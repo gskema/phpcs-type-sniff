@@ -52,7 +52,7 @@ class TypeConverter
             if (2 === $docType->getCount() && $docType->containsType(NullType::class)) {
                 $otherType = $types[0] instanceof NullType ? $types[1] : $types[0];
                 $suggestedType = static::toFunctionType($otherType);
-                if ($suggestedType) {
+                if (null !== $suggestedType) {
                     return new NullableType($suggestedType);
                 }
             }

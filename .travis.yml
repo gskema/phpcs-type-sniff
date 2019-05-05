@@ -24,7 +24,7 @@ before_script:
   - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-dist
 
 script:
-  - vendor/bin/phpcs
+  - vendor/bin/phpcs -p
   - vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
 
 after_script:

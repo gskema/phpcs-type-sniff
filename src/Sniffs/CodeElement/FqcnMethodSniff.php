@@ -59,10 +59,11 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         $hasInheritDocTag = $docBlock->hasTag('inheritdoc');
 
         // @inheritDoc
-        if ($hasInheritDocTag || ($isMagicMethod && !$isConstructMethod)) {
-            return;
-        } elseif ($method->isExtended() && !$isConstructMethod) {
-            if (!$hasInheritDocTag) {
+        // __construct can be detected as extended and magic, but we want to inspect it anyway
+        if (!$isConstructMethod) {
+            if ($hasInheritDocTag || $isMagicMethod) {
+                return;
+            } elseif ($method->isExtended()) {
                 $file->addWarningOnLine('Missing @inheritDoc tag', $method->getLine(), 'FqcnMethodSniff');
                 return;
             }

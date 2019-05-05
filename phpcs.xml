@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<ruleset name="std_ruleset">
+    <!-- @see https://github.com/squizlabs/PHP_CodeSniffer/wiki -->
+    <description>~</description>
+
+    <arg name="extensions" value="php"/>
+    <arg name="bootstrap" value="./vendor/autoload.php"/>
+
+    <file>src</file>
+    <file>tests</file>
+
+    <rule ref="PSR2"/>
+    <rule ref="./src/Sniffs/CompositeCodeElementSniff.php"/>
+
+</ruleset>

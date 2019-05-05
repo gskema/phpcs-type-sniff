@@ -1,0 +1,45 @@
+{
+    "name": "gskema/phpcs-type-sniff",
+    "type": "library",
+    "description": "PHPCS sniff to enforce PHP7 types and array types",
+    "keywords": [
+        "gskema",
+        "phpcs-type-sniff",
+        "phpcs",
+        "sniff"
+    ],
+    "homepage": "https://github.com/gskema/phpcs-type-sniff",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Gytis Škėma",
+            "email": "gytis.skema@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.1",
+        "squizlabs/php_codesniffer": "@stable"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Gskema\\TypeSniff\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Gskema\\TypeSniff\\": "tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "master": "dev"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

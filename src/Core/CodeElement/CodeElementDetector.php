@@ -1,0 +1,292 @@
+<?php
+
+namespace Gskema\TypeSniff\Core\CodeElement;
+
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Util\Tokens;
+use ReflectionClass;
+use ReflectionException;
+use Gskema\TypeSniff\Core\CodeElement\Element\ClassConstElement;
+use Gskema\TypeSniff\Core\CodeElement\Element\ClassElement;
+use Gskema\TypeSniff\Core\CodeElement\Element\ClassMethodElement;
+use Gskema\TypeSniff\Core\CodeElement\Element\ClassPropElement;
+use Gskema\TypeSniff\Core\CodeElement\Element\CodeElementInterface;
+use Gskema\TypeSniff\Core\CodeElement\Element\ConstElement;
+use Gskema\TypeSniff\Core\CodeElement\Element\FileElement;
+use Gskema\TypeSniff\Core\CodeElement\Element\FunctionElement;
+use Gskema\TypeSniff\Core\CodeElement\Element\InterfaceConstElement;
+use Gskema\TypeSniff\Core\CodeElement\Element\InterfaceElement;
+use Gskema\TypeSniff\Core\CodeElement\Element\InterfaceMethodElement;
+use Gskema\TypeSniff\Core\CodeElement\Element\TraitElement;
+use Gskema\TypeSniff\Core\CodeElement\Element\TraitMethodElement;
+use Gskema\TypeSniff\Core\CodeElement\Element\TraitPropElement;
+use Gskema\TypeSniff\Core\DocBlock\DocBlock;
+use Gskema\TypeSniff\Core\DocBlock\DocBlockParser;
+use Gskema\TypeSniff\Core\DocBlock\UndefinedDocBlock;
+use Gskema\TypeSniff\Core\Func\FunctionSignatureParser;
+
+/**
+ * @see CodeElementDetectorTest
+ */
+class CodeElementDetector
+{
+    /** @var string[][] [FQCN => string[], ...] */
+    protected static $cachedParentMethods = [];
+
+    /**
+     * @see https://www.php.net/manual/en/tokens.php
+     * @see https://docs.phpdoc.org/glossary.html
+     *
+     * @param File $file
+     * @param bool $useReflection
+     *
+     * @return CodeElementInterface[]
+     */
+    public static function detectFromTokens(File $file, bool $useReflection): array
+    {
+        $tokens = $file->getTokens();
+
+        $namespace = '';
+        $className = null;
+
+        $elements = [];
+        foreach ($tokens as $ptr => $token) {
+            $tokenCode = $token['code'];
+            $line = $token['line'];
+            $path = $token['conditions'] ?? [];
+
+            // Bracketed namespaces are not supported.
+            // This scope detection logic could be a separate class in the future.
+            $inParentheses = !empty($token['nested_parenthesis']);
+            $inFile = [] === array_intersect($path, [T_CLASS, T_TRAIT, T_INTERFACE, T_ANON_CLASS]) && !$inParentheses;
+            $inClass = T_CLASS === end($path) && !$inParentheses;
+            $inTrait = T_TRAIT === end($path) && !$inParentheses;
+            $inInterface = T_INTERFACE === end($path) && !$inParentheses;
+
+            switch ($token['code']) {
+                case T_CLASS:
+                case T_TRAIT:
+                case T_INTERFACE:
+                    $className = static::getDeclarationName($file, $ptr);
+                    break;
+                case T_NAMESPACE:
+                    $namespace = static::getNamespace($file, $ptr);
+                    break;
+            }
+
+            $fqcn = ($namespace ? $namespace.'\\' : '').$className;
+
+            // Instead of looking for doc blocks , we look for tokens
+            // that should be preceded / followed by a doc block. This way we can
+            // have "undefined" doc blocks for checking.
+
+            if ($inFile && T_OPEN_TAG === $tokenCode) {
+                // @TODO Skip declare?
+                $skip = [T_WHITESPACE, T_DECLARE, T_ENDDECLARE];
+                $docBlock = static::getNextDocBlock($file, $ptr, $skip);
+                $elements[] = new FileElement($line, $docBlock, $file->path);
+                continue;
+            }
+
+            // This covers all elements below. Open tag is processed above.
+            $skip = array_merge(Tokens::$methodPrefixes, [T_WHITESPACE]);
+
+            if ($inFile) {
+                switch ($tokenCode) {
+                    case T_CONST:
+                        $constName = static::getDeclarationName($file, $ptr);
+                        $docBlock = static::getPrevDocBlock($file, $ptr, $skip);
+                        $elements[] = new ConstElement($line, $docBlock, $namespace, $constName);
+                        break;
+                    case T_FUNCTION:
+                        $docBlock = static::getPrevDocBlock($file, $ptr, $skip);
+                        $fnSig = FunctionSignatureParser::fromTokens($file, $ptr);
+                        $elements[] = new FunctionElement($line, $docBlock, $namespace, $fnSig);
+                        break;
+                    case T_CLASS:
+                        $docBlock = static::getPrevDocBlock($file, $ptr, $skip);
+                        $elements[] = new ClassElement($line, $docBlock, $fqcn);
+                        break;
+                    case T_TRAIT:
+                        $docBlock = static::getPrevDocBlock($file, $ptr, $skip);
+                        $elements[] = new TraitElement($line, $docBlock, $fqcn);
+                        break;
+                    case T_INTERFACE:
+                        $docBlock = static::getPrevDocBlock($file, $ptr, $skip);
+                        $elements[] = new InterfaceElement($line, $docBlock, $fqcn);
+                        break;
+                }
+            } elseif ($inClass) {
+                $decName = static::getDeclarationName($file, $ptr);
+                switch ($tokenCode) {
+                    case T_CONST:
+                        $docBlock = static::getPrevDocBlock($file, $ptr, $skip);
+                        $elements[] = new ClassConstElement($line, $docBlock, $fqcn, $decName);
+                        break;
+                    case T_VARIABLE:
+                        $docBlock = static::getPrevDocBlock($file, $ptr, $skip);
+                        $elements[] = new ClassPropElement($line, $docBlock, $fqcn, $decName);
+                        break;
+                    case T_FUNCTION:
+                        $extended = static::isExtended($fqcn, $decName, $useReflection);
+                        $fnSig = FunctionSignatureParser::fromTokens($file, $ptr);
+                        $docBlock = static::getPrevDocBlock($file, $ptr, $skip);
+                        $elements[] = new ClassMethodElement($docBlock, $fqcn, $fnSig, $extended);
+                        break;
+                }
+            } elseif ($inTrait) {
+                $decName = static::getDeclarationName($file, $ptr);
+                switch ($tokenCode) {
+                    case T_CONST:
+                        $docBlock = static::getPrevDocBlock($file, $ptr, $skip);
+                        $elements[] = new TraitPropElement($line, $docBlock, $fqcn, $decName);
+                        break;
+                    case T_FUNCTION:
+                        $extended = static::isExtended($fqcn, $decName, $useReflection);
+                        $fnSig = FunctionSignatureParser::fromTokens($file, $ptr);
+                        $docBlock = static::getPrevDocBlock($file, $ptr, $skip);
+                        $elements[] = new TraitMethodElement($docBlock, $fqcn, $fnSig, $extended);
+                        break;
+                }
+            } elseif ($inInterface) {
+                $decName = static::getDeclarationName($file, $ptr);
+                switch ($tokenCode) {
+                    case T_CONST:
+                        $docBlock = static::getPrevDocBlock($file, $ptr, $skip);
+                        $elements[] = new InterfaceConstElement($line, $docBlock, $fqcn, $decName);
+                        break;
+                    case T_FUNCTION:
+                        $extended = static::isExtended($fqcn, $decName, $useReflection);
+                        $fnSig = FunctionSignatureParser::fromTokens($file, $ptr);
+                        $docBlock = static::getPrevDocBlock($file, $ptr, $skip);
+                        $elements[] = new InterfaceMethodElement($docBlock, $fqcn, $fnSig, $extended);
+                        break;
+                }
+            }
+        }
+
+        return $elements;
+    }
+
+    /**
+     * @param File           $file
+     * @param int            $startPos
+     * @param int[]|string[] $skip
+     *
+     * @return DocBlock
+     */
+    protected static function getPrevDocBlock(File $file, int $startPos, array $skip): DocBlock
+    {
+        $docClosePos = $file->findPrevious($skip, $startPos - 1, null, true);
+        $tokenCode = false === $docClosePos ? null : $file->getTokens()[$docClosePos]['code'];
+
+        if (T_DOC_COMMENT_CLOSE_TAG === $tokenCode) {
+            $docOpenPos = $file->findPrevious(T_DOC_COMMENT_OPEN_TAG, $docClosePos - 1);
+            if (false !== $docOpenPos) {
+                return DocBlockParser::fromTokens($file, $docOpenPos, $docClosePos);
+            }
+        }
+
+        return new UndefinedDocBlock();
+    }
+
+    /**
+     * @param File           $file
+     * @param int            $startPos
+     * @param int[]|string[] $skip
+     *
+     * @return DocBlock
+     */
+    protected static function getNextDocBlock(File $file, int $startPos, array $skip): DocBlock
+    {
+        $docOpenPos = $file->findNext($skip, $startPos + 1, null, true);
+        $tokenCode = false === $docOpenPos ? null : $file->getTokens()[$docOpenPos]['code'];
+
+        if (T_DOC_COMMENT_OPEN_TAG === $tokenCode) {
+            $docClosePos = $file->findNext(T_DOC_COMMENT_CLOSE_TAG, $docOpenPos + 1);
+            if (false !== $docClosePos) {
+                return DocBlockParser::fromTokens($file, $docOpenPos, $docClosePos);
+            }
+        }
+
+        return new UndefinedDocBlock();
+    }
+
+    protected static function getNamespace(File $file, int $namespacePtr): string
+    {
+        $namespace = '';
+        $tokens = $file->getTokens();
+        $maxPos = count($tokens) - 1;
+
+        for ($ptr = $namespacePtr + 2; $ptr <= $maxPos; $ptr++) {
+            $tokenCode = $tokens[$ptr]['code'];
+            if (T_SEMICOLON === $tokenCode || T_OPEN_CURLY_BRACKET === $tokenCode) {
+                break;
+            }
+            if (T_STRING === $tokenCode || T_NS_SEPARATOR === $tokenCode) {
+                $namespace .= $tokens[$ptr]['content'];
+            }
+        }
+
+        return $namespace;
+    }
+
+    protected static function getDeclarationName(File $file, int $tokenPos): string
+    {
+        $name = '';
+        $namePos = $file->findNext([T_STRING, T_VARIABLE], $tokenPos);
+        if (false !== $namePos) {
+            $name = $file->getTokens()[$namePos]['content'];
+        }
+        if ('$' === ($name[0] ?? null)) {
+            $name = substr($name, 1);
+        }
+
+        return $name;
+    }
+
+    protected static function isExtended(string $fqcn, string $method, bool $useReflection): ?bool
+    {
+        // @TODO Handle reflection errors
+        if (!$useReflection) {
+            return null;
+        }
+
+        if (!isset(static::$cachedParentMethods[$fqcn])) {
+            static::$cachedParentMethods[$fqcn] = static::getMethodsRecursive($fqcn, false);
+        }
+
+        return in_array($method, static::$cachedParentMethods[$fqcn]);
+    }
+
+    /**
+     * @param string $fqcn
+     * @param bool   $includeOwn
+     *
+     * @return string[]
+     * @throws ReflectionException
+     */
+    protected static function getMethodsRecursive(string $fqcn, bool $includeOwn): array
+    {
+        $classRef = new ReflectionClass($fqcn);
+
+        $methodNames = [];
+        if ($includeOwn) {
+            foreach ($classRef->getMethods() as $methodRef) {
+                $methodNames[] = $methodRef->getName();
+            }
+        }
+
+        $parentClasses = $classRef->getInterfaceNames();
+        if ($classRef->getParentClass()) {
+            $parentClasses[] = $classRef->getParentClass()->getName();
+        }
+
+        foreach ($parentClasses as $parentClass) {
+            $parentMethods = static::getMethodsRecursive($parentClass, true);
+            $methodNames = array_merge($methodNames, $parentMethods);
+        }
+
+        return $methodNames;
+    }
+}

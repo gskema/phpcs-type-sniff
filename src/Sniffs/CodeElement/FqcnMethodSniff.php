@@ -129,7 +129,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         } elseif ($docType instanceof UndefinedType) {
             // doc_block:defined, doc_type:undefined
             $suggestedFnType = TypeConverter::toExpectedDocType($fnType);
-            if ($suggestedFnType) {
+            if (null !== $suggestedFnType) {
                 $warnings[$docTypeLine] = sprintf(
                     'Add type hint in PHPDoc tag for :subject:, e.g. "%s"',
                     $suggestedFnType->toString()

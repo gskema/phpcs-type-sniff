@@ -48,7 +48,7 @@ class VarTag implements TagInterface
         return $this->paramName;
     }
 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }

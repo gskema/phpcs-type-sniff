@@ -16,7 +16,7 @@
 Via Composer
 
 ```bash
-$ composer require gskema/phpcs-type-sniff
+$ composer require --dev gskema/phpcs-type-sniff
 ```
 
 ## Usage

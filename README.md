@@ -3,6 +3,8 @@
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE.md)
 [![Build Status][ico-travis]][link-travis]
+[![Coverage Status][ico-scrutinizer]][link-scrutinizer]
+[![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
 - Enforces usage of PHP 7 type declarations
@@ -64,9 +66,13 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 
 [ico-version]: https://img.shields.io/packagist/v/gskema/phpcs-type-sniff.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/gskema/phpcs-type-sniff/master.svg?style=flat-square\
+[ico-travis]: https://img.shields.io/travis/gskema/phpcs-type-sniff/master.svg?style=flat-square
+[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/gskema/phpcs-type-sniff.svg?style=flat-square
+[ico-code-quality]: https://img.shields.io/scrutinizer/g/gskema/phpcs-type-sniff.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/gskema/phpcs-type-sniff.svg?style=flat-square
 
 [link-packagist]: https://packagist.org/packages/gskema/phpcs-type-sniff
 [link-travis]: https://travis-ci.org/gskema/phpcs-type-sniff
+[link-scrutinizer]: https://scrutinizer-ci.com/g/gskema/phpcs-type-sniff/code-structure
+[link-code-quality]: https://scrutinizer-ci.com/g/gskema/phpcs-type-sniff
 [link-downloads]: https://packagist.org/packages/gskema/phpcs-type-sniff

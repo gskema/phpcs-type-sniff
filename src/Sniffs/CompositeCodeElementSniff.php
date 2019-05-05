@@ -45,7 +45,7 @@ class CompositeCodeElementSniff implements Sniff
     /**
      * @inheritDoc
      */
-    public function process(File $file, $namespacePos)
+    public function process(File $file, $openTagPtr)
     {
         $elements = CodeElementDetector::detectFromTokens($file, true);
 

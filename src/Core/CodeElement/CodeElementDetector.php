@@ -170,20 +170,20 @@ class CodeElementDetector
 
     /**
      * @param File           $file
-     * @param int            $startPos
+     * @param int            $startPtr
      * @param int[]|string[] $skip
      *
      * @return DocBlock
      */
-    protected static function getPrevDocBlock(File $file, int $startPos, array $skip): DocBlock
+    protected static function getPrevDocBlock(File $file, int $startPtr, array $skip): DocBlock
     {
-        $docClosePos = $file->findPrevious($skip, $startPos - 1, null, true);
-        $tokenCode = false === $docClosePos ? null : $file->getTokens()[$docClosePos]['code'];
+        $docClosePtr = $file->findPrevious($skip, $startPtr - 1, null, true);
+        $tokenCode = false === $docClosePtr ? null : $file->getTokens()[$docClosePtr]['code'];
 
         if (T_DOC_COMMENT_CLOSE_TAG === $tokenCode) {
-            $docOpenPos = $file->findPrevious(T_DOC_COMMENT_OPEN_TAG, $docClosePos - 1);
-            if (false !== $docOpenPos) {
-                return DocBlockParser::fromTokens($file, $docOpenPos, $docClosePos);
+            $docOpenPtr = $file->findPrevious(T_DOC_COMMENT_OPEN_TAG, $docClosePtr - 1);
+            if (false !== $docOpenPtr) {
+                return DocBlockParser::fromTokens($file, $docOpenPtr, $docClosePtr);
             }
         }
 
@@ -192,20 +192,20 @@ class CodeElementDetector
 
     /**
      * @param File           $file
-     * @param int            $startPos
+     * @param int            $startPtr
      * @param int[]|string[] $skip
      *
      * @return DocBlock
      */
-    protected static function getNextDocBlock(File $file, int $startPos, array $skip): DocBlock
+    protected static function getNextDocBlock(File $file, int $startPtr, array $skip): DocBlock
     {
-        $docOpenPos = $file->findNext($skip, $startPos + 1, null, true);
-        $tokenCode = false === $docOpenPos ? null : $file->getTokens()[$docOpenPos]['code'];
+        $docOpenPtr = $file->findNext($skip, $startPtr + 1, null, true);
+        $tokenCode = false === $docOpenPtr ? null : $file->getTokens()[$docOpenPtr]['code'];
 
         if (T_DOC_COMMENT_OPEN_TAG === $tokenCode) {
-            $docClosePos = $file->findNext(T_DOC_COMMENT_CLOSE_TAG, $docOpenPos + 1);
-            if (false !== $docClosePos) {
-                return DocBlockParser::fromTokens($file, $docOpenPos, $docClosePos);
+            $docClosePtr = $file->findNext(T_DOC_COMMENT_CLOSE_TAG, $docOpenPtr + 1);
+            if (false !== $docClosePtr) {
+                return DocBlockParser::fromTokens($file, $docOpenPtr, $docClosePtr);
             }
         }
 
@@ -216,9 +216,9 @@ class CodeElementDetector
     {
         $namespace = '';
         $tokens = $file->getTokens();
-        $maxPos = count($tokens) - 1;
+        $maxPtr = count($tokens) - 1;
 
-        for ($ptr = $namespacePtr + 2; $ptr <= $maxPos; $ptr++) {
+        for ($ptr = $namespacePtr + 2; $ptr <= $maxPtr; $ptr++) {
             $tokenCode = $tokens[$ptr]['code'];
             if (T_SEMICOLON === $tokenCode || T_OPEN_CURLY_BRACKET === $tokenCode) {
                 break;
@@ -231,12 +231,12 @@ class CodeElementDetector
         return $namespace;
     }
 
-    protected static function getDeclarationName(File $file, int $tokenPos): string
+    protected static function getDeclarationName(File $file, int $ptr): string
     {
         $name = '';
-        $namePos = $file->findNext([T_STRING, T_VARIABLE], $tokenPos);
-        if (false !== $namePos) {
-            $name = $file->getTokens()[$namePos]['content'];
+        $namePtr = $file->findNext([T_STRING, T_VARIABLE], $ptr);
+        if (false !== $namePtr) {
+            $name = $file->getTokens()[$namePtr]['content'];
         }
         if ('$' === ($name[0] ?? null)) {
             $name = substr($name, 1);

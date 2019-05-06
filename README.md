@@ -44,7 +44,7 @@ Inspections for methods with @inheritdoc tag are skipped.
 If a method does not have this tag, it is inspected.
 
 ```xml
-<ruleset name="std_ruleset">
+<ruleset name="your_ruleset">
     <!-- your configuration -->
     <rule ref="./vendor/gskema/phpcs-type-sniff/src/Sniffs/CompositeCodeElementSniff.php"/>
 </ruleset>

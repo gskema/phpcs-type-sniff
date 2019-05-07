@@ -35,7 +35,7 @@ class ReturnTag implements TagInterface
         return $this->type;
     }
 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }

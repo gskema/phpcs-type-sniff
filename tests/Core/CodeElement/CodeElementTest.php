@@ -42,7 +42,7 @@ class CodeElementTest extends TestCase
         self::assertEquals(3, $classMethod->getLine());
         self::assertEquals($this->createDocBlock(), $classMethod->getDocBlock());
         self::assertEquals('FQCN3', $classMethod->getFqcn());
-        self::assertEquals( $this->createSignature(), $classMethod->getSignature());
+        self::assertEquals($this->createSignature(), $classMethod->getSignature());
         self::assertEquals(false, $classMethod->isExtended());
 
         $classProp = new ClassPropElement(4, $this->createDocBlock(), 'FQCN4', 'prop1');

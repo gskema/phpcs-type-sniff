@@ -4,6 +4,9 @@ namespace Gskema\TypeSniff\Core\Func;
 
 use Gskema\TypeSniff\Core\Type\TypeInterface;
 
+/**
+ * @see FunctionSignatureTest
+ */
 class FunctionSignature
 {
     /** @var int */
@@ -72,11 +75,17 @@ class FunctionSignature
 
     public function hasParam(string $name): bool
     {
-        return key_exists($name, $this->params);
+        return null !== $this->getParam($name);
     }
 
     public function getParam(string $name): ?FunctionParam
     {
-        return $this->params[$name] ?? null;
+        foreach ($this->params as $param) {
+            if ($param->getName() === $name) {
+                return $param;
+            }
+        }
+
+        return null;
     }
 }

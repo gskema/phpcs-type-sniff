@@ -4,6 +4,9 @@ namespace Gskema\TypeSniff\Core\Func;
 
 use Gskema\TypeSniff\Core\Type\TypeInterface;
 
+/**
+ * @see FunctionParamTest
+ */
 class FunctionParam
 {
     /** @var int */

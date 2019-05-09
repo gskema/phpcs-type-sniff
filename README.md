@@ -25,7 +25,7 @@ This is a standalone sniff, you need to add it to your `phpcs.xml` file.
 
 ### Usage With Reflection
 
-With reflection enabled, this sniff can assert if @inheritoc tag
+With reflection enabled, this sniff can assert if `@inheritoc` tag
 is needed. Inspections for extended/implemented methods are skipped.
 Reflections need to load actual classes, which is why we need to include
 the autoloader.

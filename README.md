@@ -40,7 +40,7 @@ the autoloader.
 
 ### Usage Without Reflection
 
-Inspections for methods with @inheritdoc tag are skipped.
+Inspections for methods with `@inheritdoc` tag are skipped.
 If a method does not have this tag, it is inspected.
 
 ```xml

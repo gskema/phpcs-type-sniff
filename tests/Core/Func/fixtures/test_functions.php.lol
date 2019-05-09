@@ -14,3 +14,5 @@ function func3(
     int $arg5 = \Space1\Class2::SOME_CONST
 ): \Space1\Class2 {
 }
+
+function ($arg1)

@@ -3,6 +3,7 @@
 namespace Gskema\TypeSniff\Core\Func;
 
 use PHP_CodeSniffer\Config;
+use PHP_CodeSniffer\Exceptions\RuntimeException;
 use PHP_CodeSniffer\Files\LocalFile;
 use PHP_CodeSniffer\Ruleset;
 use PHPUnit\Framework\TestCase;
@@ -34,7 +35,8 @@ class FunctionSignatureParserTest extends TestCase
                 [],
                 new UndefinedType(),
                 3
-            )
+            ),
+            null
         ];
 
         // #1
@@ -52,7 +54,8 @@ class FunctionSignatureParserTest extends TestCase
                 ],
                 new ArrayType(),
                 5
-            )
+            ),
+            null
         ];
 
         // #2
@@ -71,7 +74,16 @@ class FunctionSignatureParserTest extends TestCase
                 ],
                 new FqcnType('\Space1\Class2'),
                 15
-            )
+            ),
+            null
+        ];
+
+        // #3
+        $dataSets[] = [
+            __DIR__.'/fixtures/test_functions.php.lol',
+            118,
+            null,
+            \RuntimeException::class
         ];
 
         return $dataSets;
@@ -79,17 +91,26 @@ class FunctionSignatureParserTest extends TestCase
 
     /**
      * @dataProvider dataFromTokens
-     * @param string $givenPath
-     * @param int $givenFnPtr
-     * @param FunctionSignature $expectedFun
+     *
+     * @param string                 $givenPath
+     * @param int                    $givenFnPtr
+     * @param FunctionSignature|null $expectedFun
+     * @param string|null            $expectedException
+     *
+     * @throws RuntimeException
      */
     public function testFromTokens(
         string $givenPath,
         int $givenFnPtr,
-        FunctionSignature $expectedFun
+        ?FunctionSignature $expectedFun,
+        ?string $expectedException
     ): void {
         $givenFile = new LocalFile($givenPath, new Ruleset(new Config()), new Config());
         $givenFile->parse();
+
+        if (null !== $expectedException) {
+            self::expectException($expectedException);
+        }
 
         $actualFunc = FunctionSignatureParser::fromTokens(
             $givenFile,

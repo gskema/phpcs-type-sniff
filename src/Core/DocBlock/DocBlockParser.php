@@ -26,10 +26,8 @@ class DocBlockParser
 
     public static function fromRaw(string $rawDocBlock, int $startLineNum): DocBlock
     {
-        // @TODO Use tokens instead of RegExp for speed?
-        if (!preg_match_all('#^[ \t]*\/*\**\**[ \t]?(.*?)[ \t]*\**\/*$#m', $rawDocBlock, $matches)) {
-            throw new RuntimeException('Cannot parse DocBlock');
-        }
+        // This regex always matches, not need to check for 0|false
+        preg_match_all('#^[ \t]*\/*\**\**[ \t]?(.*?)[ \t]*\**\/*$#m', $rawDocBlock, $matches);
 
         $descLines = [];
         $tagLineNum = null;

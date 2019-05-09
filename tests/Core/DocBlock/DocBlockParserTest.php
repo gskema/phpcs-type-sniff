@@ -3,6 +3,7 @@
 namespace Gskema\TypeSniff\Core\DocBlock;
 
 use PHP_CodeSniffer\Config;
+use PHP_CodeSniffer\Exceptions\RuntimeException;
 use PHP_CodeSniffer\Files\LocalFile;
 use PHP_CodeSniffer\Ruleset;
 use PHPUnit\Framework\TestCase;
@@ -27,9 +28,9 @@ class DocBlockParserTest extends TestCase
 
         // #0
         $dataSets[] = [
-            __DIR__.'/fixtures/TestDocBlock.php.huh',
-            [2, 55],
-            new DocBlock(
+            'givenPath' => __DIR__.'/fixtures/TestDocBlock.php.huh',
+            'givenPointers' => [2, 55],
+            'expectedDocBlock' => new DocBlock(
                 [
                     4 => 'FuncDesc',
                     5 => 'oops',
@@ -41,26 +42,28 @@ class DocBlockParserTest extends TestCase
                     new GenericTag(12, 'inheritdoc', null),
                     new ReturnTag(14, new ArrayType(), null)
                 ]
-            )
+            ),
+            'expectedException' => null,
         ];
 
         // #1
         $dataSets[] = [
-            __DIR__.'/fixtures/TestDocBlock.php.huh',
-            [58, 63],
-            new DocBlock(
+            'givenPath' => __DIR__.'/fixtures/TestDocBlock.php.huh',
+            'givenPointers' => [58, 63],
+            'expectedDocBlock' => new DocBlock(
                 [],
                 [
                     new VarTag(17, new IntType(), null, 'SomeDesc'),
                 ]
-            )
+            ),
+            'expectedException' => null,
         ];
 
         // #2
         $dataSets[] = [
-            __DIR__.'/fixtures/TestDocBlock.php.huh',
-            [66, 71],
-            new DocBlock(
+            'givenPath' => __DIR__.'/fixtures/TestDocBlock.php.huh',
+            'givenPointers' => [66, 71],
+            'expectedDocBlock' => new DocBlock(
                 [],
                 [
                     new VarTag(
@@ -70,14 +73,15 @@ class DocBlockParserTest extends TestCase
                         'Desc1'
                     ),
                 ]
-            )
+            ),
+            'expectedException' => null,
         ];
 
         // #3
         $dataSets[] = [
-            __DIR__.'/fixtures/TestDocBlock.php.huh',
-            [75, 158],
-            new DocBlock(
+            'givenPath' => __DIR__.'/fixtures/TestDocBlock.php.huh',
+            'givenPointers' => [75, 158],
+            'expectedDocBlock' => new DocBlock(
                 [
                     23 => 'FuncDesc',
                     24 => 'oops wtf',
@@ -99,7 +103,8 @@ class DocBlockParserTest extends TestCase
                     new GenericTag(36, 'inheritdoc', null),
                     new ReturnTag(38, new TypedArrayType(new StringType(), 1), null)
                 ]
-            )
+            ),
+            'expectedException' => null,
         ];
 
         return $dataSets;
@@ -108,20 +113,35 @@ class DocBlockParserTest extends TestCase
     /**
      * @dataProvider dataDetectFromTokens
      *
-     * @param string   $givenPath
-     * @param int[]    $givenPointers
-     * @param DocBlock $expected
+     * @param string        $givenPath
+     * @param int[]         $givenPointers
+     * @param DocBlock|null $expectedDocBlock
+     * @param string|null   $expectedException
+     *
+     * @throws RuntimeException
      */
     public function testDetectFromTokens(
         string $givenPath,
         array $givenPointers,
-        DocBlock $expected
+        ?DocBlock $expectedDocBlock,
+        ?string $expectedException
     ): void {
         $givenFile = new LocalFile($givenPath, new Ruleset(new Config()), new Config());
         $givenFile->parse();
 
+        if (null !== $expectedException) {
+            self::expectException($expectedException);
+        }
+
         $actual = DocBlockParser::fromTokens($givenFile, $givenPointers[0], $givenPointers[1]);
 
-        self::assertEquals($expected, $actual);
+        self::assertEquals($expectedDocBlock, $actual);
+    }
+
+    public function testExceptions(): void
+    {
+        $this->expectException(\RuntimeException::class);
+
+        DocBlockParser::fromRaw("/** @ test */", 1);
     }
 }

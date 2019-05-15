@@ -60,5 +60,6 @@ class DocBlockTest extends TestCase
         self::assertEquals(true, $docBlock->hasOneOfTags(['deprecated', 'see', 'param']));
         self::assertEquals(false, $docBlock->hasOneOfTags(['see', 'link']));
         self::assertEquals($descLines, $docBlock->getDescriptionLines());
+        self::assertEquals("Line1\nLine2", $docBlock->getDescription());
     }
 }

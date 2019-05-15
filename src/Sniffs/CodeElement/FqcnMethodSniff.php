@@ -199,9 +199,11 @@ class FqcnMethodSniff implements CodeElementSniffInterface
 
         $docReturnTag = $docBlock->getReturnTag();
 
+        $hasUsefulDescription = $docBlock->hasDescription()
+            && !preg_match('#^\w+\s+constructor\.?$#', $docBlock->getDescription());
+
         if ($docBlock instanceof UndefinedDocBlock
-            || $docBlock->hasDescription()
-            // || $docBlock->hasContentLines()
+            || $hasUsefulDescription
             || $docBlock->hasOneOfTags($usefulTagNames)
             || ($docReturnTag && $docReturnTag->hasDescription())
         ) {

@@ -6,6 +6,9 @@ use Gskema\TypeSniff\Core\DocBlock\Tag\ParamTag;
 use Gskema\TypeSniff\Core\DocBlock\Tag\ReturnTag;
 use Gskema\TypeSniff\Core\DocBlock\Tag\TagInterface;
 
+/**
+ * @see DocBlockTest
+ */
 class DocBlock
 {
     /** @var string[] [ptr => string, ...] */
@@ -35,6 +38,11 @@ class DocBlock
     public function hasDescription(): bool
     {
         return !empty($this->descriptionLines);
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->descriptionLines ? implode("\n", $this->descriptionLines) : null;
     }
 
     /**

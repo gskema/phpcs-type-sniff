@@ -3,20 +3,27 @@
 namespace Gskema\TypeSniff\Sniffs;
 
 use PHP_CodeSniffer\Files\File;
-use PHP_CodeSniffer\Sniffs\Sniff;
 use Gskema\TypeSniff\Core\CodeElement\CodeElementDetector;
 use Gskema\TypeSniff\Sniffs\CodeElement\CodeElementSniffInterface;
 use Gskema\TypeSniff\Sniffs\CodeElement\FqcnConstSniff;
 use Gskema\TypeSniff\Sniffs\CodeElement\FqcnMethodSniff;
 use Gskema\TypeSniff\Sniffs\CodeElement\FqcnPropSniff;
 
-class CompositeCodeElementSniff implements Sniff
+class CompositeCodeElementSniff extends AbstractConfigurableSniff
 {
+    /** @var bool */
+    public $useReflection = false;
+
     /** @var CodeElementSniffInterface[][] */
     protected $sniffs = [];
 
-    public function __construct()
+    /**
+     * @inheritDoc
+     */
+    protected function configure(array $config): void
     {
+        $this->useReflection = $config['useReflection'] ?? false;
+
         /** @var CodeElementSniffInterface[] $sniffs */
         $sniffs = [
             new FqcnMethodSniff(),
@@ -45,9 +52,9 @@ class CompositeCodeElementSniff implements Sniff
     /**
      * @inheritDoc
      */
-    public function process(File $file, $openTagPtr)
+    protected function run(File $file, int $openTagPtr): void
     {
-        $elements = CodeElementDetector::detectFromTokens($file, true);
+        $elements = CodeElementDetector::detectFromTokens($file, $this->useReflection);
 
         foreach ($elements as $element) {
             $className = get_class($element);

@@ -34,7 +34,11 @@ the autoloader.
 <ruleset name="your_ruleset">
     <!-- your configuration -->
     <arg name="bootstrap" value="./vendor/autoload.php"/>
-    <rule ref="./vendor/gskema/phpcs-type-sniff/src/Sniffs/CompositeCodeElementSniff.php"/>
+    <rule ref="./vendor/gskema/phpcs-type-sniff/src/Sniffs/CompositeCodeElementSniff.php">
+        <properties>
+            <property name="useReflection" value="true"/>
+        </properties>
+    </rule>
 </ruleset>
 ```
 

@@ -24,6 +24,14 @@ class FqcnMethodSniff implements CodeElementSniffInterface
     /**
      * @inheritDoc
      */
+    public function configure(array $config): void
+    {
+        // nothing to do (yet)
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function register(): array
     {
         return [

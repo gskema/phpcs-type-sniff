@@ -31,6 +31,7 @@ abstract class AbstractConfigurableSniff implements Sniff
                 }
             }
 
+            // @TODO Process arrays
             foreach ($opts as $key => &$val) {
                 if ('true' === $val) {
                     $val = true;

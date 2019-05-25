@@ -53,7 +53,8 @@ class CompositeCodeElementSniff extends AbstractConfigurableSniff
         }
 
         foreach ($rawSniffs as $rawSniff) {
-            if ($rawSniff['enabled'] ?? true) {
+            $enabled = $rawSniff['enabled'] ?? true;
+            if (!$enabled) {
                 continue;
             }
             /** @var CodeElementSniffInterface $sniff */

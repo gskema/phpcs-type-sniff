@@ -18,14 +18,14 @@ abstract class AbstractConfigurableSniff implements Sniff
         // File path sniffs and not saved using sniff code and their config
         // is not processed. This is a workaround.
         if (!$this->configured) {
-            $bits0 = explode('\\', get_class($this));
-            $class0 = end($bits0);
+            $bits = explode('\\', get_class($this));
+            $currentClass = end($bits);
 
             $opts = [];
             foreach ($file->ruleset->ruleset as $ref => $rule) {
-                $bits1 = explode('/', $ref);
-                $class1 = rtrim(end($bits1), '.php');
-                if ($class0 === $class1) {
+                $bits = explode('/', $ref);
+                $cfgClass = rtrim(end($bits), '.php');
+                if ($currentClass === $cfgClass) {
                     $opts = $rule['properties'];
                     break;
                 }

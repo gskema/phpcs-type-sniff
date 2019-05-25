@@ -32,12 +32,12 @@ class CompositeCodeElementSniff extends AbstractConfigurableSniff
         $config['sniffs'][] = FqcnConstSniff::class;
 
         // CodeElementSniff(s) are saved by their short name, meaning you can't have 2 instances of same sniff.
-        $sniffs = [];
+        $rawSniffs = [];
         foreach ($config['sniffs'] as $class) {
             $bits = explode('\\', $class);
             $shortClass = end($bits);
-            if (!isset($sniffs[$shortClass])) {
-                $sniffs[$shortClass] = ['class' => $class, 'config' => []];
+            if (!isset($rawSniffs[$shortClass])) {
+                $rawSniffs[$shortClass] = ['class' => $class, 'config' => []];
             }
         }
 
@@ -46,23 +46,23 @@ class CompositeCodeElementSniff extends AbstractConfigurableSniff
         foreach ($config as $key => $val) {
             if ('sniffs'!== $key && false !== strpos($key, '.')) {
                 [$shortClass, $cfgKey] = explode('.', $key, 2);
-                if (isset($sniffs[$shortClass])) {
-                    $sniffs[$shortClass]['config'][$cfgKey] = $val;
+                if (isset($rawSniffs[$shortClass])) {
+                    $rawSniffs[$shortClass]['config'][$cfgKey] = $val;
                 }
             }
         }
 
-        foreach ($sniffs as $sniffCfg) {
-            if ($sniffCfg['enabled'] ?? true) {
+        foreach ($rawSniffs as $rawSniff) {
+            if ($rawSniff['enabled'] ?? true) {
                 continue;
             }
             /** @var CodeElementSniffInterface $sniff */
-            $sniff = new $sniffCfg['class'];
-            $sniff->configure($sniffCfg['config']);
+            $sniff = new $rawSniff['class'];
+            $sniff->configure($rawSniff['config']);
 
-            $classNames = $sniff->register();
-            foreach ($classNames as $className) {
-                $this->sniffs[$className][] = $sniff;
+            $codeElementClasses = $sniff->register();
+            foreach ($codeElementClasses as $codeElementClass) {
+                $this->sniffs[$codeElementClass][] = $sniff;
             }
         }
     }

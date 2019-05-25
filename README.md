@@ -21,7 +21,7 @@ $ composer require --dev gskema/phpcs-type-sniff
 
 ## Usage
 
-This is a standalone sniff, you need to add it to your `phpcs.xml` file.
+This is a standalone sniff file, you need to add it to your `phpcs.xml` file.
 
 ### Usage With Reflection
 
@@ -51,6 +51,59 @@ If a method does not have this tag, it is inspected.
 <ruleset name="your_ruleset">
     <!-- your configuration -->
     <rule ref="./vendor/gskema/phpcs-type-sniff/src/Sniffs/CompositeCodeElementSniff.php"/>
+</ruleset>
+```
+
+## Configuration
+
+Sniffs are registered and saved by their short class name.
+This allows easily specifying configuration options for a specific code element sniff,
+e.g. `FqcnMethodSniff.usefulTags`. All custom code sniff classes must have unique
+short class names.
+
+String `true/false` values are automatically converted to booleans.
+
+```xml
+<ruleset name="your_ruleset">
+    <!-- your configuration -->
+
+    <!-- Include autoloader which is needed when using reflection API or custom code element sniff(s) -->
+    <arg name="bootstrap" value="./vendor/autoload.php"/>
+
+    <!-- Include a standalone sniff to your custom coding standard -->
+    <rule ref="./vendor/gskema/phpcs-type-sniff/src/Sniffs/CompositeCodeElementSniff.php">
+        <properties>
+            <!-- Enable usage of reflection API when inspecting extended classes. Autoloader is needed. -->
+            <property name="useReflection" value="true"/>
+
+            <!-- Disable one of the default code element sniffs -->
+            <property name="FqcnConstSniff.enabled" value="false" />
+            <property name="FqcnMethodSniff.enabled" value="false" />
+            <property name="FqcnPropSniff.enabled" value="false" />
+
+            <!-- Add additional tags which are considered useful when asserting useless DocBlock(s) -->
+            <property name="FqcnMethodSniff.usefulTags" type="array">
+                <element value="@someTag1"/>
+                <element value="@someTag2"/>
+            </property>
+
+            <!-- Your own custom code element sniff(s). Autoloader is needed. -->
+            <!-- These classes implement CodeElementSniffInterface -->
+            <property name="sniffs" type="array">
+                <element value="\Acme\CustomCodeElementSniff" />
+                <element value="\Acme\AnotherCustomMethodSniff" />
+            </property>
+
+            <!-- Configuration options for a custom code element sniffs -->
+            <property name="CustomCodeElementSniff.opt1" value="str1" />
+            <!-- Specifying element key(s) will create an associative array -->
+            <property name="AnotherCustomMethodSniff.arrayOpt1" type="array">
+                <element key="key1" value="str1"/>
+                <element key="key2" value="str2"/>
+            </property>
+
+        </properties>
+    </rule>
 </ruleset>
 ```
 

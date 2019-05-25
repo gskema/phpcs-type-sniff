@@ -8,6 +8,11 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 
 ### Added
 - Description "ClassA Constructor." is now ignored and not considered useful.
+- Configuration for `CompositeCodeElementSniff`
+- Ability to add and configure custom `CodeElementSniffInterface` sniffs
+- Option `useReflection`
+- Option `sniffs`
+- Option `FqcnMethodSniff.usefulTags`
 
 ### Fixed
 - ReturnTag::getDescription()

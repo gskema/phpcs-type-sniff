@@ -31,14 +31,14 @@ abstract class AbstractConfigurableSniff implements Sniff
                 }
             }
 
-            // @TODO Process arrays
-            foreach ($opts as $key => &$val) {
+            array_walk_recursive($opts, function (&$val) {
                 if ('true' === $val) {
                     $val = true;
                 } elseif ('false' === $val) {
                     $val = false;
                 }
-            }
+            });
+
             $this->configure($opts);
             $this->configured = true;
         }

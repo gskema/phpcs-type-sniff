@@ -67,21 +67,23 @@ String `true/false` values are automatically converted to booleans.
 <ruleset name="your_ruleset">
     <!-- your configuration -->
 
-    <!-- Include autoloader which is needed when using reflection API or custom code element sniff(s) -->
+    <!-- Includes an autoloader which is needed when using reflection API -->
+    <!-- or custom code element sniff(s) -->
     <arg name="bootstrap" value="./vendor/autoload.php"/>
 
-    <!-- Include a standalone sniff to your custom coding standard -->
+    <!-- Includes a standalone sniff to your custom coding standard -->
     <rule ref="./vendor/gskema/phpcs-type-sniff/src/Sniffs/CompositeCodeElementSniff.php">
         <properties>
-            <!-- Enable usage of reflection API when inspecting extended classes. Autoloader is needed. -->
+            <!-- Enables usage of reflection API when inspecting extended classes. -->
+            <!-- Autoloader is needed. -->
             <property name="useReflection" value="true"/>
 
-            <!-- Disable one of the default code element sniffs -->
+            <!-- Disables one of the default code element sniffs -->
             <property name="FqcnConstSniff.enabled" value="false" />
             <property name="FqcnMethodSniff.enabled" value="false" />
             <property name="FqcnPropSniff.enabled" value="false" />
 
-            <!-- Add additional tags which are considered useful when asserting useless DocBlock(s) -->
+            <!-- Adds additional useful PHPDoc tags for asserting useful DocBlock(s) -->
             <property name="FqcnMethodSniff.usefulTags" type="array">
                 <element value="@someTag1"/>
                 <element value="@someTag2"/>
@@ -94,7 +96,7 @@ String `true/false` values are automatically converted to booleans.
                 <element value="\Acme\AnotherCustomMethodSniff" />
             </property>
 
-            <!-- Configuration options for a custom code element sniffs -->
+            <!-- Configuration options for custom code element sniffs -->
             <property name="CustomCodeElementSniff.opt1" value="str1" />
             <!-- Specifying element key(s) will create an associative array -->
             <property name="AnotherCustomMethodSniff.arrayOpt1" type="array">

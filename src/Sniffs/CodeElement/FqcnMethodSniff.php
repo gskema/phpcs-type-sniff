@@ -21,6 +21,35 @@ use Gskema\TypeSniff\Core\Type\TypeInterface;
 
 class FqcnMethodSniff implements CodeElementSniffInterface
 {
+    /** @var string[] */
+    protected $baseUsefulTags = [
+        '@deprecated',
+        '@throws',
+        '@dataProvider',
+        '@see',
+        '@todo',
+        '@inheritDoc'
+    ];
+
+    /** @var string[] */
+    protected $usefulTags = [];
+
+    /**
+     * @inheritDoc
+     */
+    public function configure(array $config): void
+    {
+        $rawTags = array_merge($this->baseUsefulTags, $config['usefulTags'] ?? []);
+
+        $usefulTags = [];
+        foreach ($rawTags as $rawTag) {
+            $usefulTags[] = strtolower(ltrim($rawTag, '@'));
+        }
+        $usefulTags = array_unique($usefulTags);
+
+        $this->usefulTags = $usefulTags;
+    }
+
     /**
      * @inheritDoc
      */

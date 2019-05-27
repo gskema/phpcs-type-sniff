@@ -4,6 +4,11 @@ All notable changes to `phpcs-type-sniff` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## 0.10.3 - 2019-05-27
+
+### Fixed
+- Useless doc block detection when comparing `CompoundType` and `NullableType`, raw types are now sorted.
+
 ## 0.10.2 - 2019-05-27
 
 ### Fixed

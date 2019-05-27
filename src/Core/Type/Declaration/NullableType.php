@@ -34,6 +34,9 @@ class NullableType implements TypeInterface
 
     public function toDocString(): string
     {
-        return $this->type->toString().'|null';
+        $rawType = $this->type->toString();
+
+        // This must match sorting in CompoundType::toString() for raw comparisons.
+        return $rawType > 'null' ? 'null|'.$rawType : $rawType.'|null';
     }
 }

@@ -49,7 +49,8 @@ class TypeTest extends TestCase
         self::assertEquals(new StringType(), (new NullableType(new StringType()))->getType());
         self::assertEquals(true, (new NullableType(new StringType()))->containsType(StringType::class));
         self::assertEquals(false, (new NullableType(new StringType()))->containsType(VoidType::class));
-        self::assertEquals('string|null', (new NullableType(new StringType()))->toDocString());
+        self::assertEquals('null|string', (new NullableType(new StringType()))->toDocString());
+        self::assertEquals('int|null', (new NullableType(new IntType()))->toDocString());
 
         self::assertEquals('int|string', (new CompoundType([new StringType(), new IntType()]))->toString());
         self::assertEquals([new StringType(), new IntType()], (new CompoundType([new StringType(), new IntType()]))->getTypes());

@@ -223,8 +223,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         $fnSig = $method->getSignature();
         $docBlock = $method->getDocBlock();
 
-        $usefulTagNames = ['deprecated', 'throws', 'dataprovider', 'see', 'todo', 'inheritdoc']; // @TODO ??
-        $usefulTagNames = array_diff($usefulTagNames, ['param', 'return']);
+        $usefulTagNames = array_diff($this->usefulTags, ['param', 'return']);
 
         $docReturnTag = $docBlock->getReturnTag();
 

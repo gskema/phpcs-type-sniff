@@ -4,6 +4,11 @@ All notable changes to `phpcs-type-sniff` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## 0.10.2 - 2019-05-27
+
+### Fixed
+- Usage of FqcnMethodSniff.usefulTags config option
+
 ## 0.10.1 - 2019-05-27
 
 ### Fixed

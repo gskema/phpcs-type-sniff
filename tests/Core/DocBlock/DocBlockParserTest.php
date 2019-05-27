@@ -138,10 +138,55 @@ class DocBlockParserTest extends TestCase
         self::assertEquals($expectedDocBlock, $actual);
     }
 
-    public function testExceptions(): void
+    /**
+     * @return mixed[]
+     */
+    public function dataFromRaw(): array
     {
-        $this->expectException(\RuntimeException::class);
+        $dataSets = [];
 
-        DocBlockParser::fromRaw("/** @ test */", 1);
+        // #0
+        $dataSets[] = [
+            'givenRawDocBlock'  => '/** @ test */',
+            'givenStartLine'    => 1,
+            'expectedDocBlock'  => null,
+            'expectedException' => \RuntimeException::class,
+        ];
+
+        // #1
+        $dataSets[] = [
+            'givenRawDocBlock'  =>'/** @SmartTemplate() */',
+            'givenStartLine'    => 2,
+            'expectedDocBlock'  => new DocBlock(
+                [],
+                [new GenericTag(2, 'smarttemplate()', null)]
+            ),
+            'expectedException' => null,
+        ];
+
+        return $dataSets;
+    }
+
+    /**
+     * @dataProvider dataFromRaw
+     *
+     * @param string        $givenRawDocBlock
+     * @param int           $givenStartLine
+     * @param DocBlock|null $expectedDocBlock
+     * @param string|null   $expectedException
+     */
+    public function testFromRaw(
+        string $givenRawDocBlock,
+        int $givenStartLine,
+        ?DocBlock $expectedDocBlock,
+        ?string $expectedException
+    ): void {
+        if (null !== $expectedException) {
+            $this->expectException($expectedException);
+        }
+
+        $actualDocBlock = DocBlockParser::fromRaw($givenRawDocBlock, $givenStartLine);
+
+        $this->assertEquals($expectedDocBlock, $actualDocBlock);
     }
 }

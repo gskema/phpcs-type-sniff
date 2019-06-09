@@ -51,7 +51,7 @@ class CodeElementTest extends TestCase
         self::assertEquals(4, $classProp->getLine());
         self::assertEquals('prop1', $classProp->getPropName());
 
-        $const = new ConstElement(5, $this->createDocBlock(), 'NS1', 'CONST1');
+        $const = new ConstElement(5, $this->createDocBlock(), 'NS1', 'CONST1', null);
         self::assertEquals(5, $const->getLine());
         self::assertEquals($this->createDocBlock(), $const->getDocBlock());
         self::assertEquals('CONST1', $const->getName());

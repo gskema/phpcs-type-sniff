@@ -155,7 +155,8 @@ class CodeElementDetectorTest extends TestCase
                     11,
                     new UndefinedDocBlock(),
                     'Gskema\TypeSniff\\Core\\CodeElement',
-                    'CONST1'
+                    'CONST1',
+                    new IntType()
                 ),
                 new ClassElement(
                     14,

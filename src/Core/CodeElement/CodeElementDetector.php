@@ -102,8 +102,9 @@ class CodeElementDetector
                 switch ($tokenCode) {
                     case T_CONST:
                         $constName = static::getDeclarationName($file, $ptr);
+                        $valueType = static::getAssignmentType($file, $ptr);
                         $docBlock = static::getPrevDocBlock($file, $ptr, $skip);
-                        $elements[] = new ConstElement($line, $docBlock, $namespace, $constName);
+                        $elements[] = new ConstElement($line, $docBlock, $namespace, $constName, $valueType);
                         break;
                     case T_FUNCTION:
                         $docBlock = static::getPrevDocBlock($file, $ptr, $skip);

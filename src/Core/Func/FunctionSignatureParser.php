@@ -44,7 +44,6 @@ class FunctionSignatureParser
             $token = $tokens[$ptr];
 
             switch ($token['code']) {
-                case T_SELF:
                 case T_CALLABLE:
                 case T_NULLABLE:
                     // these cannot be default
@@ -54,6 +53,8 @@ class FunctionSignatureParser
                     $raw['default'] = '';
                     break;
                 case T_STRING:
+                case T_SELF:
+                case T_DOUBLE_COLON:
                 case T_NS_SEPARATOR:
                     if (isset($raw['default'])) {
                         $raw['default'] .= $token['content'];

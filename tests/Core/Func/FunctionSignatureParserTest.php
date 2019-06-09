@@ -86,6 +86,23 @@ class FunctionSignatureParserTest extends TestCase
             \RuntimeException::class
         ];
 
+        // #4
+        $dataSets[] = [
+            __DIR__.'/fixtures/func1.php.txt',
+            2,
+            new FunctionSignature(
+                3,
+                'func1',
+                [
+                    new FunctionParam(4, 'arg1', new IntType()),
+                    new FunctionParam(5, 'arg2', new StringType())
+                ],
+                new UndefinedType(),
+                6
+            ),
+            null
+        ];
+
         return $dataSets;
     }
 

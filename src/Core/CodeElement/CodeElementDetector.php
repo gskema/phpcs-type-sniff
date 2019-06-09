@@ -2,6 +2,13 @@
 
 namespace Gskema\TypeSniff\Core\CodeElement;
 
+use Gskema\TypeSniff\Core\Type\Common\ArrayType;
+use Gskema\TypeSniff\Core\Type\Common\BoolType;
+use Gskema\TypeSniff\Core\Type\Common\FloatType;
+use Gskema\TypeSniff\Core\Type\Common\IntType;
+use Gskema\TypeSniff\Core\Type\Common\StringType;
+use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
+use Gskema\TypeSniff\Core\Type\TypeInterface;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 use ReflectionClass;
@@ -121,12 +128,12 @@ class CodeElementDetector
                 switch ($tokenCode) {
                     case T_CONST:
                         $docBlock = static::getPrevDocBlock($file, $ptr, $skip);
-                        $valueType = null;
+                        $valueType = static::getAssignmentType($file, $ptr);
                         $elements[] = new ClassConstElement($line, $docBlock, $fqcn, $decName, $valueType);
                         break;
                     case T_VARIABLE:
                         $docBlock = static::getPrevDocBlock($file, $ptr, $skip);
-                        $defValueType = null;
+                        $defValueType = static::getAssignmentType($file, $ptr);
                         $elements[] = new ClassPropElement($line, $docBlock, $fqcn, $decName, $defValueType);
                         break;
                     case T_FUNCTION:
@@ -141,7 +148,7 @@ class CodeElementDetector
                 switch ($tokenCode) {
                     case T_CONST:
                         $docBlock = static::getPrevDocBlock($file, $ptr, $skip);
-                        $defValueType = null;
+                        $defValueType = static::getAssignmentType($file, $ptr);
                         $elements[] = new TraitPropElement($line, $docBlock, $fqcn, $decName, $defValueType);
                         break;
                     case T_FUNCTION:
@@ -156,7 +163,7 @@ class CodeElementDetector
                 switch ($tokenCode) {
                     case T_CONST:
                         $docBlock = static::getPrevDocBlock($file, $ptr, $skip);
-                        $valueType = null;
+                        $valueType = static::getAssignmentType($file, $ptr);
                         $elements[] = new InterfaceConstElement($line, $docBlock, $fqcn, $decName, $valueType);
                         break;
                     case T_FUNCTION:
@@ -292,5 +299,51 @@ class CodeElementDetector
         }
 
         return $methodNames;
+    }
+
+    protected static function getAssignmentType(File $file, int $ptr): ?TypeInterface
+    {
+        // @TODO Move function somewhere?
+        $tokens = $file->getTokens();
+
+        // $ptr is at const or variable, it safer and easier to search backwards
+        $semiPtr = $file->findNext([T_SEMICOLON], $ptr + 1);
+        if (false === $semiPtr) {
+            return null;
+        }
+
+        $valueEndPtr = $file->findPrevious(Tokens::$emptyTokens, $semiPtr - 1, null, true);
+        if (false === $valueEndPtr) {
+            return null;
+        }
+
+        $valueToken = $tokens[$valueEndPtr];
+        switch ($valueToken['code']) {
+            case T_NULL:
+                $valueType = new NullType();
+                break;
+            case T_TRUE:
+            case T_FALSE:
+                $valueType = new BoolType();
+                break;
+            case T_LNUMBER:
+                $valueType = new IntType();
+                break;
+            case T_DNUMBER:
+                $valueType = new FloatType();
+                break;
+            case T_CONSTANT_ENCAPSED_STRING:
+            case T_END_HEREDOC:
+                $valueType = new StringType();
+                break;
+            case T_CLOSE_SHORT_ARRAY:
+            case T_CLOSE_PARENTHESIS: // array()
+                $valueType = new ArrayType();
+                break;
+            default:
+                $valueType = null;
+        }
+
+        return $valueType;
     }
 }

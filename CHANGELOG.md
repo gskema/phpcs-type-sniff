@@ -4,6 +4,11 @@ All notable changes to `phpcs-type-sniff` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## 0.10.4 - 2019-06-09
+
+### Fixed
+- Parameter default value detection when self, double colon is used
+
 ## 0.10.3 - 2019-05-27
 
 ### Fixed

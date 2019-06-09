@@ -59,7 +59,8 @@ class CodeElementDetectorTest extends TestCase
                     15,
                     new UndefinedDocBlock(),
                     'Test\\Name\\Space\\TestClass',
-                    'CONST1'
+                    'CONST1',
+                    null
                 ),
                 new ClassConstElement(
                     18,
@@ -67,13 +68,15 @@ class CodeElementDetectorTest extends TestCase
                         new VarTag(17, new IntType(), null, null),
                     ]),
                     'Test\\Name\\Space\\TestClass',
-                    'CONST2'
+                    'CONST2',
+                    null
                 ),
                 new ClassPropElement(
                     20,
                     new UndefinedDocBlock(),
                     'Test\\Name\\Space\\TestClass',
-                    'prop1'
+                    'prop1',
+                    null
                 ),
                 new ClassPropElement(
                     25,
@@ -81,7 +84,8 @@ class CodeElementDetectorTest extends TestCase
                         new VarTag(23, new IntType(), null, null)
                     ]),
                     'Test\\Name\\Space\\TestClass',
-                    'prop2'
+                    'prop2',
+                    null
                 ),
                 new ClassPropElement(
                     28,
@@ -89,7 +93,8 @@ class CodeElementDetectorTest extends TestCase
                         new VarTag(27, new CompoundType([new StringType(), new NullType()]), null, null)
                     ]),
                     'Test\\Name\\Space\\TestClass',
-                    'prop3'
+                    'prop3',
+                    null
                 ),
                 new ClassMethodElement(
                     new UndefinedDocBlock(),
@@ -167,13 +172,15 @@ class CodeElementDetectorTest extends TestCase
                         new VarTag(56, new IntType(), null, null),
                     ]),
                     'Gskema\TypeSniff\\Core\\CodeElement\\TestClass2',
-                    'prop1'
+                    'prop1',
+                    null
                 ),
                 new ClassConstElement(
                     59,
                     new UndefinedDocBlock(),
                     'Gskema\TypeSniff\\Core\\CodeElement\\TestClass2',
-                    'CONST2'
+                    'CONST2',
+                    null
                 ),
             ],
         ];

@@ -121,11 +121,13 @@ class CodeElementDetector
                 switch ($tokenCode) {
                     case T_CONST:
                         $docBlock = static::getPrevDocBlock($file, $ptr, $skip);
-                        $elements[] = new ClassConstElement($line, $docBlock, $fqcn, $decName);
+                        $valueType = null;
+                        $elements[] = new ClassConstElement($line, $docBlock, $fqcn, $decName, $valueType);
                         break;
                     case T_VARIABLE:
                         $docBlock = static::getPrevDocBlock($file, $ptr, $skip);
-                        $elements[] = new ClassPropElement($line, $docBlock, $fqcn, $decName);
+                        $defValueType = null;
+                        $elements[] = new ClassPropElement($line, $docBlock, $fqcn, $decName, $defValueType);
                         break;
                     case T_FUNCTION:
                         $extended = static::isExtended($fqcn, $decName, $useReflection);
@@ -139,7 +141,8 @@ class CodeElementDetector
                 switch ($tokenCode) {
                     case T_CONST:
                         $docBlock = static::getPrevDocBlock($file, $ptr, $skip);
-                        $elements[] = new TraitPropElement($line, $docBlock, $fqcn, $decName);
+                        $defValueType = null;
+                        $elements[] = new TraitPropElement($line, $docBlock, $fqcn, $decName, $defValueType);
                         break;
                     case T_FUNCTION:
                         $extended = static::isExtended($fqcn, $decName, $useReflection);
@@ -153,7 +156,8 @@ class CodeElementDetector
                 switch ($tokenCode) {
                     case T_CONST:
                         $docBlock = static::getPrevDocBlock($file, $ptr, $skip);
-                        $elements[] = new InterfaceConstElement($line, $docBlock, $fqcn, $decName);
+                        $valueType = null;
+                        $elements[] = new InterfaceConstElement($line, $docBlock, $fqcn, $decName, $valueType);
                         break;
                     case T_FUNCTION:
                         $extended = static::isExtended($fqcn, $decName, $useReflection);

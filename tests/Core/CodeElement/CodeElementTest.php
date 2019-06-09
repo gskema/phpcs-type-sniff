@@ -27,7 +27,7 @@ class CodeElementTest extends TestCase
 {
     public function test(): void
     {
-        $classConst = new ClassConstElement(1, $this->createDocBlock(), 'FQCN1', 'CONST1');
+        $classConst = new ClassConstElement(1, $this->createDocBlock(), 'FQCN1', 'CONST1', null);
         self::assertEquals('CONST1', $classConst->getConstName());
         self::assertEquals('FQCN1', $classConst->getFqcn());
         self::assertEquals($this->createDocBlock(), $classConst->getDocBlock());
@@ -45,7 +45,7 @@ class CodeElementTest extends TestCase
         self::assertEquals($this->createSignature(), $classMethod->getSignature());
         self::assertEquals(false, $classMethod->isExtended());
 
-        $classProp = new ClassPropElement(4, $this->createDocBlock(), 'FQCN4', 'prop1');
+        $classProp = new ClassPropElement(4, $this->createDocBlock(), 'FQCN4', 'prop1', null);
         self::assertEquals('FQCN4', $classProp->getFqcn());
         self::assertEquals($this->createDocBlock(), $classProp->getDocBlock());
         self::assertEquals(4, $classProp->getLine());
@@ -68,7 +68,7 @@ class CodeElementTest extends TestCase
         self::assertEquals('NS2', $func->getNamespace());
         self::assertEquals($this->createSignature(), $func->getSignature());
 
-        $interfaceConst = new InterfaceConstElement(8, $this->createDocBlock(), 'FQCN5', 'CONST3');
+        $interfaceConst = new InterfaceConstElement(8, $this->createDocBlock(), 'FQCN5', 'CONST3', null);
         self::assertEquals('CONST3', $interfaceConst->getConstName());
         self::assertEquals('FQCN5', $interfaceConst->getFqcn());
         self::assertEquals($this->createDocBlock(), $interfaceConst->getDocBlock());
@@ -98,7 +98,7 @@ class CodeElementTest extends TestCase
         self::assertEquals($this->createSignature(), $traitMethod->getSignature());
         self::assertEquals(true, $traitMethod->isExtended());
 
-        $traitProp = new TraitPropElement(12, $this->createDocBlock(), 'FQCN10', 'prop2');
+        $traitProp = new TraitPropElement(12, $this->createDocBlock(), 'FQCN10', 'prop2', null);
         self::assertEquals('FQCN10', $traitProp->getFqcn());
         self::assertEquals($this->createDocBlock(), $traitProp->getDocBlock());
         self::assertEquals(12, $traitProp->getLine());

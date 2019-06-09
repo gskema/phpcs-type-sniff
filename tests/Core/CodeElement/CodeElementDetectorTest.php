@@ -43,12 +43,12 @@ class CodeElementDetectorTest extends TestCase
 
         // #0
         $dataSets[] = [
-            __DIR__.'/fixtures/TestClass.php.huh',
+            __DIR__.'/fixtures/TestClass0.php.txt',
             [
                 new FileElement(
                     1,
                     new DocBlock([3 => 'File Doc Comment'], []),
-                    __DIR__.'/fixtures/TestClass.php.huh'
+                    __DIR__.'/fixtures/TestClass0.php.txt'
                 ),
                 new ClassElement(
                     13,
@@ -138,12 +138,12 @@ class CodeElementDetectorTest extends TestCase
 
         // #1
         $dataSets[] = [
-            __DIR__.'/fixtures/TestClass2.php.huh',
+            __DIR__.'/fixtures/TestClass1.php.txt',
             [
                 new FileElement(
                     1,
                     new UndefinedDocBlock(),
-                    __DIR__.'/fixtures/TestClass2.php.huh'
+                    __DIR__.'/fixtures/TestClass1.php.txt'
                 ),
                 new FunctionElement(
                     7,
@@ -190,12 +190,12 @@ class CodeElementDetectorTest extends TestCase
 
         // #2
         $dataSets[] = [
-            __DIR__.'/fixtures/TestClass3.php.txt',
+            __DIR__.'/fixtures/TestClass2.php.txt',
             [
                 new FileElement(
                     1,
                     new UndefinedDocBlock(),
-                    __DIR__.'/fixtures/TestClass3.php.txt'
+                    __DIR__.'/fixtures/TestClass2.php.txt'
                 ),
                 new ClassElement(
                     3,

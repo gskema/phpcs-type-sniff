@@ -1,6 +1,6 @@
 <?php
 
-namespace Gskema\TypeSniff\Sniffs\fixtures;
+namespace Acme;
 
 class Class0
 {

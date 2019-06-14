@@ -33,6 +33,34 @@ class CompositeCodeElementSniffTest extends TestCase
             ]
         ];
 
+        // #1
+        $dataSets[] = [
+            [
+                'FqcnMethodSniff.usefulTags' => ['@SmartTemplate'],
+            ],
+            __DIR__.'/fixtures/Class1.php.txt',
+            [
+                '007 Add type declaration for parameter $a or create PHPDoc with type hint',
+                '007 Create PHPDoc with typed array type hint for parameter $b, .e.g.: "string[]" or "SomeClass[]"',
+                '012 Add type hint in PHPDoc tag for parameter $c',
+                '014 Missing PHPDoc tag or void type declaration for return value',
+                '019 Add type hint in PHPDoc tag for parameter $d',
+                '020 Add type hint in PHPDoc tag for parameter $e, e.g. "int"',
+                '021 Add type hint in PHPDoc tag for parameter $f',
+                '024 Replace array type with typed array type in PHPDoc for return value. Use mixed[] for generic arrays.',
+                '035 Add type declaration for parameter $h',
+                '035 Add type declaration for parameter $i, e.g.: "?int"',
+                '035 Add type declaration for return value, e.g.: "?array"',
+                '040 Remove array type, typed array type is present in PHPDoc for parameter $j.',
+                '041 Replace array type with typed array type in PHPDoc for parameter $k. Use mixed[] for generic arrays.',
+                '042 Add type hint in PHPDoc tag for parameter $l',
+                '044 Add "null" type hint in PHPDoc for parameter $n',
+                '045 Add "int" type hint in PHPDoc for parameter $o',
+                '046 Add "null" type hint in PHPDoc for parameter $p',
+                '065 Useless PHPDoc',
+            ]
+        ];
+
         return $dataSets;
     }
 

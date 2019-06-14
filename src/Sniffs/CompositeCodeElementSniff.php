@@ -9,6 +9,9 @@ use Gskema\TypeSniff\Sniffs\CodeElement\FqcnConstSniff;
 use Gskema\TypeSniff\Sniffs\CodeElement\FqcnMethodSniff;
 use Gskema\TypeSniff\Sniffs\CodeElement\FqcnPropSniff;
 
+/**
+ * @see CompositeCodeElementSniffTest
+ */
 class CompositeCodeElementSniff extends AbstractConfigurableSniff
 {
     /** @var bool */

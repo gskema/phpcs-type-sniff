@@ -173,6 +173,9 @@ class FqcnMethodSniff implements CodeElementSniffInterface
                 $warnings[$fnTypeLine] = sprintf('Add type declaration for :subject:');
             } elseif ($suggestedFnType = TypeConverter::toFunctionType($docType)) {
                 $warnings[$fnTypeLine] = sprintf('Add type declaration for :subject:, e.g.: "%s"', $suggestedFnType->toString());
+            } elseif ($this->containsType($docType, ArrayType::class)) {
+                // e.g. compound array|string -> cannot be forced in fn type, but should be updated to typed array
+                $warnings[$docTypeLine] = 'Replace array type with typed array type in PHPDoc for :subject:. Use mixed[] for generic arrays.';
             }
         } elseif ($this->containsType($fnType, ArrayType::class)) {
             // doc_block:defined, doc_type:defined, fn_type:array

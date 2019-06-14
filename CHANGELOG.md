@@ -4,6 +4,11 @@ All notable changes to `phpcs-type-sniff` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## 0.10.5 - 2019-06-14
+
+### Fixed
+- Added warning for array type inside compound parameter type.
+
 ## 0.10.4 - 2019-06-09
 
 ### Fixed

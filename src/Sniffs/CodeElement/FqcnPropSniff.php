@@ -2,6 +2,7 @@
 
 namespace Gskema\TypeSniff\Sniffs\CodeElement;
 
+use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
 use PHP_CodeSniffer\Files\File;
 use Gskema\TypeSniff\Core\CodeElement\Element\AbstractFqcnPropElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassPropElement;
@@ -75,7 +76,9 @@ class FqcnPropSniff implements CodeElementSniffInterface
                 $prop->getLine(),
                 'FqcnPropSniff'
             );
-        } elseif (is_a($prop->getDefaultValueType(), ArrayType::class)) {
+        } elseif (is_a($prop->getDefaultValueType(), ArrayType::class)
+              && !is_a($docType, TypedArrayType::class)
+        ) {
             $file->addWarningOnLine(
                 'Add PHPDoc with typed array type hint for '.$subject.'. Use mixed[] for generic arrays.',
                 $prop->getLine(),

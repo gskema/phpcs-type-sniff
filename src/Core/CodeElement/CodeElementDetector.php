@@ -342,6 +342,9 @@ class CodeElementDetector
                 $valueType = new ArrayType();
                 break;
             default:
+                // We COULD returned UndefinedType for T_STRING (no assigment), but this conflicts
+                // with values that are other classes' constants (contains T_STRING tokens),
+                // where we CANNOT detect the type yet.
                 $valueType = null;
         }
 

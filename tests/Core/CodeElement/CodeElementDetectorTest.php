@@ -2,6 +2,8 @@
 
 namespace Gskema\TypeSniff\Core\CodeElement;
 
+use Gskema\TypeSniff\Core\Type\Common\BoolType;
+use Gskema\TypeSniff\Core\Type\Common\FloatType;
 use PHP_CodeSniffer\Config;
 use PHP_CodeSniffer\Files\LocalFile;
 use PHP_CodeSniffer\Ruleset;
@@ -41,12 +43,12 @@ class CodeElementDetectorTest extends TestCase
 
         // #0
         $dataSets[] = [
-            __DIR__.'/fixtures/TestClass.php.huh',
+            __DIR__.'/fixtures/TestClass0.php.txt',
             [
                 new FileElement(
                     1,
                     new DocBlock([3 => 'File Doc Comment'], []),
-                    __DIR__.'/fixtures/TestClass.php.huh'
+                    __DIR__.'/fixtures/TestClass0.php.txt'
                 ),
                 new ClassElement(
                     13,
@@ -59,7 +61,8 @@ class CodeElementDetectorTest extends TestCase
                     15,
                     new UndefinedDocBlock(),
                     'Test\\Name\\Space\\TestClass',
-                    'CONST1'
+                    'CONST1',
+                    new IntType()
                 ),
                 new ClassConstElement(
                     18,
@@ -67,13 +70,15 @@ class CodeElementDetectorTest extends TestCase
                         new VarTag(17, new IntType(), null, null),
                     ]),
                     'Test\\Name\\Space\\TestClass',
-                    'CONST2'
+                    'CONST2',
+                    new IntType()
                 ),
                 new ClassPropElement(
                     20,
                     new UndefinedDocBlock(),
                     'Test\\Name\\Space\\TestClass',
-                    'prop1'
+                    'prop1',
+                    null
                 ),
                 new ClassPropElement(
                     25,
@@ -81,7 +86,8 @@ class CodeElementDetectorTest extends TestCase
                         new VarTag(23, new IntType(), null, null)
                     ]),
                     'Test\\Name\\Space\\TestClass',
-                    'prop2'
+                    'prop2',
+                    null
                 ),
                 new ClassPropElement(
                     28,
@@ -89,7 +95,8 @@ class CodeElementDetectorTest extends TestCase
                         new VarTag(27, new CompoundType([new StringType(), new NullType()]), null, null)
                     ]),
                     'Test\\Name\\Space\\TestClass',
-                    'prop3'
+                    'prop3',
+                    null
                 ),
                 new ClassMethodElement(
                     new UndefinedDocBlock(),
@@ -131,12 +138,12 @@ class CodeElementDetectorTest extends TestCase
 
         // #1
         $dataSets[] = [
-            __DIR__.'/fixtures/TestClass2.php.huh',
+            __DIR__.'/fixtures/TestClass1.php.txt',
             [
                 new FileElement(
                     1,
                     new UndefinedDocBlock(),
-                    __DIR__.'/fixtures/TestClass2.php.huh'
+                    __DIR__.'/fixtures/TestClass1.php.txt'
                 ),
                 new FunctionElement(
                     7,
@@ -148,7 +155,8 @@ class CodeElementDetectorTest extends TestCase
                     11,
                     new UndefinedDocBlock(),
                     'Gskema\TypeSniff\\Core\\CodeElement',
-                    'CONST1'
+                    'CONST1',
+                    new IntType()
                 ),
                 new ClassElement(
                     14,
@@ -167,15 +175,146 @@ class CodeElementDetectorTest extends TestCase
                         new VarTag(56, new IntType(), null, null),
                     ]),
                     'Gskema\TypeSniff\\Core\\CodeElement\\TestClass2',
-                    'prop1'
+                    'prop1',
+                    null
                 ),
                 new ClassConstElement(
                     59,
                     new UndefinedDocBlock(),
                     'Gskema\TypeSniff\\Core\\CodeElement\\TestClass2',
-                    'CONST2'
+                    'CONST2',
+                    new IntType()
                 ),
             ],
+        ];
+
+        // #2
+        $dataSets[] = [
+            __DIR__.'/fixtures/TestClass2.php.txt',
+            [
+                new FileElement(
+                    1,
+                    new UndefinedDocBlock(),
+                    __DIR__.'/fixtures/TestClass2.php.txt'
+                ),
+                new ClassElement(
+                    3,
+                    new UndefinedDocBlock(),
+                    'TestClass3'
+                ),
+                new ClassConstElement(
+                    5,
+                    new UndefinedDocBlock(),
+                    'TestClass3',
+                    'C01',
+                    new NullType()
+                ),
+                new ClassConstElement(
+                    6,
+                    new UndefinedDocBlock(),
+                    'TestClass3',
+                    'C02',
+                    new BoolType()
+                ),
+                new ClassConstElement(
+                    7,
+                    new UndefinedDocBlock(),
+                    'TestClass3',
+                    'C03',
+                    new BoolType()
+                ),
+                new ClassConstElement(
+                    8,
+                    new UndefinedDocBlock(),
+                    'TestClass3',
+                    'C04',
+                    new IntType()
+                ),
+                new ClassConstElement(
+                    9,
+                    new UndefinedDocBlock(),
+                    'TestClass3',
+                    'C05',
+                    new FloatType()
+                ),
+                new ClassConstElement(
+                    10,
+                    new UndefinedDocBlock(),
+                    'TestClass3',
+                    'C06',
+                    new IntType()
+                ),
+                new ClassConstElement(
+                    11,
+                    new UndefinedDocBlock(),
+                    'TestClass3',
+                    'C07',
+                    new StringType()
+                ),
+                new ClassConstElement(
+                    12,
+                    new UndefinedDocBlock(),
+                    'TestClass3',
+                    'C08',
+                    new StringType()
+                ),
+                new ClassConstElement(
+                    13,
+                    new UndefinedDocBlock(),
+                    'TestClass3',
+                    'C09',
+                    new StringType()
+                ),
+                new ClassConstElement(
+                    16,
+                    new UndefinedDocBlock(),
+                    'TestClass3',
+                    'C10',
+                    new ArrayType()
+                ),
+                new ClassConstElement(
+                    17,
+                    new UndefinedDocBlock(),
+                    'TestClass3',
+                    'C11',
+                    new ArrayType()
+                ),
+                new ClassConstElement(
+                    18,
+                    new UndefinedDocBlock(),
+                    'TestClass3',
+                    'C12',
+                    null
+                ),
+                new ClassConstElement(
+                    19,
+                    new UndefinedDocBlock(),
+                    'TestClass3',
+                    'C13',
+                    null
+                ),
+                new ClassConstElement(
+                    20,
+                    new UndefinedDocBlock(),
+                    'TestClass3',
+                    'C14',
+                    new IntType()
+                ),
+                new ClassPropElement(
+                    21,
+                    new UndefinedDocBlock(),
+                    'TestClass3',
+                    'prop1',
+                    null
+                ),
+                new ClassPropElement(
+                    22,
+                    new UndefinedDocBlock(),
+                    'TestClass3',
+                    'prop2',
+                    new IntType()
+                ),
+            ]
         ];
 
         return $dataSets;

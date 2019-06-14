@@ -2,6 +2,7 @@
 
 namespace Gskema\TypeSniff\Sniffs\CodeElement;
 
+use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
 use PHP_CodeSniffer\Files\File;
 use Gskema\TypeSniff\Core\CodeElement\Element\AbstractFqcnPropElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassPropElement;
@@ -45,32 +46,41 @@ class FqcnPropSniff implements CodeElementSniffInterface
 
         /** @var VarTag|null $varTag */
         $varTag = $docBlock->getTagsByName('var')[0] ?? null;
-        $varType = $varTag ? $varTag->getType() : null;
+        $docType = $varTag ? $varTag->getType() : null;
+
+        $subject = 'property $'.$prop->getPropName();
 
         if ($docBlock instanceof UndefinedDocBlock) {
             $file->addWarningOnLine(
-                'Add PHPDoc for property $'.$prop->getPropName(),
+                'Add PHPDoc for '.$subject,
                 $prop->getLine(),
                 'FqcnPropSniff'
             );
         } elseif (null === $varTag) {
             $file->addWarningOnLine(
-                'Add @var tag for property $'.$prop->getPropName(),
+                'Add @var tag for '.$subject,
                 $prop->getLine(),
                 'FqcnPropSniff'
             );
-        } elseif ($varType instanceof UndefinedType) {
+        } elseif ($docType instanceof UndefinedType) {
             $file->addWarningOnLine(
-                'Add type hint to @var tag for property $'.$prop->getPropName(),
+                'Add type hint to @var tag for '.$subject,
                 $prop->getLine(),
                 'FqcnPropSniff'
             );
-        } elseif ($varType instanceof ArrayType
-              || ($varType instanceof CompoundType && $varType->containsType(ArrayType::class))
+        } elseif ($docType instanceof ArrayType
+              || ($docType instanceof CompoundType && $docType->containsType(ArrayType::class))
         ) {
-            $subject = '$'.$prop->getPropName();
             $file->addWarningOnLine(
                 'Replace array type with typed array type in PHPDoc for '.$subject.'. Use mixed[] for generic arrays.',
+                $prop->getLine(),
+                'FqcnPropSniff'
+            );
+        } elseif (is_a($prop->getDefaultValueType(), ArrayType::class)
+              && !is_a($docType, TypedArrayType::class)
+        ) {
+            $file->addWarningOnLine(
+                'Add PHPDoc with typed array type hint for '.$subject.'. Use mixed[] for generic arrays.',
                 $prop->getLine(),
                 'FqcnPropSniff'
             );

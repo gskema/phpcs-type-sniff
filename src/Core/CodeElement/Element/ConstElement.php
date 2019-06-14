@@ -3,6 +3,7 @@
 namespace Gskema\TypeSniff\Core\CodeElement\Element;
 
 use Gskema\TypeSniff\Core\DocBlock\DocBlock;
+use Gskema\TypeSniff\Core\Type\TypeInterface;
 
 class ConstElement implements CodeElementInterface
 {
@@ -18,16 +19,21 @@ class ConstElement implements CodeElementInterface
     /** @var string */
     protected $name;
 
+    /** @var TypeInterface|null */
+    protected $valueType;
+
     public function __construct(
         int $line,
         DocBlock $docBlock,
         string $namespace,
-        string $name
+        string $name,
+        ?TypeInterface $valueType
     ) {
         $this->line = $line;
         $this->docBlock = $docBlock;
         $this->namespace = $namespace;
         $this->name = $name;
+        $this->valueType = $valueType;
     }
 
     /**
@@ -54,5 +60,10 @@ class ConstElement implements CodeElementInterface
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getValueType(): ?TypeInterface
+    {
+        return $this->valueType;
     }
 }

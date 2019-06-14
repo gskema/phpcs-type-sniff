@@ -2,6 +2,14 @@
 
 namespace Gskema\TypeSniff\Core\CodeElement;
 
+use Gskema\TypeSniff\Core\Type\Common\ArrayType;
+use Gskema\TypeSniff\Core\Type\Common\BoolType;
+use Gskema\TypeSniff\Core\Type\Common\FloatType;
+use Gskema\TypeSniff\Core\Type\Common\IntType;
+use Gskema\TypeSniff\Core\Type\Common\StringType;
+use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
+use Gskema\TypeSniff\Core\Type\TypeInterface;
+use ParseError;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 use ReflectionClass;
@@ -95,8 +103,9 @@ class CodeElementDetector
                 switch ($tokenCode) {
                     case T_CONST:
                         $constName = static::getDeclarationName($file, $ptr);
+                        $valueType = static::getAssignmentType($file, $ptr);
                         $docBlock = static::getPrevDocBlock($file, $ptr, $skip);
-                        $elements[] = new ConstElement($line, $docBlock, $namespace, $constName);
+                        $elements[] = new ConstElement($line, $docBlock, $namespace, $constName, $valueType);
                         break;
                     case T_FUNCTION:
                         $docBlock = static::getPrevDocBlock($file, $ptr, $skip);
@@ -121,11 +130,13 @@ class CodeElementDetector
                 switch ($tokenCode) {
                     case T_CONST:
                         $docBlock = static::getPrevDocBlock($file, $ptr, $skip);
-                        $elements[] = new ClassConstElement($line, $docBlock, $fqcn, $decName);
+                        $valueType = static::getAssignmentType($file, $ptr);
+                        $elements[] = new ClassConstElement($line, $docBlock, $fqcn, $decName, $valueType);
                         break;
                     case T_VARIABLE:
                         $docBlock = static::getPrevDocBlock($file, $ptr, $skip);
-                        $elements[] = new ClassPropElement($line, $docBlock, $fqcn, $decName);
+                        $defValueType = static::getAssignmentType($file, $ptr);
+                        $elements[] = new ClassPropElement($line, $docBlock, $fqcn, $decName, $defValueType);
                         break;
                     case T_FUNCTION:
                         $extended = static::isExtended($fqcn, $decName, $useReflection);
@@ -139,7 +150,8 @@ class CodeElementDetector
                 switch ($tokenCode) {
                     case T_CONST:
                         $docBlock = static::getPrevDocBlock($file, $ptr, $skip);
-                        $elements[] = new TraitPropElement($line, $docBlock, $fqcn, $decName);
+                        $defValueType = static::getAssignmentType($file, $ptr);
+                        $elements[] = new TraitPropElement($line, $docBlock, $fqcn, $decName, $defValueType);
                         break;
                     case T_FUNCTION:
                         $extended = static::isExtended($fqcn, $decName, $useReflection);
@@ -153,7 +165,8 @@ class CodeElementDetector
                 switch ($tokenCode) {
                     case T_CONST:
                         $docBlock = static::getPrevDocBlock($file, $ptr, $skip);
-                        $elements[] = new InterfaceConstElement($line, $docBlock, $fqcn, $decName);
+                        $valueType = static::getAssignmentType($file, $ptr);
+                        $elements[] = new InterfaceConstElement($line, $docBlock, $fqcn, $decName, $valueType);
                         break;
                     case T_FUNCTION:
                         $extended = static::isExtended($fqcn, $decName, $useReflection);
@@ -247,7 +260,6 @@ class CodeElementDetector
 
     protected static function isExtended(string $fqcn, string $method, bool $useReflection): ?bool
     {
-        // @TODO Handle reflection errors
         if (!$useReflection) {
             return null;
         }
@@ -268,7 +280,11 @@ class CodeElementDetector
      */
     protected static function getMethodsRecursive(string $fqcn, bool $includeOwn): array
     {
-        $classRef = new ReflectionClass($fqcn);
+        try {
+            $classRef = new ReflectionClass($fqcn);
+        } catch (ParseError $e) {
+            return []; // suppress error popups when editing .php file
+        }
 
         $methodNames = [];
         if ($includeOwn) {
@@ -288,5 +304,54 @@ class CodeElementDetector
         }
 
         return $methodNames;
+    }
+
+    protected static function getAssignmentType(File $file, int $ptr): ?TypeInterface
+    {
+        // @TODO Move function somewhere?
+        $tokens = $file->getTokens();
+
+        // $ptr is at const or variable, it safer and easier to search backwards
+        $semiPtr = $file->findNext([T_SEMICOLON], $ptr + 1);
+        if (false === $semiPtr) {
+            return null;
+        }
+
+        $valueEndPtr = $file->findPrevious(Tokens::$emptyTokens, $semiPtr - 1, null, true);
+        if (false === $valueEndPtr) {
+            return null;
+        }
+
+        $valueToken = $tokens[$valueEndPtr];
+        switch ($valueToken['code']) {
+            case T_NULL:
+                $valueType = new NullType();
+                break;
+            case T_TRUE:
+            case T_FALSE:
+                $valueType = new BoolType();
+                break;
+            case T_LNUMBER:
+                $valueType = new IntType();
+                break;
+            case T_DNUMBER:
+                $valueType = new FloatType();
+                break;
+            case T_CONSTANT_ENCAPSED_STRING:
+            case T_END_HEREDOC:
+                $valueType = new StringType();
+                break;
+            case T_CLOSE_SHORT_ARRAY:
+            case T_CLOSE_PARENTHESIS: // array()
+                $valueType = new ArrayType();
+                break;
+            default:
+                // We COULD returned UndefinedType for T_STRING (no assigment), but this conflicts
+                // with values that are other classes' constants (contains T_STRING tokens),
+                // where we CANNOT detect the type yet.
+                $valueType = null;
+        }
+
+        return $valueType;
     }
 }

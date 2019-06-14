@@ -9,6 +9,7 @@ use Gskema\TypeSniff\Core\Type\Common\IntType;
 use Gskema\TypeSniff\Core\Type\Common\StringType;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
 use Gskema\TypeSniff\Core\Type\TypeInterface;
+use ParseError;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 use ReflectionClass;
@@ -259,7 +260,6 @@ class CodeElementDetector
 
     protected static function isExtended(string $fqcn, string $method, bool $useReflection): ?bool
     {
-        // @TODO Handle reflection errors
         if (!$useReflection) {
             return null;
         }
@@ -280,7 +280,11 @@ class CodeElementDetector
      */
     protected static function getMethodsRecursive(string $fqcn, bool $includeOwn): array
     {
-        $classRef = new ReflectionClass($fqcn);
+        try {
+            $classRef = new ReflectionClass($fqcn);
+        } catch (ParseError $e) {
+            return []; // suppress error popups when editing .php file
+        }
 
         $methodNames = [];
         if ($includeOwn) {

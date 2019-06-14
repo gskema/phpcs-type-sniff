@@ -60,13 +60,5 @@ class FqcnConstSniff implements CodeElementSniffInterface
                 'FqcnConstSniff'
             );
         }
-
-        if ($varTag && null !== $varTag->getParamName()) {
-            $file->addWarningOnLine(
-                'Remove property name $'.$varTag->getParamName().' from @var tag',
-                $const->getLine(),
-                'FqcnConstSniff'
-            );
-        }
     }
 }

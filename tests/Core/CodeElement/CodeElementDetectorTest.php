@@ -50,8 +50,9 @@ class CodeElementDetectorTest extends TestCase
 
         // #0
         $dataSets[] = [
-            __DIR__.'/fixtures/TestClass0.php.txt',
-            [
+            'givenUseReflection' => false,
+            'givenFile' => __DIR__.'/fixtures/TestClass0.php.txt',
+            'expectedElements' => [
                 new FileElement(
                     1,
                     new DocBlock([3 => 'File Doc Comment'], []),
@@ -145,8 +146,9 @@ class CodeElementDetectorTest extends TestCase
 
         // #1
         $dataSets[] = [
-            __DIR__.'/fixtures/TestClass1.php.txt',
-            [
+            'givenUseReflection' => false,
+            'givenFile' => __DIR__.'/fixtures/TestClass1.php.txt',
+            'expectedElements' => [
                 new FileElement(
                     1,
                     new UndefinedDocBlock(),
@@ -197,8 +199,9 @@ class CodeElementDetectorTest extends TestCase
 
         // #2
         $dataSets[] = [
-            __DIR__.'/fixtures/TestClass2.php.txt',
-            [
+            'givenUseReflection' => false,
+            'givenFile' => __DIR__.'/fixtures/TestClass2.php.txt',
+            'expectedElements' => [
                 new FileElement(
                     1,
                     new UndefinedDocBlock(),
@@ -326,8 +329,9 @@ class CodeElementDetectorTest extends TestCase
 
         // #3
         $dataSets[] = [
-            __DIR__.'/fixtures/TestInterface0.php.txt',
-            [
+            'givenUseReflection' => false,
+            'givenFile' => __DIR__.'/fixtures/TestInterface0.php.txt',
+            'expectedElements' => [
                 new FileElement(1, new UndefinedDocBlock(), __DIR__.'/fixtures/TestInterface0.php.txt'),
                 new InterfaceElement(3, new UndefinedDocBlock(), 'TestInterface0'),
                 new InterfaceConstElement(5, new UndefinedDocBlock(), 'TestInterface0', 'C1', new IntType()),
@@ -342,8 +346,9 @@ class CodeElementDetectorTest extends TestCase
 
         // #4
         $dataSets[] = [
-            __DIR__.'/fixtures/TestTrait0.php.txt',
-            [
+            'givenUseReflection' => false,
+            'givenFile' => __DIR__.'/fixtures/TestTrait0.php.txt',
+            'expectedElements' => [
                 new FileElement(1, new UndefinedDocBlock(), __DIR__.'/fixtures/TestTrait0.php.txt'),
                 new TraitElement(3, new UndefinedDocBlock(), 'TestTrait0'),
                 new TraitPropElement(5, new UndefinedDocBlock(), 'TestTrait0', 'prop1', new IntType()),
@@ -364,21 +369,68 @@ class CodeElementDetectorTest extends TestCase
             ]
         ];
 
+        // #5
+        $dataSets[] = [
+            'givenUseReflection' => true,
+            'givenFile' => __DIR__.'/fixtures/Ref2.php',
+            'expectedElements' => [
+                new FileElement(1, new UndefinedDocBlock(), __DIR__.'/fixtures/Ref2.php'),
+                new ClassElement(5, new UndefinedDocBlock(), 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\Ref2'),
+                new ClassMethodElement(
+                    new UndefinedDocBlock(),
+                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\Ref2',
+                    new FunctionSignature(
+                        7,
+                        'func0',
+                        [],
+                        new VoidType(),
+                        7
+                    ),
+                    true
+                ),
+                new ClassMethodElement(
+                    new UndefinedDocBlock(),
+                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\Ref2',
+                    new FunctionSignature(
+                        11,
+                        'func1',
+                        [],
+                        new VoidType(),
+                        12
+                    ),
+                    true
+                ),
+                new ClassMethodElement(
+                    new UndefinedDocBlock(),
+                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\Ref2',
+                    new FunctionSignature(
+                        15,
+                        'func2',
+                        [],
+                        new UndefinedType(),
+                        15
+                    ),
+                    false
+                ),
+            ]
+        ];
+
         return $dataSets;
     }
 
     /**
      * @dataProvider dataDetectFromTokens
      *
-     * @param string        $givenPath
+     * @param bool                   $givenUseReflection
+     * @param string                 $givenPath
      * @param CodeElementInterface[] $expected
      */
-    public function testDetectFromTokens(string $givenPath, array $expected): void
+    public function testDetectFromTokens(bool $givenUseReflection, string $givenPath, array $expected): void
     {
         $givenFile = new LocalFile($givenPath, new Ruleset(new Config()), new Config());
         $givenFile->parse();
 
-        $actual = CodeElementDetector::detectFromTokens($givenFile, false);
+        $actual = CodeElementDetector::detectFromTokens($givenFile, $givenUseReflection);
 
         self::assertEquals($expected, $actual);
     }

@@ -8,6 +8,7 @@
 
     <file>src</file>
     <file>tests</file>
+    <exclude-pattern>*/tests/*\.php$</exclude-pattern>
 
     <rule ref="PSR2">
         <exclude name="Generic.Files.LineLength"/>

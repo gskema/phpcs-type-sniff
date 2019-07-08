@@ -318,9 +318,7 @@ class CodeElementDetector
         }
 
         $valueEndPtr = $file->findPrevious(Tokens::$emptyTokens, $semiPtr - 1, null, true);
-        if (false === $valueEndPtr) {
-            return null;
-        }
+        // $valueEndPtr will never be false here, since $ptr points to T_CONST, T_VARIABLE
 
         $valueToken = $tokens[$valueEndPtr];
         switch ($valueToken['code']) {

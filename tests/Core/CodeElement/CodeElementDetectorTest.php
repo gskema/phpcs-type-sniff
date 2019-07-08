@@ -415,6 +415,57 @@ class CodeElementDetectorTest extends TestCase
             ]
         ];
 
+        // #6
+        $dataSets[] = [
+            'givenUseReflection' => false,
+            'givenFile' => __DIR__.'/fixtures/Parse0.php',
+            'expectedElements' => [
+                new FileElement(1, new UndefinedDocBlock(), __DIR__.'/fixtures/Parse0.php'),
+                new ClassElement(5, new UndefinedDocBlock(), 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\Parse0'),
+                new ClassMethodElement(
+                    new UndefinedDocBlock(),
+                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\Parse0',
+                    new FunctionSignature(
+                        7,
+                        'func1',
+                        [],
+                        new VoidType(),
+                        7
+                    ),
+                    null
+                ),
+                new ClassPropElement(
+                    11,
+                    new UndefinedDocBlock(),
+                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\Parse0',
+                    'prop1',
+                    null // failed to parse
+                )
+            ]
+        ];
+
+        // #7
+        $dataSets[] = [
+            'givenUseReflection' => true,
+            'givenFile' => __DIR__.'/fixtures/Parse1.php',
+            'expectedElements' => [
+                new FileElement(1, new UndefinedDocBlock(), __DIR__.'/fixtures/Parse1.php'),
+                new ClassElement(5, new UndefinedDocBlock(), 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\Parse1'),
+                new ClassMethodElement(
+                    new UndefinedDocBlock(),
+                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\Parse1',
+                    new FunctionSignature(
+                        7,
+                        'func1',
+                        [],
+                        new VoidType(),
+                        7
+                    ),
+                    false // ParseError
+                ),
+            ]
+        ];
+
         return $dataSets;
     }
 

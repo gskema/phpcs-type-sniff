@@ -139,43 +139,44 @@ class FqcnMethodSniff implements CodeElementSniffInterface
     ): void {
         // @TODO Required mixed[][] instead of array[]
 
+        /** @var string[][] $warnings */
         $warnings = [];
         if ($docBlock instanceof UndefinedDocBlock) {
             // doc_block:undefined, fn_type:?
             if ($fnType instanceof UndefinedType) {
-                $warnings[$fnTypeLine] = 'Add type declaration for :subject: or create PHPDoc with type hint';
+                $warnings[$fnTypeLine][] = 'Add type declaration for :subject: or create PHPDoc with type hint';
             } elseif ($this->containsType($fnType, ArrayType::class)) {
-                $warnings[$fnTypeLine] = 'Create PHPDoc with typed array type hint for :subject:, .e.g.: "string[]" or "SomeClass[]"';
+                $warnings[$fnTypeLine][] = 'Create PHPDoc with typed array type hint for :subject:, .e.g.: "string[]" or "SomeClass[]"';
             }
         } elseif (null === $docType) {
             // doc_block:defined, doc_tag:missing
             if ('return value' === $subject) { // @TODO ??
                 if (!($fnType instanceof VoidType)) {
-                    $warnings[$fnTypeLine] = 'Missing PHPDoc tag or void type declaration for :subject:';
+                    $warnings[$fnTypeLine][] = 'Missing PHPDoc tag or void type declaration for :subject:';
                 }
             } else {
-                $warnings[$fnTypeLine] = 'Missing PHPDoc tag for :subject:';
+                $warnings[$fnTypeLine][] = 'Missing PHPDoc tag for :subject:';
             }
         } elseif ($docType instanceof UndefinedType) {
             // doc_block:defined, doc_type:undefined
             $suggestedFnType = TypeConverter::toExpectedDocType($fnType);
             if (null !== $suggestedFnType) {
-                $warnings[$docTypeLine] = sprintf(
+                $warnings[$docTypeLine][] = sprintf(
                     'Add type hint in PHPDoc tag for :subject:, e.g. "%s"',
                     $suggestedFnType->toString()
                 );
             } else {
-                $warnings[$docTypeLine] = 'Add type hint in PHPDoc tag for :subject:';
+                $warnings[$docTypeLine][] = 'Add type hint in PHPDoc tag for :subject:';
             }
         } elseif ($fnType instanceof UndefinedType) {
             // doc_block:defined, doc_type:defined, fn_type:undefined
             if ($docType instanceof NullType) {
-                $warnings[$fnTypeLine] = sprintf('Add type declaration for :subject:');
+                $warnings[$fnTypeLine][] = sprintf('Add type declaration for :subject:');
             } elseif ($suggestedFnType = TypeConverter::toFunctionType($docType)) {
-                $warnings[$fnTypeLine] = sprintf('Add type declaration for :subject:, e.g.: "%s"', $suggestedFnType->toString());
+                $warnings[$fnTypeLine][] = sprintf('Add type declaration for :subject:, e.g.: "%s"', $suggestedFnType->toString());
             } elseif ($this->containsType($docType, ArrayType::class)) {
                 // e.g. compound array|string -> cannot be forced in fn type, but should be updated to typed array
-                $warnings[$docTypeLine] = 'Replace array type with typed array type in PHPDoc for :subject:. Use mixed[] for generic arrays.';
+                $warnings[$docTypeLine][] = 'Replace array type with typed array type in PHPDoc for :subject:. Use mixed[] for generic arrays.';
             }
         } elseif ($this->containsType($fnType, ArrayType::class)) {
             // doc_block:defined, doc_type:defined, fn_type:array
@@ -183,16 +184,16 @@ class FqcnMethodSniff implements CodeElementSniffInterface
             $docHasArray = $this->containsType($docType, ArrayType::class);
 
             if ($docHasTypedArray && $docHasArray) {
-                $warnings[$docTypeLine] = 'Remove array type, typed array type is present in PHPDoc for :subject:.';
+                $warnings[$docTypeLine][] = 'Remove array type, typed array type is present in PHPDoc for :subject:.';
             } elseif (!$docHasTypedArray && $docHasArray) {
-                $warnings[$docTypeLine] = 'Replace array type with typed array type in PHPDoc for :subject:. Use mixed[] for generic arrays.';
+                $warnings[$docTypeLine][] = 'Replace array type with typed array type in PHPDoc for :subject:. Use mixed[] for generic arrays.';
             } elseif (!$docHasTypedArray && !$docHasArray) {
-                $warnings[$docTypeLine] = 'Add typed array type in PHPDoc for :subject:. Use mixed[] for generic arrays.';
+                $warnings[$docTypeLine][] = 'Add typed array type in PHPDoc for :subject:. Use mixed[] for generic arrays.';
             }
         } elseif ($fnType instanceof NullableType) {
             // doc_block:defined, doc_type:defined, fn_type:nullable
             if (!$this->containsType($docType, NullType::class)) {
-                $warnings[$docTypeLine] = 'Add "null" type hint in PHPDoc for :subject:';
+                $warnings[$docTypeLine][] = 'Add "null" type hint in PHPDoc for :subject:';
             }
         } else {
             // doc_block:defined, doc_type:defined, fn_type:defined
@@ -203,14 +204,16 @@ class FqcnMethodSniff implements CodeElementSniffInterface
 
             foreach ($expectedDocTypes as $expectedDocType) {
                 if (!$this->containsType($docType, get_class($expectedDocType))) {
-                    $warnings[$docTypeLine] = sprintf('Add "%s" type hint in PHPDoc for :subject:', $fnType->toString());
+                    $warnings[$docTypeLine][] = sprintf('Add "%s" type hint in PHPDoc for :subject:', $fnType->toString());
                 }
             }
         }
 
-        foreach ($warnings as $line => $warningTpl) {
-            $warning = str_replace(':subject:', $subject, $warningTpl);
-            $file->addWarningOnLine($warning, $line, 'FqcnMethodSniff');
+        foreach ($warnings as $line => $lineWarnings) {
+            foreach ($lineWarnings as $warningTpl) {
+                $warning = str_replace(':subject:', $subject, $warningTpl);
+                $file->addWarningOnLine($warning, $line, 'FqcnMethodSniff');
+            }
         }
     }
 

@@ -2,8 +2,15 @@
 
 namespace Gskema\TypeSniff\Core\CodeElement;
 
+use Gskema\TypeSniff\Core\CodeElement\Element\InterfaceConstElement;
+use Gskema\TypeSniff\Core\CodeElement\Element\InterfaceElement;
+use Gskema\TypeSniff\Core\CodeElement\Element\InterfaceMethodElement;
+use Gskema\TypeSniff\Core\CodeElement\Element\TraitElement;
+use Gskema\TypeSniff\Core\CodeElement\Element\TraitMethodElement;
+use Gskema\TypeSniff\Core\CodeElement\Element\TraitPropElement;
 use Gskema\TypeSniff\Core\Type\Common\BoolType;
 use Gskema\TypeSniff\Core\Type\Common\FloatType;
+use Gskema\TypeSniff\Core\Type\Common\VoidType;
 use PHP_CodeSniffer\Config;
 use PHP_CodeSniffer\Files\LocalFile;
 use PHP_CodeSniffer\Ruleset;
@@ -313,6 +320,46 @@ class CodeElementDetectorTest extends TestCase
                     'TestClass3',
                     'prop2',
                     new IntType()
+                ),
+            ]
+        ];
+
+        // #3
+        $dataSets[] = [
+            __DIR__.'/fixtures/TestInterface0.php.txt',
+            [
+                new FileElement(1, new UndefinedDocBlock(), __DIR__.'/fixtures/TestInterface0.php.txt'),
+                new InterfaceElement(3, new UndefinedDocBlock(), 'TestInterface0'),
+                new InterfaceConstElement(5, new UndefinedDocBlock(), 'TestInterface0', 'C1', new IntType()),
+                new InterfaceMethodElement(
+                    new UndefinedDocBlock(),
+                    'TestInterface0',
+                    new FunctionSignature(7, 'func1', [], new VoidType(), 7),
+                    null
+                ),
+            ]
+        ];
+
+        // #4
+        $dataSets[] = [
+            __DIR__.'/fixtures/TestTrait0.php.txt',
+            [
+                new FileElement(1, new UndefinedDocBlock(), __DIR__.'/fixtures/TestTrait0.php.txt'),
+                new TraitElement(3, new UndefinedDocBlock(), 'TestTrait0'),
+                new TraitPropElement(5, new UndefinedDocBlock(), 'TestTrait0', 'prop1', new IntType()),
+                new TraitMethodElement(
+                    new UndefinedDocBlock(),
+                    'TestTrait0',
+                    new FunctionSignature(
+                        7,
+                        'func1',
+                        [
+                            new FunctionParam(7, 'arg1', new IntType())
+                        ],
+                        new IntType(),
+                        7
+                    ),
+                    null
                 ),
             ]
         ];

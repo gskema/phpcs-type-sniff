@@ -83,4 +83,6 @@ class Class1
     public function method9(int $a, ?array $b): void
     {
     }
+
+    public $prop1;
 }

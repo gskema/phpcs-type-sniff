@@ -58,6 +58,18 @@ class CompositeCodeElementSniffTest extends TestCase
                 '045 Add "int" type hint in PHPDoc for parameter $o',
                 '046 Add "null" type hint in PHPDoc for parameter $p',
                 '065 Useless PHPDoc',
+                '087 Add PHPDoc for property $prop1',
+            ]
+        ];
+
+        // #2
+        $dataSets[] = [
+            [
+                'FqcnMethodSniff.enabled' => 'false',
+            ],
+            __DIR__.'/fixtures/Class1.php.txt',
+            [
+                '087 Add PHPDoc for property $prop1',
             ]
         ];
 

@@ -148,7 +148,7 @@ class CodeElementDetector
             } elseif ($inTrait) {
                 $decName = static::getDeclarationName($file, $ptr);
                 switch ($tokenCode) {
-                    case T_CONST:
+                    case T_VARIABLE:
                         $docBlock = static::getPrevDocBlock($file, $ptr, $skip);
                         $defValueType = static::getAssignmentType($file, $ptr);
                         $elements[] = new TraitPropElement($line, $docBlock, $fqcn, $decName, $defValueType);

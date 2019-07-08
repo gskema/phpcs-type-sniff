@@ -75,6 +75,17 @@ class CompositeCodeElementSniffTest extends TestCase
             ]
         ];
 
+        // #3
+        $dataSets[] = [
+            [],
+            __DIR__.'/fixtures/Class3.php',
+            [
+                '007 Add type declaration for parameter $arg1 or create PHPDoc with type hint',
+                '027 Add "null" type hint in PHPDoc for parameter $arg1',
+                '042 Add "null" type hint in PHPDoc for return value',
+            ]
+        ];
+
         return $dataSets;
     }
 

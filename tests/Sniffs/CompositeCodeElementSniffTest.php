@@ -18,7 +18,9 @@ class CompositeCodeElementSniffTest extends TestCase
 
         // #0
         $dataSets[] = [
-            [],
+            [
+                'FqcnMethodSniff.enabled' => 'true',
+            ],
             __DIR__.'/fixtures/Class0.php.txt',
             [
                 '010 Replace array type with typed array type in PHPDoc for C2 constant. Use mixed[] for generic arrays.',

@@ -21,7 +21,7 @@ class CompositeCodeElementSniffTest extends TestCase
             [
                 'FqcnMethodSniff.enabled' => 'true',
             ],
-            __DIR__.'/fixtures/Class0.php.txt',
+            __DIR__.'/fixtures/TestClass0.php',
             [
                 '010 Replace array type with typed array type in PHPDoc for C2 constant. Use mixed[] for generic arrays.',
                 '012 Add PHPDoc with typed array type hint for C3 constant. Use mixed[] for generic arrays.',
@@ -40,7 +40,7 @@ class CompositeCodeElementSniffTest extends TestCase
             [
                 'FqcnMethodSniff.usefulTags' => ['@SmartTemplate'],
             ],
-            __DIR__.'/fixtures/Class1.php.txt',
+            __DIR__.'/fixtures/TestClass1.php',
             [
                 '007 Add type declaration for parameter $a or create PHPDoc with type hint',
                 '007 Create PHPDoc with typed array type hint for parameter $b, .e.g.: "string[]" or "SomeClass[]"',
@@ -69,7 +69,7 @@ class CompositeCodeElementSniffTest extends TestCase
             [
                 'FqcnMethodSniff.enabled' => 'false',
             ],
-            __DIR__.'/fixtures/Class1.php.txt',
+            __DIR__.'/fixtures/TestClass1.php',
             [
                 '087 Add PHPDoc for property $prop1',
             ]
@@ -80,7 +80,7 @@ class CompositeCodeElementSniffTest extends TestCase
             [
                 'useReflection' => true,
             ],
-            __DIR__.'/fixtures/Class3.php',
+            __DIR__.'/fixtures/TestClass3.php',
             [
                 '007 Add type declaration for parameter $arg1 or create PHPDoc with type hint',
                 '022 Missing @inheritDoc tag',

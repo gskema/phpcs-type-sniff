@@ -1,5 +1,7 @@
 <?php
 
+namespace Gskema\TypeSniff\Core\CodeElement\fixtures;
+
 trait TestTrait0
 {
     public $prop1 = 1;

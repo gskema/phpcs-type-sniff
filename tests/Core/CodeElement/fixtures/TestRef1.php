@@ -2,11 +2,9 @@
 
 namespace Gskema\TypeSniff\Core\CodeElement\fixtures;
 
-class Parse0
+class TestRef1
 {
     public function func1(): void
     {
     }
-
-    public $prop1 = 1
 }

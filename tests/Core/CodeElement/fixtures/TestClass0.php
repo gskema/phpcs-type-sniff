@@ -3,7 +3,7 @@
  * File Doc Comment
  */
 
-namespace Test\Name\Space;
+namespace Gskema\TypeSniff\Core\CodeElement\fixtures;
 
 /**
  * Class TestClass

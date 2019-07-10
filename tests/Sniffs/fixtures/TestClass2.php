@@ -2,7 +2,7 @@
 
 namespace Gskema\TypeSniff\Sniffs\fixtures;
 
-class Class2
+class TestClass2
 {
     public function __construct($arg1)
     {

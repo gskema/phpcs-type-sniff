@@ -28,7 +28,7 @@ class DocBlockParserTest extends TestCase
 
         // #0
         $dataSets[] = [
-            'givenPath' => __DIR__.'/fixtures/TestDocBlock.php.txt',
+            'givenPath' => __DIR__.'/fixtures/TestDocBlock.php',
             'givenPointers' => [2, 55],
             'expectedDocBlock' => new DocBlock(
                 [
@@ -48,7 +48,7 @@ class DocBlockParserTest extends TestCase
 
         // #1
         $dataSets[] = [
-            'givenPath' => __DIR__.'/fixtures/TestDocBlock.php.txt',
+            'givenPath' => __DIR__.'/fixtures/TestDocBlock.php',
             'givenPointers' => [58, 63],
             'expectedDocBlock' => new DocBlock(
                 [],
@@ -61,7 +61,7 @@ class DocBlockParserTest extends TestCase
 
         // #2
         $dataSets[] = [
-            'givenPath' => __DIR__.'/fixtures/TestDocBlock.php.txt',
+            'givenPath' => __DIR__.'/fixtures/TestDocBlock.php',
             'givenPointers' => [66, 71],
             'expectedDocBlock' => new DocBlock(
                 [],
@@ -79,7 +79,7 @@ class DocBlockParserTest extends TestCase
 
         // #3
         $dataSets[] = [
-            'givenPath' => __DIR__.'/fixtures/TestDocBlock.php.txt',
+            'givenPath' => __DIR__.'/fixtures/TestDocBlock.php',
             'givenPointers' => [75, 158],
             'expectedDocBlock' => new DocBlock(
                 [

@@ -2,7 +2,7 @@
 
 namespace Gskema\TypeSniff\Core\CodeElement\fixtures;
 
-class Parse1 extends Parse0
+class TestParse1 extends TestParse0
 {
     public function func1(): void
     {

@@ -51,24 +51,24 @@ class CodeElementDetectorTest extends TestCase
         // #0
         $dataSets[] = [
             'givenUseReflection' => false,
-            'givenFile' => __DIR__.'/fixtures/TestClass0.php.txt',
+            'givenFile' => __DIR__.'/fixtures/TestClass0.php',
             'expectedElements' => [
                 new FileElement(
                     1,
                     new DocBlock([3 => 'File Doc Comment'], []),
-                    __DIR__.'/fixtures/TestClass0.php.txt'
+                    __DIR__.'/fixtures/TestClass0.php'
                 ),
                 new ClassElement(
                     13,
                     new DocBlock([9 => 'Class TestClass'], [
                         new GenericTag(11, 'package', 'Gskema\TypeSniff\Core\DocBlock\fixtures')
                     ]),
-                    'Test\\Name\\Space\\TestClass'
+                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass'
                 ),
                 new ClassConstElement(
                     15,
                     new UndefinedDocBlock(),
-                    'Test\\Name\\Space\\TestClass',
+                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass',
                     'CONST1',
                     new IntType()
                 ),
@@ -77,14 +77,14 @@ class CodeElementDetectorTest extends TestCase
                     new DocBlock([], [
                         new VarTag(17, new IntType(), null, null),
                     ]),
-                    'Test\\Name\\Space\\TestClass',
+                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass',
                     'CONST2',
                     new IntType()
                 ),
                 new ClassPropElement(
                     20,
                     new UndefinedDocBlock(),
-                    'Test\\Name\\Space\\TestClass',
+                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass',
                     'prop1',
                     null
                 ),
@@ -93,7 +93,7 @@ class CodeElementDetectorTest extends TestCase
                     new DocBlock([], [
                         new VarTag(23, new IntType(), null, null)
                     ]),
-                    'Test\\Name\\Space\\TestClass',
+                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass',
                     'prop2',
                     null
                 ),
@@ -102,13 +102,13 @@ class CodeElementDetectorTest extends TestCase
                     new DocBlock([], [
                         new VarTag(27, new CompoundType([new StringType(), new NullType()]), null, null)
                     ]),
-                    'Test\\Name\\Space\\TestClass',
+                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass',
                     'prop3',
                     null
                 ),
                 new ClassMethodElement(
                     new UndefinedDocBlock(),
-                    'Test\\Name\\Space\\TestClass',
+                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass',
                     new FunctionSignature(
                         30,
                         '__construct',
@@ -120,7 +120,7 @@ class CodeElementDetectorTest extends TestCase
                 ),
                 new ClassMethodElement(
                     new UndefinedDocBlock(),
-                    'Test\\Name\\Space\\TestClass',
+                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass',
                     new FunctionSignature(34, 'method1', [], new StringType(), 34),
                     null
                 ),
@@ -129,7 +129,7 @@ class CodeElementDetectorTest extends TestCase
                         new ParamTag(40, new IntType(), 'param1', null),
                         new ReturnTag(42, new CompoundType([new ArrayType(), new NullType()]), null)
                     ]),
-                    'Test\\Name\\Space\\TestClass',
+                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass',
                     new FunctionSignature(
                         44,
                         'method2',
@@ -147,34 +147,34 @@ class CodeElementDetectorTest extends TestCase
         // #1
         $dataSets[] = [
             'givenUseReflection' => false,
-            'givenFile' => __DIR__.'/fixtures/TestClass1.php.txt',
+            'givenFile' => __DIR__.'/fixtures/TestClass1.php',
             'expectedElements' => [
                 new FileElement(
                     1,
                     new UndefinedDocBlock(),
-                    __DIR__.'/fixtures/TestClass1.php.txt'
+                    __DIR__.'/fixtures/TestClass1.php'
                 ),
                 new FunctionElement(
                     7,
                     new UndefinedDocBlock(),
-                    'Gskema\TypeSniff\\Core\\CodeElement',
+                    'Gskema\TypeSniff\\Core\\CodeElement\\fixtures',
                     new FunctionSignature(7, 'namedFunc', [], new UndefinedType(), 7)
                 ),
                 new ConstElement(
                     11,
                     new UndefinedDocBlock(),
-                    'Gskema\TypeSniff\\Core\\CodeElement',
+                    'Gskema\TypeSniff\\Core\\CodeElement\\fixtures',
                     'CONST1',
                     new IntType()
                 ),
                 new ClassElement(
                     14,
                     new UndefinedDocBlock(),
-                    'Gskema\TypeSniff\\Core\\CodeElement\\TestClass2'
+                    'Gskema\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass2'
                 ),
                 new ClassMethodElement(
                     new UndefinedDocBlock(),
-                    'Gskema\TypeSniff\\Core\\CodeElement\\TestClass2',
+                    'Gskema\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass2',
                     new FunctionSignature(16, 'method1', [], new UndefinedType(), 16),
                     null
                 ),
@@ -183,14 +183,14 @@ class CodeElementDetectorTest extends TestCase
                     new DocBlock([], [
                         new VarTag(56, new IntType(), null, null),
                     ]),
-                    'Gskema\TypeSniff\\Core\\CodeElement\\TestClass2',
+                    'Gskema\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass2',
                     'prop1',
                     null
                 ),
                 new ClassConstElement(
                     59,
                     new UndefinedDocBlock(),
-                    'Gskema\TypeSniff\\Core\\CodeElement\\TestClass2',
+                    'Gskema\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass2',
                     'CONST2',
                     new IntType()
                 ),
@@ -200,127 +200,127 @@ class CodeElementDetectorTest extends TestCase
         // #2
         $dataSets[] = [
             'givenUseReflection' => false,
-            'givenFile' => __DIR__.'/fixtures/TestClass2.php.txt',
+            'givenFile' => __DIR__.'/fixtures/TestClass2.php',
             'expectedElements' => [
                 new FileElement(
                     1,
                     new UndefinedDocBlock(),
-                    __DIR__.'/fixtures/TestClass2.php.txt'
+                    __DIR__.'/fixtures/TestClass2.php'
                 ),
                 new ClassElement(
-                    3,
-                    new UndefinedDocBlock(),
-                    'TestClass3'
-                ),
-                new ClassConstElement(
                     5,
                     new UndefinedDocBlock(),
-                    'TestClass3',
-                    'C01',
-                    new NullType()
-                ),
-                new ClassConstElement(
-                    6,
-                    new UndefinedDocBlock(),
-                    'TestClass3',
-                    'C02',
-                    new BoolType()
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3'
                 ),
                 new ClassConstElement(
                     7,
                     new UndefinedDocBlock(),
-                    'TestClass3',
-                    'C03',
-                    new BoolType()
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
+                    'C01',
+                    new NullType()
                 ),
                 new ClassConstElement(
                     8,
                     new UndefinedDocBlock(),
-                    'TestClass3',
-                    'C04',
-                    new IntType()
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
+                    'C02',
+                    new BoolType()
                 ),
                 new ClassConstElement(
                     9,
                     new UndefinedDocBlock(),
-                    'TestClass3',
-                    'C05',
-                    new FloatType()
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
+                    'C03',
+                    new BoolType()
                 ),
                 new ClassConstElement(
                     10,
                     new UndefinedDocBlock(),
-                    'TestClass3',
-                    'C06',
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
+                    'C04',
                     new IntType()
                 ),
                 new ClassConstElement(
                     11,
                     new UndefinedDocBlock(),
-                    'TestClass3',
-                    'C07',
-                    new StringType()
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
+                    'C05',
+                    new FloatType()
                 ),
                 new ClassConstElement(
                     12,
                     new UndefinedDocBlock(),
-                    'TestClass3',
-                    'C08',
-                    new StringType()
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
+                    'C06',
+                    new IntType()
                 ),
                 new ClassConstElement(
                     13,
                     new UndefinedDocBlock(),
-                    'TestClass3',
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
+                    'C07',
+                    new StringType()
+                ),
+                new ClassConstElement(
+                    14,
+                    new UndefinedDocBlock(),
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
+                    'C08',
+                    new StringType()
+                ),
+                new ClassConstElement(
+                    15,
+                    new UndefinedDocBlock(),
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
                     'C09',
                     new StringType()
                 ),
                 new ClassConstElement(
-                    16,
+                    18,
                     new UndefinedDocBlock(),
-                    'TestClass3',
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
                     'C10',
                     new ArrayType()
                 ),
                 new ClassConstElement(
-                    17,
+                    19,
                     new UndefinedDocBlock(),
-                    'TestClass3',
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
                     'C11',
                     new ArrayType()
                 ),
                 new ClassConstElement(
-                    18,
+                    20,
                     new UndefinedDocBlock(),
-                    'TestClass3',
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
                     'C12',
                     null
                 ),
                 new ClassConstElement(
-                    19,
+                    21,
                     new UndefinedDocBlock(),
-                    'TestClass3',
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
                     'C13',
                     null
                 ),
                 new ClassConstElement(
-                    20,
+                    22,
                     new UndefinedDocBlock(),
-                    'TestClass3',
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
                     'C14',
                     new IntType()
                 ),
                 new ClassPropElement(
-                    21,
+                    23,
                     new UndefinedDocBlock(),
-                    'TestClass3',
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
                     'prop1',
                     null
                 ),
                 new ClassPropElement(
-                    22,
+                    24,
                     new UndefinedDocBlock(),
-                    'TestClass3',
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
                     'prop2',
                     new IntType()
                 ),
@@ -330,15 +330,15 @@ class CodeElementDetectorTest extends TestCase
         // #3
         $dataSets[] = [
             'givenUseReflection' => false,
-            'givenFile' => __DIR__.'/fixtures/TestInterface0.php.txt',
+            'givenFile' => __DIR__.'/fixtures/TestInterface0.php',
             'expectedElements' => [
-                new FileElement(1, new UndefinedDocBlock(), __DIR__.'/fixtures/TestInterface0.php.txt'),
-                new InterfaceElement(3, new UndefinedDocBlock(), 'TestInterface0'),
-                new InterfaceConstElement(5, new UndefinedDocBlock(), 'TestInterface0', 'C1', new IntType()),
+                new FileElement(1, new UndefinedDocBlock(), __DIR__.'/fixtures/TestInterface0.php'),
+                new InterfaceElement(5, new UndefinedDocBlock(), 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestInterface0'),
+                new InterfaceConstElement(7, new UndefinedDocBlock(), 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestInterface0', 'C1', new IntType()),
                 new InterfaceMethodElement(
                     new UndefinedDocBlock(),
-                    'TestInterface0',
-                    new FunctionSignature(7, 'func1', [], new VoidType(), 7),
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestInterface0',
+                    new FunctionSignature(9, 'func1', [], new VoidType(), 9),
                     null
                 ),
             ]
@@ -347,22 +347,22 @@ class CodeElementDetectorTest extends TestCase
         // #4
         $dataSets[] = [
             'givenUseReflection' => false,
-            'givenFile' => __DIR__.'/fixtures/TestTrait0.php.txt',
+            'givenFile' => __DIR__.'/fixtures/TestTrait0.php',
             'expectedElements' => [
-                new FileElement(1, new UndefinedDocBlock(), __DIR__.'/fixtures/TestTrait0.php.txt'),
-                new TraitElement(3, new UndefinedDocBlock(), 'TestTrait0'),
-                new TraitPropElement(5, new UndefinedDocBlock(), 'TestTrait0', 'prop1', new IntType()),
+                new FileElement(1, new UndefinedDocBlock(), __DIR__.'/fixtures/TestTrait0.php'),
+                new TraitElement(5, new UndefinedDocBlock(), 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestTrait0'),
+                new TraitPropElement(7, new UndefinedDocBlock(), 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestTrait0', 'prop1', new IntType()),
                 new TraitMethodElement(
                     new UndefinedDocBlock(),
-                    'TestTrait0',
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestTrait0',
                     new FunctionSignature(
-                        7,
+                        9,
                         'func1',
                         [
-                            new FunctionParam(7, 'arg1', new IntType())
+                            new FunctionParam(9, 'arg1', new IntType())
                         ],
                         new IntType(),
-                        7
+                        9
                     ),
                     null
                 ),
@@ -372,13 +372,13 @@ class CodeElementDetectorTest extends TestCase
         // #5
         $dataSets[] = [
             'givenUseReflection' => true,
-            'givenFile' => __DIR__.'/fixtures/Ref2.php',
+            'givenFile' => __DIR__.'/fixtures/TestRef2.php',
             'expectedElements' => [
-                new FileElement(1, new UndefinedDocBlock(), __DIR__.'/fixtures/Ref2.php'),
-                new ClassElement(5, new UndefinedDocBlock(), 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\Ref2'),
+                new FileElement(1, new UndefinedDocBlock(), __DIR__.'/fixtures/TestRef2.php'),
+                new ClassElement(5, new UndefinedDocBlock(), 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestRef2'),
                 new ClassMethodElement(
                     new UndefinedDocBlock(),
-                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\Ref2',
+                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestRef2',
                     new FunctionSignature(
                         7,
                         'func0',
@@ -390,7 +390,7 @@ class CodeElementDetectorTest extends TestCase
                 ),
                 new ClassMethodElement(
                     new UndefinedDocBlock(),
-                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\Ref2',
+                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestRef2',
                     new FunctionSignature(
                         11,
                         'func1',
@@ -402,7 +402,7 @@ class CodeElementDetectorTest extends TestCase
                 ),
                 new ClassMethodElement(
                     new UndefinedDocBlock(),
-                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\Ref2',
+                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestRef2',
                     new FunctionSignature(
                         15,
                         'func2',
@@ -418,13 +418,13 @@ class CodeElementDetectorTest extends TestCase
         // #6
         $dataSets[] = [
             'givenUseReflection' => false,
-            'givenFile' => __DIR__.'/fixtures/Parse0.php',
+            'givenFile' => __DIR__.'/fixtures/TestParse0.php',
             'expectedElements' => [
-                new FileElement(1, new UndefinedDocBlock(), __DIR__.'/fixtures/Parse0.php'),
-                new ClassElement(5, new UndefinedDocBlock(), 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\Parse0'),
+                new FileElement(1, new UndefinedDocBlock(), __DIR__.'/fixtures/TestParse0.php'),
+                new ClassElement(5, new UndefinedDocBlock(), 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestParse0'),
                 new ClassMethodElement(
                     new UndefinedDocBlock(),
-                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\Parse0',
+                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestParse0',
                     new FunctionSignature(
                         7,
                         'func1',
@@ -437,7 +437,7 @@ class CodeElementDetectorTest extends TestCase
                 new ClassPropElement(
                     11,
                     new UndefinedDocBlock(),
-                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\Parse0',
+                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestParse0',
                     'prop1',
                     null // failed to parse
                 )
@@ -447,13 +447,13 @@ class CodeElementDetectorTest extends TestCase
         // #7
         $dataSets[] = [
             'givenUseReflection' => true,
-            'givenFile' => __DIR__.'/fixtures/Parse1.php',
+            'givenFile' => __DIR__.'/fixtures/TestParse1.php',
             'expectedElements' => [
-                new FileElement(1, new UndefinedDocBlock(), __DIR__.'/fixtures/Parse1.php'),
-                new ClassElement(5, new UndefinedDocBlock(), 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\Parse1'),
+                new FileElement(1, new UndefinedDocBlock(), __DIR__.'/fixtures/TestParse1.php'),
+                new ClassElement(5, new UndefinedDocBlock(), 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestParse1'),
                 new ClassMethodElement(
                     new UndefinedDocBlock(),
-                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\Parse1',
+                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestParse1',
                     new FunctionSignature(
                         7,
                         'func1',
@@ -478,6 +478,8 @@ class CodeElementDetectorTest extends TestCase
      */
     public function testDetectFromTokens(bool $givenUseReflection, string $givenPath, array $expected): void
     {
+        static::assertFileExists($givenPath);
+
         $givenFile = new LocalFile($givenPath, new Ruleset(new Config()), new Config());
         $givenFile->parse();
 

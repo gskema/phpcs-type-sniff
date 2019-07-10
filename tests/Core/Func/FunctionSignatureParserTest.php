@@ -27,7 +27,7 @@ class FunctionSignatureParserTest extends TestCase
 
         // #0
         $dataSets[] = [
-            __DIR__.'/fixtures/func0.php.txt',
+            __DIR__.'/fixtures/test_func0.php',
             2,
             new FunctionSignature(
                 3,
@@ -41,7 +41,7 @@ class FunctionSignatureParserTest extends TestCase
 
         // #1
         $dataSets[] = [
-            __DIR__.'/fixtures/func0.php.txt',
+            __DIR__.'/fixtures/test_func0.php',
             13,
             new FunctionSignature(
                 5,
@@ -60,7 +60,7 @@ class FunctionSignatureParserTest extends TestCase
 
         // #2
         $dataSets[] = [
-            __DIR__.'/fixtures/func0.php.txt',
+            __DIR__.'/fixtures/test_func0.php',
             48,
             new FunctionSignature(
                 9,
@@ -80,7 +80,7 @@ class FunctionSignatureParserTest extends TestCase
 
         // #3
         $dataSets[] = [
-            __DIR__.'/fixtures/func0.php.txt',
+            __DIR__.'/fixtures/test_func0.php',
             118,
             null,
             \RuntimeException::class
@@ -88,7 +88,7 @@ class FunctionSignatureParserTest extends TestCase
 
         // #4
         $dataSets[] = [
-            __DIR__.'/fixtures/func1.php.txt',
+            __DIR__.'/fixtures/test_func1.php',
             2,
             new FunctionSignature(
                 3,

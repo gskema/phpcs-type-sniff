@@ -1,8 +1,8 @@
 <?php
 
-namespace Acme;
+namespace Gskema\TypeSniff\Sniffs\fixtures;
 
-class Class0
+class TestClass0
 {
     const C1 = 1;
 

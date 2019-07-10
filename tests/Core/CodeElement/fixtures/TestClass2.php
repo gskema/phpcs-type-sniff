@@ -1,5 +1,7 @@
 <?php
 
+namespace Gskema\TypeSniff\Core\CodeElement\fixtures;
+
 class TestClass3
 {
     const C01 = null;

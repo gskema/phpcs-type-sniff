@@ -1,8 +1,8 @@
 <?php
 
-namespace Acme;
+namespace Gskema\TypeSniff\Sniffs\fixtures;
 
-class Class1
+class TestClass1
 {
     public function method1($a, array $b): void
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Gskema\TypeSniff\Core\CodeElement;
+namespace Gskema\TypeSniff\Core\CodeElement\fixtures;
 
 use PHP_CodeSniffer\Util\Tokens;
 

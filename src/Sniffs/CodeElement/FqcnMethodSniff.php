@@ -244,13 +244,6 @@ class FqcnMethodSniff implements CodeElementSniffInterface
             return false;
         }
 
-        $paramTags = $docBlock->getParamTags();
-        foreach ($paramTags as $paramTag) {
-            if ($paramTag->hasDescription()) {
-                return false;
-            }
-        }
-
         foreach ($fnSig->getParams() as $fnParam) {
             $paramTag = $docBlock->getParamTag($fnParam->getName());
             if (null === $paramTag) {

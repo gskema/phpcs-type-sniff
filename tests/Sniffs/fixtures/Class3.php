@@ -44,4 +44,27 @@ class Class3 extends Class2
     public function func5(): ?int
     {
     }
+
+    /**
+     * Description
+     * @return int
+     */
+    public function func6(): int
+    {
+    }
+
+
+    /**
+     * @param int $param1 description
+     */
+    public function func7(int $param1): void
+    {
+    }
+
+    /**
+     * @return int|string
+     */
+    public function func8(): int
+    {
+    }
 }

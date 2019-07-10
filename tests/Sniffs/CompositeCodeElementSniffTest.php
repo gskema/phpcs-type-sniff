@@ -77,10 +77,13 @@ class CompositeCodeElementSniffTest extends TestCase
 
         // #3
         $dataSets[] = [
-            [],
+            [
+                'useReflection' => true,
+            ],
             __DIR__.'/fixtures/Class3.php',
             [
                 '007 Add type declaration for parameter $arg1 or create PHPDoc with type hint',
+                '022 Missing @inheritDoc tag',
                 '027 Add "null" type hint in PHPDoc for parameter $arg1',
                 '042 Add "null" type hint in PHPDoc for return value',
             ]

@@ -67,4 +67,11 @@ class TestClass3 extends TestClass2
     public function func8(): int
     {
     }
+
+    /**
+     * @return int|null|string
+     */
+    public function func9(): ?int
+    {
+    }
 }

@@ -74,6 +74,7 @@ String `true/false` values are automatically converted to booleans.
     <!-- Includes a standalone sniff to your custom coding standard -->
     <rule ref="./vendor/gskema/phpcs-type-sniff/src/Sniffs/CompositeCodeElementSniff.php">
         <properties>
+
             <!-- Enables usage of reflection API when inspecting extended classes. -->
             <!-- Autoloader is needed. -->
             <property name="useReflection" value="true"/>

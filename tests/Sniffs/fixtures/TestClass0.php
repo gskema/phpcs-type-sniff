@@ -38,4 +38,16 @@ class TestClass0
 
     /** @var int $prop8 */
     private $prop8 = 8;
+
+    /** @var string[]|object[] */
+    private $prop9 = [];
+
+    /** @var string[]|array */
+    private $prop10 = [];
+
+    /** @var int[]|null[] */
+    const C5 = [null, 1];
+
+    /** @var string[]|array */
+    const C6 = [null, 1];
 }

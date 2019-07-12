@@ -32,6 +32,8 @@ class CompositeCodeElementSniffTest extends TestCase
                 '031 Replace array type with typed array type in PHPDoc for property $prop5. Use mixed[] for generic arrays.',
                 '034 Add PHPDoc with typed array type hint for property $prop6. Use mixed[] for generic arrays.',
                 '040 Remove property name $prop8 from @var tag',
+                '046 Replace array type with typed array type in PHPDoc for property $prop10. Use mixed[] for generic arrays.',
+                '052 Replace array type with typed array type in PHPDoc for C6 constant. Use mixed[] for generic arrays.',
             ]
         ];
 

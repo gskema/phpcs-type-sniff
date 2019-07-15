@@ -2,7 +2,7 @@
 
 namespace Gskema\TypeSniff\Core\CodeElement\fixtures;
 
-class TestClass3
+class TestClass2
 {
     const C01 = null;
     const C02 = false;

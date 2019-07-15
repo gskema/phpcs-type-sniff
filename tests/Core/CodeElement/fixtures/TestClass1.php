@@ -11,7 +11,7 @@ function namedFunc()
 const CONST1 = 2;
 
 if (1) {
-    class TestClass2
+    class TestClass1
     {
         public function method1()
         {

@@ -60,15 +60,15 @@ class CodeElementDetectorTest extends TestCase
                 ),
                 new ClassElement(
                     13,
-                    new DocBlock([9 => 'Class TestClass'], [
+                    new DocBlock([9 => 'Class TestClass0'], [
                         new GenericTag(11, 'package', 'Gskema\TypeSniff\Core\DocBlock\fixtures')
                     ]),
-                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass'
+                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass0'
                 ),
                 new ClassConstElement(
                     15,
                     new UndefinedDocBlock(),
-                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass',
+                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass0',
                     'CONST1',
                     new IntType()
                 ),
@@ -77,14 +77,14 @@ class CodeElementDetectorTest extends TestCase
                     new DocBlock([], [
                         new VarTag(17, new IntType(), null, null),
                     ]),
-                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass',
+                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass0',
                     'CONST2',
                     new IntType()
                 ),
                 new ClassPropElement(
                     20,
                     new UndefinedDocBlock(),
-                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass',
+                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass0',
                     'prop1',
                     null
                 ),
@@ -93,7 +93,7 @@ class CodeElementDetectorTest extends TestCase
                     new DocBlock([], [
                         new VarTag(23, new IntType(), null, null)
                     ]),
-                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass',
+                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass0',
                     'prop2',
                     null
                 ),
@@ -102,13 +102,13 @@ class CodeElementDetectorTest extends TestCase
                     new DocBlock([], [
                         new VarTag(27, new CompoundType([new StringType(), new NullType()]), null, null)
                     ]),
-                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass',
+                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass0',
                     'prop3',
                     null
                 ),
                 new ClassMethodElement(
                     new UndefinedDocBlock(),
-                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass',
+                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass0',
                     new FunctionSignature(
                         30,
                         '__construct',
@@ -120,7 +120,7 @@ class CodeElementDetectorTest extends TestCase
                 ),
                 new ClassMethodElement(
                     new UndefinedDocBlock(),
-                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass',
+                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass0',
                     new FunctionSignature(34, 'method1', [], new StringType(), 34),
                     null
                 ),
@@ -129,7 +129,7 @@ class CodeElementDetectorTest extends TestCase
                         new ParamTag(40, new IntType(), 'param1', null),
                         new ReturnTag(42, new CompoundType([new ArrayType(), new NullType()]), null)
                     ]),
-                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass',
+                    'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass0',
                     new FunctionSignature(
                         44,
                         'method2',
@@ -170,11 +170,11 @@ class CodeElementDetectorTest extends TestCase
                 new ClassElement(
                     14,
                     new UndefinedDocBlock(),
-                    'Gskema\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass2'
+                    'Gskema\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass1'
                 ),
                 new ClassMethodElement(
                     new UndefinedDocBlock(),
-                    'Gskema\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass2',
+                    'Gskema\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass1',
                     new FunctionSignature(16, 'method1', [], new UndefinedType(), 16),
                     null
                 ),
@@ -183,14 +183,14 @@ class CodeElementDetectorTest extends TestCase
                     new DocBlock([], [
                         new VarTag(56, new IntType(), null, null),
                     ]),
-                    'Gskema\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass2',
+                    'Gskema\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass1',
                     'prop1',
                     null
                 ),
                 new ClassConstElement(
                     59,
                     new UndefinedDocBlock(),
-                    'Gskema\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass2',
+                    'Gskema\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass1',
                     'CONST2',
                     new IntType()
                 ),
@@ -210,117 +210,117 @@ class CodeElementDetectorTest extends TestCase
                 new ClassElement(
                     5,
                     new UndefinedDocBlock(),
-                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3'
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2'
                 ),
                 new ClassConstElement(
                     7,
                     new UndefinedDocBlock(),
-                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                     'C01',
                     new NullType()
                 ),
                 new ClassConstElement(
                     8,
                     new UndefinedDocBlock(),
-                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                     'C02',
                     new BoolType()
                 ),
                 new ClassConstElement(
                     9,
                     new UndefinedDocBlock(),
-                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                     'C03',
                     new BoolType()
                 ),
                 new ClassConstElement(
                     10,
                     new UndefinedDocBlock(),
-                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                     'C04',
                     new IntType()
                 ),
                 new ClassConstElement(
                     11,
                     new UndefinedDocBlock(),
-                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                     'C05',
                     new FloatType()
                 ),
                 new ClassConstElement(
                     12,
                     new UndefinedDocBlock(),
-                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                     'C06',
                     new IntType()
                 ),
                 new ClassConstElement(
                     13,
                     new UndefinedDocBlock(),
-                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                     'C07',
                     new StringType()
                 ),
                 new ClassConstElement(
                     14,
                     new UndefinedDocBlock(),
-                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                     'C08',
                     new StringType()
                 ),
                 new ClassConstElement(
                     15,
                     new UndefinedDocBlock(),
-                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                     'C09',
                     new StringType()
                 ),
                 new ClassConstElement(
                     18,
                     new UndefinedDocBlock(),
-                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                     'C10',
                     new ArrayType()
                 ),
                 new ClassConstElement(
                     19,
                     new UndefinedDocBlock(),
-                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                     'C11',
                     new ArrayType()
                 ),
                 new ClassConstElement(
                     20,
                     new UndefinedDocBlock(),
-                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                     'C12',
                     null
                 ),
                 new ClassConstElement(
                     21,
                     new UndefinedDocBlock(),
-                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                     'C13',
                     null
                 ),
                 new ClassConstElement(
                     22,
                     new UndefinedDocBlock(),
-                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                     'C14',
                     new IntType()
                 ),
                 new ClassPropElement(
                     23,
                     new UndefinedDocBlock(),
-                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                     'prop1',
                     null
                 ),
                 new ClassPropElement(
                     24,
                     new UndefinedDocBlock(),
-                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
+                    'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                     'prop2',
                     new IntType()
                 ),

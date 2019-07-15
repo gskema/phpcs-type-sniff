@@ -10,6 +10,7 @@ use Gskema\TypeSniff\Core\Type\Common\FqcnType;
 use Gskema\TypeSniff\Core\Type\Common\IntType;
 use Gskema\TypeSniff\Core\Type\Common\IterableType;
 use Gskema\TypeSniff\Core\Type\Common\ObjectType;
+use Gskema\TypeSniff\Core\Type\Common\ParentType;
 use Gskema\TypeSniff\Core\Type\Common\ResourceType;
 use Gskema\TypeSniff\Core\Type\Common\SelfType;
 use Gskema\TypeSniff\Core\Type\Common\StringType;
@@ -46,6 +47,7 @@ class TypeFactory
         'mixed'    => MixedType::class,
         'null'     => NullType::class,
         'object'   => ObjectType::class,
+        'parent'   => ParentType::class,
         'resource' => ResourceType::class,
         'self'     => SelfType::class,
         'static'   => StaticType::class,

@@ -4,6 +4,10 @@ All notable changes to `phpcs-type-sniff` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## Next
+### Added
+- Detection for "parent" type
+
 ## 0.11.1 - 2019-07-12
 ### Fixed
 - Typed array prop, const check when compound type is used

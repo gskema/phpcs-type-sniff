@@ -6,11 +6,11 @@
 namespace Gskema\TypeSniff\Core\CodeElement\fixtures;
 
 /**
- * Class TestClass
+ * Class TestClass0
  *
  * @package Gskema\TypeSniff\Core\DocBlock\fixtures
  */
-class TestClass
+class TestClass0
 {
     const CONST1 = 1;
 

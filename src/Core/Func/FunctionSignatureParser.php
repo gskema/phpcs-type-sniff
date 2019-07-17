@@ -38,12 +38,14 @@ class FunctionSignatureParser
             throw new RuntimeException('Expected to find function name');
         }
 
+        /** @var FunctionParam[] $params */
         $params = [];
         $raw = [];
         while (isset($tokens[++$ptr])) {
             $token = $tokens[$ptr];
 
             switch ($token['code']) {
+                case T_PARENT:
                 case T_CALLABLE:
                 case T_NULLABLE:
                     // these cannot be default

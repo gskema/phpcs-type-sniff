@@ -2,6 +2,7 @@
 
 namespace Gskema\TypeSniff\Sniffs\CodeElement;
 
+use Gskema\TypeSniff\Core\Type\TypeComparator;
 use PHP_CodeSniffer\Files\File;
 use Gskema\TypeSniff\Core\CodeElement\Element\AbstractFqcnMethodElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassMethodElement;
@@ -139,72 +140,93 @@ class FqcnMethodSniff implements CodeElementSniffInterface
     ): void {
         // @TODO Required mixed[][] instead of array[]
 
+        $isReturnType = 'return value' === $subject;
+        // $isParamType = !$isReturnType;
+
         /** @var string[][] $warnings */
         $warnings = [];
         if ($docBlock instanceof UndefinedDocBlock) {
-            // doc_block:undefined, fn_type:?
+            // Require docType for undefined type or array type
             if ($fnType instanceof UndefinedType) {
                 $warnings[$fnTypeLine][] = 'Add type declaration for :subject: or create PHPDoc with type hint';
             } elseif ($this->containsType($fnType, ArrayType::class)) {
                 $warnings[$fnTypeLine][] = 'Create PHPDoc with typed array type hint for :subject:, .e.g.: "string[]" or "SomeClass[]"';
             }
         } elseif (null === $docType) {
-            // doc_block:defined, doc_tag:missing
-            if ('return value' === $subject) { // @TODO ??
+            // Require docTag unless void return type
+            if ($isReturnType) {
                 if (!($fnType instanceof VoidType)) {
                     $warnings[$fnTypeLine][] = 'Missing PHPDoc tag or void type declaration for :subject:';
                 }
             } else {
                 $warnings[$fnTypeLine][] = 'Missing PHPDoc tag for :subject:';
             }
-        } elseif ($docType instanceof UndefinedType) {
-            // doc_block:defined, doc_type:undefined
-            $suggestedFnType = TypeConverter::toExpectedDocType($fnType);
-            if (null !== $suggestedFnType) {
-                $warnings[$docTypeLine][] = sprintf(
-                    'Add type hint in PHPDoc tag for :subject:, e.g. "%s"',
-                    $suggestedFnType->toString()
-                );
-            } else {
-                $warnings[$docTypeLine][] = 'Add type hint in PHPDoc tag for :subject:';
-            }
-        } elseif ($fnType instanceof UndefinedType) {
-            // doc_block:defined, doc_type:defined, fn_type:undefined
-            if ($docType instanceof NullType) {
-                $warnings[$fnTypeLine][] = sprintf('Add type declaration for :subject:');
-            } elseif ($suggestedFnType = TypeConverter::toFunctionType($docType)) {
-                $warnings[$fnTypeLine][] = sprintf('Add type declaration for :subject:, e.g.: "%s"', $suggestedFnType->toString());
-            } elseif ($this->containsType($docType, ArrayType::class)) {
-                // e.g. compound array|string -> cannot be forced in fn type, but should be updated to typed array
-                $warnings[$docTypeLine][] = 'Replace array type with typed array type in PHPDoc for :subject:. Use mixed[] for generic arrays.';
-            }
-        } elseif ($this->containsType($fnType, ArrayType::class)) {
-            // doc_block:defined, doc_type:defined, fn_type:array
-            $docHasTypedArray = $this->containsType($docType, TypedArrayType::class);
-            $docHasArray = $this->containsType($docType, ArrayType::class);
-
-            if ($docHasTypedArray && $docHasArray) {
-                $warnings[$docTypeLine][] = 'Remove array type, typed array type is present in PHPDoc for :subject:.';
-            } elseif (!$docHasTypedArray && $docHasArray) {
-                $warnings[$docTypeLine][] = 'Replace array type with typed array type in PHPDoc for :subject:. Use mixed[] for generic arrays.';
-            } elseif (!$docHasTypedArray && !$docHasArray) {
-                $warnings[$docTypeLine][] = 'Add typed array type in PHPDoc for :subject:. Use mixed[] for generic arrays.';
-            }
-        } elseif ($fnType instanceof NullableType) {
-            // doc_block:defined, doc_type:defined, fn_type:nullable
-            if (!$this->containsType($docType, NullType::class)) {
-                $warnings[$docTypeLine][] = 'Add "null" type hint in PHPDoc for :subject:';
-            }
         } else {
-            // doc_block:defined, doc_type:defined, fn_type:defined
-            $expectedDocType = TypeConverter::toExpectedDocType($fnType);
-            $expectedDocTypes = $expectedDocType instanceof CompoundType
-                ? $expectedDocType->getTypes()
-                : array_filter([$expectedDocType]);
+            $docTypeDefined = !($docType instanceof UndefinedType);
+            $fnTypeDefined = !($fnType instanceof UndefinedType);
 
-            foreach ($expectedDocTypes as $expectedDocType) {
-                if (!$this->containsType($docType, get_class($expectedDocType))) {
-                    $warnings[$docTypeLine][] = sprintf('Add "%s" type hint in PHPDoc for :subject:', $fnType->toString());
+            if ($docTypeDefined) {
+                // Require typed array type
+                // Require composite with null instead of null
+                // @TODO true/void/false/$this/ cannot be param tags
+
+                $docHasTypedArray = $this->containsType($docType, TypedArrayType::class);
+                $docHasArray = $this->containsType($docType, ArrayType::class);
+
+                if ($docHasTypedArray && $docHasArray) {
+                    $warnings[$docTypeLine][] = 'Remove array type, typed array type is present in PHPDoc for :subject:.';
+                } elseif (!$docHasTypedArray && $docHasArray) {
+                    $warnings[$docTypeLine][] = 'Replace array type with typed array type in PHPDoc for :subject:. Use mixed[] for generic arrays.';
+                }
+
+                if ($docType instanceof NullType) {
+                    if ($isReturnType) {
+                        $warnings[$docTypeLine][] = 'Use void :subject :type declaration or change type to compound, e.g. SomeClass|null';
+                    } else {
+                        $warnings[$docTypeLine][] = 'Change type hint for :subject: to compound, e.g. SomeClass|null';
+                    }
+                }
+            } else {
+                // Require docType (example from fnType)
+                $exampleDocType = TypeConverter::toExampleDocType($fnType);
+                if (null !== $exampleDocType) {
+                    $warnings[$docTypeLine][] = sprintf('Add type hint in PHPDoc tag for :subject:, e.g. "%s"', $exampleDocType->toString());
+                } else {
+                    $warnings[$docTypeLine][] = 'Add type hint in PHPDoc tag for :subject:';
+                }
+            }
+
+            if (!$fnTypeDefined) {
+                // Require fnType if possible (check, suggest from docType)
+                if ($suggestedFnType = TypeConverter::toFunctionType($docType)) {
+                    $warnings[$fnTypeLine][] = sprintf('Add type declaration for :subject:, e.g.: "%s"', $suggestedFnType->toString());
+                }
+                // @TODO Warning for null?
+            }
+
+            if ($docTypeDefined && $fnTypeDefined) {
+                // Require to add missing types to docType,
+                // @TODO Remove void return docType,
+
+                /** @var TypeInterface[] $wrongDocTypes */
+                /** @var TypeInterface[] $missingDocTypes */
+                [$wrongDocTypes, $missingDocTypes] = TypeComparator::compare($docType, $fnType);
+
+                if ($wrongDocTypes) {
+                    $warnings[$docTypeLine][] = sprintf(
+                        'Type %s "%s" %s not compatible with :subject: type declaration',
+                        isset($wrongDocTypes[1]) ? 'hints' : 'hint',
+                        $this->implodeTypes($wrongDocTypes),
+                        isset($wrongDocTypes[1]) ? 'are' : 'is'
+                    );
+                }
+
+                if ($missingDocTypes) {
+                    $warnings[$docTypeLine][] = sprintf(
+                        'Missing "%s" %s in :subject: type hint',
+                        $this->implodeTypes($missingDocTypes),
+                        isset($missingDocTypes[1]) ? 'types' : 'type'
+                    );
                 }
             }
         }
@@ -278,5 +300,19 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         }
 
         return true;
+    }
+
+    /**
+     * @param TypeInterface[] $types
+     * @return string|null
+     */
+    protected function implodeTypes(array $types): ?string
+    {
+        $rawTypes = [];
+        foreach ($types as $type) {
+            $rawTypes[] = $type->toString();
+        }
+
+        return $rawTypes ? implode(', ', $rawTypes) : null;
     }
 }

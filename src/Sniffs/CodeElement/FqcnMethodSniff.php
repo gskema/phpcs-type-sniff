@@ -94,7 +94,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
             if ($hasInheritDocTag || $isMagicMethod) {
                 return;
             } elseif ($method->isExtended()) {
-                $file->addWarningOnLine('Missing @inheritDoc tag', $method->getLine(), 'FqcnMethodSniff');
+                $file->addWarningOnLine('Missing @inheritDoc tag. Remove duplicated parent PHPDoc content.', $method->getLine(), 'FqcnMethodSniff');
                 return;
             }
         }

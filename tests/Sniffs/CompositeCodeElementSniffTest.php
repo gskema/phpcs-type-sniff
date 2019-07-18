@@ -93,7 +93,7 @@ class CompositeCodeElementSniffTest extends TestCase
             __DIR__.'/fixtures/TestClass3.php',
             [
                 '007 Add type declaration for parameter $arg1 or create PHPDoc with type hint',
-                '022 Missing @inheritDoc tag',
+                '022 Missing @inheritDoc tag. Remove duplicated parent PHPDoc content.',
                 '027 Type hint "string" is not compatible with parameter $arg1 type declaration',
                 '027 Missing "null, int" types in parameter $arg1 type hint',
                 '042 Type hints "string, float" are not compatible with return value type declaration',

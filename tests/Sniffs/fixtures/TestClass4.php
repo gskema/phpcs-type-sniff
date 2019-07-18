@@ -119,4 +119,20 @@ class TestClass4 extends \stdClass
     public function func9(int $arg1, array $arg2): void
     {
     }
+
+    /**
+     * @param mixed[]|mixed $arg1
+     *
+     * @return int|mixed
+     */
+    public function func10(array $arg1): int
+    {
+    }
+
+    /**
+     * @return mixed
+     */
+    public function func11()
+    {
+    }
 }

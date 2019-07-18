@@ -15,7 +15,6 @@ use Gskema\TypeSniff\Core\Type\Common\ArrayType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Common\VoidType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
-use Gskema\TypeSniff\Core\Type\DocBlock\CompoundType;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
 use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
 use Gskema\TypeSniff\Core\Type\TypeConverter;
@@ -150,7 +149,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
             // Require docType for undefined type or array type
             if ($fnType instanceof UndefinedType) {
                 $warnings[$fnTypeLine][] = 'Add type declaration for :subject: or create PHPDoc with type hint';
-            } elseif ($this->containsType($fnType, ArrayType::class)) {
+            } elseif (TypeHelper::containsType($fnType, ArrayType::class)) {
                 $warnings[$fnTypeLine][] = 'Create PHPDoc with typed array type hint for :subject:, .e.g.: "string[]" or "SomeClass[]"';
             }
         } elseif (null === $docType) {
@@ -171,8 +170,8 @@ class FqcnMethodSniff implements CodeElementSniffInterface
                 // Require composite with null instead of null
                 // @TODO true/void/false/$this/ cannot be param tags
 
-                $docHasTypedArray = $this->containsType($docType, TypedArrayType::class);
-                $docHasArray = $this->containsType($docType, ArrayType::class);
+                $docHasTypedArray = TypeHelper::containsType($docType, TypedArrayType::class);
+                $docHasArray = TypeHelper::containsType($docType, ArrayType::class);
 
                 if ($docHasTypedArray && $docHasArray) {
                     $warnings[$docTypeLine][] = 'Remove array type, typed array type is present in PHPDoc for :subject:.';
@@ -247,13 +246,6 @@ class FqcnMethodSniff implements CodeElementSniffInterface
                 $file->addWarningOnLine($warning, $line, 'FqcnMethodSniff');
             }
         }
-    }
-
-    protected function containsType(TypeInterface $type, string $typeClassName): bool
-    {
-        return is_a($type, $typeClassName)
-            || ($type instanceof CompoundType && $type->containsType($typeClassName))
-            || ($type instanceof NullableType && $type->containsType($typeClassName));
     }
 
     protected function hasUselessDocBlock(AbstractFqcnMethodElement $method): bool

@@ -4,7 +4,6 @@ namespace Gskema\TypeSniff\Sniffs\CodeElement;
 
 use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
 use Gskema\TypeSniff\Core\Type\TypeHelper;
-use Gskema\TypeSniff\Core\Type\TypeInterface;
 use PHP_CodeSniffer\Files\File;
 use Gskema\TypeSniff\Core\CodeElement\Element\AbstractFqcnPropElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassPropElement;
@@ -14,7 +13,6 @@ use Gskema\TypeSniff\Core\DocBlock\Tag\VarTag;
 use Gskema\TypeSniff\Core\DocBlock\UndefinedDocBlock;
 use Gskema\TypeSniff\Core\Type\Common\ArrayType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
-use Gskema\TypeSniff\Core\Type\DocBlock\CompoundType;
 
 class FqcnPropSniff implements CodeElementSniffInterface
 {
@@ -70,14 +68,14 @@ class FqcnPropSniff implements CodeElementSniffInterface
                 $prop->getLine(),
                 'FqcnPropSniff'
             );
-        } elseif ($this->containsType($docType, ArrayType::class)) {
+        } elseif (TypeHelper::containsType($docType, ArrayType::class)) {
             $file->addWarningOnLine(
                 'Replace array type with typed array type in PHPDoc for '.$subject.'. Use mixed[] for generic arrays.',
                 $prop->getLine(),
                 'FqcnPropSniff'
             );
         } elseif (is_a($prop->getDefaultValueType(), ArrayType::class)
-            && !$this->containsType($docType, TypedArrayType::class)
+            && !TypeHelper::containsType($docType, TypedArrayType::class)
         ) {
             $file->addWarningOnLine(
                 'Add PHPDoc with typed array type hint for '.$subject.'. Use mixed[] for generic arrays.',
@@ -100,11 +98,5 @@ class FqcnPropSniff implements CodeElementSniffInterface
                 'FqcnPropSniff'
             );
         }
-    }
-
-    protected function containsType(?TypeInterface $type, string $typeClassName): bool
-    {
-        return is_a($type, $typeClassName)
-            || ($type instanceof CompoundType && $type->containsType($typeClassName));
     }
 }

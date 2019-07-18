@@ -50,17 +50,19 @@ class CompositeCodeElementSniffTest extends TestCase
                 '014 Missing PHPDoc tag or void type declaration for return value',
                 '019 Add type hint in PHPDoc tag for parameter $d',
                 '020 Add type hint in PHPDoc tag for parameter $e, e.g. "int"',
-                '021 Add type hint in PHPDoc tag for parameter $f',
+                '021 Add type hint in PHPDoc tag for parameter $f, e.g. "SomeClass[]"',
                 '024 Replace array type with typed array type in PHPDoc for return value. Use mixed[] for generic arrays.',
-                '035 Add type declaration for parameter $h',
+                '031 Change type hint for parameter $h to compound, e.g. SomeClass|null',
                 '035 Add type declaration for parameter $i, e.g.: "?int"',
                 '035 Add type declaration for return value, e.g.: "?array"',
                 '040 Remove array type, typed array type is present in PHPDoc for parameter $j.',
                 '041 Replace array type with typed array type in PHPDoc for parameter $k. Use mixed[] for generic arrays.',
-                '042 Add type hint in PHPDoc tag for parameter $l',
-                '044 Add "null" type hint in PHPDoc for parameter $n',
-                '045 Add "int" type hint in PHPDoc for parameter $o',
-                '046 Add "null" type hint in PHPDoc for parameter $p',
+                '042 Add type hint in PHPDoc tag for parameter $l, e.g. "SomeClass[]"',
+                '044 Missing "null" type in parameter $n type hint',
+                '045 Type hint "string" is not compatible with parameter $o type declaration',
+                '045 Missing "int" type in parameter $o type hint',
+                '046 Type hint "int" is not compatible with parameter $p type declaration',
+                '046 Missing "null, string" types in parameter $p type hint',
                 '065 Useless PHPDoc',
                 '087 Add PHPDoc for property $prop1',
             ]
@@ -86,8 +88,25 @@ class CompositeCodeElementSniffTest extends TestCase
             [
                 '007 Add type declaration for parameter $arg1 or create PHPDoc with type hint',
                 '022 Missing @inheritDoc tag',
-                '027 Add "null" type hint in PHPDoc for parameter $arg1',
-                '042 Add "null" type hint in PHPDoc for return value',
+                '027 Type hint "string" is not compatible with parameter $arg1 type declaration',
+                '027 Missing "null, int" types in parameter $arg1 type hint',
+                '042 Type hints "string, float" are not compatible with return value type declaration',
+                '042 Missing "null, int" types in return value type hint',
+                '065 Type hint "string" is not compatible with return value type declaration',
+                '072 Type hint "string" is not compatible with return value type declaration',
+            ]
+        ];
+
+        // #4
+        $dataSets[] = [
+            [
+                'useReflection' => false,
+            ],
+            __DIR__.'/fixtures/TestClass4.php',
+            [
+                '008 Replace array type with typed array type in PHPDoc for parameter $arg1. Use mixed[] for generic arrays.',
+                '037 Type hint "static" is not compatible with return value type declaration',
+                '037 Missing "self" type in return value type hint',
             ]
         ];
 

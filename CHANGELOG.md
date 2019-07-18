@@ -7,6 +7,13 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 ## Next
 ### Added
 - Detection for "parent" type
+- Warning when only using null parameter doc type, compound type is suggested
+- Warning when using null return type, removal or compound type is suggested
+- Warning for doc types that are incompatible with declared function types
+- More accurate warning for missing doc types (detected from function type)
+### Changed
+- self, typed array type examples when for missing function type warnings
+- FqcnMethodSniff logic. Removed dead end inspection paths
 
 ## 0.11.1 - 2019-07-12
 ### Fixed
@@ -26,7 +33,7 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 
 ## 0.10.5 - 2019-06-14
 ### Added
-- Added warning for array type inside compound parameter type.
+- Added warning for array type inside compound parameter type
 
 ## 0.10.4 - 2019-06-09
 ### Fixed
@@ -46,7 +53,7 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 
 ## 0.10.0 - 2019-05-27
 ### Added
-- Description "ClassA Constructor." is now ignored and not considered useful.
+- Description "ClassA Constructor." is now ignored and not considered useful
 - Configuration for `CompositeCodeElementSniff`
 - Ability to add and configure custom `CodeElementSniffInterface` sniffs
 - Option `useReflection`

@@ -5,8 +5,8 @@ namespace Gskema\TypeSniff\Core\Type;
 use Gskema\TypeSniff\Core\Type\Common\ArrayType;
 use Gskema\TypeSniff\Core\Type\Common\BoolType;
 use Gskema\TypeSniff\Core\Type\Common\FloatType;
+use Gskema\TypeSniff\Core\Type\Common\FqcnType;
 use Gskema\TypeSniff\Core\Type\Common\ObjectType;
-use Gskema\TypeSniff\Core\Type\Common\SelfType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Common\VoidType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
@@ -25,18 +25,18 @@ use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
  */
 class TypeConverter
 {
-    public static function toExpectedDocType(TypeInterface $fnType): ?TypeInterface
+    public static function toExampleDocType(TypeInterface $fnType): ?TypeInterface
     {
-        if ($fnType instanceof ArrayType
-         || $fnType instanceof UndefinedType
-         || $fnType instanceof VoidType
-         || $fnType instanceof SelfType
-        ) {
+        if ($fnType instanceof UndefinedType || $fnType instanceof VoidType) {
             return null;
         }
 
+        if ($fnType instanceof ArrayType) {
+            return new TypedArrayType(new FqcnType('SomeClass'), 1);
+        }
+
         if ($fnType instanceof NullableType) {
-            $accurateType = static::toExpectedDocType($fnType->getType());
+            $accurateType = static::toExampleDocType($fnType->getType());
             return $accurateType
                 ? new CompoundType([$accurateType, new NullType()])
                 : null;
@@ -80,7 +80,7 @@ class TypeConverter
             return null;
         }
 
-        // "self", "static", "$this" type hints cannot be forced into "self" type declaration
+        // "static", "$this" type hints cannot be forced into "self" type declaration
         // because it is incompatible with extended classes.
         $map = [
             UndefinedType::class => null,
@@ -89,7 +89,6 @@ class TypeConverter
             FalseType::class => BoolType::class,
             MixedType::class => null,
             NullType::class => null,
-            SelfType::class => null,
             StaticType::class => null,
             ThisType::class => null,
             TrueType::class => BoolType::class,

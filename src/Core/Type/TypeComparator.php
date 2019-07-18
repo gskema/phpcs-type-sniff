@@ -18,6 +18,7 @@ use Gskema\TypeSniff\Core\Type\DocBlock\DoubleType;
 use Gskema\TypeSniff\Core\Type\DocBlock\FalseType;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
 use Gskema\TypeSniff\Core\Type\DocBlock\StaticType;
+use Gskema\TypeSniff\Core\Type\DocBlock\ThisType;
 use Gskema\TypeSniff\Core\Type\DocBlock\TrueType;
 use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
 
@@ -62,6 +63,13 @@ class TypeComparator
             IterableType::class,
             ObjectType::class,
             ParentType::class,
+        ],
+        ThisType::class => [
+            CallableType::class,
+            FqcnType::class,
+            IterableType::class,
+            ObjectType::class,
+            SelfType::class,
         ],
         TrueType::class => [
             BoolType::class,

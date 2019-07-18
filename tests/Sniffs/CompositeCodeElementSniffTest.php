@@ -97,6 +97,19 @@ class CompositeCodeElementSniffTest extends TestCase
             ]
         ];
 
+        // #4
+        $dataSets[] = [
+            [
+                'useReflection' => false,
+            ],
+            __DIR__.'/fixtures/TestClass4.php',
+            [
+                '008 Replace array type with typed array type in PHPDoc for parameter $arg1. Use mixed[] for generic arrays.',
+                '037 Type hint "static" is not compatible with return value type declaration',
+                '037 Missing "self" type in return value type hint',
+            ]
+        ];
+
         return $dataSets;
     }
 

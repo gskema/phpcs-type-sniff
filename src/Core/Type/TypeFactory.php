@@ -88,7 +88,6 @@ class TypeFactory
             }
         }
 
-        // @TODO Full import?
         return new FqcnType($rawType);
     }
 }

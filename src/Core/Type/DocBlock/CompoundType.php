@@ -68,7 +68,6 @@ class CompoundType implements TypeInterface
             $rawTypes[] = $type->toString();
         }
         sort($rawTypes);
-        // @TODO Ensure null is last?
 
         return implode('|', $rawTypes);
     }

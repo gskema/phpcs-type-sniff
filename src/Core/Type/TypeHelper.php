@@ -38,4 +38,19 @@ class TypeHelper
 
         return null;
     }
+
+    /**
+     * @param TypeInterface[] $types
+     *
+     * @return string|null
+     */
+    public static function listRawTypes(array $types): ?string
+    {
+        $rawTypes = [];
+        foreach ($types as $type) {
+            $rawTypes[] = $type->toString();
+        }
+
+        return $rawTypes ? implode(', ', $rawTypes) : null;
+    }
 }

@@ -223,7 +223,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
                     $warnings[$docTypeLine][] = sprintf(
                         'Type %s "%s" %s not compatible with :subject: type declaration',
                         isset($wrongDocTypes[1]) ? 'hints' : 'hint',
-                        $this->implodeTypes($wrongDocTypes),
+                        TypeHelper::listRawTypes($wrongDocTypes),
                         isset($wrongDocTypes[1]) ? 'are' : 'is'
                     );
                 }
@@ -231,7 +231,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
                 if ($missingDocTypes) {
                     $warnings[$docTypeLine][] = sprintf(
                         'Missing "%s" %s in :subject: type hint',
-                        $this->implodeTypes($missingDocTypes),
+                        TypeHelper::listRawTypes($missingDocTypes),
                         isset($missingDocTypes[1]) ? 'types' : 'type'
                     );
                 }
@@ -298,19 +298,5 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         }
 
         return true;
-    }
-
-    /**
-     * @param TypeInterface[] $types
-     * @return string|null
-     */
-    protected function implodeTypes(array $types): ?string
-    {
-        $rawTypes = [];
-        foreach ($types as $type) {
-            $rawTypes[] = $type->toString();
-        }
-
-        return $rawTypes ? implode(', ', $rawTypes) : null;
     }
 }

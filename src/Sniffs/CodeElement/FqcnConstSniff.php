@@ -3,6 +3,7 @@
 namespace Gskema\TypeSniff\Sniffs\CodeElement;
 
 use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
+use Gskema\TypeSniff\Core\Type\TypeComparator;
 use Gskema\TypeSniff\Core\Type\TypeHelper;
 use PHP_CodeSniffer\Files\File;
 use Gskema\TypeSniff\Core\CodeElement\Element\AbstractFqcnConstElement;
@@ -40,36 +41,55 @@ class FqcnConstSniff implements CodeElementSniffInterface
      */
     public function process(File $file, CodeElementInterface $const): void
     {
-        // @TODO Infer type from value?
         $docBlock = $const->getDocBlock();
 
         /** @var VarTag|null $varTag */
         $varTag = $docBlock->getTagsByName('var')[0] ?? null;
         $docType = $varTag ? $varTag->getType() : null;
+        $docTypeLine = $varTag ? $varTag->getLine() : $const->getLine();
+        $valueType = $const->getValueType();
 
-        $subject = $const->getConstName().' constant';
-
+        $warnings = [];
         if (TypeHelper::containsType($docType, ArrayType::class)) {
-            $file->addWarningOnLine(
-                'Replace array type with typed array type in PHPDoc for '.$subject.'. Use mixed[] for generic arrays. Correct array depth must be specified.',
-                $const->getLine(),
-                'FqcnConstSniff'
-            );
-        } elseif (is_a($const->getValueType(), ArrayType::class)
+            $warnings[$docTypeLine][] = 'Replace array type with typed array type in PHPDoc for :subject:. Use mixed[] for generic arrays. Correct array depth must be specified.';
+        } elseif (is_a($valueType, ArrayType::class)
               && !TypeHelper::containsType($docType, TypedArrayType::class)
         ) {
-            $file->addWarningOnLine(
-                'Add PHPDoc with typed array type hint for '.$subject.'. Use mixed[] for generic arrays. Correct array depth must be specified.',
-                $const->getLine(),
-                'FqcnConstSniff'
-            );
+            $warnings[$docTypeLine][] = 'Add PHPDoc with typed array type hint for :subject:. Use mixed[] for generic arrays. Correct array depth must be specified.';
         } elseif ($fakeType = TypeHelper::getFakeTypedArrayType($docType)) {
-            $msg = sprintf(
-                'Use a more specific type in typed array hint "%s" for %s. Correct array depth must be specified.',
-                $fakeType->toString(),
-                $subject
+            $warnings[$docTypeLine][] = sprintf(
+                'Use a more specific type in typed array hint "%s" for :subject:. Correct array depth must be specified.',
+                $fakeType->toString()
             );
-            $file->addWarningOnLine($msg, $const->getLine(), 'FqcnConstSniff');
+        }
+
+        if ($docType && $valueType) {
+            [$wrongDocTypes, $missingDocTypes] = TypeComparator::compare($docType, $valueType);
+
+            if ($wrongDocTypes) {
+                $warnings[$docTypeLine][] = sprintf(
+                    'Type %s "%s" %s not compatible with :subject: value type',
+                    isset($wrongDocTypes[1]) ? 'hints' : 'hint',
+                    TypeHelper::listRawTypes($wrongDocTypes),
+                    isset($wrongDocTypes[1]) ? 'are' : 'is'
+                );
+            }
+
+            if ($missingDocTypes) {
+                $warnings[$docTypeLine][] = sprintf(
+                    'Missing "%s" %s in :subject: type hint',
+                    TypeHelper::listRawTypes($missingDocTypes),
+                    isset($missingDocTypes[1]) ? 'types' : 'type'
+                );
+            }
+        }
+
+        $subject = $const->getConstName().' constant';
+        foreach ($warnings as $line => $lineWarnings) {
+            foreach ($lineWarnings as $warningTpl) {
+                $warning = str_replace(':subject:', $subject, $warningTpl);
+                $file->addWarningOnLine($warning, $line, 'FqcnConstSniff');
+            }
         }
     }
 }

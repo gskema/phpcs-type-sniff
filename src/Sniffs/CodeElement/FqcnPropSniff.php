@@ -3,6 +3,7 @@
 namespace Gskema\TypeSniff\Sniffs\CodeElement;
 
 use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
+use Gskema\TypeSniff\Core\Type\TypeHelper;
 use Gskema\TypeSniff\Core\Type\TypeInterface;
 use PHP_CodeSniffer\Files\File;
 use Gskema\TypeSniff\Core\CodeElement\Element\AbstractFqcnPropElement;
@@ -83,6 +84,13 @@ class FqcnPropSniff implements CodeElementSniffInterface
                 $prop->getLine(),
                 'FqcnPropSniff'
             );
+        } elseif ($fakeType = TypeHelper::getFakeTypedArrayType($docType)) {
+            $msg = sprintf(
+                'Use a more specific type in typed array hint "%s" for %s. Correct array depth must be specified.',
+                $fakeType->toString(),
+                $subject
+            );
+            $file->addWarningOnLine($msg, $prop->getLine(), 'FqcnPropSniff');
         }
 
         if ($varTag && null !== $varTag->getParamName()) {

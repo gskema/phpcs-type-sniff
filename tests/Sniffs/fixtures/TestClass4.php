@@ -111,4 +111,12 @@ class TestClass4 extends \stdClass
     public function func8(int $arg1): void
     {
     }
+
+    /**
+     * @param int     $arg1
+     * @param array[] $arg2
+     */
+    public function func9(int $arg1, array $arg2): void
+    {
+    }
 }

@@ -50,4 +50,10 @@ class TestClass0
 
     /** @var string[]|array */
     const C6 = [null, 1];
+
+    /** @var array[] */
+    const C7 = [];
+
+    /** @var array[][] */
+    private $prop11 = [];
 }

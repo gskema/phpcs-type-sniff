@@ -34,6 +34,8 @@ class CompositeCodeElementSniffTest extends TestCase
                 '040 Remove property name $prop8 from @var tag',
                 '046 Replace array type with typed array type in PHPDoc for property $prop10. Use mixed[] for generic arrays.',
                 '052 Replace array type with typed array type in PHPDoc for C6 constant. Use mixed[] for generic arrays.',
+                '055 Use a more specific type in typed array hint "array[]" for C7 constant. Correct array depth must be specified.',
+                '058 Use a more specific type in typed array hint "array[][]" for property $prop11. Correct array depth must be specified.',
             ]
         ];
 
@@ -110,6 +112,7 @@ class CompositeCodeElementSniffTest extends TestCase
                 '037 Missing "self" type in return value type hint',
                 '102 Remove @return void tag, not necessary',
                 '111 Useless PHPDoc',
+                '117 Use a more specific type in typed array hint "array[]" for parameter $arg2. Correct array depth must be specified.',
             ]
         ];
 

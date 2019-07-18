@@ -4,6 +4,7 @@ namespace Gskema\TypeSniff\Sniffs\CodeElement;
 
 use Gskema\TypeSniff\Core\Type\DocBlock\CompoundType;
 use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
+use Gskema\TypeSniff\Core\Type\TypeHelper;
 use Gskema\TypeSniff\Core\Type\TypeInterface;
 use PHP_CodeSniffer\Files\File;
 use Gskema\TypeSniff\Core\CodeElement\Element\AbstractFqcnConstElement;
@@ -64,9 +65,15 @@ class FqcnConstSniff implements CodeElementSniffInterface
                 $const->getLine(),
                 'FqcnConstSniff'
             );
+        } elseif ($fakeType = TypeHelper::getFakeTypedArrayType($docType)) {
+            $msg = sprintf(
+                'Use a more specific type in typed array hint "%s" for %s. Correct array depth must be specified.',
+                $fakeType->toString(),
+                $subject
+            );
+            $file->addWarningOnLine($msg, $const->getLine(), 'FqcnConstSniff');
         }
     }
-
 
     protected function containsType(?TypeInterface $type, string $typeClassName): bool
     {

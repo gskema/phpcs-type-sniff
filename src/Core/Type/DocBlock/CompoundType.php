@@ -42,6 +42,23 @@ class CompoundType implements TypeInterface
     }
 
     /**
+     * @param string $typeClassName
+     *
+     * @return TypeInterface[]
+     */
+    public function getType(string $typeClassName): array
+    {
+        $types = [];
+        foreach ($this->types as $type) {
+            if (is_a($type, $typeClassName)) {
+                $types[] = $type;
+            }
+        }
+
+        return $types;
+    }
+
+    /**
      * @inheritDoc
      */
     public function toString(): string

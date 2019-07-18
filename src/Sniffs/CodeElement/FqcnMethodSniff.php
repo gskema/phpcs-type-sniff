@@ -3,6 +3,7 @@
 namespace Gskema\TypeSniff\Sniffs\CodeElement;
 
 use Gskema\TypeSniff\Core\Type\TypeComparator;
+use Gskema\TypeSniff\Core\Type\TypeHelper;
 use PHP_CodeSniffer\Files\File;
 use Gskema\TypeSniff\Core\CodeElement\Element\AbstractFqcnMethodElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassMethodElement;
@@ -177,6 +178,14 @@ class FqcnMethodSniff implements CodeElementSniffInterface
                     $warnings[$docTypeLine][] = 'Remove array type, typed array type is present in PHPDoc for :subject:.';
                 } elseif (!$docHasTypedArray && $docHasArray) {
                     $warnings[$docTypeLine][] = 'Replace array type with typed array type in PHPDoc for :subject:. Use mixed[] for generic arrays.';
+                }
+
+                if ($docHasTypedArray && $fakeType = TypeHelper::getFakeTypedArrayType($docType)) {
+                    $msg = sprintf(
+                        'Use a more specific type in typed array hint "%s" for :subject:. Correct array depth must be specified.',
+                        $fakeType->toString()
+                    );
+                    $warnings[$docTypeLine][] = $msg;
                 }
 
                 if ($docType instanceof NullType) {

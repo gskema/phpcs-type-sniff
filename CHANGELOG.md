@@ -11,6 +11,7 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 - Warning when using null return type, removal or compound type is suggested
 - Warning for doc types that are incompatible with declared function types
 - More accurate warning for missing doc types (detected from function type)
+- Nullable function type is suggested from null doc type
 ### Changed
 - self, typed array type examples when for missing function type warnings
 - FqcnMethodSniff logic. Removed dead end inspection paths

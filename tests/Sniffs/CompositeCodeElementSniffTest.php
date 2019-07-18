@@ -53,6 +53,7 @@ class CompositeCodeElementSniffTest extends TestCase
                 '021 Add type hint in PHPDoc tag for parameter $f, e.g. "SomeClass[]"',
                 '024 Replace array type with typed array type in PHPDoc for return value. Use mixed[] for generic arrays.',
                 '031 Change type hint for parameter $h to compound, e.g. SomeClass|null',
+                '035 Add type declaration for parameter $h, e.g.: "?SomeClass"',
                 '035 Add type declaration for parameter $i, e.g.: "?int"',
                 '035 Add type declaration for return value, e.g.: "?array"',
                 '040 Remove array type, typed array type is present in PHPDoc for parameter $j.',

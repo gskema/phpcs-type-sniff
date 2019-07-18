@@ -198,10 +198,9 @@ class FqcnMethodSniff implements CodeElementSniffInterface
 
             if (!$fnTypeDefined) {
                 // Require fnType if possible (check, suggest from docType)
-                if ($suggestedFnType = TypeConverter::toFunctionType($docType)) {
+                if ($suggestedFnType = TypeConverter::toExampleFnType($docType)) {
                     $warnings[$fnTypeLine][] = sprintf('Add type declaration for :subject:, e.g.: "%s"', $suggestedFnType->toString());
                 }
-                // @TODO Warning for null?
             }
 
             if ($docTypeDefined && $fnTypeDefined) {

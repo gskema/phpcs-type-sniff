@@ -108,6 +108,8 @@ class CompositeCodeElementSniffTest extends TestCase
                 '008 Replace array type with typed array type in PHPDoc for parameter $arg1. Use mixed[] for generic arrays.',
                 '037 Type hint "static" is not compatible with return value type declaration',
                 '037 Missing "self" type in return value type hint',
+                '102 Remove @return void tag, not necessary',
+                '111 Useless PHPDoc',
             ]
         ];
 

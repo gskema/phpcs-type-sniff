@@ -205,7 +205,9 @@ class FqcnMethodSniff implements CodeElementSniffInterface
 
             if ($docTypeDefined && $fnTypeDefined) {
                 // Require to add missing types to docType,
-                // @TODO Remove void return docType,
+                if ($fnType instanceof VoidType && $docType instanceof VoidType) {
+                    $warnings[$docTypeLine][] = 'Remove @return void tag, not necessary';
+                }
 
                 /** @var TypeInterface[] $wrongDocTypes */
                 /** @var TypeInterface[] $missingDocTypes */
@@ -275,7 +277,6 @@ class FqcnMethodSniff implements CodeElementSniffInterface
                 return false;
             }
 
-            // @TODO Cleaner way?
             $fnType = $fnParam->getType();
             $rawFnType = $fnType instanceof NullableType
                 ? $fnType->toDocString()
@@ -288,7 +289,6 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         $returnTag  = $docBlock->getReturnTag();
         $returnType = $fnSig->getReturnType();
 
-        // @TODO ??
         if ($returnTag && $returnType) {
             $rawReturnType = $returnType instanceof NullableType
                 ? $returnType->toDocString()

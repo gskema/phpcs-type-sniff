@@ -12,6 +12,7 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 - Warning for doc types that are incompatible with declared function types
 - More accurate warning for missing doc types (detected from function type)
 - Nullable function type is suggested from null doc type
+- Warning when using return void tag when type declaration is specified
 ### Changed
 - self, typed array type examples when for missing function type warnings
 - FqcnMethodSniff logic. Removed dead end inspection paths

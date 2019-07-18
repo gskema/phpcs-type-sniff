@@ -121,6 +121,19 @@ class CompositeCodeElementSniffTest extends TestCase
             ]
         ];
 
+        // #5
+        $dataSets[] = [
+            [
+                'useReflection' => false,
+            ],
+            __DIR__.'/fixtures/TestClass5.php',
+            [
+                '006 Useless description',
+                '007 Useless tag',
+                '012 Useless description.',
+            ],
+        ];
+
         return $dataSets;
     }
 

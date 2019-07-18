@@ -126,6 +126,12 @@ class FqcnMethodSniff implements CodeElementSniffInterface
                 $docType ? $docType->getType() : null,
                 $docType ? $docType->getLine() : $fnSig->getLine()
             );
+        } else {
+            foreach ($docBlock->getDescriptionLines() as $lineNum => $descLine) {
+                if (preg_match('#^\w+\s+constructor\.?$#', $descLine)) {
+                    $file->addWarningOnLine('Useless description.', $lineNum, 'FqcnMethodSniff');
+                }
+            }
         }
     }
 
@@ -255,11 +261,8 @@ class FqcnMethodSniff implements CodeElementSniffInterface
 
         $docReturnTag = $docBlock->getReturnTag();
 
-        $hasUsefulDescription = $docBlock->hasDescription()
-            && !preg_match('#^\w+\s+constructor\.?$#', $docBlock->getDescription());
-
         if ($docBlock instanceof UndefinedDocBlock
-            || $hasUsefulDescription
+            || $docBlock->hasDescription()
             || $docBlock->hasOneOfTags($usefulTagNames)
             || ($docReturnTag && $docReturnTag->hasDescription())
         ) {

@@ -13,9 +13,14 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 - More accurate warning for missing doc types (detected from function type)
 - Nullable function type is suggested from null doc type
 - Warning when using return void tag when type declaration is specified
+- Warning for incomplete type array types, e.g. array[]
+- Warning for wrong, missing types in const, PHPDoc tags.
+- Useless FQCN description warning
+- Useless __construct description warning
 ### Changed
 - self, typed array type examples when for missing function type warnings
 - FqcnMethodSniff logic. Removed dead end inspection paths
+- Updated warnings texts
 
 ## 0.11.1 - 2019-07-12
 ### Fixed

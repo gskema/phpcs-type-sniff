@@ -32,10 +32,10 @@ class TypeConverterTest extends TestCase
     /**
      * @return TypeInterface[][]
      */
-    public function dataToExpectedDocType(): array
+    public function dataToExampleDocType(): array
     {
         return [
-            [new ArrayType(), null],
+            [new ArrayType(), new TypedArrayType(new FqcnType('SomeClass'), 1)],
             [new BoolType(), new BoolType()],
             [new CallableType(), new CallableType()],
             [new FloatType(), new FloatType()],
@@ -44,7 +44,7 @@ class TypeConverterTest extends TestCase
             [new IterableType(), new IterableType()],
             [new ObjectType(), new ObjectType()],
             [new ResourceType(), new ResourceType()],
-            [new SelfType(), null],
+            [new SelfType(), new SelfType()],
             [new StringType(), new StringType()],
             [new UndefinedType(), null],
             [new VoidType(), null],
@@ -56,17 +56,18 @@ class TypeConverterTest extends TestCase
     }
 
     /**
-     * @dataProvider dataToExpectedDocType
+     * @dataProvider dataToExampleDocType
+     *
      * @param TypeInterface      $givenFnType
-     * @param TypeInterface|null $expectedDocType
+     * @param TypeInterface|null $expectedExampleDocType
      */
-    public function testToExpectedDocType(
+    public function testToExampleDocType(
         TypeInterface $givenFnType,
-        ?TypeInterface $expectedDocType
+        ?TypeInterface $expectedExampleDocType
     ): void {
-        $actualDocType = TypeConverter::toExpectedDocType($givenFnType);
+        $actualExampleDocType = TypeConverter::toExampleDocType($givenFnType);
 
-        $this->assertEquals($expectedDocType, $actualDocType);
+        $this->assertEquals($expectedExampleDocType, $actualExampleDocType);
     }
 
     /**
@@ -119,7 +120,7 @@ class TypeConverterTest extends TestCase
             [new FalseType(), new BoolType()],
             [new MixedType(), null],
             [new NullType(), null],
-            [new SelfType(), null],
+            [new SelfType(), new SelfType()],
             [new StaticType(), null],
             [new ThisType(), null],
             [new TrueType(), new BoolType()],

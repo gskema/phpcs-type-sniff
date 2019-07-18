@@ -138,8 +138,6 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         ?TypeInterface $docType,
         int $docTypeLine
     ): void {
-        // @TODO Required mixed[][] instead of array[]
-
         $isReturnType = 'return value' === $subject;
         // $isParamType = !$isReturnType;
 
@@ -176,7 +174,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
                 if ($docHasTypedArray && $docHasArray) {
                     $warnings[$docTypeLine][] = 'Remove array type, typed array type is present in PHPDoc for :subject:.';
                 } elseif (!$docHasTypedArray && $docHasArray) {
-                    $warnings[$docTypeLine][] = 'Replace array type with typed array type in PHPDoc for :subject:. Use mixed[] for generic arrays.';
+                    $warnings[$docTypeLine][] = 'Replace array type with typed array type in PHPDoc for :subject:. Use mixed[] for generic arrays. Correct array depth must be specified.';
                 }
 
                 if ($docHasTypedArray && $fakeType = TypeHelper::getFakeTypedArrayType($docType)) {

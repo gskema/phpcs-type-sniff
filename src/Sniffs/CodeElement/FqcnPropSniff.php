@@ -70,7 +70,7 @@ class FqcnPropSniff implements CodeElementSniffInterface
             );
         } elseif (TypeHelper::containsType($docType, ArrayType::class)) {
             $file->addWarningOnLine(
-                'Replace array type with typed array type in PHPDoc for '.$subject.'. Use mixed[] for generic arrays.',
+                'Replace array type with typed array type in PHPDoc for '.$subject.'. Use mixed[] for generic arrays. Correct array depth must be specified.',
                 $prop->getLine(),
                 'FqcnPropSniff'
             );
@@ -78,7 +78,7 @@ class FqcnPropSniff implements CodeElementSniffInterface
             && !TypeHelper::containsType($docType, TypedArrayType::class)
         ) {
             $file->addWarningOnLine(
-                'Add PHPDoc with typed array type hint for '.$subject.'. Use mixed[] for generic arrays.',
+                'Add PHPDoc with typed array type hint for '.$subject.'. Use mixed[] for generic arrays. Correct array depth must be specified.',
                 $prop->getLine(),
                 'FqcnPropSniff'
             );

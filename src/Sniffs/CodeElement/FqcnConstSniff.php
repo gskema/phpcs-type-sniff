@@ -2,6 +2,7 @@
 
 namespace Gskema\TypeSniff\Sniffs\CodeElement;
 
+use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
 use Gskema\TypeSniff\Core\Type\TypeComparator;
 use Gskema\TypeSniff\Core\Type\TypeHelper;
@@ -64,7 +65,7 @@ class FqcnConstSniff implements CodeElementSniffInterface
         }
 
         if ($docType && $valueType) {
-            [$wrongDocTypes, $missingDocTypes] = TypeComparator::compare($docType, $valueType);
+            [$wrongDocTypes, $missingDocTypes] = TypeComparator::compare($docType, new UndefinedType(), $valueType);
 
             if ($wrongDocTypes) {
                 $warnings[$docTypeLine][] = sprintf(

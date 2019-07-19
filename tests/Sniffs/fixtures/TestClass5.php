@@ -15,4 +15,13 @@ class TestClass5
     public function __construct(int $arg1)
     {
     }
+
+    /**
+     * @param string|null $arg1
+     * @param float $arg2
+     */
+    public function func1(string $arg1 = null, float $arg2 = 1): void
+    {
+
+    }
 }

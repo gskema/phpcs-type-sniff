@@ -27,7 +27,13 @@ use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
  */
 class TypeComparator
 {
-    /** @var string[][] */
+    /**
+     * If return declaration is "iterable", but PHPDoc has "array",
+     * then no warning for wrong/missing type will be issued because "array" is more specific
+     * than "iterable".
+     *
+     * @var string[][]
+     */
     protected static $coveredFnTypeClassMap = [
         ArrayType::class => [
             IterableType::class,
@@ -81,30 +87,45 @@ class TypeComparator
     ];
 
     /**
-     * @param TypeInterface $docType
-     * @param TypeInterface $fnType
+     * @param TypeInterface      $docType
+     * @param TypeInterface      $fnType
+     * @param TypeInterface|null $valueType Const value type, default prop type, default param value type.
+     *                                      Null means it wasn't possible to detect the type.
      *
      * @return TypeInterface[][]
      */
-    public static function compare(TypeInterface $docType, TypeInterface $fnType): array
-    {
-        if ($fnType instanceof UndefinedType) {
+    public static function compare(
+        TypeInterface $docType,
+        TypeInterface $fnType,
+        ?TypeInterface $valueType
+    ): array {
+        $fnTypeDefined = !($fnType instanceof UndefinedType);
+        $valTypeDefined = $valueType && !($valueType instanceof UndefinedType);
+
+        $fnTypeMap = [];
+        if ($fnTypeDefined) {
+            if ($fnType instanceof NullableType) {
+                $fnTypeMap[NullType::class] = new NullType();
+                $mainFnType = $fnType->getType();
+            } else {
+                $mainFnType = $fnType;
+            }
+            $fnTypeMap[get_class($mainFnType)] = $mainFnType;
+        }
+
+        if ($valTypeDefined) {
+            $fnTypeMap[get_class($valueType)] = $valueType;
+        }
+
+        // Both fn and val types are undefined (or not detected), so we cannot check for missing or wrong types
+        if (empty($fnTypeMap)) {
             return [[], []];
         }
 
-        $fnTypeMap = [];
-        if ($fnType instanceof NullableType) {
-            $fnTypeMap[NullType::class] = new NullType();
-            $mainFnType = $fnType->getType();
-        } else {
-            $mainFnType = $fnType;
-        }
-        $fnTypeMap[get_class($mainFnType)] = $mainFnType;
-
-        $flatDocTypes = $docType instanceof CompoundType ? $docType->getTypes() : [$docType];
-
         $wrongDocTypes = [];
         $missingDocTypeMap = $fnTypeMap;
+
+        $flatDocTypes = $docType instanceof CompoundType ? $docType->getTypes() : [$docType];
         foreach ($flatDocTypes as $flatDocType) {
             $flatDocTypeClass = get_class($flatDocType);
             $coveredFnTypeClasses = static::$coveredFnTypeClassMap[$flatDocTypeClass] ?? [];
@@ -125,6 +146,13 @@ class TypeComparator
         }
 
         $missingDocTypes = array_values($missingDocTypeMap);
+
+        // Assigned value type could not be detected, so we cannot accurately report wrong types.
+        // E.g. function func1(int $arg1 = SomeClass::CONST1) - CONST1 may be null and we would
+        // report doc type "null" as wrong.
+        if (null === $valueType) {
+            $wrongDocTypes = [];
+        }
 
         return [$wrongDocTypes, $missingDocTypes];
     }

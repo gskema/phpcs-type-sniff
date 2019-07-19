@@ -76,7 +76,8 @@ class FqcnPropSniff implements CodeElementSniffInterface
         }
 
         if ($docType && $defValueType) {
-            [, $missingDocTypes] = TypeComparator::compare($docType, $defValueType);
+            // $wrongTypes are intentionally ignored, props are dynamic
+            [, $missingDocTypes] = TypeComparator::compare($docType, new UndefinedType(), $defValueType);
 
             if ($missingDocTypes) {
                 $warnings[$docTypeLine][] = sprintf(

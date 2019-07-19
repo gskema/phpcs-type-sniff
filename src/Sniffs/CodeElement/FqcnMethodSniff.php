@@ -110,8 +110,9 @@ class FqcnMethodSniff implements CodeElementSniffInterface
             $fnTypeLine = $fnParam->getLine();
             $docType = $tag ? $tag->getType() : null;
             $docTypeLine = $tag ? $tag->getLine() : $fnTypeLine;
+            $valueType = $fnParam->getValueType();
 
-            $this->processSigType($file, $docBlock, $subject, $fnType, $fnTypeLine, $docType, $docTypeLine);
+            $this->processSigType($file, $docBlock, $subject, $fnType, $fnTypeLine, $docType, $docTypeLine, $valueType);
         }
 
         // @return
@@ -124,7 +125,8 @@ class FqcnMethodSniff implements CodeElementSniffInterface
                 $fnSig->getReturnType(),
                 $fnSig->getReturnLine(),
                 $docType ? $docType->getType() : null,
-                $docType ? $docType->getLine() : $fnSig->getLine()
+                $docType ? $docType->getLine() : $fnSig->getLine(),
+                new UndefinedType()
             );
         } else {
             foreach ($docBlock->getDescriptionLines() as $lineNum => $descLine) {
@@ -142,7 +144,8 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         TypeInterface $fnType,
         int $fnTypeLine,
         ?TypeInterface $docType,
-        int $docTypeLine
+        int $docTypeLine,
+        ?TypeInterface $valueType
     ): void {
         $isReturnType = 'return value' === $subject;
         // $isParamType = !$isReturnType;
@@ -223,7 +226,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
 
                 /** @var TypeInterface[] $wrongDocTypes */
                 /** @var TypeInterface[] $missingDocTypes */
-                [$wrongDocTypes, $missingDocTypes] = TypeComparator::compare($docType, $fnType);
+                [$wrongDocTypes, $missingDocTypes] = TypeComparator::compare($docType, $fnType, $valueType);
 
                 if ($wrongDocTypes) {
                     $warnings[$docTypeLine][] = sprintf(

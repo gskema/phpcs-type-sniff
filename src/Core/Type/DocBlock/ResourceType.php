@@ -1,6 +1,6 @@
 <?php
 
-namespace Gskema\TypeSniff\Core\Type\Common;
+namespace Gskema\TypeSniff\Core\Type\DocBlock;
 
 use Gskema\TypeSniff\Core\Type\TypeInterface;
 

@@ -23,17 +23,24 @@ class CompositeCodeElementSniffTest extends TestCase
             ],
             __DIR__.'/fixtures/TestClass0.php',
             [
-                '010 Replace array type with typed array type in PHPDoc for C2 constant. Use mixed[] for generic arrays.',
-                '012 Add PHPDoc with typed array type hint for C3 constant. Use mixed[] for generic arrays.',
+                '009 Replace array type with typed array type in PHPDoc for C2 constant. Use mixed[] for generic arrays. Correct array depth must be specified.',
+                '009 Type hint "array" is not compatible with C2 constant value type',
+                '009 Missing "int" type in C2 constant type hint',
+                '012 Add PHPDoc with typed array type hint for C3 constant. Use mixed[] for generic arrays. Correct array depth must be specified.',
                 '017 Add PHPDoc for property $prop1',
                 '022 Add @var tag for property $prop2',
-                '025 Add type hint to @var tag for property $prop3',
-                '028 Replace array type with typed array type in PHPDoc for property $prop4. Use mixed[] for generic arrays.',
-                '031 Replace array type with typed array type in PHPDoc for property $prop5. Use mixed[] for generic arrays.',
-                '034 Add PHPDoc with typed array type hint for property $prop6. Use mixed[] for generic arrays.',
-                '040 Remove property name $prop8 from @var tag',
-                '046 Replace array type with typed array type in PHPDoc for property $prop10. Use mixed[] for generic arrays.',
-                '052 Replace array type with typed array type in PHPDoc for C6 constant. Use mixed[] for generic arrays.',
+                '024 Add type hint to @var tag for property $prop3',
+                '027 Replace array type with typed array type in PHPDoc for property $prop4. Use mixed[] for generic arrays. Correct array depth must be specified.',
+                '030 Replace array type with typed array type in PHPDoc for property $prop5. Use mixed[] for generic arrays. Correct array depth must be specified.',
+                '033 Add PHPDoc with typed array type hint for property $prop6. Use mixed[] for generic arrays. Correct array depth must be specified.',
+                '033 Missing "array" type in property $prop6 type hint',
+                '039 Remove property name $prop8 from @var tag',
+                '045 Replace array type with typed array type in PHPDoc for property $prop10. Use mixed[] for generic arrays. Correct array depth must be specified.',
+                '045 Remove redundant property $prop10 type hints "array"',
+                '051 Replace array type with typed array type in PHPDoc for C6 constant. Use mixed[] for generic arrays. Correct array depth must be specified.',
+                '051 Remove redundant C6 constant type hints "array"',
+                '054 Use a more specific type in typed array hint "array[]" for C7 constant. Correct array depth must be specified.',
+                '057 Use a more specific type in typed array hint "array[][]" for property $prop11. Correct array depth must be specified.',
             ]
         ];
 
@@ -51,12 +58,13 @@ class CompositeCodeElementSniffTest extends TestCase
                 '019 Add type hint in PHPDoc tag for parameter $d',
                 '020 Add type hint in PHPDoc tag for parameter $e, e.g. "int"',
                 '021 Add type hint in PHPDoc tag for parameter $f, e.g. "SomeClass[]"',
-                '024 Replace array type with typed array type in PHPDoc for return value. Use mixed[] for generic arrays.',
+                '024 Replace array type with typed array type in PHPDoc for return value. Use mixed[] for generic arrays. Correct array depth must be specified.',
                 '031 Change type hint for parameter $h to compound, e.g. SomeClass|null',
+                '035 Add type declaration for parameter $h, e.g.: "?SomeClass"',
                 '035 Add type declaration for parameter $i, e.g.: "?int"',
                 '035 Add type declaration for return value, e.g.: "?array"',
-                '040 Remove array type, typed array type is present in PHPDoc for parameter $j.',
-                '041 Replace array type with typed array type in PHPDoc for parameter $k. Use mixed[] for generic arrays.',
+                '040 Remove redundant parameter $j type hints "array"',
+                '041 Replace array type with typed array type in PHPDoc for parameter $k. Use mixed[] for generic arrays. Correct array depth must be specified.',
                 '042 Add type hint in PHPDoc tag for parameter $l, e.g. "SomeClass[]"',
                 '044 Missing "null" type in parameter $n type hint',
                 '045 Type hint "string" is not compatible with parameter $o type declaration',
@@ -87,7 +95,7 @@ class CompositeCodeElementSniffTest extends TestCase
             __DIR__.'/fixtures/TestClass3.php',
             [
                 '007 Add type declaration for parameter $arg1 or create PHPDoc with type hint',
-                '022 Missing @inheritDoc tag',
+                '022 Missing @inheritDoc tag. Remove duplicated parent PHPDoc content.',
                 '027 Type hint "string" is not compatible with parameter $arg1 type declaration',
                 '027 Missing "null, int" types in parameter $arg1 type hint',
                 '042 Type hints "string, float" are not compatible with return value type declaration',
@@ -104,10 +112,35 @@ class CompositeCodeElementSniffTest extends TestCase
             ],
             __DIR__.'/fixtures/TestClass4.php',
             [
-                '008 Replace array type with typed array type in PHPDoc for parameter $arg1. Use mixed[] for generic arrays.',
+                '008 Replace array type with typed array type in PHPDoc for parameter $arg1. Use mixed[] for generic arrays. Correct array depth must be specified.',
                 '037 Type hint "static" is not compatible with return value type declaration',
                 '037 Missing "self" type in return value type hint',
+                '102 Remove @return void tag, not necessary',
+                '111 Useless PHPDoc',
+                '117 Use a more specific type in typed array hint "array[]" for parameter $arg2. Correct array depth must be specified.',
+                '124 Type hint "mixed" is not compatible with parameter $arg1 type declaration',
+                '126 Type hint "mixed" is not compatible with return value type declaration',
             ]
+        ];
+
+        // #5
+        $dataSets[] = [
+            [
+                'useReflection' => false,
+            ],
+            __DIR__.'/fixtures/TestClass5.php',
+            [
+                '006 Useless description',
+                '007 Useless tag',
+                '012 Useless description.',
+                '023 Change parameter $arg1 type declaration to nullable, e.g. ?string. Remove default null value if this argument is required.',
+                '042 Add type declaration for parameter $arg1, e.g.: "float"',
+                '045 Add type declaration for parameter $arg4, e.g.: "float"',
+                '035 Remove redundant parameter $arg7 type hints "double"',
+                '036 Remove redundant parameter $arg8 type hints "double"',
+                '037 Remove redundant parameter $arg9 type hints "double"',
+                '054 Change parameter $arg1 type declaration to nullable, e.g. ?string. Remove default null value if this argument is required.'
+            ],
         ];
 
         return $dataSets;

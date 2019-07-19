@@ -116,7 +116,7 @@ class CodeElementTest extends TestCase
         return new FunctionSignature(
             3,
             'method1',
-            [new FunctionParam(20, 'arg1', new UndefinedType())],
+            [new FunctionParam(20, 'arg1', new UndefinedType(), new UndefinedType())],
             new StringType(),
             20
         );

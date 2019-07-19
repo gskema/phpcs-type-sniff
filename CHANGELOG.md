@@ -11,9 +11,21 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 - Warning when using null return type, removal or compound type is suggested
 - Warning for doc types that are incompatible with declared function types
 - More accurate warning for missing doc types (detected from function type)
+- Nullable function type is suggested from null doc type
+- Warning when using return void tag when type declaration is specified
+- Warning for incomplete type array types, e.g. array[]
+- Warning for wrong, missing types in const, PHPDoc tags.
+- Useless FQCN description warning
+- Useless __construct description warning
+- Detection of function parameter default value type
+- Warning for redundant doc types, e.g. float|double
+- Warning to use nullable parameter type instead of type + null default value
 ### Changed
 - self, typed array type examples when for missing function type warnings
 - FqcnMethodSniff logic. Removed dead end inspection paths
+- Updated warnings texts
+### Fixed
+- ResourceType is now DocBlock type, because cannot be used as PHP type declaration
 
 ## 0.11.1 - 2019-07-12
 ### Fixed

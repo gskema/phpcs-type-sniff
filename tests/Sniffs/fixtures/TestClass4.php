@@ -96,4 +96,43 @@ class TestClass4 extends \stdClass
     public function func6(): self
     {
     }
+
+    /**
+     * @param int $arg1
+     * @return void
+     */
+    public function func7(int $arg1): void
+    {
+    }
+
+    /**
+     * @param int $arg1
+     */
+    public function func8(int $arg1): void
+    {
+    }
+
+    /**
+     * @param int     $arg1
+     * @param array[] $arg2
+     */
+    public function func9(int $arg1, array $arg2): void
+    {
+    }
+
+    /**
+     * @param mixed[]|mixed $arg1
+     *
+     * @return int|mixed
+     */
+    public function func10(array $arg1): int
+    {
+    }
+
+    /**
+     * @return mixed
+     */
+    public function func11()
+    {
+    }
 }

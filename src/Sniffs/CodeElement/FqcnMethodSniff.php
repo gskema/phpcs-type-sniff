@@ -3,6 +3,7 @@
 namespace Gskema\TypeSniff\Sniffs\CodeElement;
 
 use Gskema\TypeSniff\Core\Type\TypeComparator;
+use Gskema\TypeSniff\Core\Type\TypeHelper;
 use PHP_CodeSniffer\Files\File;
 use Gskema\TypeSniff\Core\CodeElement\Element\AbstractFqcnMethodElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassMethodElement;
@@ -14,7 +15,6 @@ use Gskema\TypeSniff\Core\Type\Common\ArrayType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Common\VoidType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
-use Gskema\TypeSniff\Core\Type\DocBlock\CompoundType;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
 use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
 use Gskema\TypeSniff\Core\Type\TypeConverter;
@@ -94,7 +94,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
             if ($hasInheritDocTag || $isMagicMethod) {
                 return;
             } elseif ($method->isExtended()) {
-                $file->addWarningOnLine('Missing @inheritDoc tag', $method->getLine(), 'FqcnMethodSniff');
+                $file->addWarningOnLine('Missing @inheritDoc tag. Remove duplicated parent PHPDoc content.', $method->getLine(), 'FqcnMethodSniff');
                 return;
             }
         }
@@ -110,8 +110,9 @@ class FqcnMethodSniff implements CodeElementSniffInterface
             $fnTypeLine = $fnParam->getLine();
             $docType = $tag ? $tag->getType() : null;
             $docTypeLine = $tag ? $tag->getLine() : $fnTypeLine;
+            $valueType = $fnParam->getValueType();
 
-            $this->processSigType($file, $docBlock, $subject, $fnType, $fnTypeLine, $docType, $docTypeLine);
+            $this->processSigType($file, $docBlock, $subject, $fnType, $fnTypeLine, $docType, $docTypeLine, $valueType);
         }
 
         // @return
@@ -124,8 +125,15 @@ class FqcnMethodSniff implements CodeElementSniffInterface
                 $fnSig->getReturnType(),
                 $fnSig->getReturnLine(),
                 $docType ? $docType->getType() : null,
-                $docType ? $docType->getLine() : $fnSig->getLine()
+                $docType ? $docType->getLine() : $fnSig->getLine(),
+                new UndefinedType()
             );
+        } else {
+            foreach ($docBlock->getDescriptionLines() as $lineNum => $descLine) {
+                if (preg_match('#^\w+\s+constructor\.?$#', $descLine)) {
+                    $file->addWarningOnLine('Useless description.', $lineNum, 'FqcnMethodSniff');
+                }
+            }
         }
     }
 
@@ -136,20 +144,29 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         TypeInterface $fnType,
         int $fnTypeLine,
         ?TypeInterface $docType,
-        int $docTypeLine
+        int $docTypeLine,
+        ?TypeInterface $valueType
     ): void {
-        // @TODO Required mixed[][] instead of array[]
-
         $isReturnType = 'return value' === $subject;
-        // $isParamType = !$isReturnType;
+        $docTypeDefined = !($docType instanceof UndefinedType);
+        $fnTypeDefined = !($fnType instanceof UndefinedType);
 
         /** @var string[][] $warnings */
         $warnings = [];
+
+        // func1(string $arg1 = null) -> ?string
+        if ($valueType instanceof NullType && $fnTypeDefined && !($fnType instanceof NullableType)) {
+            $warnings[$fnTypeLine][] = sprintf(
+                'Change :subject: type declaration to nullable, e.g. %s. Remove default null value if this argument is required.',
+                (new NullableType($fnType))->toString()
+            );
+        }
+
         if ($docBlock instanceof UndefinedDocBlock) {
             // Require docType for undefined type or array type
             if ($fnType instanceof UndefinedType) {
                 $warnings[$fnTypeLine][] = 'Add type declaration for :subject: or create PHPDoc with type hint';
-            } elseif ($this->containsType($fnType, ArrayType::class)) {
+            } elseif (TypeHelper::containsType($fnType, ArrayType::class)) {
                 $warnings[$fnTypeLine][] = 'Create PHPDoc with typed array type hint for :subject:, .e.g.: "string[]" or "SomeClass[]"';
             }
         } elseif (null === $docType) {
@@ -162,21 +179,28 @@ class FqcnMethodSniff implements CodeElementSniffInterface
                 $warnings[$fnTypeLine][] = 'Missing PHPDoc tag for :subject:';
             }
         } else {
-            $docTypeDefined = !($docType instanceof UndefinedType);
-            $fnTypeDefined = !($fnType instanceof UndefinedType);
-
             if ($docTypeDefined) {
                 // Require typed array type
                 // Require composite with null instead of null
                 // @TODO true/void/false/$this/ cannot be param tags
 
-                $docHasTypedArray = $this->containsType($docType, TypedArrayType::class);
-                $docHasArray = $this->containsType($docType, ArrayType::class);
+                $docHasTypedArray = TypeHelper::containsType($docType, TypedArrayType::class);
+                $docHasArray = TypeHelper::containsType($docType, ArrayType::class);
 
-                if ($docHasTypedArray && $docHasArray) {
-                    $warnings[$docTypeLine][] = 'Remove array type, typed array type is present in PHPDoc for :subject:.';
-                } elseif (!$docHasTypedArray && $docHasArray) {
-                    $warnings[$docTypeLine][] = 'Replace array type with typed array type in PHPDoc for :subject:. Use mixed[] for generic arrays.';
+                if (!$docHasTypedArray && $docHasArray) {
+                    $warnings[$docTypeLine][] = 'Replace array type with typed array type in PHPDoc for :subject:. Use mixed[] for generic arrays. Correct array depth must be specified.';
+                }
+
+                if ($redundantTypes = TypeComparator::getRedundantDocTypes($docType)) {
+                    $warnings[$docTypeLine][] = sprintf('Remove redundant :subject: type hints "%s"', TypeHelper::listRawTypes($redundantTypes));
+                }
+
+                if ($docHasTypedArray && $fakeType = TypeHelper::getFakeTypedArrayType($docType)) {
+                    $msg = sprintf(
+                        'Use a more specific type in typed array hint "%s" for :subject:. Correct array depth must be specified.',
+                        $fakeType->toString()
+                    );
+                    $warnings[$docTypeLine][] = $msg;
                 }
 
                 if ($docType instanceof NullType) {
@@ -198,25 +222,26 @@ class FqcnMethodSniff implements CodeElementSniffInterface
 
             if (!$fnTypeDefined) {
                 // Require fnType if possible (check, suggest from docType)
-                if ($suggestedFnType = TypeConverter::toFunctionType($docType)) {
+                if ($suggestedFnType = TypeConverter::toExampleFnType($docType)) {
                     $warnings[$fnTypeLine][] = sprintf('Add type declaration for :subject:, e.g.: "%s"', $suggestedFnType->toString());
                 }
-                // @TODO Warning for null?
             }
 
             if ($docTypeDefined && $fnTypeDefined) {
                 // Require to add missing types to docType,
-                // @TODO Remove void return docType,
+                if ($fnType instanceof VoidType && $docType instanceof VoidType) {
+                    $warnings[$docTypeLine][] = 'Remove @return void tag, not necessary';
+                }
 
                 /** @var TypeInterface[] $wrongDocTypes */
                 /** @var TypeInterface[] $missingDocTypes */
-                [$wrongDocTypes, $missingDocTypes] = TypeComparator::compare($docType, $fnType);
+                [$wrongDocTypes, $missingDocTypes] = TypeComparator::compare($docType, $fnType, $valueType);
 
                 if ($wrongDocTypes) {
                     $warnings[$docTypeLine][] = sprintf(
                         'Type %s "%s" %s not compatible with :subject: type declaration',
                         isset($wrongDocTypes[1]) ? 'hints' : 'hint',
-                        $this->implodeTypes($wrongDocTypes),
+                        TypeHelper::listRawTypes($wrongDocTypes),
                         isset($wrongDocTypes[1]) ? 'are' : 'is'
                     );
                 }
@@ -224,7 +249,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
                 if ($missingDocTypes) {
                     $warnings[$docTypeLine][] = sprintf(
                         'Missing "%s" %s in :subject: type hint',
-                        $this->implodeTypes($missingDocTypes),
+                        TypeHelper::listRawTypes($missingDocTypes),
                         isset($missingDocTypes[1]) ? 'types' : 'type'
                     );
                 }
@@ -239,13 +264,6 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         }
     }
 
-    protected function containsType(TypeInterface $type, string $typeClassName): bool
-    {
-        return is_a($type, $typeClassName)
-            || ($type instanceof CompoundType && $type->containsType($typeClassName))
-            || ($type instanceof NullableType && $type->containsType($typeClassName));
-    }
-
     protected function hasUselessDocBlock(AbstractFqcnMethodElement $method): bool
     {
         $fnSig = $method->getSignature();
@@ -255,11 +273,8 @@ class FqcnMethodSniff implements CodeElementSniffInterface
 
         $docReturnTag = $docBlock->getReturnTag();
 
-        $hasUsefulDescription = $docBlock->hasDescription()
-            && !preg_match('#^\w+\s+constructor\.?$#', $docBlock->getDescription());
-
         if ($docBlock instanceof UndefinedDocBlock
-            || $hasUsefulDescription
+            || $docBlock->hasDescription()
             || $docBlock->hasOneOfTags($usefulTagNames)
             || ($docReturnTag && $docReturnTag->hasDescription())
         ) {
@@ -276,7 +291,6 @@ class FqcnMethodSniff implements CodeElementSniffInterface
                 return false;
             }
 
-            // @TODO Cleaner way?
             $fnType = $fnParam->getType();
             $rawFnType = $fnType instanceof NullableType
                 ? $fnType->toDocString()
@@ -289,7 +303,6 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         $returnTag  = $docBlock->getReturnTag();
         $returnType = $fnSig->getReturnType();
 
-        // @TODO ??
         if ($returnTag && $returnType) {
             $rawReturnType = $returnType instanceof NullableType
                 ? $returnType->toDocString()
@@ -300,19 +313,5 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         }
 
         return true;
-    }
-
-    /**
-     * @param TypeInterface[] $types
-     * @return string|null
-     */
-    protected function implodeTypes(array $types): ?string
-    {
-        $rawTypes = [];
-        foreach ($types as $type) {
-            $rawTypes[] = $type->toString();
-        }
-
-        return $rawTypes ? implode(', ', $rawTypes) : null;
     }
 }

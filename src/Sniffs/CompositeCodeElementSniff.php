@@ -2,6 +2,7 @@
 
 namespace Gskema\TypeSniff\Sniffs;
 
+use Gskema\TypeSniff\Sniffs\CodeElement\FqcnDescriptionSniff;
 use PHP_CodeSniffer\Files\File;
 use Gskema\TypeSniff\Core\CodeElement\CodeElementDetector;
 use Gskema\TypeSniff\Sniffs\CodeElement\CodeElementSniffInterface;
@@ -33,6 +34,7 @@ class CompositeCodeElementSniff extends AbstractConfigurableSniff
         $config['sniffs'][] = FqcnMethodSniff::class;
         $config['sniffs'][] = FqcnPropSniff::class;
         $config['sniffs'][] = FqcnConstSniff::class;
+        $config['sniffs'][] = FqcnDescriptionSniff::class;
 
         // CodeElementSniff(s) are saved by their short name, meaning you can't have 2 instances of same sniff.
         $rawSniffs = [];

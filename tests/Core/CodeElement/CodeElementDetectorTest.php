@@ -11,15 +11,16 @@ use Gskema\TypeSniff\Core\CodeElement\Element\TraitPropElement;
 use Gskema\TypeSniff\Core\Type\Common\BoolType;
 use Gskema\TypeSniff\Core\Type\Common\CallableType;
 use Gskema\TypeSniff\Core\Type\Common\FloatType;
+use Gskema\TypeSniff\Core\Type\Common\FqcnType;
 use Gskema\TypeSniff\Core\Type\Common\IterableType;
 use Gskema\TypeSniff\Core\Type\Common\ObjectType;
 use Gskema\TypeSniff\Core\Type\Common\ParentType;
-use Gskema\TypeSniff\Core\Type\Common\ResourceType;
 use Gskema\TypeSniff\Core\Type\Common\SelfType;
 use Gskema\TypeSniff\Core\Type\Common\VoidType;
 use Gskema\TypeSniff\Core\Type\DocBlock\DoubleType;
 use Gskema\TypeSniff\Core\Type\DocBlock\FalseType;
 use Gskema\TypeSniff\Core\Type\DocBlock\MixedType;
+use Gskema\TypeSniff\Core\Type\DocBlock\ResourceType;
 use Gskema\TypeSniff\Core\Type\DocBlock\StaticType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ThisType;
 use Gskema\TypeSniff\Core\Type\DocBlock\TrueType;
@@ -147,7 +148,7 @@ class CodeElementDetectorTest extends TestCase
                         44,
                         'method2',
                         [
-                            new FunctionParam(44, 'param1', new IntType())
+                            new FunctionParam(44, 'param1', new IntType(), new UndefinedType())
                         ],
                         new NullableType(new ArrayType()),
                         44
@@ -372,7 +373,7 @@ class CodeElementDetectorTest extends TestCase
                         9,
                         'func1',
                         [
-                            new FunctionParam(9, 'arg1', new IntType())
+                            new FunctionParam(9, 'arg1', new IntType(), new UndefinedType())
                         ],
                         new IntType(),
                         9
@@ -531,33 +532,91 @@ class CodeElementDetectorTest extends TestCase
                         39,
                         'method2',
                         [
-                            new FunctionParam(40, 'array', new ArrayType()),
-                            new FunctionParam(41, 'bool', new BoolType()),
-                            new FunctionParam(42, 'boolean', new UndefinedType()),
-                            new FunctionParam(43, 'callable', new CallableType()),
-                            new FunctionParam(44, 'double', new UndefinedType()),
-                            new FunctionParam(45, 'false', new UndefinedType()),
-                            new FunctionParam(46, 'float', new FloatType()),
-                            new FunctionParam(47, 'int', new IntType()),
-                            new FunctionParam(48, 'integer', new UndefinedType()),
-                            new FunctionParam(49, 'iterable', new IterableType()),
-                            new FunctionParam(50, 'mixed', new UndefinedType()),
-                            new FunctionParam(51, 'null', new UndefinedType()),
-                            new FunctionParam(52, 'object', new UndefinedType()),
-                            new FunctionParam(53, 'parent', new ParentType()),
-                            new FunctionParam(54, 'resource', new UndefinedType()),
-                            new FunctionParam(55, 'self', new SelfType()),
-                            new FunctionParam(56, 'static', new UndefinedType()),
-                            new FunctionParam(57, 'string', new StringType()),
-                            new FunctionParam(58, 'true', new UndefinedType()),
-                            new FunctionParam(59, 'undefined', new UndefinedType()),
-                            new FunctionParam(60, 'typedArray', new ArrayType()),
-                            new FunctionParam(61, 'nullableInt', new NullableType(new IntType())),
+                            new FunctionParam(40, 'array', new ArrayType(), new UndefinedType()),
+                            new FunctionParam(41, 'bool', new BoolType(), new UndefinedType()),
+                            new FunctionParam(42, 'boolean', new UndefinedType(), new UndefinedType()),
+                            new FunctionParam(43, 'callable', new CallableType(), new UndefinedType()),
+                            new FunctionParam(44, 'double', new UndefinedType(), new UndefinedType()),
+                            new FunctionParam(45, 'false', new UndefinedType(), new UndefinedType()),
+                            new FunctionParam(46, 'float', new FloatType(), new UndefinedType()),
+                            new FunctionParam(47, 'int', new IntType(), new UndefinedType()),
+                            new FunctionParam(48, 'integer', new UndefinedType(), new UndefinedType()),
+                            new FunctionParam(49, 'iterable', new IterableType(), new UndefinedType()),
+                            new FunctionParam(50, 'mixed', new UndefinedType(), new UndefinedType()),
+                            new FunctionParam(51, 'null', new UndefinedType(), new UndefinedType()),
+                            new FunctionParam(52, 'object', new UndefinedType(), new UndefinedType()),
+                            new FunctionParam(53, 'parent', new ParentType(), new UndefinedType()),
+                            new FunctionParam(54, 'resource', new UndefinedType(), new UndefinedType()),
+                            new FunctionParam(55, 'self', new SelfType(), new UndefinedType()),
+                            new FunctionParam(56, 'static', new UndefinedType(), new UndefinedType()),
+                            new FunctionParam(57, 'string', new StringType(), new UndefinedType()),
+                            new FunctionParam(58, 'true', new UndefinedType(), new UndefinedType()),
+                            new FunctionParam(59, 'undefined', new UndefinedType(), new UndefinedType()),
+                            new FunctionParam(60, 'typedArray', new ArrayType(), new UndefinedType()),
+                            new FunctionParam(61, 'nullableInt', new NullableType(new IntType()), new UndefinedType()),
                         ],
                         new UndefinedType(),
                         62
                     ),
                     null
+                ),
+            ]
+        ];
+
+        // #9
+        $fqcn9 = 'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass4';
+        $dataSets[] = [
+            'givenUseReflection' => true,
+            'givenFile' => __DIR__.'/fixtures/TestClass4.php',
+            'expectedElements' => [
+                new FileElement(1, new UndefinedDocBlock(), __DIR__.'/fixtures/TestClass4.php'),
+                new ClassElement(7, new UndefinedDocBlock(), $fqcn9),
+                new ClassConstElement(9, new UndefinedDocBlock(), $fqcn9, 'C1', new ArrayType()),
+                new ClassConstElement(10, new UndefinedDocBlock(), $fqcn9, 'C2', new BoolType()),
+                new ClassConstElement(11, new UndefinedDocBlock(), $fqcn9, 'C3', new FloatType()),
+                new ClassConstElement(12, new UndefinedDocBlock(), $fqcn9, 'C4', new IntType()),
+                new ClassConstElement(13, new UndefinedDocBlock(), $fqcn9, 'C5', new StringType()),
+                new ClassConstElement(14, new UndefinedDocBlock(), $fqcn9, 'C6', new NullType()),
+                new ClassConstElement(15, new UndefinedDocBlock(), $fqcn9, 'C7', new ArrayType()),
+                new ClassConstElement(16, new UndefinedDocBlock(), $fqcn9, 'C8', null),
+                new ClassConstElement(17, new UndefinedDocBlock(), $fqcn9, 'C9', new StringType()),
+                new ClassMethodElement(
+                    new UndefinedDocBlock(),
+                    $fqcn9,
+                    new FunctionSignature(
+                        21,
+                        'func1',
+                        [
+                            new FunctionParam(22, 'arg1', new ArrayType(), new ArrayType()),
+                            new FunctionParam(23, 'arg2', new BoolType(), new BoolType()),
+                            new FunctionParam(24, 'arg3', new CallableType(), new NullType()),
+                            new FunctionParam(25, 'arg4', new FloatType(), new FloatType()),
+                            new FunctionParam(26, 'arg5', new FqcnType('stdClass'), new NullType()),
+                            new FunctionParam(27, 'arg6', new IntType(), new IntType()),
+                            new FunctionParam(28, 'arg7', new IterableType(), new ArrayType()),
+                            new FunctionParam(29, 'arg8', new ParentType(), new NullType()),
+                            new FunctionParam(30, 'arg9', new SelfType(), new NullType()),
+                            new FunctionParam(31, 'arg10', new StringType(), new StringType()),
+                            new FunctionParam(32, 'arg11', new UndefinedType(), new NullType()),
+                            new FunctionParam(33, 'arg12', new NullableType(new StringType()), new NullType()),
+
+                            new FunctionParam(35, 'arg13', new ArrayType(), null),
+                            new FunctionParam(36, 'arg14', new BoolType(), null),
+                            new FunctionParam(37, 'arg15', new FloatType(), null),
+                            new FunctionParam(38, 'arg16', new IntType(), null),
+                            new FunctionParam(39, 'arg17', new StringType(), null),
+                            new FunctionParam(40, 'arg18', new NullableType(new StringType()), null),
+                            new FunctionParam(41, 'arg19', new ArrayType(), null),
+                            new FunctionParam(42, 'arg20', new NullableType(new IntType()), null),
+                            new FunctionParam(43, 'arg21', new StringType(), null),
+                            new FunctionParam(45, 'arg22', new ArrayType(), new ArrayType()),
+                            new FunctionParam(46, 'arg23', new BoolType(), new BoolType()),
+                            new FunctionParam(47, 'arg24', new UndefinedType(), null),
+                        ],
+                        new VoidType(),
+                        48
+                    ),
+                    false
                 ),
             ]
         ];

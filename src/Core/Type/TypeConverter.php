@@ -45,13 +45,13 @@ class TypeConverter
         return $fnType;
     }
 
-    public static function toFunctionType(TypeInterface $docType): ?TypeInterface
+    public static function toExampleFnType(TypeInterface $docType): ?TypeInterface
     {
         if ($docType instanceof CompoundType) {
             $types = $docType->getTypes();
             if (2 === $docType->getCount() && $docType->containsType(NullType::class)) {
                 $otherType = $types[0] instanceof NullType ? $types[1] : $types[0];
-                $suggestedType = static::toFunctionType($otherType);
+                $suggestedType = static::toExampleFnType($otherType);
                 if (null !== $suggestedType) {
                     return new NullableType($suggestedType);
                 }
@@ -78,6 +78,10 @@ class TypeConverter
             }
 
             return null;
+        }
+
+        if ($docType instanceof NullType) {
+            return new NullableType(new FqcnType('SomeClass'));
         }
 
         // "static", "$this" type hints cannot be forced into "self" type declaration

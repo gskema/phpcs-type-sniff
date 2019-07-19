@@ -2,6 +2,7 @@
 
 namespace Gskema\TypeSniff\Core\Func;
 
+use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
 use PHP_CodeSniffer\Config;
 use PHP_CodeSniffer\Exceptions\RuntimeException;
 use PHP_CodeSniffer\Files\LocalFile;
@@ -47,10 +48,10 @@ class FunctionSignatureParserTest extends TestCase
                 5,
                 'func2',
                 [
-                    new FunctionParam(5, 'a', new UndefinedType()),
-                    new FunctionParam(5, 'b', new IntType()),
-                    new FunctionParam(5, 'c', new NullableType(new StringType())),
-                    new FunctionParam(5, 'd', new SelfType()),
+                    new FunctionParam(5, 'a', new UndefinedType(), new UndefinedType()),
+                    new FunctionParam(5, 'b', new IntType(), new UndefinedType()),
+                    new FunctionParam(5, 'c', new NullableType(new StringType()), new UndefinedType()),
+                    new FunctionParam(5, 'd', new SelfType(), new UndefinedType()),
                 ],
                 new ArrayType(),
                 5
@@ -66,11 +67,11 @@ class FunctionSignatureParserTest extends TestCase
                 9,
                 'func3',
                 [
-                    new FunctionParam(10, 'arg1', new NullableType(new FqcnType('\Space\Class1'))),
-                    new FunctionParam(11, 'arg2', new BoolType()),
-                    new FunctionParam(12, 'arg3', new UndefinedType()),
-                    new FunctionParam(13, 'arg4', new IntType()),
-                    new FunctionParam(14, 'arg5', new IntType()),
+                    new FunctionParam(10, 'arg1', new NullableType(new FqcnType('\Space\Class1')), new UndefinedType()),
+                    new FunctionParam(11, 'arg2', new BoolType(), new UndefinedType()),
+                    new FunctionParam(12, 'arg3', new UndefinedType(), new BoolType()),
+                    new FunctionParam(13, 'arg4', new IntType(), new NullType()),
+                    new FunctionParam(14, 'arg5', new IntType(), null),
                 ],
                 new FqcnType('\Space1\Class2'),
                 15
@@ -94,8 +95,8 @@ class FunctionSignatureParserTest extends TestCase
                 3,
                 'func1',
                 [
-                    new FunctionParam(4, 'arg1', new IntType()),
-                    new FunctionParam(5, 'arg2', new StringType())
+                    new FunctionParam(4, 'arg1', new IntType(), null),
+                    new FunctionParam(5, 'arg2', new StringType(), null)
                 ],
                 new UndefinedType(),
                 6

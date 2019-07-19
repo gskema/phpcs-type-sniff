@@ -18,11 +18,19 @@ class FunctionParam
     /** @var TypeInterface */
     protected $type;
 
-    public function __construct(int $line, string $name, TypeInterface $type)
-    {
+    /** @var TypeInterface|null */
+    protected $valueType;
+
+    public function __construct(
+        int $line,
+        string $name,
+        TypeInterface $declarationType,
+        ?TypeInterface $valueType
+    ) {
         $this->line = $line;
         $this->name = $name;
-        $this->type = $type;
+        $this->type = $declarationType;
+        $this->valueType = $valueType;
     }
 
     public function getLine(): int
@@ -38,5 +46,10 @@ class FunctionParam
     public function getType(): TypeInterface
     {
         return $this->type;
+    }
+
+    public function getValueType(): ?TypeInterface
+    {
+        return $this->valueType;
     }
 }

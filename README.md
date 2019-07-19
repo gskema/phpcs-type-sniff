@@ -83,11 +83,20 @@ String `true/false` values are automatically converted to booleans.
             <property name="FqcnConstSniff.enabled" value="false" />
             <property name="FqcnMethodSniff.enabled" value="false" />
             <property name="FqcnPropSniff.enabled" value="false" />
+            <property name="FqcnDescriptionSniff.enabled" value="false" />
 
             <!-- Adds additional useful PHPDoc tags for asserting useful DocBlock(s) -->
             <property name="FqcnMethodSniff.usefulTags" type="array">
                 <element value="@someTag1"/>
                 <element value="@someTag2"/>
+            </property>
+
+            <!-- Custom pattern and tags for asserting useless FQCN descriptions -->
+            <property name="FqcnDescriptionSniff.invalidPatterns" type="array">
+                <element value="^Nothing.+Useful$"/>
+            </property>
+            <property name="FqcnDescriptionSniff.invalidTags" type="array">
+                <element value="@api"/>
             </property>
 
             <!-- Your own custom code element sniff(s). Autoloader is needed. -->

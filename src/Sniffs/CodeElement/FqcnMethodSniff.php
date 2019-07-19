@@ -155,7 +155,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         $warnings = [];
 
         // func1(string $arg1 = null) -> ?string
-        if ($valueType instanceof NullType && !($docType instanceof NullableType)) {
+        if ($valueType instanceof NullType && $fnTypeDefined && !($fnType instanceof NullableType)) {
             $warnings[$fnTypeLine][] = sprintf(
                 'Change :subject: type declaration to nullable, e.g. %s. Remove default null value if this argument is required.',
                 (new NullableType($fnType))->toString()

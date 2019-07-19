@@ -53,6 +53,23 @@ class TestClass5
 
     public function func3(string $arg1 = null): void
     {
+    }
 
+    /**
+     * @param string   $name
+     * @param mixed|null $default
+     * @return mixed
+     */
+    private function func4(string $name, $default = null)
+    {
+    }
+
+    /**
+     * @param string   $name
+     * @param int|null $default
+     * @return mixed
+     */
+    private function func5(string $name, ?int $default = null)
+    {
     }
 }

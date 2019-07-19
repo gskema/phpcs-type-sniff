@@ -7,6 +7,7 @@ use Gskema\TypeSniff\Core\Type\Common\BoolType;
 use Gskema\TypeSniff\Core\Type\Common\CallableType;
 use Gskema\TypeSniff\Core\Type\Common\FloatType;
 use Gskema\TypeSniff\Core\Type\Common\FqcnType;
+use Gskema\TypeSniff\Core\Type\Common\IntType;
 use Gskema\TypeSniff\Core\Type\Common\IterableType;
 use Gskema\TypeSniff\Core\Type\Common\ObjectType;
 use Gskema\TypeSniff\Core\Type\Common\ParentType;
@@ -138,6 +139,14 @@ class TypeComparator
                     unset($missingDocTypeMap[$coveredFnTypeClass]);
                     break;
                 }
+            }
+
+            // workaround for func1(float $arg1 = 1) :(
+            if ($valueType instanceof IntType
+                && (FloatType::class === $flatDocTypeClass || DoubleType::class === $flatDocTypeClass)
+            ) {
+                unset($missingDocTypeMap[IntType::class]);
+                $coversFnType = true;
             }
 
             if (!$coversFnType) {

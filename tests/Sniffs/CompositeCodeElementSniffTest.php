@@ -131,6 +131,8 @@ class CompositeCodeElementSniffTest extends TestCase
                 '006 Useless description',
                 '007 Useless tag',
                 '012 Useless description.',
+                '042 Add type declaration for parameter $arg1, e.g.: "float"',
+                '045 Add type declaration for parameter $arg4, e.g.: "float"',
             ],
         ];
 

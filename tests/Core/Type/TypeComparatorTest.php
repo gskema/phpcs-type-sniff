@@ -81,6 +81,8 @@ class TypeComparatorTest extends TestCase
             57 => ['int[]|array', 'int',      '', 'int[], array', 'int'],
 
             58 => ['float', 'float', 'int', '', ''],
+            59 => ['double', 'float', 'int', '', ''],
+            60 => ['double', 'float', 'int', '', ''],
         ];
     }
 

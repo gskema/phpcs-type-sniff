@@ -2,6 +2,7 @@
 
 namespace Gskema\TypeSniff\Core\Func;
 
+use Gskema\TypeSniff\Core\Type\Common\FqcnType;
 use PHP_CodeSniffer\Files\File;
 use RuntimeException;
 use Gskema\TypeSniff\Core\Type\TypeFactory;
@@ -38,6 +39,7 @@ class FunctionSignatureParser
             throw new RuntimeException('Expected to find function name');
         }
 
+        /** @see https://www.php.net/manual/en/tokens.php */
         /** @var FunctionParam[] $params */
         $params = [];
         $raw = [];
@@ -45,6 +47,30 @@ class FunctionSignatureParser
             $token = $tokens[$ptr];
 
             switch ($token['code']) {
+                case T_CONSTANT_ENCAPSED_STRING:
+                    $raw['default'] = 'string';
+                    break;
+                case T_LNUMBER:
+                    $raw['default'] = 'int';
+                    break;
+                case T_DNUMBER:
+                    $raw['default'] = 'float';
+                    break;
+                case T_NULL:
+                    $raw['default'] = 'null';
+                    break;
+                case T_FALSE:
+                case T_TRUE:
+                    $raw['default'] = 'bool';
+                    break;
+                case T_ARRAY:
+                    $raw['default'] = 'array';
+                    $ptr = $file->findNext(T_CLOSE_PARENTHESIS, $ptr + 1) ?: $ptr;
+                    break;
+                case T_OPEN_SHORT_ARRAY:
+                    $raw['default'] = 'array';
+                    $ptr = $file->findNext(T_CLOSE_SHORT_ARRAY, $ptr + 1) ?: $ptr;
+                    break;
                 case T_PARENT:
                 case T_CALLABLE:
                 case T_NULLABLE:
@@ -125,11 +151,22 @@ class FunctionSignatureParser
      */
     protected static function createParam(array $raw): FunctionParam
     {
-        // @TODO Add defaultValue, defaultType?
+        $rawValueType = $raw['default'] ?? '';
+        if (false !== strpos($rawValueType, '::')) {
+            $valueType = null; // a constant is used, need reflection :(
+        } else {
+            $valueType = TypeFactory::fromRawType($raw['default'] ?? '');
+        }
+
+        if ($valueType instanceof FqcnType) {
+            $valueType = null; // e.g $arg = PHP_INT_MAX // @TODO
+        }
+
         return new FunctionParam(
             $raw['line'],
             $raw['name'],
-            TypeFactory::fromRawType($raw['type'] ?? '')
+            TypeFactory::fromRawType($raw['type'] ?? ''),
+            $valueType
         );
     }
 }

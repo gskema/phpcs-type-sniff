@@ -17,10 +17,13 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 - Warning for wrong, missing types in const, PHPDoc tags.
 - Useless FQCN description warning
 - Useless __construct description warning
+- Detection of function parameter default value type
 ### Changed
 - self, typed array type examples when for missing function type warnings
 - FqcnMethodSniff logic. Removed dead end inspection paths
 - Updated warnings texts
+### Fixed
+- ResourceType is now DocBlock type, because cannot be used as PHP type declaration
 
 ## 0.11.1 - 2019-07-12
 ### Fixed

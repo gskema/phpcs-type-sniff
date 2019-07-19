@@ -2,6 +2,7 @@
 
 namespace Gskema\TypeSniff\Core\Type;
 
+use Gskema\TypeSniff\Core\Type\DocBlock\ResourceType;
 use PHPUnit\Framework\TestCase;
 use Gskema\TypeSniff\Core\Type\Common\ArrayType;
 use Gskema\TypeSniff\Core\Type\Common\BoolType;
@@ -11,7 +12,6 @@ use Gskema\TypeSniff\Core\Type\Common\FqcnType;
 use Gskema\TypeSniff\Core\Type\Common\IntType;
 use Gskema\TypeSniff\Core\Type\Common\IterableType;
 use Gskema\TypeSniff\Core\Type\Common\ObjectType;
-use Gskema\TypeSniff\Core\Type\Common\ResourceType;
 use Gskema\TypeSniff\Core\Type\Common\SelfType;
 use Gskema\TypeSniff\Core\Type\Common\StringType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;

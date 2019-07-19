@@ -180,10 +180,12 @@ class FqcnMethodSniff implements CodeElementSniffInterface
                 $docHasTypedArray = TypeHelper::containsType($docType, TypedArrayType::class);
                 $docHasArray = TypeHelper::containsType($docType, ArrayType::class);
 
-                if ($docHasTypedArray && $docHasArray) {
-                    $warnings[$docTypeLine][] = 'Remove array type, typed array type is present in PHPDoc for :subject:.';
-                } elseif (!$docHasTypedArray && $docHasArray) {
+                if (!$docHasTypedArray && $docHasArray) {
                     $warnings[$docTypeLine][] = 'Replace array type with typed array type in PHPDoc for :subject:. Use mixed[] for generic arrays. Correct array depth must be specified.';
+                }
+
+                if ($redundantTypes = TypeComparator::getRedundantDocTypes($docType)) {
+                    $warnings[$docTypeLine][] = sprintf('Remove redundant :subject: type hints "%s"', TypeHelper::listRawTypes($redundantTypes));
                 }
 
                 if ($docHasTypedArray && $fakeType = TypeHelper::getFakeTypedArrayType($docType)) {

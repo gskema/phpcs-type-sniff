@@ -71,6 +71,10 @@ class FqcnPropSniff implements CodeElementSniffInterface
             );
         }
 
+        if ($redundantTypes = TypeComparator::getRedundantDocTypes($docType)) {
+            $warnings[$docTypeLine][] = sprintf('Remove redundant :subject: type hints "%s"', TypeHelper::listRawTypes($redundantTypes));
+        }
+
         if ($varTag && null !== $varTag->getParamName()) {
             $warnings[$docTypeLine][] = 'Remove property name $'.$varTag->getParamName().' from @var tag';
         }

@@ -18,6 +18,7 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 - Useless FQCN description warning
 - Useless __construct description warning
 - Detection of function parameter default value type
+- Warning for redundant doc types, e.g. float|double
 ### Changed
 - self, typed array type examples when for missing function type warnings
 - FqcnMethodSniff logic. Removed dead end inspection paths

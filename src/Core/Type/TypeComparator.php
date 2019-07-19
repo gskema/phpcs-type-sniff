@@ -28,6 +28,14 @@ use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
  */
 class TypeComparator
 {
+    /** @var string[] */
+    protected static $redundantTypeMap = [
+        ArrayType::class => TypedArrayType::class,
+        DoubleType::class => FloatType::class,
+        FalseType::class => BoolType::class,
+        TrueType::class => BoolType::class,
+    ];
+
     /**
      * If return declaration is "iterable", but PHPDoc has "array",
      * then no warning for wrong/missing type will be issued because "array" is more specific
@@ -164,5 +172,25 @@ class TypeComparator
         }
 
         return [$wrongDocTypes, $missingDocTypes];
+    }
+
+    /**
+     * @param TypeInterface|null $type
+     *
+     * @return TypeInterface[]
+     */
+    public static function getRedundantDocTypes(?TypeInterface $type): array
+    {
+        $redundantTypes = [];
+        if ($type instanceof CompoundType) {
+            foreach ($type->getTypes() as $innerType) {
+                $expectedTypeClass = static::$redundantTypeMap[get_class($innerType)] ?? null;
+                if ($expectedTypeClass && $type->containsType($expectedTypeClass)) {
+                    $redundantTypes[] = $innerType;
+                }
+            }
+        }
+
+        return $redundantTypes;
     }
 }

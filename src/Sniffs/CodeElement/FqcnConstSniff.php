@@ -64,6 +64,10 @@ class FqcnConstSniff implements CodeElementSniffInterface
             );
         }
 
+        if ($redundantTypes = TypeComparator::getRedundantDocTypes($docType)) {
+            $warnings[$docTypeLine][] = sprintf('Remove redundant :subject: type hints "%s"', TypeHelper::listRawTypes($redundantTypes));
+        }
+
         if ($docType && $valueType) {
             [$wrongDocTypes, $missingDocTypes] = TypeComparator::compare($docType, new UndefinedType(), $valueType);
 

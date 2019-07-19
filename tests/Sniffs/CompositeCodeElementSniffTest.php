@@ -36,7 +36,9 @@ class CompositeCodeElementSniffTest extends TestCase
                 '033 Missing "array" type in property $prop6 type hint',
                 '039 Remove property name $prop8 from @var tag',
                 '045 Replace array type with typed array type in PHPDoc for property $prop10. Use mixed[] for generic arrays. Correct array depth must be specified.',
+                '045 Remove redundant property $prop10 type hints "array"',
                 '051 Replace array type with typed array type in PHPDoc for C6 constant. Use mixed[] for generic arrays. Correct array depth must be specified.',
+                '051 Remove redundant C6 constant type hints "array"',
                 '054 Use a more specific type in typed array hint "array[]" for C7 constant. Correct array depth must be specified.',
                 '057 Use a more specific type in typed array hint "array[][]" for property $prop11. Correct array depth must be specified.',
             ]
@@ -61,7 +63,7 @@ class CompositeCodeElementSniffTest extends TestCase
                 '035 Add type declaration for parameter $h, e.g.: "?SomeClass"',
                 '035 Add type declaration for parameter $i, e.g.: "?int"',
                 '035 Add type declaration for return value, e.g.: "?array"',
-                '040 Remove array type, typed array type is present in PHPDoc for parameter $j.',
+                '040 Remove redundant parameter $j type hints "array"',
                 '041 Replace array type with typed array type in PHPDoc for parameter $k. Use mixed[] for generic arrays. Correct array depth must be specified.',
                 '042 Add type hint in PHPDoc tag for parameter $l, e.g. "SomeClass[]"',
                 '044 Missing "null" type in parameter $n type hint',
@@ -133,6 +135,9 @@ class CompositeCodeElementSniffTest extends TestCase
                 '012 Useless description.',
                 '042 Add type declaration for parameter $arg1, e.g.: "float"',
                 '045 Add type declaration for parameter $arg4, e.g.: "float"',
+                '035 Remove redundant parameter $arg7 type hints "double"',
+                '036 Remove redundant parameter $arg8 type hints "double"',
+                '037 Remove redundant parameter $arg9 type hints "double"',
             ],
         ];
 

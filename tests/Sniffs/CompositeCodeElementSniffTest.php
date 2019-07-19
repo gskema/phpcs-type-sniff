@@ -139,6 +139,7 @@ class CompositeCodeElementSniffTest extends TestCase
                 '035 Remove redundant parameter $arg7 type hints "double"',
                 '036 Remove redundant parameter $arg8 type hints "double"',
                 '037 Remove redundant parameter $arg9 type hints "double"',
+                '054 Change parameter $arg1 type declaration to nullable, e.g. ?string. Remove default null value if this argument is required.'
             ],
         ];
 

@@ -148,10 +148,20 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         ?TypeInterface $valueType
     ): void {
         $isReturnType = 'return value' === $subject;
-        // $isParamType = !$isReturnType;
+        $docTypeDefined = !($docType instanceof UndefinedType);
+        $fnTypeDefined = !($fnType instanceof UndefinedType);
 
         /** @var string[][] $warnings */
         $warnings = [];
+
+        // func1(string $arg1 = null) -> ?string
+        if ($valueType instanceof NullType && !($docType instanceof NullableType)) {
+            $warnings[$fnTypeLine][] = sprintf(
+                'Change :subject: type declaration to nullable, e.g. %s. Remove default null value if this argument is required.',
+                (new NullableType($fnType))->toString()
+            );
+        }
+
         if ($docBlock instanceof UndefinedDocBlock) {
             // Require docType for undefined type or array type
             if ($fnType instanceof UndefinedType) {
@@ -169,9 +179,6 @@ class FqcnMethodSniff implements CodeElementSniffInterface
                 $warnings[$fnTypeLine][] = 'Missing PHPDoc tag for :subject:';
             }
         } else {
-            $docTypeDefined = !($docType instanceof UndefinedType);
-            $fnTypeDefined = !($fnType instanceof UndefinedType);
-
             if ($docTypeDefined) {
                 // Require typed array type
                 // Require composite with null instead of null
@@ -213,14 +220,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
                 }
             }
 
-            if ($fnTypeDefined) {
-                if ($valueType instanceof NullType && !($docType instanceof NullableType)) {
-                    $warnings[$fnTypeLine][] = sprintf(
-                        'Change :subject: type declaration to nullable, e.g. %s. Remove default null value if this argument is required.',
-                        (new NullableType($fnType))->toString()
-                    );
-                }
-            } else {
+            if (!$fnTypeDefined) {
                 // Require fnType if possible (check, suggest from docType)
                 if ($suggestedFnType = TypeConverter::toExampleFnType($docType)) {
                     $warnings[$fnTypeLine][] = sprintf('Add type declaration for :subject:, e.g.: "%s"', $suggestedFnType->toString());

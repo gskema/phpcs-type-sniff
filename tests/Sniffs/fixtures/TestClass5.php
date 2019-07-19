@@ -50,4 +50,9 @@ class TestClass5
         ?float $arg9 = -1
     ): float {
     }
+
+    public function func3(string $arg1 = null): void
+    {
+
+    }
 }

@@ -133,6 +133,7 @@ class CompositeCodeElementSniffTest extends TestCase
                 '006 Useless description',
                 '007 Useless tag',
                 '012 Useless description.',
+                '023 Change parameter $arg1 type declaration to nullable, e.g. ?string. Remove default null value if this argument is required.',
                 '042 Add type declaration for parameter $arg1, e.g.: "float"',
                 '045 Add type declaration for parameter $arg4, e.g.: "float"',
                 '035 Remove redundant parameter $arg7 type hints "double"',

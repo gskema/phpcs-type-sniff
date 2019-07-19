@@ -213,7 +213,14 @@ class FqcnMethodSniff implements CodeElementSniffInterface
                 }
             }
 
-            if (!$fnTypeDefined) {
+            if ($fnTypeDefined) {
+                if ($valueType instanceof NullType && !($docType instanceof NullableType)) {
+                    $warnings[$fnTypeLine][] = sprintf(
+                        'Change :subject: type declaration to nullable, e.g. %s. Remove default null value if this argument is required.',
+                        (new NullableType($fnType))->toString()
+                    );
+                }
+            } else {
                 // Require fnType if possible (check, suggest from docType)
                 if ($suggestedFnType = TypeConverter::toExampleFnType($docType)) {
                     $warnings[$fnTypeLine][] = sprintf('Add type declaration for :subject:, e.g.: "%s"', $suggestedFnType->toString());

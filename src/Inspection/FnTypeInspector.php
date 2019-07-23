@@ -9,6 +9,18 @@ use Gskema\TypeSniff\Core\Type\TypeConverter;
 
 class FnTypeInspector
 {
+    public static function reportRequiredTypeOrDoc(TypeSubject $subject): void
+    {
+        if ($subject->hasDefinedDocBlock()) {
+            return;
+        }
+
+        // e.g. func1(array $arg1) -> must have DocBlock with TypedArrayType
+        if ($subject->getFnType() instanceof UndefinedType) {
+            $subject->addFnTypeWarning('Add type declaration for :subject: or create PHPDoc with type hint');
+        }
+    }
+
     public static function reportExpectedNullableType(TypeSubject $subject): void
     {
         // (string $arg1 = null) -> (?string $arg1 = null)
@@ -26,7 +38,9 @@ class FnTypeInspector
     public static function reportSuggestedFnTypes(TypeSubject $subject): void
     {
         // Require fnType if possible (check, suggest from docType)
-        if ($suggestedFnType = TypeConverter::toExampleFnType($subject->getDocType())) {
+        if (!$subject->hasDefinedFnType()
+            && $suggestedFnType = TypeConverter::toExampleFnType($subject->getDocType())
+        ) {
             $subject->addFnTypeWarning(sprintf('Add type declaration for :subject:, e.g.: "%s"', $suggestedFnType->toString()));
         }
     }

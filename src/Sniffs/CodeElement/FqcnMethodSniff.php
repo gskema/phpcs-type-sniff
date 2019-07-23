@@ -2,10 +2,8 @@
 
 namespace Gskema\TypeSniff\Sniffs\CodeElement;
 
-use Gskema\TypeSniff\Core\Type\TypeComparator;
-use Gskema\TypeSniff\Core\Type\TypeHelper;
 use Gskema\TypeSniff\Inspection\FnTypeInspector;
-use Gskema\TypeSniff\Inspection\Type\DocTypeInspector;
+use Gskema\TypeSniff\Inspection\DocTypeInspector;
 use Gskema\TypeSniff\Inspection\TypeSubject;
 use PHP_CodeSniffer\Files\File;
 use Gskema\TypeSniff\Core\CodeElement\Element\AbstractFqcnMethodElement;
@@ -14,14 +12,8 @@ use Gskema\TypeSniff\Core\CodeElement\Element\CodeElementInterface;
 use Gskema\TypeSniff\Core\CodeElement\Element\InterfaceMethodElement;
 use Gskema\TypeSniff\Core\DocBlock\DocBlock;
 use Gskema\TypeSniff\Core\DocBlock\UndefinedDocBlock;
-use Gskema\TypeSniff\Core\Type\Common\ArrayType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
-use Gskema\TypeSniff\Core\Type\Common\VoidType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
-use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
-use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
-use Gskema\TypeSniff\Core\Type\TypeConverter;
-use Gskema\TypeSniff\Core\Type\TypeInterface;
 
 class FqcnMethodSniff implements CodeElementSniffInterface
 {
@@ -106,40 +98,35 @@ class FqcnMethodSniff implements CodeElementSniffInterface
 
         // @param
         foreach ($fnSig->getParams() as $fnParam) {
-
+            $tag = $docBlock->getParamTag($fnParam->getName());
             $subject = new TypeSubject(
-                $docType = $tag ? $tag->getType() : null,
-                $fnType = $fnParam->getType(),
-                $valueType = $fnParam->getValueType(),
-                $docTypeLine = $tag ? $tag->getLine() : $fnTypeLine,
-                $fnTypeLine = $fnParam->getLine(),
+                $tag ? $tag->getType() : null,
+                $fnParam->getType(),
+                $fnParam->getValueType(),
+                $tag ? $tag->getLine() : $fnParam->getLine(),
+                $fnParam->getLine(),
                 sprintf('parameter $%s', $fnParam->getName()),
-                false
+                false,
+                $docBlock
             );
 
-            $tag = $docBlock->getParamTag($paramName);
-
-
-
-
-
-
-            $this->processSigType($file, $docBlock, $subject, $fnType, $fnTypeLine, $docType, $docTypeLine, $valueType);
+            $this->processSigType($file, $docBlock, $subject);
         }
 
         // @return
         if (!$isConstructMethod) {
             $returnTag = $docBlock->getReturnTag();
-            $this->processSigType(
-                $file,
-                $docBlock,
-                'return value',
-                $fnSig->getReturnType(),
-                $fnSig->getReturnLine(),
+            $subject = new TypeSubject(
                 $returnTag ? $returnTag->getType() : null,
-                $returnTag ? $returnTag->getLine() : $fnSig->getLine(),
-                new UndefinedType()
+                $fnSig->getReturnType(),
+                new UndefinedType(),
+                $returnTag ? $returnTag->getLine() : $fnSig->getReturnLine(),
+                $fnSig->getReturnLine(),
+                'return value',
+                true,
+                $docBlock
             );
+            $this->processSigType($file, $docBlock, $subject);
         } else {
             foreach ($docBlock->getDescriptionLines() as $lineNum => $descLine) {
                 if (preg_match('#^\w+\s+constructor\.?$#', $descLine)) {
@@ -149,63 +136,31 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         }
     }
 
-    protected function processSigType(
-        File $file,
-        DocBlock $docBlock,
-        string $subject,
-        TypeInterface $fnType,
-        int $fnTypeLine,
-        ?TypeInterface $docType,
-        int $docTypeLine,
-        ?TypeInterface $valueType
-    ): void {
-        $subject = new TypeSubject(
-            $docType,
-            $fnType,
-            $valueType,
-            $docTypeLine,
-            $fnTypeLine,
-            $subject,
-            'return value' === $subject
-        );
-
-        $isReturnType = 'return value' === $subject;
-        $docTypeDefined = !($docType instanceof UndefinedType);
-        $fnTypeDefined = !($fnType instanceof UndefinedType);
-
-        /** @var string[][] $warnings */
-        $warnings = [];
+    protected function processSigType(File $file, DocBlock $docBlock, TypeSubject $subject): void
+    {
+        // @TODO true/void/false/$this/ cannot be param tags
 
         FnTypeInspector::reportExpectedNullableType($subject);
 
         if ($docBlock instanceof UndefinedDocBlock) {
-            DocTypeInspector::reportRequiredDocBlock($subject);
-        } elseif (null === $docType) {
-            DocTypeInspector::reportMissingTags($subject);
+            FnTypeInspector::reportRequiredTypeOrDoc($subject);
+            DocTypeInspector::reportRequiredTypedArrayType($subject);
+        } elseif (null === $subject->getDocType()) {
+            DocTypeInspector::reportMissingTag($subject);
         } else {
-            if ($docTypeDefined) {
-                // Require typed array type
-                // Require composite with null instead of null
-                // @TODO true/void/false/$this/ cannot be param tags
+            FnTypeInspector::reportSuggestedFnTypes($subject);
 
-                DocTypeInspector::reportMissingTypedArrayTypes($subject);
-                DocTypeInspector::reportRedundantTypes($subject);
-                DocTypeInspector::reportIncompleteTypes($subject);
-            } else {
-                DocTypeInspector::reportSuggestedTypes($subject);
-            }
+            DocTypeInspector::reportSuggestedTypes($subject);
 
-            if (!$fnTypeDefined) {
-                FnTypeInspector::reportSuggestedFnTypes($subject);
-            }
-
-            if ($docTypeDefined && $fnTypeDefined) {
-                DocTypeInspector::reportUnnecessaryTags($subject);
-                DocTypeInspector::reportMissingOrWrongTypes($subject, false);
-            }
+            DocTypeInspector::reportMissingTypedArrayTypes($subject);
+            DocTypeInspector::reportRedundantTypes($subject);
+            DocTypeInspector::reportIncompleteTypes($subject);
+            DocTypeInspector::reportUnnecessaryVoidTag($subject);
+            DocTypeInspector::reportIncompleteTypes($subject);
+            DocTypeInspector::reportMissingOrWrongTypes($subject, false);
         }
 
-        $subject->passWarningsTo($file, static::CODE);
+        $subject->writeWarningsTo($file, static::CODE);
     }
 
     protected function hasUselessDocBlock(AbstractFqcnMethodElement $method): bool

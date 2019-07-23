@@ -2,13 +2,15 @@
 
 namespace Gskema\TypeSniff\Inspection;
 
+use Gskema\TypeSniff\Core\DocBlock\DocBlock;
+use Gskema\TypeSniff\Core\DocBlock\UndefinedDocBlock;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\TypeInterface;
 use PHP_CodeSniffer\Files\File;
 
 class TypeSubject
 {
-    /** @var TypeInterface */
+    /** @var TypeInterface|null */
     protected $docType; // null = missing in PHPDoc
 
     /** @var TypeInterface */
@@ -17,8 +19,8 @@ class TypeSubject
     /** @var TypeInterface|null */
     protected $valueType; // null = could not be detected
 
-    /** @var int */
-    protected $docTypeLine;
+    /** @var int|null */
+    protected $docTypeLine; // null = missing in PHPDoc
 
     /** @var int */
     protected $fnTypeLine;
@@ -29,6 +31,9 @@ class TypeSubject
     /** @var bool */
     protected $returnType;
 
+    /** @var DocBlock */
+    protected $docBlock;
+
     /** @var string[] */
     protected $docTypeWarnings = [];
 
@@ -36,24 +41,26 @@ class TypeSubject
     protected $fnTypeWarnings = [];
 
     public function __construct(
-        TypeInterface $docType,
+        ?TypeInterface $docType,
         TypeInterface $fnType,
         ?TypeInterface $valueType,
-        int $docTypeLine,
-        int $declarationTypeLine,
+        ?int $docTypeLine,
+        int $fnTypeLine,
         string $name,
-        bool $returnType
+        bool $returnType,
+        DocBlock $docBlock
     ) {
         $this->docType = $docType;
         $this->fnType = $fnType;
         $this->valueType = $valueType;
         $this->docTypeLine = $docTypeLine;
-        $this->fnTypeLine = $declarationTypeLine;
+        $this->fnTypeLine = $fnTypeLine;
         $this->name = $name;
         $this->returnType = $returnType;
+        $this->docBlock = $docBlock;
     }
 
-    public function getDocType(): TypeInterface
+    public function getDocType(): ?TypeInterface
     {
         return $this->docType;
     }
@@ -68,7 +75,7 @@ class TypeSubject
         return $this->valueType;
     }
 
-    public function getDocTypeLine(): int
+    public function getDocTypeLine(): ?int
     {
         return $this->docTypeLine;
     }
@@ -86,6 +93,11 @@ class TypeSubject
     public function isReturnType(): bool
     {
         return $this->returnType;
+    }
+
+    public function getDocBlock(): DocBlock
+    {
+        return $this->docBlock;
     }
 
     /**
@@ -114,6 +126,11 @@ class TypeSubject
         return $this->fnType && !($this->fnType instanceof UndefinedType);
     }
 
+    public function hasDefinedDocBlock(): bool
+    {
+        return !($this->docBlock instanceof UndefinedDocBlock);
+    }
+
     public function addDocTypeWarning(string $warning): void
     {
         $this->docTypeWarnings[] = $warning;
@@ -124,7 +141,7 @@ class TypeSubject
         $this->fnTypeWarnings[] = $warning;
     }
 
-    public function passWarningsTo(File $file, string $sniffCode): void
+    public function writeWarningsTo(File $file, string $sniffCode): void
     {
         foreach ($this->docTypeWarnings as $docTypeWarning) {
             $warning = str_replace(':subject:', $this->name, $docTypeWarning);

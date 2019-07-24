@@ -6,10 +6,11 @@ use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
 use Gskema\TypeSniff\Core\Type\TypeConverter;
+use Gskema\TypeSniff\Inspection\Subject\AbstractTypeSubject;
 
 class FnTypeInspector
 {
-    public static function reportRequiredTypeOrDoc(TypeSubject $subject): void
+    public static function reportRequiredTypeOrDoc(AbstractTypeSubject $subject): void
     {
         if ($subject->hasDefinedDocBlock()) {
             return;
@@ -21,7 +22,7 @@ class FnTypeInspector
         }
     }
 
-    public static function reportExpectedNullableType(TypeSubject $subject): void
+    public static function reportExpectedNullableType(AbstractTypeSubject $subject): void
     {
         // (string $arg1 = null) -> (?string $arg1 = null)
         if ($subject->getValueType() instanceof NullType
@@ -35,7 +36,7 @@ class FnTypeInspector
         }
     }
 
-    public static function reportSuggestedFnTypes(TypeSubject $subject): void
+    public static function reportSuggestedFnTypes(AbstractTypeSubject $subject): void
     {
         // Require fnType if possible (check, suggest from docType)
         if (!$subject->hasDefinedFnType()

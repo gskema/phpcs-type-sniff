@@ -8,10 +8,12 @@ use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
 use Gskema\TypeSniff\Core\Type\TypeComparator;
 use Gskema\TypeSniff\Core\Type\TypeConverter;
 use Gskema\TypeSniff\Core\Type\TypeHelper;
+use Gskema\TypeSniff\Inspection\Subject\AbstractTypeSubject;
+use Gskema\TypeSniff\Inspection\Subject\ReturnTypeSubject;
 
 class DocTypeInspector
 {
-    public static function reportRequiredTypedArrayType(TypeSubject $subject): void
+    public static function reportRequiredTypedArrayType(AbstractTypeSubject $subject): void
     {
         if ($subject->hasDefinedDocBlock()) {
             return;
@@ -25,7 +27,7 @@ class DocTypeInspector
         }
     }
 
-    public static function reportMissingTypedArrayTypes(TypeSubject $subject): void
+    public static function reportMissingTypedArrayTypes(AbstractTypeSubject $subject): void
     {
         if (!$subject->hasDefinedDocType()) {
             return;
@@ -39,14 +41,14 @@ class DocTypeInspector
         }
     }
 
-    public static function reportMissingTag(TypeSubject $subject): void
+    public static function reportMissingTag(AbstractTypeSubject $subject): void
     {
         if (!($subject->hasDefinedDocBlock() && null === $subject->getDocType())) {
             return;
         }
 
         // e.g. DocBlock exists, but no @param tag
-        if ($subject->isReturnType()) {
+        if ($subject instanceof ReturnTypeSubject) {
             if (!($subject->getFnType() instanceof VoidType)) {
                 $subject->addFnTypeWarning('Missing PHPDoc tag or void type declaration for :subject:');
             }
@@ -55,10 +57,10 @@ class DocTypeInspector
         }
     }
 
-    public static function reportUnnecessaryVoidTag(TypeSubject $subject): void
+    public static function reportUnnecessaryVoidTag(AbstractTypeSubject $subject): void
     {
         // @return void in not needed
-        if ($subject->isReturnType()
+        if ($subject instanceof ReturnTypeSubject
             && $subject->getFnType() instanceof VoidType
             && $subject->getDocType() instanceof VoidType
         ) {
@@ -66,7 +68,7 @@ class DocTypeInspector
         }
     }
 
-    public static function reportRedundantTypes(TypeSubject $subject): void
+    public static function reportRedundantTypes(AbstractTypeSubject $subject): void
     {
         if (!$subject->hasDefinedDocType()) {
             return;
@@ -80,7 +82,7 @@ class DocTypeInspector
         }
     }
 
-    public static function reportFakeTypedArrayTypes(TypeSubject $subject): void
+    public static function reportFakeTypedArrayTypes(AbstractTypeSubject $subject): void
     {
         if (!$subject->hasDefinedDocType()) {
             return;
@@ -95,7 +97,7 @@ class DocTypeInspector
         }
     }
 
-    public static function reportIncompleteTypes(TypeSubject $subject): void
+    public static function reportIncompleteTypes(AbstractTypeSubject $subject): void
     {
         if (!$subject->hasDefinedDocType()) {
             return;
@@ -103,7 +105,7 @@ class DocTypeInspector
 
         // e.g. @param null $arg1 -> @param int|null $arg1
         if ($subject->getDocType() instanceof NullType) {
-            if ($subject->isReturnType()) {
+            if ($subject instanceof ReturnTypeSubject) {
                 $subject->addDocTypeWarning('Use void :subject :type declaration or change type to compound, e.g. SomeClass|null');
             } else {
                 $subject->addDocTypeWarning('Change type hint for :subject: to compound, e.g. SomeClass|null');
@@ -111,7 +113,7 @@ class DocTypeInspector
         }
     }
 
-    public static function reportSuggestedTypes(TypeSubject $subject): void
+    public static function reportSuggestedTypes(AbstractTypeSubject $subject): void
     {
         if ($subject->hasDefinedDocType()) {
             return;
@@ -126,7 +128,7 @@ class DocTypeInspector
         }
     }
 
-    public static function reportMissingOrWrongTypes(TypeSubject $subject, bool $dynamicAssignment): void
+    public static function reportMissingOrWrongTypes(AbstractTypeSubject $subject, bool $dynamicAssignment): void
     {
         // e.g. ?int, int|string -> ?int, int|null (wrong: string, missing: null)
         if (!$subject->hasDefinedDocType()) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Gskema\TypeSniff\Inspection;
+namespace Gskema\TypeSniff\Inspection\Subject;
 
 use Gskema\TypeSniff\Core\DocBlock\DocBlock;
 use Gskema\TypeSniff\Core\DocBlock\UndefinedDocBlock;
@@ -8,7 +8,7 @@ use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\TypeInterface;
 use PHP_CodeSniffer\Files\File;
 
-class TypeSubject
+abstract class AbstractTypeSubject
 {
     /** @var TypeInterface|null */
     protected $docType; // null = missing in PHPDoc
@@ -28,9 +28,6 @@ class TypeSubject
     /** @var string */
     protected $name; // "parameter $param1", "property $prop1", "constant CONST1"
 
-    /** @var bool */
-    protected $returnType;
-
     /** @var DocBlock */
     protected $docBlock;
 
@@ -47,7 +44,6 @@ class TypeSubject
         ?int $docTypeLine,
         int $fnTypeLine,
         string $name,
-        bool $returnType,
         DocBlock $docBlock
     ) {
         $this->docType = $docType;
@@ -56,7 +52,6 @@ class TypeSubject
         $this->docTypeLine = $docTypeLine;
         $this->fnTypeLine = $fnTypeLine;
         $this->name = $name;
-        $this->returnType = $returnType;
         $this->docBlock = $docBlock;
     }
 
@@ -88,11 +83,6 @@ class TypeSubject
     public function getName(): string
     {
         return $this->name;
-    }
-
-    public function isReturnType(): bool
-    {
-        return $this->returnType;
     }
 
     public function getDocBlock(): DocBlock

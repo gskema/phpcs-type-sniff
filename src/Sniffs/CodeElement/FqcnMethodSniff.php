@@ -4,7 +4,9 @@ namespace Gskema\TypeSniff\Sniffs\CodeElement;
 
 use Gskema\TypeSniff\Inspection\FnTypeInspector;
 use Gskema\TypeSniff\Inspection\DocTypeInspector;
-use Gskema\TypeSniff\Inspection\TypeSubject;
+use Gskema\TypeSniff\Inspection\Subject\AbstractTypeSubject;
+use Gskema\TypeSniff\Inspection\Subject\ParamTypeSubject;
+use Gskema\TypeSniff\Inspection\Subject\ReturnTypeSubject;
 use PHP_CodeSniffer\Files\File;
 use Gskema\TypeSniff\Core\CodeElement\Element\AbstractFqcnMethodElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassMethodElement;
@@ -12,7 +14,6 @@ use Gskema\TypeSniff\Core\CodeElement\Element\CodeElementInterface;
 use Gskema\TypeSniff\Core\CodeElement\Element\InterfaceMethodElement;
 use Gskema\TypeSniff\Core\DocBlock\DocBlock;
 use Gskema\TypeSniff\Core\DocBlock\UndefinedDocBlock;
-use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
 
 class FqcnMethodSniff implements CodeElementSniffInterface
@@ -98,34 +99,15 @@ class FqcnMethodSniff implements CodeElementSniffInterface
 
         // @param
         foreach ($fnSig->getParams() as $fnParam) {
-            $tag = $docBlock->getParamTag($fnParam->getName());
-            $subject = new TypeSubject(
-                $tag ? $tag->getType() : null,
-                $fnParam->getType(),
-                $fnParam->getValueType(),
-                $tag ? $tag->getLine() : $fnParam->getLine(),
-                $fnParam->getLine(),
-                sprintf('parameter $%s', $fnParam->getName()),
-                false,
-                $docBlock
-            );
-
+            $paramTag = $docBlock->getParamTag($fnParam->getName());
+            $subject = ParamTypeSubject::fromParam($fnParam, $paramTag, $docBlock);
             $this->processSigType($file, $docBlock, $subject);
         }
 
         // @return
         if (!$isConstructMethod) {
             $returnTag = $docBlock->getReturnTag();
-            $subject = new TypeSubject(
-                $returnTag ? $returnTag->getType() : null,
-                $fnSig->getReturnType(),
-                new UndefinedType(),
-                $returnTag ? $returnTag->getLine() : $fnSig->getReturnLine(),
-                $fnSig->getReturnLine(),
-                'return value',
-                true,
-                $docBlock
-            );
+            $subject = ReturnTypeSubject::fromSignature($fnSig, $returnTag, $docBlock);
             $this->processSigType($file, $docBlock, $subject);
         } else {
             foreach ($docBlock->getDescriptionLines() as $lineNum => $descLine) {
@@ -136,7 +118,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         }
     }
 
-    protected function processSigType(File $file, DocBlock $docBlock, TypeSubject $subject): void
+    protected function processSigType(File $file, DocBlock $docBlock, AbstractTypeSubject $subject): void
     {
         // @TODO true/void/false/$this/ cannot be param tags
 

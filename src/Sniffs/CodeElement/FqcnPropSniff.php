@@ -3,7 +3,7 @@
 namespace Gskema\TypeSniff\Sniffs\CodeElement;
 
 use Gskema\TypeSniff\Inspection\DocTypeInspector;
-use Gskema\TypeSniff\Inspection\TypeSubject;
+use Gskema\TypeSniff\Inspection\Subject\PropTypeSubject;
 use PHP_CodeSniffer\Files\File;
 use Gskema\TypeSniff\Core\CodeElement\Element\AbstractFqcnPropElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassPropElement;
@@ -48,16 +48,7 @@ class FqcnPropSniff implements CodeElementSniffInterface
         $varTag = $docBlock->getTagsByName('var')[0] ?? null;
         $docType = $varTag ? $varTag->getType() : null;
 
-        $subject = new TypeSubject(
-            $varTag ? $varTag->getType() : null,
-            new UndefinedType(),
-            $prop->getDefaultValueType(),
-            $varTag ? $varTag->getLine() : $prop->getLine(),
-            $prop->getLine(),
-            'property $'.$prop->getPropName(),
-            false,
-            $docBlock
-        );
+        $subject = PropTypeSubject::fromElement($prop);
 
         if ($docBlock instanceof UndefinedDocBlock) {
             $subject->addDocTypeWarning('Add PHPDoc for :subject:');

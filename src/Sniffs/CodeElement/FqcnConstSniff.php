@@ -2,15 +2,13 @@
 
 namespace Gskema\TypeSniff\Sniffs\CodeElement;
 
-use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Inspection\DocTypeInspector;
-use Gskema\TypeSniff\Inspection\TypeSubject;
+use Gskema\TypeSniff\Inspection\Subject\ConstTypeSubject;
 use PHP_CodeSniffer\Files\File;
 use Gskema\TypeSniff\Core\CodeElement\Element\AbstractFqcnConstElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassConstElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\CodeElementInterface;
 use Gskema\TypeSniff\Core\CodeElement\Element\InterfaceConstElement;
-use Gskema\TypeSniff\Core\DocBlock\Tag\VarTag;
 
 class FqcnConstSniff implements CodeElementSniffInterface
 {
@@ -42,21 +40,7 @@ class FqcnConstSniff implements CodeElementSniffInterface
      */
     public function process(File $file, CodeElementInterface $const): void
     {
-        $docBlock = $const->getDocBlock();
-
-        /** @var VarTag|null $varTag */
-        $varTag = $docBlock->getTagsByName('var')[0] ?? null;
-
-        $subject = new TypeSubject(
-            $varTag ? $varTag->getType() : null,
-            new UndefinedType(),
-            $const->getValueType(),
-            $varTag ? $varTag->getLine() : null,
-            $const->getLine(),
-            $const->getConstName().' constant',
-            false,
-            $docBlock
-        );
+        $subject = ConstTypeSubject::fromElement($const);
 
         if ($subject->hasDefinedDocBlock()) {
             DocTypeInspector::reportMissingTypedArrayTypes($subject);

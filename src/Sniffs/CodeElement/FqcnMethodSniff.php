@@ -74,7 +74,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
 
         $hasNewWarnings = $file->getWarningCount() > $warningCountBefore;
         if (!$hasNewWarnings && $this->hasUselessDocBlock($method)) {
-            $file->addWarningOnLine('Useless PHPDoc', $method->getLine(), 'FqcnMethodSniff');
+            $file->addWarningOnLine('Useless PHPDoc', $method->getLine(), static::CODE);
         }
     }
 
@@ -92,7 +92,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
             if ($hasInheritDocTag || $isMagicMethod) {
                 return;
             } elseif ($method->isExtended()) {
-                $file->addWarningOnLine('Missing @inheritDoc tag. Remove duplicated parent PHPDoc content.', $method->getLine(), 'FqcnMethodSniff');
+                $file->addWarningOnLine('Missing @inheritDoc tag. Remove duplicated parent PHPDoc content.', $method->getLine(), static::CODE);
                 return;
             }
         }
@@ -112,7 +112,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         } else {
             foreach ($docBlock->getDescriptionLines() as $lineNum => $descLine) {
                 if (preg_match('#^\w+\s+constructor\.?$#', $descLine)) {
-                    $file->addWarningOnLine('Useless description.', $lineNum, 'FqcnMethodSniff');
+                    $file->addWarningOnLine('Useless description.', $lineNum, static::CODE);
                 }
             }
         }

@@ -114,9 +114,10 @@ class DocTypeInspector
         if ($subject->getDocType() instanceof NullType) {
             if ($subject instanceof ReturnTypeSubject) {
                 $subject->addDocTypeWarning('Use void :subject :type declaration or change type to compound, e.g. SomeClass|null');
-            } else {
+            } elseif ($subject instanceof ParamTypeSubject) {
                 $subject->addDocTypeWarning('Change type hint for :subject: to compound, e.g. SomeClass|null');
             }
+            // having @var null for const, prop is allowed
         }
     }
 

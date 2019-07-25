@@ -9,6 +9,8 @@ use Gskema\TypeSniff\Core\Type\TypeComparator;
 use Gskema\TypeSniff\Core\Type\TypeConverter;
 use Gskema\TypeSniff\Core\Type\TypeHelper;
 use Gskema\TypeSniff\Inspection\Subject\AbstractTypeSubject;
+use Gskema\TypeSniff\Inspection\Subject\ParamTypeSubject;
+use Gskema\TypeSniff\Inspection\Subject\PropTypeSubject;
 use Gskema\TypeSniff\Inspection\Subject\ReturnTypeSubject;
 
 class DocTypeInspector
@@ -23,7 +25,7 @@ class DocTypeInspector
             || TypeHelper::containsType($subject->getFnType(), ArrayType::class)
         ) {
             // @TODO Nullable
-            $subject->addDocTypeWarning('Add PHPDoc with typed array type hint for :subject:. Use mixed[] for generic arrays. Correct array depth must be specified.');
+            $subject->addFnTypeWarning('Create PHPDoc with typed array type hint for :subject:, .e.g.: "string[]" or "SomeClass[]"'); // @TODO
         }
     }
 
@@ -128,24 +130,28 @@ class DocTypeInspector
         }
     }
 
-    public static function reportMissingOrWrongTypes(AbstractTypeSubject $subject, bool $dynamicAssignment): void
+    public static function reportMissingOrWrongTypes(AbstractTypeSubject $subject): void
     {
-        // e.g. ?int, int|string -> ?int, int|null (wrong: string, missing: null)
-        if (!$subject->hasDefinedDocType()) {
-            // TypeComparator::compare requires defined fnType or valType, will return empty if not defined
+        // e.g. $param1 = null, mixed|null -> do not report
+        if ($subject instanceof ParamTypeSubject && !$subject->hasDefinedFnType()) {
             return;
         }
 
+        // e.g. ?int, int|string -> ?int, int|null (wrong: string, missing: null)
         [$wrongDocTypes, $missingDocTypes] = TypeComparator::compare(
             $subject->getDocType(),
             $subject->getFnType(),
             $subject->getValueType()
         );
 
+        if ($subject instanceof PropTypeSubject) {
+            $wrongDocTypes = []; // not reported because props have dynamic values
+        }
+
         // wrong types are not reported for dynamic assignments, e.g. class props.
-        if (!$dynamicAssignment && $wrongDocTypes) {
+        if ($wrongDocTypes) {
             $subject->addDocTypeWarning(sprintf(
-                'Type %s "%s" %s not compatible with :subject: type declaration',
+                'Type %s "%s" %s not compatible with :subject: value type', // @TODO
                 isset($wrongDocTypes[1]) ? 'hints' : 'hint',
                 TypeHelper::listRawTypes($wrongDocTypes),
                 isset($wrongDocTypes[1]) ? 'are' : 'is'

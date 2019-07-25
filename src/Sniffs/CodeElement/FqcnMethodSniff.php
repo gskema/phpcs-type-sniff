@@ -138,8 +138,8 @@ class FqcnMethodSniff implements CodeElementSniffInterface
             DocTypeInspector::reportRedundantTypes($subject);
             DocTypeInspector::reportIncompleteTypes($subject);
             DocTypeInspector::reportUnnecessaryVoidTag($subject);
-            DocTypeInspector::reportIncompleteTypes($subject);
-            DocTypeInspector::reportMissingOrWrongTypes($subject, false);
+            DocTypeInspector::reportFakeTypedArrayTypes($subject);
+            DocTypeInspector::reportMissingOrWrongTypes($subject);
         }
 
         $subject->writeWarningsTo($file, static::CODE);

@@ -67,7 +67,7 @@ class FqcnPropSniff implements CodeElementSniffInterface
             DocTypeInspector::reportFakeTypedArrayTypes($subject);
             DocTypeInspector::reportRedundantTypes($subject);
             DocTypeInspector::reportIncompleteTypes($subject);
-            DocTypeInspector::reportMissingOrWrongTypes($subject, true);
+            DocTypeInspector::reportMissingOrWrongTypes($subject);
         } else {
             DocTypeInspector::reportRequiredTypedArrayType($subject);
         }

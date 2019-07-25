@@ -135,7 +135,7 @@ abstract class AbstractTypeSubject
     {
         foreach ($this->docTypeWarnings as $docTypeWarning) {
             $warning = str_replace(':subject:', $this->name, $docTypeWarning);
-            $file->addWarningOnLine($warning, $this->docTypeLine, $sniffCode);
+            $file->addWarningOnLine($warning, $this->docTypeLine ?? $this->fnTypeLine, $sniffCode);
         }
 
         foreach ($this->fnTypeWarnings as $fnTypeWarning) {

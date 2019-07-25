@@ -69,7 +69,6 @@ class FqcnMethodSniff implements CodeElementSniffInterface
     {
         $warningCountBefore = $file->getWarningCount();
 
-        // @TODO Assert description
         $this->processMethod($file, $method);
 
         $hasNewWarnings = $file->getWarningCount() > $warningCountBefore;

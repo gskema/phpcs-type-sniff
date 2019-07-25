@@ -76,4 +76,7 @@ class TestClass5
     public function func6(?array $arg1): void
     {
     }
+
+    /** @var string */
+    const C1 = '';
 }

@@ -20,6 +20,7 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 - Detection of function parameter default value type
 - Warning for redundant doc types, e.g. float|double
 - Warning to use nullable parameter type instead of type + null default value
+- Warning for useless const PHPDoc
 ### Changed
 - self, typed array type examples when for missing function type warnings
 - FqcnMethodSniff logic. Removed dead end inspection paths

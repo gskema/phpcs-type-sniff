@@ -141,6 +141,7 @@ class CompositeCodeElementSniffTest extends TestCase
                 '037 Remove redundant parameter $arg9 type hints "double"',
                 '054 Change parameter $arg1 type declaration to nullable, e.g. ?string. Remove default null value if this argument is required.',
                 '076 Create PHPDoc with typed array type hint for parameter $arg1, .e.g.: "string[]|null" or "SomeClass[]|null". Correct array depth must be specified.',
+                '081 Useless PHPDoc',
             ],
         ];
 

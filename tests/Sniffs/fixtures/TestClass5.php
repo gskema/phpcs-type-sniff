@@ -72,4 +72,8 @@ class TestClass5
     private function func5(string $name, ?int $default = null)
     {
     }
+
+    public function func6(?array $arg1): void
+    {
+    }
 }

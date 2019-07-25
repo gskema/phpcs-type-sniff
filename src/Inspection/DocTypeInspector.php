@@ -4,6 +4,7 @@ namespace Gskema\TypeSniff\Inspection;
 
 use Gskema\TypeSniff\Core\Type\Common\ArrayType;
 use Gskema\TypeSniff\Core\Type\Common\VoidType;
+use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
 use Gskema\TypeSniff\Core\Type\TypeComparator;
 use Gskema\TypeSniff\Core\Type\TypeConverter;
@@ -24,8 +25,12 @@ class DocTypeInspector
         if ($subject->getValueType() instanceof ArrayType
             || TypeHelper::containsType($subject->getFnType(), ArrayType::class)
         ) {
-            // @TODO Nullable
-            $subject->addFnTypeWarning('Create PHPDoc with typed array type hint for :subject:, .e.g.: "string[]" or "SomeClass[]"'); // @TODO
+            $isNullable = $subject->getFnType() instanceof NullableType;
+            $subject->addFnTypeWarning(sprintf(
+                'Create PHPDoc with typed array type hint for :subject:, .e.g.: "string[]%s" or "SomeClass[]%s". Correct array depth must be specified.',
+                $isNullable ? '|null' : '',
+                $isNullable ? '|null' : ''
+            ));
         }
     }
 
@@ -38,7 +43,7 @@ class DocTypeInspector
         // e.g. @param array $arg1 -> @param int[] $arg1
         if (TypeHelper::containsType($subject->getDocType(), ArrayType::class)) {
             $subject->addDocTypeWarning(
-                'Replace array type with typed array type in PHPDoc for :subject:. Use mixed[] for generic arrays. Correct array depth must be specified.'
+                'Replace array type with typed array type in PHPDoc for :subject:, .e.g.: "string[]" or "SomeClass[]". Use mixed[] for generic arrays. Correct array depth must be specified.'
             );
         }
     }
@@ -151,7 +156,7 @@ class DocTypeInspector
         // wrong types are not reported for dynamic assignments, e.g. class props.
         if ($wrongDocTypes) {
             $subject->addDocTypeWarning(sprintf(
-                'Type %s "%s" %s not compatible with :subject: value type', // @TODO
+                'Type %s "%s" %s not compatible with :subject: value type',
                 isset($wrongDocTypes[1]) ? 'hints' : 'hint',
                 TypeHelper::listRawTypes($wrongDocTypes),
                 isset($wrongDocTypes[1]) ? 'are' : 'is'

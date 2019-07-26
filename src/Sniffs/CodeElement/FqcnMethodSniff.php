@@ -16,6 +16,9 @@ use Gskema\TypeSniff\Core\DocBlock\DocBlock;
 use Gskema\TypeSniff\Core\DocBlock\UndefinedDocBlock;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
 
+/**
+ * @see FqcnMethodSniffTestT
+ */
 class FqcnMethodSniff implements CodeElementSniffInterface
 {
     protected const CODE = 'FqcnMethodSniff';
@@ -154,7 +157,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         foreach ($fnSig->getParams() as $fnParam) {
             $paramTag = $docBlock->getParamTag($fnParam->getName());
             if (null === $paramTag) {
-                continue;
+                return false; // missing, needs to be fixed
             }
 
             if ($paramTag->hasDescription()) {

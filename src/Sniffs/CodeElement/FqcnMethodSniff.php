@@ -17,7 +17,7 @@ use Gskema\TypeSniff\Core\DocBlock\UndefinedDocBlock;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
 
 /**
- * @see FqcnMethodSniffTestT
+ * @see FqcnMethodSniffTest
  */
 class FqcnMethodSniff implements CodeElementSniffInterface
 {

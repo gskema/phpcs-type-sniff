@@ -107,7 +107,7 @@ class DocTypeInspector
         // e.g. @param null $arg1 -> @param int|null $arg1
         if ($subject->getDocType() instanceof NullType) {
             if ($subject instanceof ReturnTypeSubject) {
-                $subject->addDocTypeWarning('Use void :subject :type declaration or change type to compound, e.g. SomeClass|null');
+                $subject->addDocTypeWarning('Use void :subject: type declaration or change type to compound, e.g. SomeClass|null');
             } elseif ($subject instanceof ParamTypeSubject) {
                 $subject->addDocTypeWarning('Change type hint for :subject: to compound, e.g. SomeClass|null');
             }

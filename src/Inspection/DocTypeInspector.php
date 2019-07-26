@@ -3,6 +3,7 @@
 namespace Gskema\TypeSniff\Inspection;
 
 use Gskema\TypeSniff\Core\Type\Common\ArrayType;
+use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Common\VoidType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
@@ -16,25 +17,64 @@ use Gskema\TypeSniff\Inspection\Subject\ReturnTypeSubject;
 
 class DocTypeInspector
 {
-    public static function reportRequiredTypedArrayType(AbstractTypeSubject $subject): void
+    public static function reportMandatoryTypes(AbstractTypeSubject $subject): void
     {
-        if ($subject->hasDefinedDocBlock()) {
-            return;
-        }
+        $hasDocBlock = $subject->hasDefinedDocBlock();
+        $hasDocTypeTag = null !== $subject->getDocType();
 
-        if ($subject->getValueType() instanceof ArrayType
-            || TypeHelper::containsType($subject->getFnType(), ArrayType::class)
+        // e.g. $arg1 = [], C1 = [], $prop1 = [], ?array $arg1
+        if (!$hasDocTypeTag
+            && ($subject->getValueType() instanceof ArrayType || TypeHelper::containsType($subject->getFnType(), ArrayType::class))
         ) {
             $isNullable = $subject->getFnType() instanceof NullableType;
             $subject->addFnTypeWarning(sprintf(
-                'Create PHPDoc with typed array type hint for :subject:, .e.g.: "string[]%s" or "SomeClass[]%s". Correct array depth must be specified.',
+                '%s typed array type hint for :subject:, .e.g.: "string[]%s" or "SomeClass[]%s". Correct array depth must be specified.',
+                $subject->hasDefinedDocBlock() ? 'Add' : 'Create PHPDoc with',
                 $isNullable ? '|null' : '',
                 $isNullable ? '|null' : ''
             ));
+
+            return; // exit
+        }
+
+        if ($subject instanceof ParamTypeSubject) {
+            // doc block must not be missing any @param tag
+            if ($hasDocBlock && !$hasDocTypeTag) {
+                $subject->addFnTypeWarning('Missing PHPDoc tag for :subject:');
+            }
+        } elseif ($subject instanceof PropTypeSubject) {
+            // @var tags for props are mandatory
+            if (!$hasDocTypeTag) {
+                $subject->addDocTypeWarning('Add @var tag for :subject:');
+            } elseif ($subject->getDocType() instanceof UndefinedType) {
+                $subject->addDocTypeWarning('Add type hint to @var tag for :subject:');
+            }
         }
     }
 
-    public static function reportMissingTypedArrayTypes(AbstractTypeSubject $subject): void
+    public static function reportRemovableTypes(AbstractTypeSubject $subject): void
+    {
+        if (!$subject->hasDefinedDocType()) {
+            return;
+        }
+
+        // @return void in not needed
+        if ($subject instanceof ReturnTypeSubject
+            && $subject->getFnType() instanceof VoidType
+            && $subject->getDocType() instanceof VoidType
+        ) {
+            $subject->addDocTypeWarning('Remove @return void tag, not necessary');
+        }
+
+        // e.g. double|float, array|int[] -> float, int[]
+        if ($redundantTypes = TypeComparator::getRedundantDocTypes($subject->getDocType())) {
+            $subject->addDocTypeWarning(
+                sprintf('Remove redundant :subject: type hints "%s"', TypeHelper::listRawTypes($redundantTypes))
+            );
+        }
+    }
+
+    public static function reportReplaceableTypes(AbstractTypeSubject $subject): void
     {
         if (!$subject->hasDefinedDocType()) {
             return;
@@ -46,54 +86,6 @@ class DocTypeInspector
                 'Replace array type with typed array type in PHPDoc for :subject:, .e.g.: "string[]" or "SomeClass[]". Use mixed[] for generic arrays. Correct array depth must be specified.'
             );
         }
-    }
-
-    public static function reportMissingTag(AbstractTypeSubject $subject): void
-    {
-        if (!($subject->hasDefinedDocBlock() && null === $subject->getDocType())) {
-            return;
-        }
-
-        // e.g. DocBlock exists, but no @param tag
-        if ($subject instanceof ReturnTypeSubject) {
-            if (!($subject->getFnType() instanceof VoidType)) {
-                $subject->addFnTypeWarning('Missing PHPDoc tag or void type declaration for :subject:');
-            }
-        } else {
-            $subject->addFnTypeWarning('Missing PHPDoc tag for :subject:');
-        }
-    }
-
-    public static function reportUnnecessaryVoidTag(AbstractTypeSubject $subject): void
-    {
-        // @return void in not needed
-        if ($subject instanceof ReturnTypeSubject
-            && $subject->getFnType() instanceof VoidType
-            && $subject->getDocType() instanceof VoidType
-        ) {
-            $subject->addDocTypeWarning('Remove @return void tag, not necessary');
-        }
-    }
-
-    public static function reportRedundantTypes(AbstractTypeSubject $subject): void
-    {
-        if (!$subject->hasDefinedDocType()) {
-            return;
-        }
-
-        // e.g. double|float, array|int[] -> float, int[]
-        if ($redundantTypes = TypeComparator::getRedundantDocTypes($subject->getDocType())) {
-            $subject->addDocTypeWarning(
-                sprintf('Remove redundant :subject: type hints "%s"', TypeHelper::listRawTypes($redundantTypes))
-            );
-        }
-    }
-
-    public static function reportFakeTypedArrayTypes(AbstractTypeSubject $subject): void
-    {
-        if (!$subject->hasDefinedDocType()) {
-            return;
-        }
 
         // e.g. array[] -> mixed[][]
         if ($fakeType = TypeHelper::getFakeTypedArrayType($subject->getDocType())) {
@@ -104,11 +96,13 @@ class DocTypeInspector
         }
     }
 
-    public static function reportIncompleteTypes(AbstractTypeSubject $subject): void
+    public static function reportInvalidTypes(AbstractTypeSubject $subject): void
     {
         if (!$subject->hasDefinedDocType()) {
             return;
         }
+
+        // @TODO true/void/false/$this/ cannot be param tags
 
         // e.g. @param null $arg1 -> @param int|null $arg1
         if ($subject->getDocType() instanceof NullType) {
@@ -123,7 +117,7 @@ class DocTypeInspector
 
     public static function reportSuggestedTypes(AbstractTypeSubject $subject): void
     {
-        if ($subject->hasDefinedDocType()) {
+        if (!$subject->hasDefinedDocBlock() || $subject->hasDefinedDocType()) {
             return;
         }
 
@@ -132,7 +126,13 @@ class DocTypeInspector
         if (null !== $exampleDocType) {
             $subject->addDocTypeWarning(sprintf('Add type hint in PHPDoc tag for :subject:, e.g. "%s"', $exampleDocType->toString()));
         } else {
-            $subject->addDocTypeWarning('Add type hint in PHPDoc tag for :subject:');
+            if ($subject instanceof ReturnTypeSubject) {
+                if (!($subject->getFnType() instanceof VoidType)) {
+                    $subject->addFnTypeWarning('Missing PHPDoc tag or void type declaration for :subject:');
+                }
+            } else {
+                 $subject->addDocTypeWarning('Add type hint in PHPDoc tag for :subject:');
+            }
         }
     }
 
@@ -140,6 +140,10 @@ class DocTypeInspector
     {
         // e.g. $param1 = null, mixed|null -> do not report
         if ($subject instanceof ParamTypeSubject && !$subject->hasDefinedFnType()) {
+            return;
+        }
+
+        if (!$subject->hasDefinedDocType()) {
             return;
         }
 

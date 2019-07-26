@@ -119,27 +119,17 @@ class FqcnMethodSniff implements CodeElementSniffInterface
 
     protected function processSigType(File $file, DocBlock $docBlock, AbstractTypeSubject $subject): void
     {
-        // @TODO true/void/false/$this/ cannot be param tags
+        FnTypeInspector::reportMandatoryTypes($subject);
+        FnTypeInspector::reportSuggestedTypes($subject);
+        FnTypeInspector::reportReplaceableTypes($subject);
 
-        FnTypeInspector::reportExpectedNullableType($subject);
+        DocTypeInspector::reportMandatoryTypes($subject);
+        DocTypeInspector::reportSuggestedTypes($subject);
+        DocTypeInspector::reportReplaceableTypes($subject);
 
-        if ($docBlock instanceof UndefinedDocBlock) {
-            FnTypeInspector::reportRequiredTypeOrDoc($subject);
-            DocTypeInspector::reportRequiredTypedArrayType($subject);
-        } elseif (null === $subject->getDocType()) {
-            DocTypeInspector::reportMissingTag($subject);
-        } else {
-            FnTypeInspector::reportSuggestedFnTypes($subject);
-
-            DocTypeInspector::reportSuggestedTypes($subject);
-
-            DocTypeInspector::reportMissingTypedArrayTypes($subject);
-            DocTypeInspector::reportRedundantTypes($subject);
-            DocTypeInspector::reportIncompleteTypes($subject);
-            DocTypeInspector::reportUnnecessaryVoidTag($subject);
-            DocTypeInspector::reportFakeTypedArrayTypes($subject);
-            DocTypeInspector::reportMissingOrWrongTypes($subject);
-        }
+        DocTypeInspector::reportRemovableTypes($subject);
+        DocTypeInspector::reportInvalidTypes($subject);
+        DocTypeInspector::reportMissingOrWrongTypes($subject);
 
         $subject->writeWarningsTo($file, static::CODE);
     }

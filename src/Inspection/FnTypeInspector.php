@@ -10,7 +10,7 @@ use Gskema\TypeSniff\Inspection\Subject\AbstractTypeSubject;
 
 class FnTypeInspector
 {
-    public static function reportRequiredTypeOrDoc(AbstractTypeSubject $subject): void
+    public static function reportMandatoryTypes(AbstractTypeSubject $subject): void
     {
         if ($subject->hasDefinedDocBlock()) {
             return;
@@ -22,7 +22,7 @@ class FnTypeInspector
         }
     }
 
-    public static function reportExpectedNullableType(AbstractTypeSubject $subject): void
+    public static function reportReplaceableTypes(AbstractTypeSubject $subject): void
     {
         // (string $arg1 = null) -> (?string $arg1 = null)
         if ($subject->getValueType() instanceof NullType
@@ -36,8 +36,12 @@ class FnTypeInspector
         }
     }
 
-    public static function reportSuggestedFnTypes(AbstractTypeSubject $subject): void
+    public static function reportSuggestedTypes(AbstractTypeSubject $subject): void
     {
+        if (!$subject->hasDefinedDocType()) {
+            return;
+        }
+
         // Require fnType if possible (check, suggest from docType)
         if (!$subject->hasDefinedFnType()
             && $suggestedFnType = TypeConverter::toExampleFnType($subject->getDocType())

@@ -9,9 +9,6 @@ use Gskema\TypeSniff\Core\CodeElement\Element\AbstractFqcnPropElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassPropElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\CodeElementInterface;
 use Gskema\TypeSniff\Core\CodeElement\Element\TraitPropElement;
-use Gskema\TypeSniff\Core\DocBlock\Tag\VarTag;
-use Gskema\TypeSniff\Core\DocBlock\UndefinedDocBlock;
-use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 
 class FqcnPropSniff implements CodeElementSniffInterface
 {
@@ -42,35 +39,24 @@ class FqcnPropSniff implements CodeElementSniffInterface
      */
     public function process(File $file, CodeElementInterface $prop): void
     {
-        $docBlock = $prop->getDocBlock();
-
-        /** @var VarTag|null $varTag */
-        $varTag = $docBlock->getTagsByName('var')[0] ?? null;
-        $docType = $varTag ? $varTag->getType() : null;
-
         $subject = PropTypeSubject::fromElement($prop);
 
-        if ($docBlock instanceof UndefinedDocBlock) {
-            $subject->addDocTypeWarning('Add PHPDoc for :subject:');
-        } elseif (null === $varTag) {
-            $subject->addDocTypeWarning('Add @var tag for :subject:');
-        } elseif ($docType instanceof UndefinedType) {
-            $subject->addDocTypeWarning('Add type hint to @var tag for :subject:');
-        }
+        DocTypeInspector::reportMandatoryTypes($subject);
+        DocTypeInspector::reportReplaceableTypes($subject);
+        DocTypeInspector::reportRemovableTypes($subject);
+        DocTypeInspector::reportMissingOrWrongTypes($subject);
+
+        static::reportInvalidDescription($subject);
+
+        $subject->writeWarningsTo($file, static::CODE);
+    }
+
+    protected static function reportInvalidDescription(PropTypeSubject $subject): void
+    {
+        $varTag = $subject->getDocBlock()->getTagsByName('var')[0] ?? null;
 
         if ($varTag && null !== $varTag->getParamName()) {
             $subject->addDocTypeWarning('Remove property name $'.$varTag->getParamName().' from @var tag');
         }
-
-        if ($subject->hasDefinedDocType()) {
-            DocTypeInspector::reportMissingTypedArrayTypes($subject);
-            DocTypeInspector::reportFakeTypedArrayTypes($subject);
-            DocTypeInspector::reportRedundantTypes($subject);
-            DocTypeInspector::reportMissingOrWrongTypes($subject);
-        } else {
-            DocTypeInspector::reportRequiredTypedArrayType($subject);
-        }
-
-        $subject->writeWarningsTo($file, static::CODE);
     }
 }

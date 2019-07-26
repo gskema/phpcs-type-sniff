@@ -43,15 +43,13 @@ class FqcnConstSniff implements CodeElementSniffInterface
     {
         $subject = ConstTypeSubject::fromElement($const);
 
-        if ($subject->hasDefinedDocBlock()) {
-            DocTypeInspector::reportMissingTypedArrayTypes($subject);
-            DocTypeInspector::reportFakeTypedArrayTypes($subject);
-            DocTypeInspector::reportRedundantTypes($subject);
-            DocTypeInspector::reportMissingOrWrongTypes($subject);
-            static::reportUselessDocBlock($subject);
-        } else {
-            DocTypeInspector::reportRequiredTypedArrayType($subject);
-        }
+        DocTypeInspector::reportMandatoryTypes($subject);
+        DocTypeInspector::reportReplaceableTypes($subject);
+
+        DocTypeInspector::reportRemovableTypes($subject);
+        DocTypeInspector::reportMissingOrWrongTypes($subject);
+
+        static::reportUselessDocBlock($subject);
 
         $subject->writeWarningsTo($file, static::CODE);
     }

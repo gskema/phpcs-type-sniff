@@ -27,7 +27,7 @@ class CompositeCodeElementSniffTest extends TestCase
                 '009 Type hint "array" is not compatible with C2 constant value type',
                 '009 Missing "int" type in C2 constant type hint',
                 '012 Create PHPDoc with typed array type hint for C3 constant, .e.g.: "string[]" or "SomeClass[]". Correct array depth must be specified.',
-                '017 Add PHPDoc for property $prop1',
+                '017 Add @var tag for property $prop1',
                 '022 Add @var tag for property $prop2',
                 '024 Add type hint to @var tag for property $prop3',
                 '027 Replace array type with typed array type in PHPDoc for property $prop4, .e.g.: "string[]" or "SomeClass[]". Use mixed[] for generic arrays. Correct array depth must be specified.',
@@ -72,7 +72,7 @@ class CompositeCodeElementSniffTest extends TestCase
                 '046 Type hint "int" is not compatible with parameter $p value type',
                 '046 Missing "null, string" types in parameter $p type hint',
                 '065 Useless PHPDoc',
-                '087 Add PHPDoc for property $prop1',
+                '087 Add @var tag for property $prop1',
             ]
         ];
 
@@ -83,7 +83,7 @@ class CompositeCodeElementSniffTest extends TestCase
             ],
             __DIR__.'/fixtures/TestClass1.php',
             [
-                '087 Add PHPDoc for property $prop1',
+                '087 Add @var tag for property $prop1',
             ]
         ];
 

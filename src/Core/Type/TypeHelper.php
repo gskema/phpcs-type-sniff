@@ -7,6 +7,9 @@ use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
 use Gskema\TypeSniff\Core\Type\DocBlock\CompoundType;
 use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
 
+/**
+ * @see TypeHelperTest
+ */
 class TypeHelper
 {
     public static function containsType(?TypeInterface $type, string $typeClassName): bool

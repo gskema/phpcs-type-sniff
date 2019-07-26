@@ -145,6 +145,9 @@ class CompositeCodeElementSniffTest extends TestCase
                 '078 Create PHPDoc with typed array type hint for parameter $arg1, .e.g.: "string[]|null" or "SomeClass[]|null". Correct array depth must be specified.',
                 '083 Useless PHPDoc',
                 '086 Useless PHPDoc',
+                '092 Use void return value type declaration or change type to compound, e.g. SomeClass|null',
+                '094 Add type declaration for return value, e.g.: "?SomeClass"',
+                '101 Useless PHPDoc',
             ],
         ];
 

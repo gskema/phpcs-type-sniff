@@ -74,6 +74,8 @@ class TypeComparatorTest extends TestCase
             51 => ['float', 'float', 'int', '', ''],
             52 => ['double', 'float', 'int', '', ''],
             53 => ['double', 'float', 'int', '', ''],
+            54 => ['', 'float', '', '', ''],
+            55 => ['bool', 'float', null, '', 'float'],
         ];
     }
 
@@ -95,7 +97,7 @@ class TypeComparatorTest extends TestCase
     ): void {
         $givenDocType = TypeFactory::fromRawType($givenRawDocType);
         $givenFnType = TypeFactory::fromRawType($givenRawFnType);
-        $givenValType = TypeFactory::fromRawType($givenRawValueType);
+        $givenValType = null !== $givenRawValueType ? TypeFactory::fromRawType($givenRawValueType) : null;
 
         [$actualWrongDocTypes, $actualMissingDocTypes] = TypeComparator::compare($givenDocType, $givenFnType, $givenValType);
 

@@ -87,4 +87,18 @@ class TestClass5
 
     /** @var null */
     public $prop1;
+
+    /**
+     * @return null
+     */
+    public function func7()
+    {
+    }
+
+    /**
+     * @return int|null
+     */
+    public function func8(): ?int
+    {
+    }
 }

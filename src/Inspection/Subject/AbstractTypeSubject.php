@@ -8,6 +8,9 @@ use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\TypeInterface;
 use PHP_CodeSniffer\Files\File;
 
+/**
+ * @see AbstractTypeSubjectTest
+ */
 abstract class AbstractTypeSubject
 {
     /** @var TypeInterface|null */

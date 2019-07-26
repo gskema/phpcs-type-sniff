@@ -10,6 +10,8 @@ use PHP_CodeSniffer\Files\File;
 
 class FqcnDescriptionSniff implements CodeElementSniffInterface
 {
+    protected const CODE = 'FqcnDescriptionSniff';
+
     /** @var string[] */
     protected $invalidPatterns = [
         '^(Class|Trait|Interface)\s+\w+\s*$',
@@ -56,7 +58,7 @@ class FqcnDescriptionSniff implements CodeElementSniffInterface
         foreach ($element->getDocBlock()->getDescriptionLines() as $lineNum => $descriptionLine) {
             foreach ($this->invalidPatterns as $invalidPattern) {
                 if (preg_match($invalidPattern, $descriptionLine)) {
-                    $file->addWarningOnLine('Useless description', $lineNum, 'FqcnDescriptionSniff');
+                    $file->addWarningOnLine('Useless description', $lineNum, static::CODE);
                 }
             }
         }
@@ -64,7 +66,7 @@ class FqcnDescriptionSniff implements CodeElementSniffInterface
         foreach ($element->getDocBlock()->getTags() as $tag) {
             foreach ($this->invalidTags as $invalidTagName) {
                 if ($tag->getName() === $invalidTagName) {
-                    $file->addWarningOnLine('Useless tag', $tag->getLine(), 'FqcnDescriptionSniff');
+                    $file->addWarningOnLine('Useless tag', $tag->getLine(), static::CODE);
                 }
             }
         }

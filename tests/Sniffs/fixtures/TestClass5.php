@@ -67,9 +67,24 @@ class TestClass5
     /**
      * @param string   $name
      * @param int|null $default
+     * @param null     $arg1
+     *
      * @return mixed
      */
-    private function func5(string $name, ?int $default = null)
+    private function func5(string $name, ?int $default = null, $arg1 = null)
     {
     }
+
+    public function func6(?array $arg1): void
+    {
+    }
+
+    /** @var string */
+    const C1 = '';
+
+    /** @var null */
+    const C2 = null;
+
+    /** @var null */
+    public $prop1;
 }

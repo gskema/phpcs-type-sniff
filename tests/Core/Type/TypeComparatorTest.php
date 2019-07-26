@@ -47,42 +47,33 @@ class TypeComparatorTest extends TestCase
             31 => ['int[]',  'int[]',    '', '', ''],
             32 => ['int[]',  'array',    '', '', ''],
 
-            // missing types
-            33 => ['', 'array',  '', '', 'array' ],
-            34 => ['', 'Fqcn',   '', '', 'Fqcn'  ],
-            35 => ['', 'parent', '', '', 'parent'],
-            36 => ['', 'self',   '', '', 'self'  ],
-            37 => ['', 'double', '', '', 'double'],
-            38 => ['', 'false',  '', '', 'false' ],
-            39 => ['', 'true',   '', '', 'true'  ],
-
             // wrong types
-            40 => ['int|array',  'array',  '', 'int', ''],
-            41 => ['int|Fqcn',   'Fqcn',   '', 'int', ''],
-            42 => ['int|parent', 'parent', '', 'int', ''],
-            43 => ['int|self',   'self',   '', 'int', ''],
-            44 => ['int|double', 'double', '', 'int', ''],
-            45 => ['int|false',  'false',  '', 'int', ''],
-            46 => ['int|true',   'true',   '', 'int', ''],
+            33 => ['int|array',  'array',  '', 'int', ''],
+            34 => ['int|Fqcn',   'Fqcn',   '', 'int', ''],
+            35 => ['int|parent', 'parent', '', 'int', ''],
+            36 => ['int|self',   'self',   '', 'int', ''],
+            37 => ['int|double', 'double', '', 'int', ''],
+            38 => ['int|false',  'false',  '', 'int', ''],
+            39 => ['int|true',   'true',   '', 'int', ''],
 
             // wrong + missing types
-            47 => ['int', 'array',  '', 'int', 'array' ],
-            48 => ['int', 'Fqcn',   '', 'int', 'Fqcn'  ],
-            49 => ['int', 'parent', '', 'int', 'parent'],
-            50 => ['int', 'self',   '', 'int', 'self'  ],
-            51 => ['int', 'double', '', 'int', 'double'],
-            52 => ['int', 'false',  '', 'int', 'false' ],
-            53 => ['int', 'true',   '', 'int', 'true'  ],
+            40 => ['int', 'array',  '', 'int', 'array' ],
+            41 => ['int', 'Fqcn',   '', 'int', 'Fqcn'  ],
+            42 => ['int', 'parent', '', 'int', 'parent'],
+            43 => ['int', 'self',   '', 'int', 'self'  ],
+            44 => ['int', 'double', '', 'int', 'double'],
+            45 => ['int', 'false',  '', 'int', 'false' ],
+            46 => ['int', 'true',   '', 'int', 'true'  ],
 
             // other cases
-            54 => ['int[]|array', '',         '', '',             ''   ],
-            55 => ['int[]|array', 'array',    '', '',             ''   ],
-            56 => ['int[]|array', 'iterable', '', '',             ''   ],
-            57 => ['int[]|array', 'int',      '', 'int[], array', 'int'],
+            47 => ['int[]|array', '',         '', '',             ''   ],
+            48 => ['int[]|array', 'array',    '', '',             ''   ],
+            49 => ['int[]|array', 'iterable', '', '',             ''   ],
+            50 => ['int[]|array', 'int',      '', 'int[], array', 'int'],
 
-            58 => ['float', 'float', 'int', '', ''],
-            59 => ['double', 'float', 'int', '', ''],
-            60 => ['double', 'float', 'int', '', ''],
+            51 => ['float', 'float', 'int', '', ''],
+            52 => ['double', 'float', 'int', '', ''],
+            53 => ['double', 'float', 'int', '', ''],
         ];
     }
 

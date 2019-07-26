@@ -108,8 +108,13 @@ class TypeComparator
         TypeInterface $fnType,
         ?TypeInterface $valueType
     ): array {
+        $docTypeDefined = !($docType instanceof UndefinedType);
         $fnTypeDefined = !($fnType instanceof UndefinedType);
         $valTypeDefined = $valueType && !($valueType instanceof UndefinedType);
+
+        if (!$docTypeDefined) {
+            return [[], []];
+        }
 
         $fnTypeMap = [];
         if ($fnTypeDefined) {

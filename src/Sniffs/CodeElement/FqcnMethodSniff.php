@@ -103,14 +103,14 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         foreach ($fnSig->getParams() as $fnParam) {
             $paramTag = $docBlock->getParamTag($fnParam->getName());
             $subject = ParamTypeSubject::fromParam($fnParam, $paramTag, $docBlock);
-            $this->processSigType($file, $docBlock, $subject);
+            $this->processSigType($file, $subject);
         }
 
         // @return
         if (!$isConstructMethod) {
             $returnTag = $docBlock->getReturnTag();
             $subject = ReturnTypeSubject::fromSignature($fnSig, $returnTag, $docBlock);
-            $this->processSigType($file, $docBlock, $subject);
+            $this->processSigType($file, $subject);
         } else {
             foreach ($docBlock->getDescriptionLines() as $lineNum => $descLine) {
                 if (preg_match('#^\w+\s+constructor\.?$#', $descLine)) {
@@ -120,7 +120,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         }
     }
 
-    protected function processSigType(File $file, DocBlock $docBlock, AbstractTypeSubject $subject): void
+    protected function processSigType(File $file, AbstractTypeSubject $subject): void
     {
         FnTypeInspector::reportMandatoryTypes($subject);
         FnTypeInspector::reportSuggestedTypes($subject);

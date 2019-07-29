@@ -23,10 +23,11 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 - Warning for useless const PHPDoc
 ### Changed
 - self, typed array type examples when for missing function type warnings
-- FqcnMethodSniff logic. Removed dead end inspection paths
+- FqcnMethodSniff logic. Removed dead end inspection paths, code duplication
 - Updated warnings texts
 ### Fixed
 - ResourceType is now DocBlock type, because cannot be used as PHP type declaration
+- If @param is missing, doc block is not deemed useless, but needs to be fixed
 
 ## 0.11.1 - 2019-07-12
 ### Fixed

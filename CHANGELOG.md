@@ -4,7 +4,7 @@ All notable changes to `phpcs-type-sniff` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
-## Next
+## 0.12.0 - 2019-07-29
 ### Added
 - Detection for "parent" type
 - Warning when only using null parameter doc type, compound type is suggested

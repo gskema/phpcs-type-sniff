@@ -101,4 +101,11 @@ class TestClass5
     public function func8(): ?int
     {
     }
+
+    /**
+     * @param Collection|Image[] $images
+     */
+    public function func9(Collection $images): void
+    {
+    }
 }

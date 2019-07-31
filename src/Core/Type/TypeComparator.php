@@ -92,6 +92,7 @@ class TypeComparator
         TypedArrayType::class => [
             ArrayType::class,
             IterableType::class,
+            FqcnType::class, // e.g. Collection|Image[]
         ],
     ];
 

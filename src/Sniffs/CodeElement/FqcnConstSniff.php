@@ -60,12 +60,18 @@ class FqcnConstSniff implements CodeElementSniffInterface
             return;
         }
 
-        /** @var VarTag|null $varTag */
-        $varTag = $subject->getDocBlock()->getTagsByName('var')[0] ?? null;
+        $docBlock = $subject->getDocBlock();
 
-        $isUseful = $subject->getDocBlock()->hasDescription()
+        /** @var VarTag|null $varTag */
+        $varTag = $docBlock->getTagsByName('var')[0] ?? null;
+
+        $tagCount = count($docBlock->getTags());
+        $hasOtherTags = (!$varTag && $tagCount >= 1) || ($varTag && $tagCount >= 2);
+
+        $isUseful = $hasOtherTags
+            || $docBlock->hasDescription()
             || ($varTag && $varTag->hasDescription())
-            || ($varTag && $varTag->getType() != $subject->getValueType());
+            || ($varTag && $varTag->getType() != $subject->getValueType()); // intentional non strict
 
         if (!$isUseful) {
             $subject->addFnTypeWarning('Useless PHPDoc');

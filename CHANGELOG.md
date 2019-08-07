@@ -4,6 +4,10 @@ All notable changes to `phpcs-type-sniff` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## 0.12.2 - 2019-08-07
+### Fixed
+- FqcnConstSniff now checks for other tags before declaring useless PHPDoc.
+
 ## 0.12.1 - 2019-07-31
 ### Fixed
 - TypedArrayType is now covers FqcnType, e.g. @return Collection|Image[] -> :Collection

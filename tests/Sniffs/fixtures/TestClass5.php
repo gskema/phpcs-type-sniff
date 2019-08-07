@@ -108,4 +108,9 @@ class TestClass5
     public function func9(Collection $images): void
     {
     }
+
+    /**
+     * @see Something
+     */
+    const C3 = '?';
 }

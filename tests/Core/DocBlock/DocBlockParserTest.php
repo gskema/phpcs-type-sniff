@@ -164,6 +164,17 @@ class DocBlockParserTest extends TestCase
             'expectedException' => null,
         ];
 
+        // #2 Var tag with multiple preceding spaces
+        $dataSets[] = [
+            'givenRawDocBlock'  =>'/**  @var int */',
+            'givenStartLine'    => 2,
+            'expectedDocBlock'  => new DocBlock(
+                [],
+                [new VarTag(2, new IntType(), null, null)]
+            ),
+            'expectedException' => null,
+        ];
+
         return $dataSets;
     }
 

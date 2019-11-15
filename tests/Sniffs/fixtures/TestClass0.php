@@ -24,7 +24,7 @@ class TestClass0
     /** @var */
     private $prop3;
 
-    /** @var array */
+    /**  @var array */
     private $prop4;
 
     /** @var array|string */

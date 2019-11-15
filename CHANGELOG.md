@@ -4,6 +4,10 @@ All notable changes to `phpcs-type-sniff` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## 0.12.3 - 2019-11-15
+### Fixed
+- Fix PHPDoc tag parsing which are prefaced with multiple spaces
+
 ## 0.12.2 - 2019-08-07
 ### Fixed
 - FqcnConstSniff now checks for other tags before declaring useless PHPDoc.

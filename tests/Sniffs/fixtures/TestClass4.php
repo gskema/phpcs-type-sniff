@@ -25,7 +25,7 @@ class TestClass4 extends \stdClass
      * @param false    $arg13
      *
      * @param callable $arg14
-     * @param \Closure $arg15
+     *@param \Closure $arg15
      * @param iterable $arg16
      * @param parent   $arg17
      *

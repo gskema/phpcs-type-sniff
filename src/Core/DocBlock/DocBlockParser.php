@@ -35,8 +35,10 @@ class DocBlockParser
 
         $lineNum = $startLineNum;
         foreach ($matches[1] ?? [] as $rawLine) {
-            $ch0 = $rawLine[0] ?? null;
-            $ch1 = $rawLine[1] ?? null;
+            $trimmedLine = ltrim($rawLine); // e.g. tag may be prefaced with multiple spaces
+
+            $ch0 = $trimmedLine[0] ?? null;
+            $ch1 = $trimmedLine[1] ?? null;
             if ('@' === $ch0 || ('{' === $ch0 && '@' === $ch1)) {
                 $tagLineNum = $lineNum;
             }

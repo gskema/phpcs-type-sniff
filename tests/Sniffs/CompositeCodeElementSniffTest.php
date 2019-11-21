@@ -148,6 +148,7 @@ class CompositeCodeElementSniffTest extends TestCase
                 '092 Use void return value type declaration or change type to compound, e.g. SomeClass|null',
                 '094 Add type declaration for return value, e.g.: "?SomeClass"',
                 '101 Useless PHPDoc',
+                '117 Replace array type with typed array type in PHPDoc for C4 constant, .e.g.: "string[]" or "SomeClass[]". Use mixed[] for generic arrays. Correct array depth must be specified.'
             ],
         ];
 

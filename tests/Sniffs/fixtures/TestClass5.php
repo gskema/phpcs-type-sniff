@@ -113,4 +113,7 @@ class TestClass5
      * @see Something
      */
     const C3 = '?';
+
+    /** @var array */
+    const C4 = [];
 }

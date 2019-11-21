@@ -3,6 +3,7 @@
 namespace Gskema\TypeSniff\Sniffs\CodeElement;
 
 use Gskema\TypeSniff\Core\DocBlock\Tag\VarTag;
+use Gskema\TypeSniff\Core\Type\Common\ArrayType;
 use Gskema\TypeSniff\Inspection\DocTypeInspector;
 use Gskema\TypeSniff\Inspection\Subject\ConstTypeSubject;
 use PHP_CodeSniffer\Files\File;
@@ -64,14 +65,19 @@ class FqcnConstSniff implements CodeElementSniffInterface
 
         /** @var VarTag|null $varTag */
         $varTag = $docBlock->getTagsByName('var')[0] ?? null;
+        $docType = $varTag ? $varTag->getType() : null;
 
         $tagCount = count($docBlock->getTags());
         $hasOtherTags = (!$varTag && $tagCount >= 1) || ($varTag && $tagCount >= 2);
 
+        $hasSpecificDocType = $docType != $subject->getValueType(); // intentional non strict
+        $hasIncompleteDocType = $docType instanceof ArrayType;
+
         $isUseful = $hasOtherTags
             || $docBlock->hasDescription()
             || ($varTag && $varTag->hasDescription())
-            || ($varTag && $varTag->getType() != $subject->getValueType()); // intentional non strict
+            || $hasSpecificDocType
+            || $hasIncompleteDocType;
 
         if (!$isUseful) {
             $subject->addFnTypeWarning('Useless PHPDoc');

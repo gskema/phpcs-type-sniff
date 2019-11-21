@@ -7,9 +7,113 @@
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-- Enforces usage of PHP 7 type declarations
-- Enforces documenting array types with more accurate types
-- Checks for useless PHPDoc blocks
+Custom `phpcs` [CodeSniffer][link-phpcs] rule that:
+
+- Enforces usage of PHP 7 type declarations (where possible)
+- Enforces documenting array types with more specific types (e.g. `int[]`)
+- Checks for useless PHPDoc blocks (no repeated information)
+- Many more other checks
+
+Example PHP class (comments on the right = `phpcs` warnings):
+
+```php
+<?php
+
+namespace Fruits;
+
+/**
+ * Class Banana                     // useless description
+ * @package Fruits                  // useless tag
+ */
+class Banana
+{
+    const C1 = [];                  // missing typed array doc type
+
+    /** @var array */               // must use typed array doc type
+    const C2 = [];
+
+    /** @var array[] */             // must use specific typed array doc type
+    const C3 = [[]];
+
+    /** @var bool|false */          // redundant false type
+    const C4 = false;
+
+    /**
+     * @var int                     // incompatible int type, missing null type
+     */
+    const C5 = null;
+
+    /** @var int */
+    const C6 = 1;                   // useless PHPDoc
+
+    public $prop1 = [];             // missing typed array doc type
+
+    /** @var array */               // must use typed array doc type
+    public $prop2 = [];
+
+    public $prop3;                  // missing @var tag
+
+    /** @var */                     // missing doc type
+    public $prop4;
+
+    /** @var array[][] */           // must use specific typed array doc type
+    public $prop5;
+
+    /** @var array|string[] */      // redundant array type
+    public $prop6;
+
+    /** @var int|string */          // missing null doc type
+    public $prop7 = null;
+
+    /** @var int $prop8 */          // prop name must be removed
+    public $prop8;
+
+    public function func1(
+        $param1,                    // missing param type decl.
+        int $param2
+    ) {                             // missing return type decl.
+    }
+
+    /**
+     * @param int|null  $param1
+     * @param int|null  $param2
+     * @param array     $param3     // must use typed array doc type
+     *
+     * @param           $param5     // suggested int doc type
+     * @param           $param6     // missing doc type
+     * @param array[]   $param7     // must use specific typed array doc type
+     * @param bool|true $param8     // remove true doc type
+     * @param null      $param9     // suggested compound doc type, e.g. int|null
+     * @param string    $param10    // incompatible string type, missing int, null types
+     * @param stdClass  $param11
+     * @param bool|int  $param12
+     *
+     * @return void                 // useless tag
+     */
+    public function func2(
+        $param1,                    // suggested ?int type decl.
+        int $param2 = null,         // suggested ?int type decl.
+        array $param3,
+        $param4,                    // missing @param tag
+        int $param5,
+        $param6,
+        array $param7,
+        bool $param8,
+        $param9 = null,             // missing type decl.
+        ?int $param10 = null,
+        stdClass $param11,
+        $param12
+    ): void {
+    }
+
+    /**
+     * @return int
+     */
+    public function func3(): int    // useless PHPDoc
+    {
+    }
+}
+```
 
 ## Install
 
@@ -23,34 +127,41 @@ $ composer require --dev gskema/phpcs-type-sniff
 
 This is a standalone sniff file, you need to add it to your `phpcs.xml` file.
 
+### Usage Without Reflection
+
+Inspections for methods with `@inheritdoc` tag are skipped.
+If a method does not have this tag, it is inspected. **This is the recommend setup**.
+
+```xml
+<ruleset name="your_ruleset">
+    <!-- your configuration -->
+    <rule ref="PSR2"/>
+
+    <!-- phpcs-type-sniff configuration -->   
+    <rule ref="./vendor/gskema/phpcs-type-sniff/src/Sniffs/CompositeCodeElementSniff.php"/>
+</ruleset>
+```
+
 ### Usage With Reflection
 
 With reflection enabled, this sniff can assert if `@inheritoc` tag
 is needed. Inspections for extended/implemented methods are skipped.
 Reflections need to load actual classes, which is why we need to include
-the autoloader.
+the autoloader. This option is good for inspecting extended methods, however using `ReflectionClass` may
+cause `phpcs` crashes while editing (not possible to catch `FatalError`).
 
 ```xml
 <ruleset name="your_ruleset">
     <!-- your configuration -->
+    <rule ref="PSR2"/>
+
+    <!-- phpcs-type-sniff configuration -->   
     <arg name="bootstrap" value="./vendor/autoload.php"/>
     <rule ref="./vendor/gskema/phpcs-type-sniff/src/Sniffs/CompositeCodeElementSniff.php">
         <properties>
             <property name="useReflection" value="true"/>
         </properties>
     </rule>
-</ruleset>
-```
-
-### Usage Without Reflection
-
-Inspections for methods with `@inheritdoc` tag are skipped.
-If a method does not have this tag, it is inspected.
-
-```xml
-<ruleset name="your_ruleset">
-    <!-- your configuration -->
-    <rule ref="./vendor/gskema/phpcs-type-sniff/src/Sniffs/CompositeCodeElementSniff.php"/>
 </ruleset>
 ```
 
@@ -66,6 +177,9 @@ String `true/false` values are automatically converted to booleans.
 ```xml
 <ruleset name="your_ruleset">
     <!-- your configuration -->
+    <rule ref="PSR2"/>
+
+    <!-- phpcs-type-sniff configuration -->   
 
     <!-- Includes an autoloader which is needed when using reflection API -->
     <!-- or custom code element sniff(s) -->
@@ -145,3 +259,4 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [link-scrutinizer]: https://scrutinizer-ci.com/g/gskema/phpcs-type-sniff/code-structure
 [link-code-quality]: https://scrutinizer-ci.com/g/gskema/phpcs-type-sniff
 [link-downloads]: https://packagist.org/packages/gskema/phpcs-type-sniff
+[link-phpcs]: https://github.com/squizlabs/PHP_CodeSniffer

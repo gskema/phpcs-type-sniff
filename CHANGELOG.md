@@ -4,6 +4,10 @@ All notable changes to `phpcs-type-sniff` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## Next
+### Added
+- Parsing of alternative PHPDoc array types (array shapes, object-like arrays) as mixed[]
+
 ## 0.12.4 - 2019-11-21
 ### Fixed
 - Useless PHPDoc for const is no longer reported when doc type is incomplete (e.g. array)

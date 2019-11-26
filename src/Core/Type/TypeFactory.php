@@ -80,7 +80,20 @@ class TypeFactory
             return new $basicType;
         }
 
-        if (false !== strpos($rawType, '[]')) {
+        if (false !== strpos($rawType, '<') || false !== strpos($rawType, '{')) {
+            // e.g.: array<int, string>
+            //       array{foo: string, bar: int}
+            //       array{b:bool,d:string}[]
+            //       array<int, string>[]
+            //       list<string>
+
+            // We don't need to parse these type fully and carry their info, because it is not used.
+            // Parsing and returning this as mixed[] is enough to prevent array warnings, const/prop/param is documented.
+            return new TypedArrayType(new MixedType(), 1);
+        } elseif (false !== strpos($rawType, '[]')) {
+            // e.g.: int[]
+            //       \SomeClass[][]
+
             $bits = explode('[]', $rawType);
             $bitCount = count($bits);
             if ($bitCount > 1) {

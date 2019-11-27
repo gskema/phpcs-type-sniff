@@ -25,6 +25,9 @@ class FqcnMethodSniff implements CodeElementSniffInterface
     /** @var string[] */
     protected $invalidTags = [];
 
+    /** @var bool */
+    protected $reportMissingTags = true;
+
     /**
      * @inheritDoc
      */
@@ -38,6 +41,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         $invalidTags = array_unique($invalidTags);
 
         $this->invalidTags = $invalidTags;
+        $this->reportMissingTags = $config['reportMissingTags'] ?? true;
     }
 
     /**

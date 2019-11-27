@@ -10,6 +10,7 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 
 ### Added
 - Setting `FqcnMethodSniff.invalidTags`. Specifies which methods tags should be removed.
+- Setting `FqcnMethodSniff.reportMissingTags`.
 
 ### Changed
 - Parsing of generic tags with parentheses, no longer part of tag name, Dynamic content is now tag content.

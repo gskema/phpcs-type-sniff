@@ -213,6 +213,10 @@ String `true/false` values are automatically converted to booleans.
                 <element value="@api"/>
             </property>
 
+            <!-- Disables reporting missing @param, @return tags in non-empty method PHPDoc -->
+            <!-- when method type declarations are present -->
+            <property name="FqcnMethodSniff.reportMissingTags" value="false"/>
+
             <!-- Your own custom code element sniff(s). Autoloader is needed. -->
             <!-- These classes implement CodeElementSniffInterface -->
             <property name="sniffs" type="array">

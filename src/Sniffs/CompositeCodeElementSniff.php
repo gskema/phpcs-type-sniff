@@ -47,7 +47,7 @@ class CompositeCodeElementSniff extends AbstractConfigurableSniff
         }
 
         // Property keys for CodeElementSniff(s) are applied by the short class name.
-        // E.g. FqcnMethodSniff.usefulTags
+        // E.g. FqcnMethodSniff.invalidTags
         foreach ($config as $key => $val) {
             if ('sniffs'!== $key && false !== strpos($key, '.')) {
                 [$shortClass, $cfgKey] = explode('.', $key, 2);

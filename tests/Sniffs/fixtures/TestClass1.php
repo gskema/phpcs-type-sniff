@@ -85,4 +85,12 @@ class TestClass1
     }
 
     public $prop1;
+
+    /**
+     * @some-custom-tag
+     * @param int $a
+     */
+    public function method10(int $a): void
+    {
+    }
 }

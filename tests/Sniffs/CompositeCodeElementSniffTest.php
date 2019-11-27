@@ -46,7 +46,7 @@ class CompositeCodeElementSniffTest extends TestCase
         // #1
         $dataSets[] = [
             [
-                'FqcnMethodSniff.usefulTags' => ['@SmartTemplate'],
+                'FqcnMethodSniff.invalidTags' => ['@SmartTemplate'],
             ],
             __DIR__.'/fixtures/TestClass1.php',
             [
@@ -72,6 +72,7 @@ class CompositeCodeElementSniffTest extends TestCase
                 '046 Type hint "int" is not compatible with parameter $p value type',
                 '046 Missing "null, string" types in parameter $p type hint',
                 '065 Useless PHPDoc',
+                '070 Useless tag',
                 '087 Add @var tag for property $prop1',
             ]
         ];

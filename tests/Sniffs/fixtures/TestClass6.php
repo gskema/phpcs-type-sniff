@@ -30,7 +30,7 @@ class TestClass6
      * @param array{foo: string, bar: int} $arg3
      * @param array{b:bool,d:string}[] $arg4
      * @param array<int, string>[] $arg5
-     * @param list<string> $arg6
+     * @param array('key1' => string, 'key2' => int) $arg6
      */
     public function func1(
         array $arg2,

@@ -80,12 +80,13 @@ class TypeFactory
             return new $basicType;
         }
 
-        if (false !== strpos($rawType, '<') || false !== strpos($rawType, '{')) {
+        $rawType6 = substr($rawType, 0, 6);
+        if (in_array($rawType6, ['array<', 'array{', 'array('])) {
             // e.g.: array<int, string>
             //       array{foo: string, bar: int}
             //       array{b:bool,d:string}[]
             //       array<int, string>[]
-            //       list<string>
+            //       array('key' => string, ...)
 
             // We don't need to parse these type fully and carry their info, because it is not used.
             // Parsing and returning this as mixed[] is enough to prevent array warnings, const/prop/param is documented.

@@ -119,13 +119,17 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         FnTypeInspector::reportSuggestedTypes($subject);
         FnTypeInspector::reportReplaceableTypes($subject);
 
-        DocTypeInspector::reportMandatoryTypes($subject);
-        DocTypeInspector::reportSuggestedTypes($subject);
-        DocTypeInspector::reportReplaceableTypes($subject);
+        if ($this->reportMissingTags || $subject->hasDocTypeTag()) {
+            DocTypeInspector::reportMandatoryTypes($subject);
+            DocTypeInspector::reportSuggestedTypes($subject);
+            DocTypeInspector::reportReplaceableTypes($subject);
 
-        DocTypeInspector::reportRemovableTypes($subject);
-        DocTypeInspector::reportInvalidTypes($subject);
-        DocTypeInspector::reportMissingOrWrongTypes($subject);
+            DocTypeInspector::reportRemovableTypes($subject);
+            DocTypeInspector::reportInvalidTypes($subject);
+            DocTypeInspector::reportMissingOrWrongTypes($subject);
+        } else {
+            DocTypeInspector::reportMandatoryTypes($subject, true);
+        }
 
         $subject->writeWarningsTo($file, static::CODE);
     }

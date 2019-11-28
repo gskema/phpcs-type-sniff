@@ -17,7 +17,7 @@ use Gskema\TypeSniff\Inspection\Subject\ReturnTypeSubject;
 
 class DocTypeInspector
 {
-    public static function reportMandatoryTypes(AbstractTypeSubject $subject): void
+    public static function reportMandatoryTypes(AbstractTypeSubject $subject, bool $allowMissing = false): void
     {
         $hasDocBlock = $subject->hasDefinedDocBlock();
         $hasDocTypeTag = null !== $subject->getDocType();
@@ -35,6 +35,12 @@ class DocTypeInspector
             ));
 
             return; // exit
+        }
+
+        // Above: reports for doc types that must be specified (typed array type), cannot be missing.
+        // Below: reports for missing doc types, tags. This may be OK in case fn type is specified.
+        if ($allowMissing) {
+            return;
         }
 
         if ($subject instanceof ParamTypeSubject) {

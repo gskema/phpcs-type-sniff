@@ -2,6 +2,7 @@
 
 namespace Gskema\TypeSniff\Core\Type;
 
+use Gskema\TypeSniff\Core\Type\Common\FqcnType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ResourceType;
 use PHPUnit\Framework\TestCase;
 use Gskema\TypeSniff\Core\Type\Common\ArrayType;
@@ -77,6 +78,50 @@ class TypeFactoryTest extends TestCase
                     new NullType()
                 ])
             ],
+            [
+                'string|NodeList|Node|(Node|Location)[]',
+                new CompoundType([
+                    new StringType(),
+                    new FqcnType('NodeList'),
+                    new FqcnType('Node'),
+                    new TypedArrayType(new CompoundType([
+                        new FqcnType('Node'),
+                        new FqcnType('Location')
+                    ]), 1)
+                ])
+            ],
+            [
+                'array<string,array<string,string>>|\Zend\ServiceManager\Config',
+                new CompoundType([
+                    new TypedArrayType(new MixedType(), 1),
+                    new FqcnType('\Zend\ServiceManager\Config')
+                ])
+            ],
+            [
+                'array<string,array<string,(int[]|string)[])>>',
+                new TypedArrayType(new MixedType(), 1)
+            ],
+            [
+                '(int[]|string)[]|null',
+                new CompoundType([
+                    new TypedArrayType(new CompoundType([
+                        new TypedArrayType(new IntType(), 1),
+                        new StringType(),
+                    ]), 1),
+                    new NullType()
+                ])
+            ],
+            [
+                'array<int>|',
+                new TypedArrayType(new MixedType(), 1)
+            ],
+            [
+                '((bool|int)[][]|(string|float)[])[]',
+                new TypedArrayType(new CompoundType([
+                    new TypedArrayType(new CompoundType([new BoolType(), new IntType()]), 2), // (bool|int)[][]
+                    new TypedArrayType(new CompoundType([new StringType(), new FloatType()]), 1), // (string|float)[]
+                ]), 1)
+            ]
         ];
     }
 

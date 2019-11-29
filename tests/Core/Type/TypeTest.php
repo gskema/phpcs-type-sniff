@@ -60,6 +60,11 @@ class TypeTest extends TestCase
         self::assertEquals(true, (new CompoundType([new StringType(), new IntType()]))->containsType(IntType::class));
         self::assertEquals(false, (new CompoundType([new StringType(), new IntType()]))->containsType(SelfType::class));
         self::assertEquals([new StringType()], (new CompoundType([new StringType(), new IntType()]))->getType(StringType::class));
+        self::assertEquals(
+            '(int|string)[]',
+            (new TypedArrayType(new CompoundType([new StringType(), new IntType()]), 1))
+                ->toString()
+        );
 
         self::assertEquals('double', (new DoubleType())->toString());
         self::assertEquals('false', (new FalseType())->toString());

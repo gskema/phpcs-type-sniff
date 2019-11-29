@@ -33,6 +33,11 @@ class TypedArrayType implements TypeInterface
      */
     public function toString(): string
     {
-        return $this->type->toString().str_repeat('[]', $this->depth);
+        $innerType = $this->type->toString();
+        if ($this->type instanceof CompoundType) {
+            $innerType = sprintf('(%s)', $innerType);
+        }
+
+        return $innerType.str_repeat('[]', $this->depth);
     }
 }

@@ -162,9 +162,9 @@ class CompositeCodeElementSniffTest extends TestCase
             ],
             __DIR__.'/fixtures/TestClass6.php',
             [
-                '017 Add type declaration for parameter $arg1 or create PHPDoc with type hint',
-                '017 Add typed array type hint for parameter $arg2, .e.g.: "string[]" or "SomeClass[]". Correct array depth must be specified.',
-                '017 Add type declaration for return value or create PHPDoc with type hint',
+                '064 Add type declaration for parameter $arg1 or create PHPDoc with type hint',
+                '064 Add typed array type hint for parameter $arg2, .e.g.: "string[]" or "SomeClass[]". Correct array depth must be specified.',
+                '064 Add type declaration for return value or create PHPDoc with type hint',
             ],
         ];
 

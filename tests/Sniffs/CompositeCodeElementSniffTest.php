@@ -46,13 +46,14 @@ class CompositeCodeElementSniffTest extends TestCase
         // #1
         $dataSets[] = [
             [
-                'FqcnMethodSniff.usefulTags' => ['@SmartTemplate'],
+                'FqcnMethodSniff.invalidTags' => ['@SmartTemplate'],
             ],
             __DIR__.'/fixtures/TestClass1.php',
             [
                 '007 Add type declaration for parameter $a or create PHPDoc with type hint',
                 '007 Create PHPDoc with typed array type hint for parameter $b, .e.g.: "string[]" or "SomeClass[]". Correct array depth must be specified.',
                 '012 Add type hint in PHPDoc tag for parameter $c',
+                '014 Add type declaration for return value or create PHPDoc with type hint',
                 '014 Missing PHPDoc tag or void type declaration for return value',
                 '019 Add type hint in PHPDoc tag for parameter $d',
                 '020 Add type hint in PHPDoc tag for parameter $e, e.g. "int"',
@@ -72,6 +73,7 @@ class CompositeCodeElementSniffTest extends TestCase
                 '046 Type hint "int" is not compatible with parameter $p value type',
                 '046 Missing "null, string" types in parameter $p type hint',
                 '065 Useless PHPDoc',
+                '070 Useless tag',
                 '087 Add @var tag for property $prop1',
             ]
         ];
@@ -156,10 +158,13 @@ class CompositeCodeElementSniffTest extends TestCase
         $dataSets[] = [
             [
                 'useReflection' => false,
+                'FqcnMethodSniff.reportMissingTags' => false,
             ],
             __DIR__.'/fixtures/TestClass6.php',
             [
-                // no warnings
+                '017 Add type declaration for parameter $arg1 or create PHPDoc with type hint',
+                '017 Add typed array type hint for parameter $arg2, .e.g.: "string[]" or "SomeClass[]". Correct array depth must be specified.',
+                '017 Add type declaration for return value or create PHPDoc with type hint',
             ],
         ];
 

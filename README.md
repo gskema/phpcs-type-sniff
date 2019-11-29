@@ -169,7 +169,7 @@ cause `phpcs` crashes while editing (not possible to catch `FatalError`).
 
 Sniffs are registered and saved by their short class name.
 This allows easily specifying configuration options for a specific code element sniff,
-e.g. `FqcnMethodSniff.usefulTags`. All custom code sniff classes must have unique
+e.g. `FqcnMethodSniff.invalidTags`. All custom code sniff classes must have unique
 short class names.
 
 String `true/false` values are automatically converted to booleans.
@@ -199,19 +199,23 @@ String `true/false` values are automatically converted to booleans.
             <property name="FqcnPropSniff.enabled" value="false" />
             <property name="FqcnDescriptionSniff.enabled" value="false" />
 
-            <!-- Adds additional useful PHPDoc tags for asserting useful DocBlock(s) -->
-            <property name="FqcnMethodSniff.usefulTags" type="array">
+            <!-- Tags that should be removed from method PHPDoc -->
+            <property name="FqcnMethodSniff.invalidTags" type="array">
                 <element value="@someTag1"/>
                 <element value="@someTag2"/>
             </property>
 
-            <!-- Custom pattern and tags for asserting useless FQCN descriptions -->
+            <!-- Description lines and tags that should be removed from FQCN PHPDoc -->
             <property name="FqcnDescriptionSniff.invalidPatterns" type="array">
                 <element value="^Nothing.+Useful$"/>
             </property>
             <property name="FqcnDescriptionSniff.invalidTags" type="array">
                 <element value="@api"/>
             </property>
+
+            <!-- Disables reporting missing @param, @return tags in non-empty method PHPDoc -->
+            <!-- when method type declarations are present -->
+            <property name="FqcnMethodSniff.reportMissingTags" value="false"/>
 
             <!-- Your own custom code element sniff(s). Autoloader is needed. -->
             <!-- These classes implement CodeElementSniffInterface -->

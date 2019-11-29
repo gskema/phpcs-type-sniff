@@ -89,7 +89,7 @@ class DocBlockParser
             $type = TypeFactory::fromRawType($matches[1] ?? '');
             $description = $matches[2] ?? null;
             $tag = new ReturnTag($line, $type, $description);
-        } elseif (preg_match('#^{?@([\w\(\)]+)}?(?:$|\s*(.*)$)#', $rawTag, $matches)) {
+        } elseif (preg_match('#^{?@([\w\-\_]+)}?(?:$|\s*(.*)$)#', $rawTag, $matches)) {
             $tagName = strtolower($matches[1]);
             $content = $matches[2] ?? null;
             $tag = new GenericTag($line, $tagName, $content);

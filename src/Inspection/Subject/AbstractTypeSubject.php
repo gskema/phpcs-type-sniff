@@ -146,4 +146,9 @@ abstract class AbstractTypeSubject
             $file->addWarningOnLine($warning, $this->fnTypeLine, $sniffCode);
         }
     }
+
+    public function hasDocTypeTag(): bool
+    {
+        return null !== $this->docType;
+    }
 }

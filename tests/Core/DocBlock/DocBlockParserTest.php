@@ -159,7 +159,7 @@ class DocBlockParserTest extends TestCase
             'givenStartLine'    => 2,
             'expectedDocBlock'  => new DocBlock(
                 [],
-                [new GenericTag(2, 'smarttemplate()', null)]
+                [new GenericTag(2, 'smarttemplate', '()')]
             ),
             'expectedException' => null,
         ];
@@ -171,6 +171,25 @@ class DocBlockParserTest extends TestCase
             'expectedDocBlock'  => new DocBlock(
                 [],
                 [new VarTag(2, new IntType(), null, null)]
+            ),
+            'expectedException' => null,
+        ];
+
+        // #3 Dynamic tags, some with dashes
+        $dataSets[] = [
+            'givenRawDocBlock'  => '/**
+ * @Route("/{id}", name="blog_post", requirements = {"id" = "\d+"})
+ * @Param-Converter("user", class="AcmeBlogBundle:User", options={
+ *    "repository_method" = "findByFullName"
+ * })
+ */',
+            'givenStartLine'    => 2,
+            'expectedDocBlock'  => new DocBlock(
+                [],
+                [
+                    new GenericTag(3, 'route', '("/{id}", name="blog_post", requirements = {"id" = "\d+"})'),
+                    new GenericTag(4, 'param-converter', '("user", class="AcmeBlogBundle:User", options={ "repository_method" = "findByFullName" })'),
+                ]
             ),
             'expectedException' => null,
         ];

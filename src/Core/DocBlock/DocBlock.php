@@ -128,4 +128,17 @@ class DocBlock
 
         return $matchingTags;
     }
+
+    /**
+     * @return string[]
+     */
+    public function getTagNames(): array
+    {
+        $tagNames = [];
+        foreach ($this->tags as $tag) {
+            $tagNames[$tag->getName()] = null;
+        }
+
+        return array_keys($tagNames);
+    }
 }

@@ -12,7 +12,6 @@ use Gskema\TypeSniff\Core\CodeElement\Element\AbstractFqcnMethodElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassMethodElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\CodeElementInterface;
 use Gskema\TypeSniff\Core\CodeElement\Element\InterfaceMethodElement;
-use Gskema\TypeSniff\Core\DocBlock\DocBlock;
 use Gskema\TypeSniff\Core\DocBlock\UndefinedDocBlock;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
 
@@ -24,32 +23,25 @@ class FqcnMethodSniff implements CodeElementSniffInterface
     protected const CODE = 'FqcnMethodSniff';
 
     /** @var string[] */
-    protected $baseUsefulTags = [
-        '@deprecated',
-        '@throws',
-        '@dataProvider',
-        '@see',
-        '@todo',
-        '@inheritDoc'
-    ];
+    protected $invalidTags = [];
 
-    /** @var string[] */
-    protected $usefulTags = [];
+    /** @var bool */
+    protected $reportMissingTags = true;
 
     /**
      * @inheritDoc
      */
     public function configure(array $config): void
     {
-        $rawTags = array_merge($this->baseUsefulTags, $config['usefulTags'] ?? []);
-
-        $usefulTags = [];
-        foreach ($rawTags as $rawTag) {
-            $usefulTags[] = strtolower(ltrim($rawTag, '@'));
+        // TagInterface uses lowercase tags names, no @ symbol in front
+        $invalidTags = [];
+        foreach ($config['invalidTags'] ?? [] as $rawTag) {
+            $invalidTags[] = strtolower(ltrim($rawTag, '@'));
         }
-        $usefulTags = array_unique($usefulTags);
+        $invalidTags = array_unique($invalidTags);
 
-        $this->usefulTags = $usefulTags;
+        $this->invalidTags = $invalidTags;
+        $this->reportMissingTags = $config['reportMissingTags'] ?? true;
     }
 
     /**
@@ -72,6 +64,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
     {
         $warningCountBefore = $file->getWarningCount();
 
+        static::reportInvalidTags($file, $method, $this->invalidTags);
         $this->processMethod($file, $method);
 
         $hasNewWarnings = $file->getWarningCount() > $warningCountBefore;
@@ -126,13 +119,17 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         FnTypeInspector::reportSuggestedTypes($subject);
         FnTypeInspector::reportReplaceableTypes($subject);
 
-        DocTypeInspector::reportMandatoryTypes($subject);
-        DocTypeInspector::reportSuggestedTypes($subject);
-        DocTypeInspector::reportReplaceableTypes($subject);
+        if ($this->reportMissingTags || $subject->hasDocTypeTag()) {
+            DocTypeInspector::reportMandatoryTypes($subject);
+            DocTypeInspector::reportSuggestedTypes($subject);
+            DocTypeInspector::reportReplaceableTypes($subject);
 
-        DocTypeInspector::reportRemovableTypes($subject);
-        DocTypeInspector::reportInvalidTypes($subject);
-        DocTypeInspector::reportMissingOrWrongTypes($subject);
+            DocTypeInspector::reportRemovableTypes($subject);
+            DocTypeInspector::reportInvalidTypes($subject);
+            DocTypeInspector::reportMissingOrWrongTypes($subject);
+        } else {
+            DocTypeInspector::reportMandatoryTypes($subject, true);
+        }
 
         $subject->writeWarningsTo($file, static::CODE);
     }
@@ -142,14 +139,13 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         $fnSig = $method->getSignature();
         $docBlock = $method->getDocBlock();
 
-        $usefulTagNames = array_diff($this->usefulTags, ['param', 'return']);
-
         $docReturnTag = $docBlock->getReturnTag();
 
         if ($docBlock instanceof UndefinedDocBlock
             || $docBlock->hasDescription()
-            || $docBlock->hasOneOfTags($usefulTagNames)
             || ($docReturnTag && $docReturnTag->hasDescription())
+            // check if other "useful" tags are present
+            || array_diff($docBlock->getTagNames(), ['param', 'return'])
         ) {
             return false;
         }
@@ -186,5 +182,21 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         }
 
         return true;
+    }
+
+    /**
+     * @param File                      $file
+     * @param AbstractFqcnMethodElement $method
+     * @param static[]                  $invalidTags
+     */
+    protected static function reportInvalidTags(File $file, AbstractFqcnMethodElement $method, array $invalidTags): void
+    {
+        foreach ($method->getDocBlock()->getTags() as $tag) {
+            foreach ($invalidTags as $invalidTagName) {
+                if ($tag->getName() === $invalidTagName) {
+                    $file->addWarningOnLine('Useless tag', $tag->getLine(), static::CODE);
+                }
+            }
+        }
     }
 }

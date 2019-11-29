@@ -50,4 +50,18 @@ class TestClass6
         array $arg11
     ): void {
     }
+
+    /**
+     * @Route("/")
+     */
+    public function func2(int $arg1): int
+    {
+    }
+
+    /**
+     * @Param-Converted("/")
+     */
+    public function func3($arg1, array $arg2)
+    {
+    }
 }

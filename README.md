@@ -112,6 +112,18 @@ class Banana
     public function func3(): int    // useless PHPDoc
     {
     }
+
+    /**
+     * @param array<int, bool>           $arg1 // alternative array documentation
+     * @param array{foo: bool, bar: int} $arg2 // supported, no warning
+     * @param (int|string)[]             $arg3 //
+     */
+    public function func4(
+        array $arg1,
+        array $arg2,
+        array $arg3
+    ): void {
+    }
 }
 ```
 

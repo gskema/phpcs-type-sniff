@@ -37,7 +37,7 @@ class FqcnPropSniff implements CodeElementSniffInterface
      * @inheritDoc
      * @param AbstractFqcnPropElement $prop
      */
-    public function process(File $file, CodeElementInterface $prop): void
+    public function process(File $file, CodeElementInterface $prop, CodeElementInterface $parentElement): void
     {
         $subject = PropTypeSubject::fromElement($prop);
 

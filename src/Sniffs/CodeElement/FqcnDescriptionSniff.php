@@ -53,7 +53,7 @@ class FqcnDescriptionSniff implements CodeElementSniffInterface
     /**
      * @inheritDoc
      */
-    public function process(File $file, CodeElementInterface $element): void
+    public function process(File $file, CodeElementInterface $element, CodeElementInterface $parentElement): void
     {
         foreach ($element->getDocBlock()->getDescriptionLines() as $lineNum => $descriptionLine) {
             foreach ($this->invalidPatterns as $invalidPattern) {

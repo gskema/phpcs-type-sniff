@@ -2,6 +2,9 @@
 
 namespace Gskema\TypeSniff\Sniffs;
 
+use Generator;
+use Gskema\TypeSniff\Core\CodeElement\Element\CodeElementInterface;
+use Gskema\TypeSniff\Core\CodeElement\Element\FileElement;
 use Gskema\TypeSniff\Sniffs\CodeElement\FqcnDescriptionSniff;
 use PHP_CodeSniffer\Files\File;
 use Gskema\TypeSniff\Core\CodeElement\CodeElementDetector;
@@ -88,12 +91,59 @@ class CompositeCodeElementSniff extends AbstractConfigurableSniff
      */
     protected function run(File $file, int $openTagPtr): void
     {
-        $elements = CodeElementDetector::detectFromTokens($file, $this->useReflection);
+        $fileElement = CodeElementDetector::detectFromTokens($file, $this->useReflection);
 
-        foreach ($elements as $element) {
+        foreach ($this->getArgIterator($fileElement) as [$element, $parentElement]) {
             $className = get_class($element);
             foreach ($this->sniffs[$className] ?? [] as $sniff) {
-                $sniff->process($file, $element);
+                $sniff->process($file, $element, $parentElement);
+            }
+        }
+    }
+
+    /**
+     * @param FileElement $file
+     *
+     * @return Generator|CodeElementInterface[][]
+     */
+    protected function getArgIterator(FileElement $file): Generator
+    {
+        // world's most complicated iterator
+        yield [$file, $file];
+        foreach ($file->getConstants() as $constant) {
+            yield [$constant, $file];
+        }
+        foreach ($file->getFunctions() as $function) {
+            yield [$function, $file];
+        }
+        foreach ($file->getClasses() as $class) {
+            yield [$class, $file];
+            foreach ($class->getConstants() as $constant) {
+                yield [$constant, $class];
+            }
+            foreach ($class->getProperties() as $prop) {
+                yield [$prop, $class];
+            }
+            foreach ($class->getMethods() as $method) {
+                yield [$method, $class];
+            }
+        }
+        foreach ($file->getTraits() as $trait) {
+            yield [$trait, $file];
+            foreach ($trait->getProperties() as $prop) {
+                yield [$prop, $trait];
+            }
+            foreach ($trait->getMethods() as $method) {
+                yield [$method, $trait];
+            }
+        }
+        foreach ($file->getInterfaces() as $interface) {
+            yield [$interface, $file];
+            foreach ($interface->getConstants() as $constant) {
+                yield [$constant, $interface];
+            }
+            foreach ($interface->getMethods() as $method) {
+                yield [$method, $interface];
             }
         }
     }

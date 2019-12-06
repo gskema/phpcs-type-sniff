@@ -11,7 +11,6 @@ use Gskema\TypeSniff\Core\CodeElement\Element\ClassConstElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassMethodElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassPropElement;
-use Gskema\TypeSniff\Core\CodeElement\Element\CodeElementInterface;
 use Gskema\TypeSniff\Core\CodeElement\Element\ConstElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\FileElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\FunctionElement;
@@ -35,17 +34,19 @@ class CodeElementDetector
      * @param File $file
      * @param bool $useReflection
      *
-     * @return CodeElementInterface[]
+     * @return FileElement
      */
-    public static function detectFromTokens(File $file, bool $useReflection): array
+    public static function detectFromTokens(File $file, bool $useReflection): FileElement
     {
-        $tokens = $file->getTokens();
-
         $namespace = '';
         $className = null;
+        $fileElement = null;
 
-        $elements = [];
-        foreach ($tokens as $ptr => $token) {
+        /** @var FileElement|ClassElement|TraitElement|InterfaceElement|null $parentElement */
+        $parentElement = null;
+
+        foreach ($file->getTokens() as $ptr => $token) {
+            $currentElement = null;
             $tokenCode = $token['code'];
             $line = $token['line'];
             $path = $token['conditions'] ?? [];
@@ -79,7 +80,7 @@ class CodeElementDetector
                 // @TODO Skip declare?
                 $skip = [T_WHITESPACE, T_DECLARE, T_ENDDECLARE];
                 $docBlock = TokenHelper::getNextDocBlock($file, $ptr, $skip);
-                $elements[] = new FileElement($line, $docBlock, $file->path);
+                $fileElement = new FileElement($line, $docBlock, $file->path);
                 continue;
             }
 
@@ -92,24 +93,34 @@ class CodeElementDetector
                         $constName = TokenHelper::getDeclarationName($file, $ptr);
                         $valueType = TokenHelper::getAssignmentType($file, $ptr);
                         $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
-                        $elements[] = new ConstElement($line, $docBlock, $namespace, $constName, $valueType);
+                        $currentElement = new ConstElement($line, $docBlock, $namespace, $constName, $valueType);
+                        $fileElement->addConstant($currentElement);
+                        $parentElement = $fileElement;
                         break;
                     case T_FUNCTION:
                         $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
                         $fnSig = FunctionSignatureParser::fromTokens($file, $ptr);
-                        $elements[] = new FunctionElement($line, $docBlock, $namespace, $fnSig);
+                        $currentElement = new FunctionElement($line, $docBlock, $namespace, $fnSig);
+                        $fileElement->addFunction($currentElement);
+                        $parentElement = $fileElement;
                         break;
                     case T_CLASS:
                         $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
-                        $elements[] = new ClassElement($line, $docBlock, $fqcn);
+                        $currentElement = new ClassElement($line, $docBlock, $fqcn);
+                        $fileElement->addClass($currentElement);
+                        $parentElement = $currentElement;
                         break;
                     case T_TRAIT:
                         $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
-                        $elements[] = new TraitElement($line, $docBlock, $fqcn);
+                        $currentElement = new TraitElement($line, $docBlock, $fqcn);
+                        $fileElement->addTrait($currentElement);
+                        $parentElement = $currentElement;
                         break;
                     case T_INTERFACE:
                         $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
-                        $elements[] = new InterfaceElement($line, $docBlock, $fqcn);
+                        $currentElement = new InterfaceElement($line, $docBlock, $fqcn);
+                        $fileElement->addInterface($currentElement);
+                        $parentElement = $currentElement;
                         break;
                 }
             } elseif ($inClass) {
@@ -118,18 +129,21 @@ class CodeElementDetector
                     case T_CONST:
                         $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
                         $valueType = TokenHelper::getAssignmentType($file, $ptr);
-                        $elements[] = new ClassConstElement($line, $docBlock, $fqcn, $decName, $valueType);
+                        $currentElement = new ClassConstElement($line, $docBlock, $fqcn, $decName, $valueType);
+                        $parentElement->addConstant($currentElement);
                         break;
                     case T_VARIABLE:
                         $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
                         $defValueType = TokenHelper::getAssignmentType($file, $ptr);
-                        $elements[] = new ClassPropElement($line, $docBlock, $fqcn, $decName, $defValueType);
+                        $currentElement = new ClassPropElement($line, $docBlock, $fqcn, $decName, $defValueType);
+                        $parentElement->addProperty($currentElement);
                         break;
                     case T_FUNCTION:
                         $extended = static::isExtended($fqcn, $decName, $useReflection);
                         $fnSig = FunctionSignatureParser::fromTokens($file, $ptr);
                         $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
-                        $elements[] = new ClassMethodElement($docBlock, $fqcn, $fnSig, $extended);
+                        $currentElement = new ClassMethodElement($docBlock, $fqcn, $fnSig, $extended);
+                        $parentElement->addMethod($currentElement);
                         break;
                 }
             } elseif ($inTrait) {
@@ -138,13 +152,15 @@ class CodeElementDetector
                     case T_VARIABLE:
                         $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
                         $defValueType = TokenHelper::getAssignmentType($file, $ptr);
-                        $elements[] = new TraitPropElement($line, $docBlock, $fqcn, $decName, $defValueType);
+                        $currentElement = new TraitPropElement($line, $docBlock, $fqcn, $decName, $defValueType);
+                        $parentElement->addProperty($currentElement);
                         break;
                     case T_FUNCTION:
                         $extended = static::isExtended($fqcn, $decName, $useReflection);
                         $fnSig = FunctionSignatureParser::fromTokens($file, $ptr);
                         $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
-                        $elements[] = new TraitMethodElement($docBlock, $fqcn, $fnSig, $extended);
+                        $currentElement = new TraitMethodElement($docBlock, $fqcn, $fnSig, $extended);
+                        $parentElement->addMethod($currentElement);
                         break;
                 }
             } elseif ($inInterface) {
@@ -153,19 +169,21 @@ class CodeElementDetector
                     case T_CONST:
                         $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
                         $valueType = TokenHelper::getAssignmentType($file, $ptr);
-                        $elements[] = new InterfaceConstElement($line, $docBlock, $fqcn, $decName, $valueType);
+                        $currentElement = new InterfaceConstElement($line, $docBlock, $fqcn, $decName, $valueType);
+                        $parentElement->addConstant($currentElement);
                         break;
                     case T_FUNCTION:
                         $extended = static::isExtended($fqcn, $decName, $useReflection);
                         $fnSig = FunctionSignatureParser::fromTokens($file, $ptr);
                         $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
-                        $elements[] = new InterfaceMethodElement($docBlock, $fqcn, $fnSig, $extended);
+                        $currentElement = new InterfaceMethodElement($docBlock, $fqcn, $fnSig, $extended);
+                        $parentElement->addMethod($currentElement);
                         break;
                 }
             }
         }
 
-        return $elements;
+        return $fileElement;
     }
 
     protected static function isExtended(string $fqcn, string $method, bool $useReflection): ?bool

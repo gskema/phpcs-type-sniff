@@ -60,7 +60,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
      * @inheritDoc
      * @param AbstractFqcnMethodElement $method
      */
-    public function process(File $file, CodeElementInterface $method): void
+    public function process(File $file, CodeElementInterface $method, CodeElementInterface $parentElement): void
     {
         $warningCountBefore = $file->getWarningCount();
 

@@ -2,6 +2,7 @@
 
 namespace Gskema\TypeSniff\Core\CodeElement;
 
+use Gskema\TypeSniff\Core\ReflectionCache;
 use Gskema\TypeSniff\Core\Type\Common\ArrayType;
 use Gskema\TypeSniff\Core\Type\Common\BoolType;
 use Gskema\TypeSniff\Core\Type\Common\FloatType;
@@ -9,10 +10,8 @@ use Gskema\TypeSniff\Core\Type\Common\IntType;
 use Gskema\TypeSniff\Core\Type\Common\StringType;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
 use Gskema\TypeSniff\Core\Type\TypeInterface;
-use ParseError;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
-use ReflectionClass;
 use ReflectionException;
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassConstElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassElement;
@@ -38,9 +37,6 @@ use Gskema\TypeSniff\Core\Func\FunctionSignatureParser;
  */
 class CodeElementDetector
 {
-    /** @var string[][] [FQCN => string[], ...] */
-    protected static $cachedParentMethods = [];
-
     /**
      * @see https://www.php.net/manual/en/tokens.php
      * @see https://docs.phpdoc.org/glossary.html
@@ -264,46 +260,11 @@ class CodeElementDetector
             return null;
         }
 
-        if (!isset(static::$cachedParentMethods[$fqcn])) {
-            static::$cachedParentMethods[$fqcn] = static::getMethodsRecursive($fqcn, false);
-        }
-
-        return in_array($method, static::$cachedParentMethods[$fqcn]);
-    }
-
-    /**
-     * @param string $fqcn
-     * @param bool   $includeOwn
-     *
-     * @return string[]
-     * @throws ReflectionException
-     */
-    protected static function getMethodsRecursive(string $fqcn, bool $includeOwn): array
-    {
         try {
-            $classRef = new ReflectionClass($fqcn);
-        } catch (ParseError $e) {
-            return []; // suppress error popups when editing .php file
+            return in_array($method, ReflectionCache::getMethodsRecursive($fqcn, false));
+        } catch (ReflectionException $e) {
+            return null;
         }
-
-        $methodNames = [];
-        if ($includeOwn) {
-            foreach ($classRef->getMethods() as $methodRef) {
-                $methodNames[] = $methodRef->getName();
-            }
-        }
-
-        $parentClasses = $classRef->getInterfaceNames();
-        if ($classRef->getParentClass()) {
-            $parentClasses[] = $classRef->getParentClass()->getName();
-        }
-
-        foreach ($parentClasses as $parentClass) {
-            $parentMethods = static::getMethodsRecursive($parentClass, true);
-            $methodNames = array_merge($methodNames, $parentMethods);
-        }
-
-        return $methodNames;
     }
 
     protected static function getAssignmentType(File $file, int $ptr): ?TypeInterface

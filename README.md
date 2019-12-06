@@ -117,11 +117,13 @@ class Banana
      * @param array<int, bool>           $arg1 // alternative array documentation
      * @param array{foo: bool, bar: int} $arg2 // supported, no warning
      * @param (int|string)[]             $arg3 //
+     * @param array('key1' => int, ...)  $arg4 //
      */
     public function func4(
         array $arg1,
         array $arg2,
-        array $arg3
+        array $arg3,
+        array $arg4
     ): void {
     }
 }

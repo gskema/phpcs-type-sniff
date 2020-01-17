@@ -121,7 +121,16 @@ class TypeFactoryTest extends TestCase
                     new TypedArrayType(new CompoundType([new BoolType(), new IntType()]), 2), // (bool|int)[][]
                     new TypedArrayType(new CompoundType([new StringType(), new FloatType()]), 1), // (string|float)[]
                 ]), 1)
-            ]
+            ],
+            ['[]', new TypedArrayType(new UndefinedType(), 1)],
+            ['[][]', new TypedArrayType(new UndefinedType(), 2)],
+            [
+                '[]|null',
+                new CompoundType([
+                    new TypedArrayType(new UndefinedType(), 1),
+                    new NullType(),
+                ])
+            ],
         ];
     }
 

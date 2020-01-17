@@ -94,9 +94,11 @@ class TypeFactory
         }
 
         // try counting 'int[][]' (array depth)
+        // edge case: [][], check if offset still valid
+        $len = strlen($rawType);
         $depth = 0;
         $offset = -2;
-        while (0 === substr_compare($rawType, '[]', $offset, 2)) {
+        while ($len + $offset >= 0 && 0 === substr_compare($rawType, '[]', $offset, 2)) {
             $offset -= 2;
             $depth++;
         }

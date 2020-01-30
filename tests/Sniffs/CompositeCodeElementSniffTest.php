@@ -136,11 +136,11 @@ class CompositeCodeElementSniffTest extends TestCase
                 '007 Useless tag',
                 '012 Useless description.',
                 '023 Change parameter $arg1 type declaration to nullable, e.g. ?string. Remove default null value if this argument is required.',
-                '042 Add type declaration for parameter $arg1, e.g.: "float"',
-                '045 Add type declaration for parameter $arg4, e.g.: "float"',
                 '035 Remove redundant parameter $arg7 type hints "double"',
                 '036 Remove redundant parameter $arg8 type hints "double"',
                 '037 Remove redundant parameter $arg9 type hints "double"',
+                '042 Add type declaration for parameter $arg1, e.g.: "float"',
+                '045 Add type declaration for parameter $arg4, e.g.: "float"',
                 '054 Change parameter $arg1 type declaration to nullable, e.g. ?string. Remove default null value if this argument is required.',
                 '070 Change type hint for parameter $arg1 to compound, e.g. SomeClass|null',
                 '074 Add type declaration for parameter $arg1, e.g.: "?SomeClass"',
@@ -207,10 +207,14 @@ class CompositeCodeElementSniffTest extends TestCase
             foreach ($colWarnings as $column => $warnings) {
                 foreach ($warnings as $warning) {
                     $lineKey = str_pad($line, '3', '0', STR_PAD_LEFT);
-                    $actualWarnings[] = $lineKey.' '.$warning['message'];
+                    $actualWarnings[$line][] = $lineKey.' '.$warning['message'];
                 }
             }
         }
+
+        // Elements are iterated by type first, then line. Need to resort to match test files.
+        ksort($actualWarnings);
+        $actualWarnings = array_merge(...$actualWarnings);
 
         static::assertEquals($expectedWarnings, $actualWarnings);
     }

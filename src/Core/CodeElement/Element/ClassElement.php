@@ -2,6 +2,8 @@
 
 namespace Gskema\TypeSniff\Core\CodeElement\Element;
 
+use Gskema\TypeSniff\Core\DocBlock\DocBlock;
+
 class ClassElement extends AbstractFqcnElement
 {
     /** @var ClassConstElement[] */
@@ -12,6 +14,28 @@ class ClassElement extends AbstractFqcnElement
 
     /** @var ClassMethodElement[] */
     protected $methods = [];
+
+    /**
+     * @param int                   $line
+     * @param DocBlock              $docBlock
+     * @param string                $fqcn
+     * @param ClassConstElement[]   $constants
+     * @param ClassPropElement[]    $properties
+     * @param ClassMethodElement[]  $methods
+     */
+    public function __construct(
+        int $line,
+        DocBlock $docBlock,
+        string $fqcn,
+        array $constants = [],
+        array $properties = [],
+        array $methods = []
+    ) {
+        parent::__construct($line, $docBlock, $fqcn);
+        $this->constants = $constants;
+        $this->properties = $properties;
+        $this->methods = $methods;
+    }
 
     /**
      * @return ClassConstElement[]

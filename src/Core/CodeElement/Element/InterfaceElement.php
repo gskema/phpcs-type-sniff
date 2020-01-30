@@ -2,6 +2,8 @@
 
 namespace Gskema\TypeSniff\Core\CodeElement\Element;
 
+use Gskema\TypeSniff\Core\DocBlock\DocBlock;
+
 class InterfaceElement extends AbstractFqcnElement
 {
     /** @var InterfaceConstElement[] */
@@ -9,6 +11,25 @@ class InterfaceElement extends AbstractFqcnElement
 
     /** @var InterfaceMethodElement[] */
     protected $methods = [];
+
+    /**
+     * @param int                      $line
+     * @param DocBlock                 $docBlock
+     * @param string                   $fqcn
+     * @param InterfaceConstElement[]  $constants
+     * @param InterfaceMethodElement[] $methods
+     */
+    public function __construct(
+        int $line,
+        DocBlock $docBlock,
+        string $fqcn,
+        array $constants = [],
+        array $methods = []
+    ) {
+        parent::__construct($line, $docBlock, $fqcn);
+        $this->constants = $constants;
+        $this->methods = $methods;
+    }
 
     /**
      * @return InterfaceConstElement[]

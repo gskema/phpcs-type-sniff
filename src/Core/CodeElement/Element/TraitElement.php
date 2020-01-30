@@ -2,6 +2,8 @@
 
 namespace Gskema\TypeSniff\Core\CodeElement\Element;
 
+use Gskema\TypeSniff\Core\DocBlock\DocBlock;
+
 class TraitElement extends AbstractFqcnElement
 {
     /** @var TraitPropElement[] */
@@ -9,6 +11,25 @@ class TraitElement extends AbstractFqcnElement
 
     /** @var TraitMethodElement[] */
     protected $methods = [];
+
+    /**
+     * @param int                  $line
+     * @param DocBlock             $docBlock
+     * @param string               $fqcn
+     * @param TraitPropElement[]   $properties
+     * @param TraitMethodElement[] $methods
+     */
+    public function __construct(
+        int $line,
+        DocBlock $docBlock,
+        string $fqcn,
+        array $properties = [],
+        array $methods = []
+    ) {
+        parent::__construct($line, $docBlock, $fqcn);
+        $this->properties = $properties;
+        $this->methods = $methods;
+    }
 
     /**
      * @return TraitPropElement[]

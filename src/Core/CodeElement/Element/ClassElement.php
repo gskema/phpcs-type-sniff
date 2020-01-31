@@ -34,7 +34,7 @@ class ClassElement extends AbstractFqcnElement
         parent::__construct($line, $docBlock, $fqcn);
         $this->constants = $constants;
         $this->properties = $properties;
-        $this->methods = $methods;
+        array_walk($methods, [$this, 'addMethod']);
     }
 
     /**
@@ -73,6 +73,11 @@ class ClassElement extends AbstractFqcnElement
 
     public function addMethod(ClassMethodElement $method): void
     {
-        $this->methods[] = $method;
+        $this->methods[$method->getSignature()->getName()] = $method;
+    }
+
+    public function getOwnConstructor(): ?ClassMethodElement
+    {
+        return $this->methods['__construct'] ?? null;
     }
 }

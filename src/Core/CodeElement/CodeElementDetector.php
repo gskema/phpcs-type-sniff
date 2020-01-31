@@ -142,7 +142,8 @@ class CodeElementDetector
                         $extended = static::isExtended($fqcn, $decName, $useReflection);
                         $fnSig = FunctionSignatureParser::fromTokens($file, $ptr);
                         $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
-                        $currentElement = new ClassMethodElement($docBlock, $fqcn, $fnSig, $extended);
+                        $currentElement = new ClassMethodElement($docBlock, $fqcn, $fnSig);
+                        $currentElement->getMetadata()->setExtended($extended);
                         $parentElement->addMethod($currentElement);
                         break;
                 }
@@ -159,7 +160,8 @@ class CodeElementDetector
                         $extended = static::isExtended($fqcn, $decName, $useReflection);
                         $fnSig = FunctionSignatureParser::fromTokens($file, $ptr);
                         $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
-                        $currentElement = new TraitMethodElement($docBlock, $fqcn, $fnSig, $extended);
+                        $currentElement = new TraitMethodElement($docBlock, $fqcn, $fnSig);
+                        $currentElement->getMetadata()->setExtended($extended);
                         $parentElement->addMethod($currentElement);
                         break;
                 }
@@ -176,7 +178,8 @@ class CodeElementDetector
                         $extended = static::isExtended($fqcn, $decName, $useReflection);
                         $fnSig = FunctionSignatureParser::fromTokens($file, $ptr);
                         $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
-                        $currentElement = new InterfaceMethodElement($docBlock, $fqcn, $fnSig, $extended);
+                        $currentElement = new InterfaceMethodElement($docBlock, $fqcn, $fnSig);
+                        $currentElement->getMetadata()->setExtended($extended);
                         $parentElement->addMethod($currentElement);
                         break;
                 }

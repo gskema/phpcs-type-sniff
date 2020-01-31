@@ -148,4 +148,112 @@ class TokenHelper
 
         return [$valueType, true];
     }
+
+    public static function getBasicGetterPropName(File $file, int $fnPtr): ?string
+    {
+        $tokens = $file->getTokens();
+        $fnToken = $tokens[$fnPtr];
+
+        $openPtr = $fnToken['scope_opener'];
+        $closePtr = $fnToken['scope_closer'];
+
+        // return $this->prop;
+        $codeSequence = [T_RETURN, T_THIS, T_OBJECT_OPERATOR, T_STRING, T_SEMICOLON];
+
+        $propName = null;
+        for ($ptr=$openPtr+1; $ptr<$closePtr; $ptr++) {
+            $token = $tokens[$ptr];
+            $code = $token['code'];
+            if (in_array($code, Tokens::$emptyTokens)) {
+                continue;
+            }
+            $expectedCode = array_shift($codeSequence);
+            if (T_THIS === $expectedCode) {
+                if (!static::isThisToken($token)) {
+                    return false;
+                }
+            } elseif ($code !== $expectedCode) {
+                return false;
+            }
+            if (T_STRING === $code) {
+                $propName = $token['content'];
+            }
+        }
+
+        return $propName;
+    }
+
+    /**
+     * @param File $file
+     * @param int  $fnPtr
+     *
+     * @return string[]|null
+     */
+    public static function getNonNullAssignedProps(File $file, int $fnPtr): ?array
+    {
+        $tokens = $file->getTokens();
+        $fnToken = $tokens[$fnPtr];
+
+        $openPtr = $fnToken['scope_opener'];
+        $closePtr = $fnToken['scope_closer'];
+
+        $nonNullAssignedProps = [];
+        for ($ptr=$openPtr+1; $ptr<$closePtr; $ptr++) {
+            $token = $tokens[$ptr];
+
+            // $this
+            if (!static::isThisToken($token)) {
+                continue;
+            }
+
+            // $this->
+            $objOpPtr = $file->findNext(Tokens::$emptyTokens, $ptr + 1, null, true);
+            $objOpToken = false === $objOpPtr ? null : $tokens[$objOpPtr];
+            if (T_OBJECT_OPERATOR !== $objOpToken['code']) {
+                continue;
+            }
+
+            // $this->prop
+            $propNamePtr = $file->findNext(Tokens::$emptyTokens, $objOpPtr + 1, null, true);
+            $propNameToken = false === $propNamePtr ? null : $tokens[$propNamePtr];
+            if (T_STRING !== $propNameToken['code']) {
+                continue;
+            }
+
+            // $this->prop =
+            $eqPtr = $file->findNext(Tokens::$emptyTokens, $propNamePtr + 1, null, true);
+            $eqToken = false === $eqPtr ? null : $tokens[$eqPtr];
+            if (T_EQUAL !== $eqToken['code']) {
+                continue;
+            }
+
+            // $this->prop = 1
+            $nullPtr = $file->findNext(Tokens::$emptyTokens, $eqPtr + 1, null, true);
+            $nullToken = false === $nullPtr ? null : $tokens[$nullPtr];
+            if (T_NULL !== $nullToken['code']) {
+                $nonNullAssignedProps[] = $propNameToken['content'];
+                continue;
+            }
+
+            // $this->prop = null === $x ? 1: 2
+            $semiPtr = $file->findNext(Tokens::$emptyTokens, $nullPtr + 1, null, true);
+            $semiToken = false === $semiPtr ? null : $tokens[$semiPtr];
+            if (T_SEMICOLON !== $semiToken['code']) {
+                $nonNullAssignedProps[] = $propNameToken['content'];
+                continue;
+            }
+        }
+
+        return $nonNullAssignedProps;
+    }
+
+    /**
+     * @param mixed[] $token
+     *
+     * @return bool
+     */
+    public static function isThisToken(array $token): bool
+    {
+        return T_VARIABLE === $token['code'] && '$this' === $token['content'];
+    }
 }

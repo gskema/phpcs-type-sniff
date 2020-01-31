@@ -145,6 +145,8 @@ class CodeElementDetector
                         $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
                         $currentElement = new ClassMethodElement($docBlock, $fqcn, $fnSig);
                         $currentElement->getMetadata()->setExtended($extended);
+                        $currentElement->getMetadata()->setBasicGetterPropName(TokenHelper::getBasicGetterPropName($file, $ptr));
+                        $currentElement->getMetadata()->setNonNullAssignedProps(TokenHelper::getNonNullAssignedProps($file, $ptr));
                         $parentElement->addMethod($currentElement);
                         break;
                 }
@@ -164,6 +166,8 @@ class CodeElementDetector
                         $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
                         $currentElement = new TraitMethodElement($docBlock, $fqcn, $fnSig);
                         $currentElement->getMetadata()->setExtended($extended);
+                        $currentElement->getMetadata()->setBasicGetterPropName(TokenHelper::getBasicGetterPropName($file, $ptr));
+                        $currentElement->getMetadata()->setNonNullAssignedProps(TokenHelper::getNonNullAssignedProps($file, $ptr));
                         $parentElement->addMethod($currentElement);
                         break;
                 }

@@ -6,6 +6,9 @@ use Gskema\TypeSniff\Core\CodeElement\Element\InterfaceConstElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\InterfaceElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\InterfaceMethodElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\Metadata\ClassMethodMetadata;
+use Gskema\TypeSniff\Core\CodeElement\Element\Metadata\ClassPropMetadata;
+use Gskema\TypeSniff\Core\CodeElement\Element\Metadata\TraitMethodMetadata;
+use Gskema\TypeSniff\Core\CodeElement\Element\Metadata\TraitPropMetadata;
 use Gskema\TypeSniff\Core\CodeElement\Element\TraitElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\TraitMethodElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\TraitPropElement;
@@ -134,12 +137,14 @@ class CodeElementDetectorTest extends TestCase
                                     [],
                                     new UndefinedType(),
                                     30
-                                )
+                                ),
+                                new ClassMethodMetadata([])
                             ),
                             new ClassMethodElement(
                                 new UndefinedDocBlock(),
                                 'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass0',
-                                new FunctionSignature(34, 'method1', [], new StringType(), 34)
+                                new FunctionSignature(34, 'method1', [], new StringType(), 34),
+                                new ClassMethodMetadata([])
                             ),
                             new ClassMethodElement(
                                 new DocBlock([], [
@@ -155,7 +160,8 @@ class CodeElementDetectorTest extends TestCase
                                     ],
                                     new NullableType(new ArrayType()),
                                     44
-                                )
+                                ),
+                                new ClassMethodMetadata([])
                             ),
                         ]
                     ),
@@ -219,7 +225,8 @@ class CodeElementDetectorTest extends TestCase
                             new ClassMethodElement(
                                 new UndefinedDocBlock(),
                                 'Gskema\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass1',
-                                new FunctionSignature(16, 'method1', [], new UndefinedType(), 16)
+                                new FunctionSignature(16, 'method1', [], new UndefinedType(), 16),
+                                new ClassMethodMetadata([])
                             ),
                         ]
                     ),
@@ -357,7 +364,8 @@ class CodeElementDetectorTest extends TestCase
                                 new UndefinedDocBlock(),
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                                 'prop2',
-                                new IntType()
+                                new IntType(),
+                                new ClassPropMetadata(true)
                             ),
                         ],
                         []
@@ -418,7 +426,14 @@ class CodeElementDetectorTest extends TestCase
                         new UndefinedDocBlock(),
                         'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestTrait0',
                         [
-                            new TraitPropElement(7, new UndefinedDocBlock(), 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestTrait0', 'prop1', new IntType()),
+                            new TraitPropElement(
+                                7,
+                                new UndefinedDocBlock(),
+                                'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestTrait0',
+                                'prop1',
+                                new IntType(),
+                                new TraitPropMetadata(true)
+                            ),
                         ],
                         [
                             new TraitMethodElement(
@@ -432,7 +447,8 @@ class CodeElementDetectorTest extends TestCase
                                     ],
                                     new IntType(),
                                     9
-                                )
+                                ),
+                                new TraitMethodMetadata([])
                             ),
                         ]
                     ),
@@ -470,7 +486,7 @@ class CodeElementDetectorTest extends TestCase
                                     new VoidType(),
                                     7
                                 ),
-                                new ClassMethodMetadata(null, null, true)
+                                new ClassMethodMetadata([], null, true)
                             ),
                             new ClassMethodElement(
                                 new UndefinedDocBlock(),
@@ -482,7 +498,7 @@ class CodeElementDetectorTest extends TestCase
                                     new VoidType(),
                                     12
                                 ),
-                                new ClassMethodMetadata(null, null, true)
+                                new ClassMethodMetadata([], null, true)
                             ),
                             new ClassMethodElement(
                                 new UndefinedDocBlock(),
@@ -494,7 +510,7 @@ class CodeElementDetectorTest extends TestCase
                                     new UndefinedType(),
                                     15
                                 ),
-                                new ClassMethodMetadata(null, null, false)
+                                new ClassMethodMetadata([], null, false)
                             ),
                         ]
                     ),
@@ -539,7 +555,8 @@ class CodeElementDetectorTest extends TestCase
                                     [],
                                     new VoidType(),
                                     7
-                                )
+                                ),
+                                new ClassMethodMetadata([])
                             ),
                         ]
                     ),
@@ -578,7 +595,7 @@ class CodeElementDetectorTest extends TestCase
                                     new VoidType(),
                                     7
                                 ),
-                                new ClassMethodMetadata(null, null, false) // ParseError
+                                new ClassMethodMetadata([], null, false) // ParseError
                             ),
                         ]
                     ),
@@ -618,7 +635,8 @@ class CodeElementDetectorTest extends TestCase
                                     [],
                                     new VoidType(),
                                     10
-                                )
+                                ),
+                                new ClassMethodMetadata([])
                             ),
                             new ClassMethodElement(
                                 new DocBlock([], [
@@ -676,7 +694,8 @@ class CodeElementDetectorTest extends TestCase
                                     ],
                                     new UndefinedType(),
                                     62
-                                )
+                                ),
+                                new ClassMethodMetadata([])
                             ),
                         ]
                     ),
@@ -751,7 +770,99 @@ class CodeElementDetectorTest extends TestCase
                                     new VoidType(),
                                     48
                                 ),
-                                new ClassMethodMetadata(null, null, false)
+                                new ClassMethodMetadata([], null, false)
+                            ),
+                        ]
+                    ),
+                ],
+                [],
+                []
+            ),
+        ];
+
+        // #10
+        $fqcn10 = 'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass5';
+        $dataSets[] = [
+            'givenUseReflection' => false,
+            'givenFile'          => __DIR__ . '/fixtures/TestClass5.php',
+            'expected'           => new FileElement(
+                1,
+                new UndefinedDocBlock(),
+                __DIR__ . '/fixtures/TestClass5.php',
+                [],
+                [],
+                [
+                    new ClassElement(
+                        5,
+                        new UndefinedDocBlock(),
+                        $fqcn10,
+                        [],
+                        [
+                            new ClassPropElement(7, new UndefinedDocBlock(), $fqcn10, 'prop1', null),
+                            new ClassPropElement(8, new UndefinedDocBlock(), $fqcn10, 'prop2', null),
+                            new ClassPropElement(9, new UndefinedDocBlock(), $fqcn10, 'prop3', null),
+                            new ClassPropElement(10, new UndefinedDocBlock(), $fqcn10, 'prop4', null)
+                        ],
+                        [
+                            new ClassMethodElement(
+                                new UndefinedDocBlock(),
+                                $fqcn10,
+                                new FunctionSignature(
+                                    12,
+                                    '__construct',
+                                    [],
+                                    new UndefinedType(),
+                                    12
+                                ),
+                                new ClassMethodMetadata(['prop2', 'prop3', 'prop4'])
+                            ),
+                            new ClassMethodElement(
+                                new UndefinedDocBlock(),
+                                $fqcn10,
+                                new FunctionSignature(
+                                    20,
+                                    'getProp1',
+                                    [],
+                                    new IntType(),
+                                    20
+                                ),
+                                new ClassMethodMetadata([], 'prop1')
+                            ),
+                            new ClassMethodElement(
+                                new UndefinedDocBlock(),
+                                $fqcn10,
+                                new FunctionSignature(
+                                    25,
+                                    'getProp2',
+                                    [],
+                                    new IntType(),
+                                    25
+                                ),
+                                new ClassMethodMetadata([])
+                            ),
+                            new ClassMethodElement(
+                                new UndefinedDocBlock(),
+                                $fqcn10,
+                                new FunctionSignature(
+                                    30,
+                                    'getProp3',
+                                    [],
+                                    new IntType(),
+                                    30
+                                ),
+                                new ClassMethodMetadata([], 'prop3')
+                            ),
+                            new ClassMethodElement(
+                                new UndefinedDocBlock(),
+                                $fqcn10,
+                                new FunctionSignature(
+                                    41,
+                                    'getProp4',
+                                    [],
+                                    new IntType(),
+                                    41
+                                ),
+                                new ClassMethodMetadata([])
                             ),
                         ]
                     ),

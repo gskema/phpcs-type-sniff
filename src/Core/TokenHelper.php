@@ -154,8 +154,12 @@ class TokenHelper
         $tokens = $file->getTokens();
         $fnToken = $tokens[$fnPtr];
 
-        $openPtr = $fnToken['scope_opener'];
-        $closePtr = $fnToken['scope_closer'];
+        // abstract or interface methods do not have scopes
+        $openPtr = $fnToken['scope_opener'] ?? null;
+        $closePtr = $fnToken['scope_closer'] ?? null;
+        if (null === $openPtr || null === $closePtr) {
+            return null;
+        }
 
         // return $this->prop;
         $codeSequence = [T_RETURN, T_THIS, T_OBJECT_OPERATOR, T_STRING, T_SEMICOLON];
@@ -194,8 +198,12 @@ class TokenHelper
         $tokens = $file->getTokens();
         $fnToken = $tokens[$fnPtr];
 
-        $openPtr = $fnToken['scope_opener'];
-        $closePtr = $fnToken['scope_closer'];
+        // abstract or interface methods do not have scopes
+        $openPtr = $fnToken['scope_opener'] ?? null;
+        $closePtr = $fnToken['scope_closer'] ?? null;
+        if (null === $openPtr || null === $closePtr) {
+            return null;
+        }
 
         $nonNullAssignedProps = [];
         for ($ptr=$openPtr+1; $ptr<$closePtr; $ptr++) {

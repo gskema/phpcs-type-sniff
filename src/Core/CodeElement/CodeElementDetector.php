@@ -91,7 +91,7 @@ class CodeElementDetector
                 switch ($tokenCode) {
                     case T_CONST:
                         $constName = TokenHelper::getDeclarationName($file, $ptr);
-                        $valueType = TokenHelper::getAssignmentType($file, $ptr);
+                        [$valueType,] = TokenHelper::getAssignmentType($file, $ptr);
                         $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
                         $currentElement = new ConstElement($line, $docBlock, $namespace, $constName, $valueType);
                         $fileElement->addConstant($currentElement);
@@ -128,14 +128,15 @@ class CodeElementDetector
                 switch ($tokenCode) {
                     case T_CONST:
                         $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
-                        $valueType = TokenHelper::getAssignmentType($file, $ptr);
+                        [$valueType,] = TokenHelper::getAssignmentType($file, $ptr);
                         $currentElement = new ClassConstElement($line, $docBlock, $fqcn, $decName, $valueType);
                         $parentElement->addConstant($currentElement);
                         break;
                     case T_VARIABLE:
                         $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
-                        $defValueType = TokenHelper::getAssignmentType($file, $ptr);
+                        [$defValueType, $hasDefValue] = TokenHelper::getAssignmentType($file, $ptr);
                         $currentElement = new ClassPropElement($line, $docBlock, $fqcn, $decName, $defValueType);
+                        $currentElement->getMetadata()->setHasDefaultValue($hasDefValue);
                         $parentElement->addProperty($currentElement);
                         break;
                     case T_FUNCTION:
@@ -152,8 +153,9 @@ class CodeElementDetector
                 switch ($tokenCode) {
                     case T_VARIABLE:
                         $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
-                        $defValueType = TokenHelper::getAssignmentType($file, $ptr);
+                        [$defValueType, $hasDefValue] = TokenHelper::getAssignmentType($file, $ptr);
                         $currentElement = new TraitPropElement($line, $docBlock, $fqcn, $decName, $defValueType);
+                        $currentElement->getMetadata()->setHasDefaultValue($hasDefValue);
                         $parentElement->addProperty($currentElement);
                         break;
                     case T_FUNCTION:
@@ -170,7 +172,7 @@ class CodeElementDetector
                 switch ($tokenCode) {
                     case T_CONST:
                         $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
-                        $valueType = TokenHelper::getAssignmentType($file, $ptr);
+                        [$valueType,] = TokenHelper::getAssignmentType($file, $ptr);
                         $currentElement = new InterfaceConstElement($line, $docBlock, $fqcn, $decName, $valueType);
                         $parentElement->addConstant($currentElement);
                         break;

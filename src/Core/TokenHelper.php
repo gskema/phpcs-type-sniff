@@ -11,7 +11,6 @@ use Gskema\TypeSniff\Core\Type\Common\FloatType;
 use Gskema\TypeSniff\Core\Type\Common\IntType;
 use Gskema\TypeSniff\Core\Type\Common\StringType;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
-use Gskema\TypeSniff\Core\Type\TypeInterface;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 
@@ -94,7 +93,13 @@ class TokenHelper
         return $name;
     }
 
-    public static function getAssignmentType(File $file, int $constVarPtr): ?TypeInterface
+    /**
+     * @param File $file
+     * @param int  $constVarPtr
+     *
+     * @return mixed[] [?TypeInterface, bool]
+     */
+    public static function getAssignmentType(File $file, int $constVarPtr): array
     {
         // @TODO Move function somewhere?
         $tokens = $file->getTokens();
@@ -102,7 +107,7 @@ class TokenHelper
         // $ptr is at const or variable (prop), it safer and easier to search backwards
         $semiPtr = $file->findNext([T_SEMICOLON], $constVarPtr + 1);
         if (false === $semiPtr) {
-            return null;
+            return [null, false];
         }
 
         $valueEndPtr = $file->findPrevious(Tokens::$emptyTokens, $semiPtr - 1, null, true);
@@ -110,6 +115,9 @@ class TokenHelper
 
         $valueToken = $tokens[$valueEndPtr];
         switch ($valueToken['code']) {
+            case T_CONST:
+            case T_VARIABLE:
+                return [null, false];
             case T_NULL:
                 $valueType = new NullType();
                 break;
@@ -138,6 +146,6 @@ class TokenHelper
                 $valueType = null;
         }
 
-        return $valueType;
+        return [$valueType, true];
     }
 }

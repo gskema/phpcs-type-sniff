@@ -97,7 +97,7 @@ class FqcnPropSniff implements CodeElementSniffInterface
             && !TypeHelper::containsType($subject->getDocType(), NullType::class)
             && !in_array($prop->getPropName(), $nonNullAssignedProps)
         ) {
-            $subject->addDocTypeWarning('Property not initialized by __construct(), add null doc type or set a default value');
+            $subject->addDocTypeWarning(':Subject: not initialized by __construct(), add null doc type or set a default value');
         }
     }
 }

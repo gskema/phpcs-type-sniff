@@ -28,7 +28,7 @@ class TraitElement extends AbstractFqcnElement
     ) {
         parent::__construct($line, $docBlock, $fqcn);
         $this->properties = $properties;
-        $this->methods = $methods;
+        array_walk($methods, [$this, 'addMethod']);
     }
 
     /**
@@ -55,5 +55,10 @@ class TraitElement extends AbstractFqcnElement
     public function addMethod(TraitMethodElement $method): void
     {
         $this->methods[] = $method;
+    }
+
+    public function getOwnConstructor(): ?TraitMethodElement
+    {
+        return $this->methods['__construct'] ?? null;
     }
 }

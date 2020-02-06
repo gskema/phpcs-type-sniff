@@ -33,7 +33,7 @@ class ClassElement extends AbstractFqcnElement
     ) {
         parent::__construct($line, $docBlock, $fqcn);
         $this->constants = $constants;
-        $this->properties = $properties;
+        array_walk($properties, [$this, 'addProperty']);
         array_walk($methods, [$this, 'addMethod']);
     }
 
@@ -68,7 +68,7 @@ class ClassElement extends AbstractFqcnElement
 
     public function addProperty(ClassPropElement $prop): void
     {
-        $this->properties[] = $prop;
+        $this->properties[$prop->getPropName()] = $prop;
     }
 
     public function addMethod(ClassMethodElement $method): void
@@ -79,5 +79,10 @@ class ClassElement extends AbstractFqcnElement
     public function getOwnConstructor(): ?ClassMethodElement
     {
         return $this->methods['__construct'] ?? null;
+    }
+
+    public function getProperty(string $name): ?ClassPropElement
+    {
+        return $this->properties[$name] ?? null;
     }
 }

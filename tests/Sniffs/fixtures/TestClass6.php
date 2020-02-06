@@ -64,4 +64,15 @@ class TestClass6
     public function func3($arg1, array $arg2)
     {
     }
+
+    /** @var string|null */
+    protected $prop1;
+
+    /**
+     * @return string
+     */
+    public function getProp1(): string
+    {
+        return $this->prop1;
+    }
 }

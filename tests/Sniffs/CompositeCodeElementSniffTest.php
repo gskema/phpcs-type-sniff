@@ -172,6 +172,8 @@ class CompositeCodeElementSniffTest extends TestCase
                 '064 Add type declaration for parameter $arg1 or create PHPDoc with type hint',
                 '064 Add typed array type hint for parameter $arg2, .e.g.: "string[]" or "SomeClass[]". Correct array depth must be specified.',
                 '064 Add type declaration for return value or create PHPDoc with type hint',
+                '072 Returned property $prop1 is nullable, add null return doc type, e.g. string|null',
+                '074 Returned property $prop1 is nullable, use nullable return type declaration, e.g. ?string',
             ],
         ];
 

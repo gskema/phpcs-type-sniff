@@ -19,12 +19,15 @@ class FqcnPropSniff implements CodeElementSniffInterface
 {
     protected const CODE = 'FqcnPropSniff';
 
+    /** @var bool */
+    protected $reportUninitializedProp = true;
+
     /**
      * @inheritDoc
      */
     public function configure(array $config): void
     {
-        // nothing to do
+        $this->reportUninitializedProp = $config['reportUninitializedProp'] ?? true;
     }
 
     /**
@@ -53,7 +56,7 @@ class FqcnPropSniff implements CodeElementSniffInterface
         DocTypeInspector::reportMissingOrWrongTypes($subject);
 
         static::reportInvalidDescription($subject);
-        static::reportUninitializedProp($subject, $prop, $parentElement);
+        $this->reportUninitializedProp && static::reportUninitializedProp($subject, $prop, $parentElement);
 
         $subject->writeWarningsTo($file, static::CODE);
     }

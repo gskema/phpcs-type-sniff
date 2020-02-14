@@ -231,6 +231,10 @@ String `true/false` values are automatically converted to booleans.
             <!-- when method type declarations are present -->
             <property name="FqcnMethodSniff.reportMissingTags" value="false"/>
 
+            <!-- Disables reporting missing null type in property PHPDoc -->
+            <!-- when there is not default value and no assigned value in __construct() -->
+            <property name="FqcnPropSniff.reportUninitializedProp" value="false"/>
+
             <!-- Your own custom code element sniff(s). Autoloader is needed. -->
             <!-- These classes implement CodeElementSniffInterface -->
             <property name="sniffs" type="array">

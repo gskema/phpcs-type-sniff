@@ -33,6 +33,12 @@ class FqcnMethodSniff implements CodeElementSniffInterface
     /** @var bool */
     protected $reportMissingTags = true;
 
+    /** @var bool */
+    protected $reportNullableBasicGetterDocType = true;
+
+    /** @var bool */
+    protected $reportNullableBasicGetterFnType = true;
+
     /**
      * @inheritDoc
      */
@@ -47,6 +53,8 @@ class FqcnMethodSniff implements CodeElementSniffInterface
 
         $this->invalidTags = $invalidTags;
         $this->reportMissingTags = $config['reportMissingTags'] ?? true;
+        $this->reportNullableBasicGetterDocType = $config['reportNullableBasicGetterDocType'] ?? true;
+        $this->reportNullableBasicGetterFnType = $config['reportNullableBasicGetterFnType'] ?? true;
     }
 
     /**
@@ -111,7 +119,8 @@ class FqcnMethodSniff implements CodeElementSniffInterface
             $this->processSigType($file, $subject);
 
             if ($method instanceof ClassMethodElement && $parent instanceof ClassElement) {
-                static::reportNullableBasicGetter($file, $subject, $method, $parent);
+                ($this->reportNullableBasicGetterDocType || $this->reportNullableBasicGetterFnType) // skip if both disabled
+                && static::reportNullableBasicGetter($file, $subject, $method, $parent);
             }
         } else {
             foreach ($docBlock->getDescriptionLines() as $lineNum => $descLine) {
@@ -209,7 +218,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         }
     }
 
-    protected static function reportNullableBasicGetter(
+    protected function reportNullableBasicGetter(
         File $file,
         ReturnTypeSubject $subject,
         ClassMethodElement $method,
@@ -240,7 +249,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         $returnDocType = $subject->getDocType();
         $isGetterDocTypeNullable = TypeHelper::containsType($returnDocType, NullType::class);
         if (!$isGetterDocTypeNullable && $subject->hasDefinedDocBlock()) {
-            $subject->addDocTypeWarning(sprintf(
+            $this->reportNullableBasicGetterDocType && $subject->addDocTypeWarning(sprintf(
                 'Returned property $%s is nullable, add null return doc type, e.g. %s',
                 $propName,
                 ($returnDocType->toString() ?? $propDocType).'|null'
@@ -250,7 +259,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         // Only report in fn type is defined. Doc type and fn type is synced by other sniffs.
         $returnFnType = $subject->getFnType();
         if (!($returnFnType instanceof UndefinedType) && !($returnFnType instanceof NullableType)) {
-            $subject->addFnTypeWarning(sprintf(
+            $this->reportNullableBasicGetterFnType && $subject->addFnTypeWarning(sprintf(
                 'Returned property $%s is nullable, use nullable return type declaration, e.g. ?%s',
                 $propName,
                 $returnFnType->toString()

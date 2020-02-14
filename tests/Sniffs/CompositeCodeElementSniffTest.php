@@ -14,6 +14,8 @@ class CompositeCodeElementSniffTest extends TestCase
      */
     public function dataProcess(): array
     {
+        $php74 = version_compare(PHP_VERSION, '7.4', '>=');
+
         $dataSets = [];
 
         // #0
@@ -28,15 +30,15 @@ class CompositeCodeElementSniffTest extends TestCase
                 '009 Missing "int" type in C2 constant type hint',
                 '012 Create PHPDoc with typed array type hint for C3 constant, .e.g.: "string[]" or "SomeClass[]". Correct array depth must be specified.',
                 '017 Add @var tag for property $prop1',
-                '017 Property $prop1 not initialized by __construct(), add null doc type or set a default value',
+                $php74 ? '' : '017 Property $prop1 not initialized by __construct(), add null doc type or set a default value',
                 '022 Add @var tag for property $prop2',
-                '022 Property $prop2 not initialized by __construct(), add null doc type or set a default value',
+                $php74 ? '' : '022 Property $prop2 not initialized by __construct(), add null doc type or set a default value',
                 '024 Add type hint to @var tag for property $prop3',
-                '024 Property $prop3 not initialized by __construct(), add null doc type or set a default value',
+                $php74 ? '' : '024 Property $prop3 not initialized by __construct(), add null doc type or set a default value',
                 '027 Replace array type with typed array type in PHPDoc for property $prop4, .e.g.: "string[]" or "SomeClass[]". Use mixed[] for generic arrays. Correct array depth must be specified.',
-                '027 Property $prop4 not initialized by __construct(), add null doc type or set a default value',
+                $php74 ? '' : '027 Property $prop4 not initialized by __construct(), add null doc type or set a default value',
                 '030 Replace array type with typed array type in PHPDoc for property $prop5, .e.g.: "string[]" or "SomeClass[]". Use mixed[] for generic arrays. Correct array depth must be specified.',
-                '030 Property $prop5 not initialized by __construct(), add null doc type or set a default value',
+                $php74 ? '' : '030 Property $prop5 not initialized by __construct(), add null doc type or set a default value',
                 '033 Missing "array" type in property $prop6 type hint',
                 '039 Remove property name $prop8 from @var tag',
                 '045 Replace array type with typed array type in PHPDoc for property $prop10, .e.g.: "string[]" or "SomeClass[]". Use mixed[] for generic arrays. Correct array depth must be specified.',
@@ -80,7 +82,7 @@ class CompositeCodeElementSniffTest extends TestCase
                 '065 Useless PHPDoc',
                 '070 Useless tag',
                 '087 Add @var tag for property $prop1',
-                '087 Property $prop1 not initialized by __construct(), add null doc type or set a default value',
+                $php74 ? '' : '087 Property $prop1 not initialized by __construct(), add null doc type or set a default value',
             ]
         ];
 
@@ -92,7 +94,7 @@ class CompositeCodeElementSniffTest extends TestCase
             __DIR__.'/fixtures/TestClass1.php',
             [
                 '087 Add @var tag for property $prop1',
-                '087 Property $prop1 not initialized by __construct(), add null doc type or set a default value',
+                $php74 ? '' : '087 Property $prop1 not initialized by __construct(), add null doc type or set a default value',
             ]
         ];
 
@@ -176,6 +178,11 @@ class CompositeCodeElementSniffTest extends TestCase
                 '074 Returned property $prop1 is nullable, use nullable return type declaration, e.g. ?string',
             ],
         ];
+
+        // Remove empty warnings (some warnings disabled on PHP 7.4)
+        foreach ($dataSets as &$dataSet) {
+            $dataSet[2] = array_values(array_filter($dataSet[2]));
+        }
 
         return $dataSets;
     }

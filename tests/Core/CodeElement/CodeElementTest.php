@@ -12,6 +12,7 @@ use Gskema\TypeSniff\Core\CodeElement\Element\FunctionElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\InterfaceConstElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\InterfaceElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\InterfaceMethodElement;
+use Gskema\TypeSniff\Core\CodeElement\Element\Metadata\ClassMethodMetadata;
 use Gskema\TypeSniff\Core\CodeElement\Element\TraitElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\TraitMethodElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\TraitPropElement;
@@ -40,13 +41,21 @@ class CodeElementTest extends TestCase
         self::assertEquals($this->createDocBlock(), $class->getDocBlock());
         self::assertEquals(2, $class->getLine());
 
-        $classMethod = new ClassMethodElement($this->createDocBlock(), 'FQCN3', $this->createSignature());
+        $classMethod = new ClassMethodElement(
+            $this->createDocBlock(),
+            'FQCN3',
+            $this->createSignature(),
+            new ClassMethodMetadata(['prop1', 'prop2'], 'prop3', false)
+        );
         $classMethod->getMetadata()->setExtended(false);
         self::assertEquals(3, $classMethod->getLine());
         self::assertEquals($this->createDocBlock(), $classMethod->getDocBlock());
         self::assertEquals('FQCN3', $classMethod->getFqcn());
         self::assertEquals($this->createSignature(), $classMethod->getSignature());
         self::assertEquals(false, $classMethod->getMetadata()->isExtended());
+        self::assertEquals(true, $classMethod->getMetadata()->isBasicGetter());
+        self::assertEquals('prop3', $classMethod->getMetadata()->getBasicGetterPropName());
+        self::assertEquals(['prop1', 'prop2'], $classMethod->getMetadata()->getNonNullAssignedProps());
 
         $classProp = new ClassPropElement(4, $this->createDocBlock(), 'FQCN4', 'prop1', new IntType());
         self::assertEquals('FQCN4', $classProp->getFqcn());
@@ -84,6 +93,8 @@ class CodeElementTest extends TestCase
         self::assertEquals('FQCN6', $interface->getFqcn());
         self::assertEquals($this->createDocBlock(), $interface->getDocBlock());
         self::assertEquals(9, $interface->getLine());
+        self::assertEquals([], $interface->getConstants());
+        self::assertEquals([], $interface->getMethods());
 
         $interfaceMethod = new InterfaceMethodElement($this->createDocBlock(), 'FQCN7', $this->createSignature());
         $interfaceMethod->getMetadata()->setExtended(true);
@@ -97,6 +108,9 @@ class CodeElementTest extends TestCase
         self::assertEquals('FQCN8', $trait->getFqcn());
         self::assertEquals($this->createDocBlock(), $trait->getDocBlock());
         self::assertEquals(10, $trait->getLine());
+        self::assertEquals([], $trait->getProperties());
+        self::assertEquals([], $trait->getMethods());
+        self::assertEquals(null, $trait->getOwnConstructor());
 
         $traitMethod = new TraitMethodElement($this->createDocBlock(), 'FQCN9', $this->createSignature());
         $traitMethod->getMetadata()->setExtended(true);

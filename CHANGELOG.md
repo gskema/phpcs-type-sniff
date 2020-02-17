@@ -9,8 +9,7 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 - Warning for uninitialized class/trait property. Default value and assignments in `__construct()` are checked. Add null doc type is suggested.
 - Warning for nullable return types for basic getters based on property doc type.
 - Setting `FqcnPropSniff.reportUninitializedProp`
-- Setting `FqcnPropSniff.reportNullableBasicGetterDocType`
-- Setting `FqcnPropSniff.reportNullableBasicGetterFnType`
+- Setting `FqcnPropSniff.reportNullableBasicGetter`
 
 ## 0.13.0 - 2019-12-09
 ### Removed

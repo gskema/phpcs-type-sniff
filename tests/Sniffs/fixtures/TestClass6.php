@@ -82,4 +82,21 @@ abstract class TestClass6
     }
 
     abstract public function method2(): string;
+
+    abstract public function __construct();
+
+    public $prop5;
+
+    public function getProp5(): int
+    {
+        return $this->prop5;
+    }
+
+    /** @var int */
+    public $prop6;
+
+    public function getProp6(): int
+    {
+        return $this->prop6;
+    }
 }

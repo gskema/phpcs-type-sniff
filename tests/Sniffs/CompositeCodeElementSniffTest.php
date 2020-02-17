@@ -176,6 +176,7 @@ class CompositeCodeElementSniffTest extends TestCase
                 '064 Add type declaration for return value or create PHPDoc with type hint',
                 '072 Returned property $prop1 is nullable, add null return doc type, e.g. string|null',
                 '074 Returned property $prop1 is nullable, use nullable return type declaration, e.g. ?string',
+                '088 Add @var tag for property $prop5'
             ],
         ];
 

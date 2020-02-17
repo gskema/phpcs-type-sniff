@@ -872,6 +872,42 @@ class CodeElementDetectorTest extends TestCase
             ),
         ];
 
+        // #11
+        $dataSets[] = [
+            'givenUseReflection' => true,
+            'givenFile'          => __DIR__ . '/fixtures/TestRef3.php',
+            'expected'           => new FileElement(
+                1,
+                new UndefinedDocBlock(),
+                __DIR__ . '/fixtures/TestRef3.php',
+                [],
+                [],
+                [
+                    new ClassElement(
+                        5,
+                        new UndefinedDocBlock(),
+                        'Gskema\TypeSniff\Core\CodeElement\fixtures\TestRef3',
+                        [],
+                        [],
+                        [
+                            new ClassMethodElement(
+                                new UndefinedDocBlock(),
+                                'Gskema\TypeSniff\Core\CodeElement\fixtures\TestRef3',
+                                new FunctionSignature(
+                                    7,
+                                    'testMethod',
+                                    [],
+                                    new UndefinedType(),
+                                    7
+                                ),
+                                new ClassMethodMetadata([], null, null)
+                            )
+                        ]
+                    )
+                ]
+            ),
+        ];
+
         return $dataSets;
     }
 

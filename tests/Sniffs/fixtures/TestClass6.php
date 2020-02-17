@@ -5,7 +5,7 @@ namespace Gskema\TypeSniff\Sniffs\fixtures;
 /**
  * @TODO (int|string)[]
  */
-class TestClass6
+abstract class TestClass6
 {
     /** @var array<int, string> */
     const C2 = [];
@@ -75,4 +75,11 @@ class TestClass6
     {
         return $this->prop1;
     }
+
+    public function getThis(): self
+    {
+        return $this;
+    }
+
+    abstract public function method2(): string;
 }

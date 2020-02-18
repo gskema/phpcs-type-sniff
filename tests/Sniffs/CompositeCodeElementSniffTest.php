@@ -188,7 +188,7 @@ class CompositeCodeElementSniffTest extends TestCase
             __DIR__.'/fixtures/TestTrait7.php',
             [
                 '007 Add @var tag for property $prop1',
-                '007 Property $prop1 not initialized by __construct(), add null doc type or set a default value',
+                $php74 ? '' : '007 Property $prop1 not initialized by __construct(), add null doc type or set a default value',
             ],
         ];
 

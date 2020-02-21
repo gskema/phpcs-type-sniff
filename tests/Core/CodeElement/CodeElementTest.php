@@ -45,7 +45,7 @@ class CodeElementTest extends TestCase
             $this->createDocBlock(),
             'FQCN3',
             $this->createSignature(),
-            new ClassMethodMetadata(['prop1', 'prop2'], 'prop3', false)
+            new ClassMethodMetadata(['prop1', 'prop2'], 'prop3', ['method'], false)
         );
         $classMethod->getMetadata()->setExtended(false);
         self::assertEquals(3, $classMethod->getLine());
@@ -56,6 +56,7 @@ class CodeElementTest extends TestCase
         self::assertEquals(true, $classMethod->getMetadata()->isBasicGetter());
         self::assertEquals('prop3', $classMethod->getMetadata()->getBasicGetterPropName());
         self::assertEquals(['prop1', 'prop2'], $classMethod->getMetadata()->getNonNullAssignedProps());
+        self::assertEquals(['method'], $classMethod->getMetadata()->getThisMethodCalls());
 
         $classProp = new ClassPropElement(4, $this->createDocBlock(), 'FQCN4', 'prop1', new IntType());
         self::assertEquals('FQCN4', $classProp->getFqcn());

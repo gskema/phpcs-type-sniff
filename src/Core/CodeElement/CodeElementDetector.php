@@ -147,6 +147,7 @@ class CodeElementDetector
                         $currentElement->getMetadata()->setExtended($extended);
                         $currentElement->getMetadata()->setBasicGetterPropName(TokenHelper::getBasicGetterPropName($file, $ptr));
                         $currentElement->getMetadata()->setNonNullAssignedProps(TokenHelper::getNonNullAssignedProps($file, $ptr));
+                        $currentElement->getMetadata()->setThisMethodCalls(TokenHelper::getThisMethodCalls($file, $ptr));
                         $parentElement->addMethod($currentElement);
                         break;
                 }
@@ -168,6 +169,7 @@ class CodeElementDetector
                         $currentElement->getMetadata()->setExtended($extended);
                         $currentElement->getMetadata()->setBasicGetterPropName(TokenHelper::getBasicGetterPropName($file, $ptr));
                         $currentElement->getMetadata()->setNonNullAssignedProps(TokenHelper::getNonNullAssignedProps($file, $ptr));
+                        $currentElement->getMetadata()->setThisMethodCalls(TokenHelper::getThisMethodCalls($file, $ptr));
                         $parentElement->addMethod($currentElement);
                         break;
                 }

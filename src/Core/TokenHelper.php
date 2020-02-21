@@ -264,4 +264,59 @@ class TokenHelper
     {
         return T_VARIABLE === $token['code'] && '$this' === $token['content'];
     }
+
+    /**
+     * @param File $file
+     * @param int  $fnPtr
+     *
+     * @return string[]
+     */
+    public static function getThisMethodCalls(File $file, int $fnPtr): array
+    {
+        $tokens = $file->getTokens();
+        $fnToken = $tokens[$fnPtr];
+
+        // abstract or interface methods do not have scopes
+        $openPtr = $fnToken['scope_opener'] ?? null;
+        $closePtr = $fnToken['scope_closer'] ?? null;
+        if (null === $openPtr || null === $closePtr) {
+            return [];
+        }
+
+        // @TODO [$this, 'name']
+        $thisMethodCalls = [];
+        for ($ptr=$openPtr+1; $ptr<$closePtr; $ptr++) {
+            $token = $tokens[$ptr];
+
+            // $this
+            if (!static::isThisToken($token)) {
+                continue;
+            }
+
+            // $this->
+            $objOpPtr = $file->findNext(Tokens::$emptyTokens, $ptr + 1, null, true);
+            $objOpToken = false === $objOpPtr ? null : $tokens[$objOpPtr];
+            if (T_OBJECT_OPERATOR !== $objOpToken['code']) {
+                continue;
+            }
+
+            // $this->method
+            $methodNamePtr = $file->findNext(Tokens::$emptyTokens, $objOpPtr + 1, null, true);
+            $methodNameToken = false === $methodNamePtr ? null : $tokens[$methodNamePtr];
+            if (T_STRING !== $methodNameToken['code']) {
+                continue;
+            }
+
+            // $this->method(
+            $eqPtr = $file->findNext(Tokens::$emptyTokens, $methodNamePtr + 1, null, true);
+            $eqToken = false === $eqPtr ? null : $tokens[$eqPtr];
+            if (T_OPEN_PARENTHESIS !== $eqToken['code']) {
+                continue;
+            }
+
+            $thisMethodCalls[] = $methodNameToken['content'];
+        }
+
+        return $thisMethodCalls;
+    }
 }

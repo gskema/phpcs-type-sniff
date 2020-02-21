@@ -10,21 +10,27 @@ abstract class AbstractFqcnMethodMetadata
     /** @var string|null */
     protected $basicGetterPropName;
 
+    /** @var string[]|null */
+    protected $thisMethodCalls;
+
     /** @var bool|null */
     protected $extended;
 
     /**
      * @param string[]|null $nonNullAssignedProps
      * @param string|null   $basicGetterPropName
+     * @param string[]|null $thisMethodCalls
      * @param bool|null     $extended
      */
     public function __construct(
         ?array $nonNullAssignedProps = null,
         ?string $basicGetterPropName = null,
+        ?array $thisMethodCalls = null,
         ?bool $extended = null
     ) {
         $this->nonNullAssignedProps = $nonNullAssignedProps;
         $this->basicGetterPropName = $basicGetterPropName;
+        $this->thisMethodCalls = $thisMethodCalls;
         $this->extended = $extended;
     }
 
@@ -57,6 +63,22 @@ abstract class AbstractFqcnMethodMetadata
     public function isBasicGetter(): bool
     {
         return null !== $this->basicGetterPropName;
+    }
+
+    /**
+     * @return string[]|null
+     */
+    public function getThisMethodCalls(): ?array
+    {
+        return $this->thisMethodCalls;
+    }
+
+    /**
+     * @param string[]|null $thisMethodCalls
+     */
+    public function setThisMethodCalls(?array $thisMethodCalls): void
+    {
+        $this->thisMethodCalls = $thisMethodCalls;
     }
 
     public function isExtended(): ?bool

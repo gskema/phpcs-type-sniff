@@ -864,6 +864,18 @@ class CodeElementDetectorTest extends TestCase
                                 ),
                                 new ClassMethodMetadata([], null, [])
                             ),
+                            new ClassMethodElement(
+                                new UndefinedDocBlock(),
+                                $fqcn10,
+                                new FunctionSignature(
+                                    47,
+                                    'method3',
+                                    [],
+                                    new VoidType(),
+                                    47
+                                ),
+                                new ClassMethodMetadata([], null, ['getProp4'])
+                            ),
                         ]
                     ),
                 ],

@@ -12,7 +12,7 @@ class TestClass5
     public function __construct()
     {
         $this->prop1 = null;
-        $this->prop2 = 5;
+        $this->prop2 = 5; $this->prop2 = 5;
         $this->prop3 = array_slice([], 0, 1);
         $this->prop4 = null === 1 ? 0 : 1;
     }
@@ -42,5 +42,14 @@ class TestClass5
     {
         $a = 1;
         return $this->prop4;
+    }
+
+    public function method3(): void
+    {
+        $this->getProp4();
+        $this->getProp4(1, 2);
+
+        $a = [];
+        array_walk($a, [$this, 'method3']);
     }
 }

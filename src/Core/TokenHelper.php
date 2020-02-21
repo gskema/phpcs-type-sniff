@@ -252,7 +252,7 @@ class TokenHelper
             }
         }
 
-        return $nonNullAssignedProps;
+        return array_values(array_unique($nonNullAssignedProps));
     }
 
     /**
@@ -317,6 +317,6 @@ class TokenHelper
             $thisMethodCalls[] = $methodNameToken['content'];
         }
 
-        return $thisMethodCalls;
+        return array_values(array_unique($thisMethodCalls));
     }
 }

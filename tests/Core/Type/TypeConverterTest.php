@@ -137,7 +137,7 @@ class TypeConverterTest extends TestCase
                 new ObjectType(),
                 version_compare(PHP_VERSION, '7.2', '<') ? null : new ObjectType()
             ],
-            [new ResourceType(), new ResourceType()],
+            [new ResourceType(), null],
             [new StringType(), new StringType()],
         ];
     }

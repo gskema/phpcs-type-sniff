@@ -40,4 +40,12 @@ class TestClass7
     {
         $this->prop4 = 1;
     }
+
+    /**
+     * @return resource
+     */
+    public function returnX()
+    {
+        return 1;
+    }
 }

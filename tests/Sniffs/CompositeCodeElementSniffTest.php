@@ -221,17 +221,6 @@ class CompositeCodeElementSniffTest extends TestCase
             ],
         ];
 
-        // #10
-        $dataSets[] = [
-            [
-                'useReflection' => false,
-            ],
-            __DIR__.'/fixtures/TestClass7.php',
-            [
-                $php74 ? '' : '007 Property $prop1 not initialized by __construct(), add null doc type or set a default value',
-            ],
-        ];
-
         // Remove empty warnings (some warnings disabled on PHP 7.4)
         foreach ($dataSets as &$dataSet) {
             $dataSet[2] = array_values(array_filter($dataSet[2]));

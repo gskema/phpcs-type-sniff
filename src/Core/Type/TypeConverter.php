@@ -15,6 +15,7 @@ use Gskema\TypeSniff\Core\Type\DocBlock\DoubleType;
 use Gskema\TypeSniff\Core\Type\DocBlock\FalseType;
 use Gskema\TypeSniff\Core\Type\DocBlock\MixedType;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
+use Gskema\TypeSniff\Core\Type\DocBlock\ResourceType;
 use Gskema\TypeSniff\Core\Type\DocBlock\StaticType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ThisType;
 use Gskema\TypeSniff\Core\Type\DocBlock\TrueType;
@@ -110,6 +111,10 @@ class TypeConverter
         if ($docType instanceof ObjectType
             && version_compare(PHP_VERSION, '7.2', '<')
         ) {
+            return null;
+        }
+
+        if ($docType instanceof ResourceType) {
             return null;
         }
 

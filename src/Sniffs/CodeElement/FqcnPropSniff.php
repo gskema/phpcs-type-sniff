@@ -3,8 +3,11 @@
 namespace Gskema\TypeSniff\Sniffs\CodeElement;
 
 use Gskema\TypeSniff\Core\CodeElement\Element\AbstractFqcnElement;
+use Gskema\TypeSniff\Core\CodeElement\Element\AbstractFqcnMethodElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassElement;
+use Gskema\TypeSniff\Core\CodeElement\Element\ClassMethodElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\TraitElement;
+use Gskema\TypeSniff\Core\CodeElement\Element\TraitMethodElement;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
 use Gskema\TypeSniff\Core\Type\TypeHelper;
 use Gskema\TypeSniff\Inspection\DocTypeInspector;
@@ -85,22 +88,58 @@ class FqcnPropSniff implements CodeElementSniffInterface
             return; // @TODO Exit when prop has defined fnType
         }
 
-        $ownConstructor = $parent->getOwnConstructor();
-
-        $nonNullAssignedProps = [];
-        if (null !== $ownConstructor) {
-            $nonNullAssignedProps = $ownConstructor->getMetadata()->getNonNullAssignedProps();
-            if (null === $nonNullAssignedProps) {
-                return;  // null = not detected, cannot assume anything on missing information.
-            }
-        }
         $propHasDefaultValue = $prop->getMetadata()->hasDefaultValue(); // null = not detected
+
+        $ownConstructor = $parent->getOwnConstructor();
 
         if ((false === $propHasDefaultValue || $prop->getDefaultValueType() instanceof NullType)
             && !TypeHelper::containsType($subject->getDocType(), NullType::class)
-            && !in_array($prop->getPropName(), $nonNullAssignedProps)
+            && (!$ownConstructor || !static::hasNonNullAssignedProp($parent, $ownConstructor, $prop->getPropName()))
         ) {
             $subject->addDocTypeWarning(':Subject: not initialized by __construct(), add null doc type or set a default value');
         }
+    }
+
+    /**
+     * @param ClassElement|TraitElement|AbstractFqcnElement                   $parent
+     * @param ClassMethodElement|TraitMethodElement|AbstractFqcnMethodElement $method
+     * @param string                                                          $propName
+     *
+     * @return bool|null
+     */
+    public static function hasNonNullAssignedProp(
+        AbstractFqcnElement $parent,
+        AbstractFqcnMethodElement $method,
+        string $propName
+    ): ?bool {
+        // Not ideal because we have to descend on every prop inspection.
+        // However early exit is used, so we don't have to descend fully each time.
+        $visitedNames = [];
+        $unvisitedNames = [$method->getSignature()->getName()];
+        while (!empty($unvisitedNames)) {
+            $callNames = [];
+            foreach ($unvisitedNames as $unvisitedName) {
+                $unvisitedMethod = $parent->getMethod($unvisitedName);
+                if (null === $unvisitedMethod) {
+                    continue;
+                }
+                $nonNullAssignedProps = $unvisitedMethod->getMetadata()->getNonNullAssignedProps();
+                if (null === $nonNullAssignedProps) {
+                    return null; // null = not detected, cannot assume anything on missing information.
+                }
+                if (in_array($propName, $nonNullAssignedProps)) {
+                    return true;
+                }
+                $callNameChunk = $unvisitedMethod->getMetadata()->getThisMethodCalls();
+                if (null === $callNameChunk) {
+                    return null; // null = not detected, cannot assume anything on missing information.
+                }
+                $callNames = array_merge($callNames, $callNameChunk);
+            }
+            $visitedNames = array_merge($visitedNames, $unvisitedNames);
+            $unvisitedNames = array_diff($callNames, $visitedNames);
+        }
+
+        return false;
     }
 }

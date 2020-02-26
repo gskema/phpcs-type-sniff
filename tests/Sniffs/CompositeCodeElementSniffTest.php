@@ -176,7 +176,9 @@ class CompositeCodeElementSniffTest extends TestCase
                 '064 Add type declaration for return value or create PHPDoc with type hint',
                 '072 Returned property $prop1 is nullable, add null return doc type, e.g. string|null',
                 '074 Returned property $prop1 is nullable, use nullable return type declaration, e.g. ?string',
-                '088 Add @var tag for property $prop5'
+                '088 Add @var tag for property $prop5',
+                '088 Property $prop5 not initialized by __construct(), add null doc type or set a default value',
+                '095 Property $prop6 not initialized by __construct(), add null doc type or set a default value',
             ],
         ];
 
@@ -200,6 +202,17 @@ class CompositeCodeElementSniffTest extends TestCase
             __DIR__.'/fixtures/TestInterface8.php',
             [
                 '015 Add type declaration for return value or create PHPDoc with type hint'
+            ],
+        ];
+
+        // #9
+        $dataSets[] = [
+            [
+                'useReflection' => false,
+            ],
+            __DIR__.'/fixtures/TestClass7.php',
+            [
+                '007 Property $prop1 not initialized by __construct(), add null doc type or set a default value',
             ],
         ];
 

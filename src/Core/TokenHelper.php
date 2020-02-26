@@ -202,7 +202,7 @@ class TokenHelper
         $openPtr = $fnToken['scope_opener'] ?? null;
         $closePtr = $fnToken['scope_closer'] ?? null;
         if (null === $openPtr || null === $closePtr) {
-            return null;
+            return [];
         }
 
         $nonNullAssignedProps = [];

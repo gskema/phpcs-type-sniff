@@ -51,22 +51,46 @@ class Banana
     /** @var array */               // must use typed array doc type
     public $prop2 = [];
 
-    public $prop3;                  // missing @var tag
+    public $prop3;                  // missing @var tag, missing null doc type
 
-    /** @var */                     // missing doc type
+    /** @var */                     // missing doc type, missing null doc type
     public $prop4;
 
-    /** @var array[][] */           // must use specific typed array doc type
+    /** @var array[][] */           // must use specific typed array doc type, missing null doc type
     public $prop5;
 
-    /** @var array|string[] */      // redundant array type
+    /** @var array|string[] */      // redundant array type, missing null doc type
     public $prop6;
 
     /** @var int|string */          // missing null doc type
     public $prop7 = null;
 
-    /** @var int $prop8 */          // prop name must be removed
+    /** @var int $prop8 */          // prop name must be removed, missing null doc type
     public $prop8;
+
+    /** @var int */
+    public $prop9;                  // Not initialized, missing null doc type
+
+    /** @var int */
+    public $prop10;                 // Initialized, missing null doc type
+
+    /** @var int */
+    public $prop11;
+
+    /** @var int */
+    public $prop12;
+
+    public function __construct()
+    {
+        $this->prop10 = null;
+        $this->prop11 = 11;
+        $this->setProp12();
+    }
+
+    public function setProp12(): void
+    {
+        $this->prop12 = 1;
+    }
 
     public function func1(
         $param1,                    // missing param type decl.

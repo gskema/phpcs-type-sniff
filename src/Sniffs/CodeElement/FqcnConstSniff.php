@@ -40,7 +40,7 @@ class FqcnConstSniff implements CodeElementSniffInterface
      *
      * @param AbstractFqcnConstElement $const
      */
-    public function process(File $file, CodeElementInterface $const): void
+    public function process(File $file, CodeElementInterface $const, CodeElementInterface $parentElement): void
     {
         $subject = ConstTypeSubject::fromElement($const);
 

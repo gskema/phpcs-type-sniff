@@ -51,22 +51,46 @@ class Banana
     /** @var array */               // must use typed array doc type
     public $prop2 = [];
 
-    public $prop3;                  // missing @var tag
+    public $prop3;                  // missing @var tag, missing null doc type
 
-    /** @var */                     // missing doc type
+    /** @var */                     // missing doc type, missing null doc type
     public $prop4;
 
-    /** @var array[][] */           // must use specific typed array doc type
+    /** @var array[][] */           // must use specific typed array doc type, missing null doc type
     public $prop5;
 
-    /** @var array|string[] */      // redundant array type
+    /** @var array|string[] */      // redundant array type, missing null doc type
     public $prop6;
 
     /** @var int|string */          // missing null doc type
     public $prop7 = null;
 
-    /** @var int $prop8 */          // prop name must be removed
+    /** @var int $prop8 */          // prop name must be removed, missing null doc type
     public $prop8;
+
+    /** @var int */
+    public $prop9;                  // Not initialized, missing null doc type
+
+    /** @var int */
+    public $prop10;                 // Initialized, missing null doc type
+
+    /** @var int */
+    public $prop11;
+
+    /** @var int */
+    public $prop12;
+
+    public function __construct()
+    {
+        $this->prop10 = null;
+        $this->prop11 = 11;
+        $this->setProp12();
+    }
+
+    public function setProp12(): void
+    {
+        $this->prop12 = 1;
+    }
 
     public function func1(
         $param1,                    // missing param type decl.
@@ -117,11 +141,13 @@ class Banana
      * @param array<int, bool>           $arg1 // alternative array documentation
      * @param array{foo: bool, bar: int} $arg2 // supported, no warning
      * @param (int|string)[]             $arg3 //
+     * @param array('key1' => int, ...)  $arg4 //
      */
     public function func4(
         array $arg1,
         array $arg2,
-        array $arg3
+        array $arg3,
+        array $arg4
     ): void {
     }
 }
@@ -228,6 +254,14 @@ String `true/false` values are automatically converted to booleans.
             <!-- Disables reporting missing @param, @return tags in non-empty method PHPDoc -->
             <!-- when method type declarations are present -->
             <property name="FqcnMethodSniff.reportMissingTags" value="false"/>
+
+            <!-- Disables reporting missing null type in basic getter return PHPDoc -->
+            <!-- and return type declaration -->
+            <property name="FqcnPropSniff.reportNullableBasicGetter" value="false"/>
+
+            <!-- Disables reporting missing null type in property PHPDoc -->
+            <!-- when there is not default value and no assigned value in __construct() -->
+            <property name="FqcnPropSniff.reportUninitializedProp" value="false"/>
 
             <!-- Your own custom code element sniff(s). Autoloader is needed. -->
             <!-- These classes implement CodeElementSniffInterface -->

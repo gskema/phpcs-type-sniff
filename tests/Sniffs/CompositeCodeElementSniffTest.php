@@ -14,6 +14,8 @@ class CompositeCodeElementSniffTest extends TestCase
      */
     public function dataProcess(): array
     {
+        $php74 = version_compare(PHP_VERSION, '7.4', '>=');
+
         $dataSets = [];
 
         // #0
@@ -28,10 +30,15 @@ class CompositeCodeElementSniffTest extends TestCase
                 '009 Missing "int" type in C2 constant type hint',
                 '012 Create PHPDoc with typed array type hint for C3 constant, .e.g.: "string[]" or "SomeClass[]". Correct array depth must be specified.',
                 '017 Add @var tag for property $prop1',
+                $php74 ? '' : '017 Property $prop1 not initialized by __construct(), add null doc type or set a default value',
                 '022 Add @var tag for property $prop2',
+                $php74 ? '' : '022 Property $prop2 not initialized by __construct(), add null doc type or set a default value',
                 '024 Add type hint to @var tag for property $prop3',
+                $php74 ? '' : '024 Property $prop3 not initialized by __construct(), add null doc type or set a default value',
                 '027 Replace array type with typed array type in PHPDoc for property $prop4, .e.g.: "string[]" or "SomeClass[]". Use mixed[] for generic arrays. Correct array depth must be specified.',
+                $php74 ? '' : '027 Property $prop4 not initialized by __construct(), add null doc type or set a default value',
                 '030 Replace array type with typed array type in PHPDoc for property $prop5, .e.g.: "string[]" or "SomeClass[]". Use mixed[] for generic arrays. Correct array depth must be specified.',
+                $php74 ? '' : '030 Property $prop5 not initialized by __construct(), add null doc type or set a default value',
                 '033 Missing "array" type in property $prop6 type hint',
                 '039 Remove property name $prop8 from @var tag',
                 '045 Replace array type with typed array type in PHPDoc for property $prop10, .e.g.: "string[]" or "SomeClass[]". Use mixed[] for generic arrays. Correct array depth must be specified.',
@@ -75,6 +82,7 @@ class CompositeCodeElementSniffTest extends TestCase
                 '065 Useless PHPDoc',
                 '070 Useless tag',
                 '087 Add @var tag for property $prop1',
+                $php74 ? '' : '087 Property $prop1 not initialized by __construct(), add null doc type or set a default value',
             ]
         ];
 
@@ -86,6 +94,7 @@ class CompositeCodeElementSniffTest extends TestCase
             __DIR__.'/fixtures/TestClass1.php',
             [
                 '087 Add @var tag for property $prop1',
+                $php74 ? '' : '087 Property $prop1 not initialized by __construct(), add null doc type or set a default value',
             ]
         ];
 
@@ -136,11 +145,11 @@ class CompositeCodeElementSniffTest extends TestCase
                 '007 Useless tag',
                 '012 Useless description.',
                 '023 Change parameter $arg1 type declaration to nullable, e.g. ?string. Remove default null value if this argument is required.',
-                '042 Add type declaration for parameter $arg1, e.g.: "float"',
-                '045 Add type declaration for parameter $arg4, e.g.: "float"',
                 '035 Remove redundant parameter $arg7 type hints "double"',
                 '036 Remove redundant parameter $arg8 type hints "double"',
                 '037 Remove redundant parameter $arg9 type hints "double"',
+                '042 Add type declaration for parameter $arg1, e.g.: "float"',
+                '045 Add type declaration for parameter $arg4, e.g.: "float"',
                 '054 Change parameter $arg1 type declaration to nullable, e.g. ?string. Remove default null value if this argument is required.',
                 '070 Change type hint for parameter $arg1 to compound, e.g. SomeClass|null',
                 '074 Add type declaration for parameter $arg1, e.g.: "?SomeClass"',
@@ -170,8 +179,63 @@ class CompositeCodeElementSniffTest extends TestCase
                 '064 Add type declaration for parameter $arg1 or create PHPDoc with type hint',
                 '064 Add typed array type hint for parameter $arg2, .e.g.: "string[]" or "SomeClass[]". Correct array depth must be specified.',
                 '064 Add type declaration for return value or create PHPDoc with type hint',
+                '072 Returned property $prop1 is nullable, add null return doc type, e.g. string|null',
+                '074 Returned property $prop1 is nullable, use nullable return type declaration, e.g. ?string',
+                '088 Add @var tag for property $prop5',
+                $php74 ? '' : '088 Property $prop5 not initialized by __construct(), add null doc type or set a default value',
+                $php74 ? '' : '095 Property $prop6 not initialized by __construct(), add null doc type or set a default value',
             ],
         ];
+
+        // #7
+        $dataSets[] = [
+            [
+                'useReflection' => false,
+            ],
+            __DIR__.'/fixtures/TestTrait7.php',
+            [
+                '007 Add @var tag for property $prop1',
+                $php74 ? '' : '007 Property $prop1 not initialized by __construct(), add null doc type or set a default value',
+            ],
+        ];
+
+        // #8
+        $dataSets[] = [
+            [
+                'useReflection' => false,
+            ],
+            __DIR__.'/fixtures/TestInterface8.php',
+            [
+                '015 Add type declaration for return value or create PHPDoc with type hint'
+            ],
+        ];
+
+        // #9
+        $dataSets[] = [
+            [
+                'useReflection' => false,
+            ],
+            __DIR__.'/fixtures/TestClass7.php',
+            [
+                $php74 ? '' : '007 Property $prop1 not initialized by __construct(), add null doc type or set a default value',
+            ],
+        ];
+
+        // #10
+        $dataSets[] = [
+            [
+                'useReflection' => false,
+            ],
+            __DIR__.'/fixtures/TestClass7.php',
+            [
+                $php74 ? '' : '007 Property $prop1 not initialized by __construct(), add null doc type or set a default value',
+            ],
+        ];
+
+        // Remove empty warnings (some warnings disabled on PHP 7.4)
+        foreach ($dataSets as &$dataSet) {
+            $dataSet[2] = array_values(array_filter($dataSet[2]));
+        }
 
         return $dataSets;
     }
@@ -212,10 +276,14 @@ class CompositeCodeElementSniffTest extends TestCase
             foreach ($colWarnings as $column => $warnings) {
                 foreach ($warnings as $warning) {
                     $lineKey = str_pad($line, '3', '0', STR_PAD_LEFT);
-                    $actualWarnings[] = $lineKey.' '.$warning['message'];
+                    $actualWarnings[$line][] = $lineKey.' '.$warning['message'];
                 }
             }
         }
+
+        // Elements are iterated by type first, then line. Need to resort to match test files.
+        ksort($actualWarnings);
+        $actualWarnings = array_merge(...$actualWarnings);
 
         static::assertEquals($expectedWarnings, $actualWarnings);
     }

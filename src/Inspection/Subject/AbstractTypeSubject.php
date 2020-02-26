@@ -136,13 +136,14 @@ abstract class AbstractTypeSubject
 
     public function writeWarningsTo(File $file, string $sniffCode): void
     {
+        $ucName = ucfirst($this->name);
         foreach ($this->docTypeWarnings as $docTypeWarning) {
-            $warning = str_replace(':subject:', $this->name, $docTypeWarning);
+            $warning = str_replace([':subject:', ':Subject:'], [$this->name, $ucName], $docTypeWarning);
             $file->addWarningOnLine($warning, $this->docTypeLine ?? $this->fnTypeLine, $sniffCode);
         }
 
         foreach ($this->fnTypeWarnings as $fnTypeWarning) {
-            $warning = str_replace(':subject:', $this->name, $fnTypeWarning);
+            $warning = str_replace([':subject:', ':Subject:'], [$this->name, $ucName], $fnTypeWarning);
             $file->addWarningOnLine($warning, $this->fnTypeLine, $sniffCode);
         }
     }

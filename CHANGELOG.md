@@ -4,6 +4,13 @@ All notable changes to `phpcs-type-sniff` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## 0.14.0 - 2020-??-??
+### Added
+- Warning for uninitialized class/trait property. Default value and assignments in `__construct()` are checked. Adding null doc type is suggested.
+- Warning for nullable return types for basic getters based on property doc type.
+- Setting `FqcnPropSniff.reportUninitializedProp`
+- Setting `FqcnPropSniff.reportNullableBasicGetter`
+
 ## 0.13.1 - 2020-01-17
 ### Added
 - Warning for undefined type typed array, e.g. []|null

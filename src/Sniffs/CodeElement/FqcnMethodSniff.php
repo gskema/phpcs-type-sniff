@@ -2,6 +2,11 @@
 
 namespace Gskema\TypeSniff\Sniffs\CodeElement;
 
+use Gskema\TypeSniff\Core\CodeElement\Element\ClassElement;
+use Gskema\TypeSniff\Core\DocBlock\Tag\VarTag;
+use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
+use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
+use Gskema\TypeSniff\Core\Type\TypeHelper;
 use Gskema\TypeSniff\Inspection\FnTypeInspector;
 use Gskema\TypeSniff\Inspection\DocTypeInspector;
 use Gskema\TypeSniff\Inspection\Subject\AbstractTypeSubject;
@@ -28,6 +33,9 @@ class FqcnMethodSniff implements CodeElementSniffInterface
     /** @var bool */
     protected $reportMissingTags = true;
 
+    /** @var bool */
+    protected $reportNullableBasicGetter = true;
+
     /**
      * @inheritDoc
      */
@@ -42,6 +50,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
 
         $this->invalidTags = $invalidTags;
         $this->reportMissingTags = $config['reportMissingTags'] ?? true;
+        $this->reportNullableBasicGetter = $config['reportNullableBasicGetter'] ?? true;
     }
 
     /**
@@ -60,12 +69,12 @@ class FqcnMethodSniff implements CodeElementSniffInterface
      * @inheritDoc
      * @param AbstractFqcnMethodElement $method
      */
-    public function process(File $file, CodeElementInterface $method): void
+    public function process(File $file, CodeElementInterface $method, CodeElementInterface $parentElement): void
     {
         $warningCountBefore = $file->getWarningCount();
 
         static::reportInvalidTags($file, $method, $this->invalidTags);
-        $this->processMethod($file, $method);
+        $this->processMethod($file, $method, $parentElement);
 
         $hasNewWarnings = $file->getWarningCount() > $warningCountBefore;
         if (!$hasNewWarnings && $this->hasUselessDocBlock($method)) {
@@ -73,7 +82,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         }
     }
 
-    protected function processMethod(File $file, AbstractFqcnMethodElement $method): void
+    protected function processMethod(File $file, AbstractFqcnMethodElement $method, CodeElementInterface $parent): void
     {
         $fnSig = $method->getSignature();
         $docBlock = $method->getDocBlock();
@@ -86,7 +95,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         if (!$isConstructMethod) {
             if ($hasInheritDocTag || $isMagicMethod) {
                 return;
-            } elseif ($method->isExtended()) {
+            } elseif ($method->getMetadata()->isExtended()) {
                 $file->addWarningOnLine('Missing @inheritDoc tag. Remove duplicated parent PHPDoc content.', $method->getLine(), static::CODE);
                 return;
             }
@@ -104,6 +113,10 @@ class FqcnMethodSniff implements CodeElementSniffInterface
             $returnTag = $docBlock->getReturnTag();
             $subject = ReturnTypeSubject::fromSignature($fnSig, $returnTag, $docBlock);
             $this->processSigType($file, $subject);
+
+            if ($method instanceof ClassMethodElement && $parent instanceof ClassElement) {
+                $this->reportNullableBasicGetter && static::reportNullableBasicGetter($file, $subject, $method, $parent);
+            }
         } else {
             foreach ($docBlock->getDescriptionLines() as $lineNum => $descLine) {
                 if (preg_match('#^\w+\s+constructor\.?$#', $descLine)) {
@@ -198,5 +211,56 @@ class FqcnMethodSniff implements CodeElementSniffInterface
                 }
             }
         }
+    }
+
+    protected static function reportNullableBasicGetter(
+        File $file,
+        ReturnTypeSubject $subject,
+        ClassMethodElement $method,
+        ClassElement $class
+    ): void {
+        $propName = $method->getMetadata()->getBasicGetterPropName();
+        if (null === $propName) {
+            return;
+        }
+
+        $prop = $class->getProperty($propName);
+        if (null === $prop) {
+            return;
+        }
+
+        /** @var VarTag|null $varTag */
+        $varTag = $prop->getDocBlock()->getTagsByName('var')[0] ?? null;
+        if (null === $varTag) {
+            return;
+        }
+
+        $propDocType = $varTag->getType();
+        $isPropNullable = TypeHelper::containsType($varTag->getType(), NullType::class);
+        if (!$isPropNullable) {
+            return;
+        }
+
+        $returnDocType = $subject->getDocType();
+        $isGetterDocTypeNullable = TypeHelper::containsType($returnDocType, NullType::class);
+        if (!$isGetterDocTypeNullable && $subject->hasDefinedDocBlock()) {
+            $subject->addDocTypeWarning(sprintf(
+                'Returned property $%s is nullable, add null return doc type, e.g. %s',
+                $propName,
+                ($returnDocType->toString() ?? $propDocType).'|null'
+            ));
+        }
+
+        // Only report in fn type is defined. Doc type and fn type is synced by other sniffs.
+        $returnFnType = $subject->getFnType();
+        if (!($returnFnType instanceof UndefinedType) && !($returnFnType instanceof NullableType)) {
+            $subject->addFnTypeWarning(sprintf(
+                'Returned property $%s is nullable, use nullable return type declaration, e.g. ?%s',
+                $propName,
+                $returnFnType->toString()
+            ));
+        }
+
+        $subject->writeWarningsTo($file, static::CODE);
     }
 }

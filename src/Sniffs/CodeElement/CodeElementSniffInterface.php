@@ -25,7 +25,8 @@ interface CodeElementSniffInterface
      * Processes code element and its DocBlock, then adds warnings/errors to PHPCS file.
      *
      * @param File                 $file
-     * @param CodeElementInterface $codeElement
+     * @param CodeElementInterface $element
+     * @param CodeElementInterface $parentElement
      */
-    public function process(File $file, CodeElementInterface $codeElement): void;
+    public function process(File $file, CodeElementInterface $element, CodeElementInterface $parentElement): void;
 }

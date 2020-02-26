@@ -11,6 +11,12 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 - Setting `FqcnPropSniff.reportUninitializedProp`
 - Setting `FqcnPropSniff.reportNullableBasicGetter`
 
+## 0.13.1 - 2020-01-17
+### Added
+- Warning for undefined type typed array, e.g. []|null
+### Fixed
+- Parsing of undefined type typed array, e.g. [][]
+
 ## 0.13.0 - 2019-12-09
 ### Removed
 - Setting `FqcnMethodSniff.usefulTags`

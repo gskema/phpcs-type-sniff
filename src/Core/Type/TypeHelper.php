@@ -3,6 +3,7 @@
 namespace Gskema\TypeSniff\Core\Type;
 
 use Gskema\TypeSniff\Core\Type\Common\ArrayType;
+use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
 use Gskema\TypeSniff\Core\Type\DocBlock\CompoundType;
 use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
@@ -34,8 +35,10 @@ class TypeHelper
         }
 
         foreach ($typedArrayTypes as $typedArrayType) {
-            if ($typedArrayType->getType() instanceof ArrayType) {
-                return $typedArrayType;  // e.g. array[][]
+            if ($typedArrayType->getType() instanceof ArrayType
+             || $typedArrayType->getType() instanceof UndefinedType
+            ) {
+                return $typedArrayType;  // e.g. array[][] or [][]
             }
         }
 

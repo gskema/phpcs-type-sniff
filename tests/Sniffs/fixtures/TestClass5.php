@@ -104,8 +104,9 @@ class TestClass5
 
     /**
      * @param Collection|Image[] $images
+     * @param []|null $arg1
      */
-    public function func9(Collection $images): void
+    public function func9(Collection $images, ?array $arg1): void
     {
     }
 
@@ -116,4 +117,13 @@ class TestClass5
 
     /** @var array */
     const C4 = [];
+
+    /** @var [] */
+    const C5 = [];
+
+    /** @var [][]|null */
+    const C6 = [];
+
+    /** @var [][]|null */
+    public $prop2 = [];
 }

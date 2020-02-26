@@ -61,4 +61,9 @@ class TraitElement extends AbstractFqcnElement
     {
         return $this->methods['__construct'] ?? null;
     }
+
+    public function getMethod(string $name): ?TraitMethodElement
+    {
+        return $this->methods[$name] ?? null;
+    }
 }

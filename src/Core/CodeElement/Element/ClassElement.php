@@ -81,6 +81,11 @@ class ClassElement extends AbstractFqcnElement
         return $this->methods['__construct'] ?? null;
     }
 
+    public function getMethod(string $name): ?ClassMethodElement
+    {
+        return $this->methods[$name] ?? null;
+    }
+
     public function getProperty(string $name): ?ClassPropElement
     {
         return $this->properties[$name] ?? null;

@@ -123,17 +123,11 @@ class FqcnPropSniff implements CodeElementSniffInterface
                 if (null === $unvisitedMethod) {
                     continue;
                 }
-                $nonNullAssignedProps = $unvisitedMethod->getMetadata()->getNonNullAssignedProps();
-                if (null === $nonNullAssignedProps) {
-                    return null; // null = not detected, cannot assume anything on missing information.
-                }
+                $nonNullAssignedProps = $unvisitedMethod->getMetadata()->getNonNullAssignedProps() ?? []; // never null
                 if (in_array($propName, $nonNullAssignedProps)) {
                     return true;
                 }
-                $callNameChunk = $unvisitedMethod->getMetadata()->getThisMethodCalls();
-                if (null === $callNameChunk) {
-                    return null; // null = not detected, cannot assume anything on missing information.
-                }
+                $callNameChunk = $unvisitedMethod->getMetadata()->getThisMethodCalls() ?? []; // never null
                 $callNames = array_merge($callNames, $callNameChunk);
             }
             $visitedNames = array_merge($visitedNames, $unvisitedNames);

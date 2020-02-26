@@ -33,6 +33,7 @@ class TestClass7
     {
         $this->assign1(); // test recursion
         $this->assign2();
+        $this->assign3(); // unknown method
     }
 
     public function assign2(): void

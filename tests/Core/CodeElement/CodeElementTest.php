@@ -112,6 +112,7 @@ class CodeElementTest extends TestCase
         self::assertEquals([], $trait->getProperties());
         self::assertEquals([], $trait->getMethods());
         self::assertEquals(null, $trait->getOwnConstructor());
+        self::assertEquals(null, $trait->getMethod('who'));
 
         $traitMethod = new TraitMethodElement($this->createDocBlock(), 'FQCN9', $this->createSignature());
         $traitMethod->getMetadata()->setExtended(true);

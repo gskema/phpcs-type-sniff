@@ -260,7 +260,8 @@ String `true/false` values are automatically converted to booleans.
             <property name="FqcnPropSniff.reportNullableBasicGetter" value="false"/>
 
             <!-- Disables reporting missing null type in property PHPDoc -->
-            <!-- when there is not default value and no assigned value in __construct() -->
+            <!-- when there is no default value and no assigned value in __construct() -->
+            <!--- Some false positives in exotic cases may be reported -->
             <property name="FqcnPropSniff.reportUninitializedProp" value="false"/>
 
             <!-- Your own custom code element sniff(s). Autoloader is needed. -->

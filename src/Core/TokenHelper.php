@@ -191,9 +191,9 @@ class TokenHelper
      * @param File $file
      * @param int  $fnPtr
      *
-     * @return string[]|null
+     * @return string[]
      */
-    public static function getNonNullAssignedProps(File $file, int $fnPtr): ?array
+    public static function getNonNullAssignedProps(File $file, int $fnPtr): array
     {
         $tokens = $file->getTokens();
         $fnToken = $tokens[$fnPtr];

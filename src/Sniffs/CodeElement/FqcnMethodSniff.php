@@ -105,18 +105,19 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         foreach ($fnSig->getParams() as $fnParam) {
             $paramTag = $docBlock->getParamTag($fnParam->getName());
             $subject = ParamTypeSubject::fromParam($fnParam, $paramTag, $docBlock);
-            $this->processSigType($file, $subject);
+            $this->processSigType($subject);
+            $subject->writeWarningsTo($file, static::CODE);
         }
 
         // @return
         if (!$isConstructMethod) {
             $returnTag = $docBlock->getReturnTag();
             $subject = ReturnTypeSubject::fromSignature($fnSig, $returnTag, $docBlock);
-            $this->processSigType($file, $subject);
-
+            $this->processSigType($subject);
             if ($method instanceof ClassMethodElement && $parent instanceof ClassElement) {
-                $this->reportNullableBasicGetter && $this->reportNullableBasicGetter($file, $subject, $method, $parent);
+                $this->reportNullableBasicGetter && $this->reportNullableBasicGetter($subject, $method, $parent);
             }
+            $subject->writeWarningsTo($file, static::CODE);
         } else {
             foreach ($docBlock->getDescriptionLines() as $lineNum => $descLine) {
                 if (preg_match('#^\w+\s+constructor\.?$#', $descLine)) {
@@ -126,7 +127,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         }
     }
 
-    protected function processSigType(File $file, AbstractTypeSubject $subject): void
+    protected function processSigType(AbstractTypeSubject $subject): void
     {
         FnTypeInspector::reportMandatoryTypes($subject);
         FnTypeInspector::reportSuggestedTypes($subject);
@@ -143,8 +144,6 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         } else {
             DocTypeInspector::reportMandatoryTypes($subject, true);
         }
-
-        $subject->writeWarningsTo($file, static::CODE);
     }
 
     protected function hasUselessDocBlock(AbstractFqcnMethodElement $method): bool
@@ -214,7 +213,6 @@ class FqcnMethodSniff implements CodeElementSniffInterface
     }
 
     protected function reportNullableBasicGetter(
-        File $file,
         ReturnTypeSubject $subject,
         ClassMethodElement $method,
         ClassElement $class
@@ -262,7 +260,5 @@ class FqcnMethodSniff implements CodeElementSniffInterface
                 $returnFnType->toString()
             ));
         }
-
-        $subject->writeWarningsTo($file, static::CODE);
     }
 }

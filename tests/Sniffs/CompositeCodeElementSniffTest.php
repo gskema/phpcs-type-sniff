@@ -229,7 +229,6 @@ class CompositeCodeElementSniffTest extends TestCase
             __DIR__.'/fixtures/TestClass8.php',
             [
                 '020 Add type hint in PHPDoc tag for return value, e.g. "null|string"',
-                '020 Add type hint in PHPDoc tag for return value, e.g. "null|string"',
                 '020 Returned property $foo is nullable, add null return doc type, e.g. null|string',
             ],
         ];

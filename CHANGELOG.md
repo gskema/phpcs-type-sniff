@@ -4,9 +4,10 @@ All notable changes to `phpcs-type-sniff` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
-## 0.14.1 - 2020-??-??
+## 0.14.1 - 2020-04-14
 ### Fixed
 - Doc type `resource` cannot be type declaration, do not require
+- Nullable basic getter warning when no dock block does not contain tags
 
 ## 0.14.0 - 2020-02-26
 ### Added

@@ -179,7 +179,7 @@ class CompositeCodeElementSniffTest extends TestCase
                 '064 Add type declaration for parameter $arg1 or create PHPDoc with type hint',
                 '064 Add typed array type hint for parameter $arg2, .e.g.: "string[]" or "SomeClass[]". Correct array depth must be specified.',
                 '064 Add type declaration for return value or create PHPDoc with type hint',
-                '072 Returned property $prop1 is nullable, add null return doc type, e.g. string|null',
+                '072 Returned property $prop1 is nullable, add null return doc type, e.g. null|string',
                 '074 Returned property $prop1 is nullable, use nullable return type declaration, e.g. ?string',
                 '088 Add @var tag for property $prop5',
                 $php74 ? '' : '088 Property $prop5 not initialized by __construct(), add null doc type or set a default value',
@@ -219,6 +219,29 @@ class CompositeCodeElementSniffTest extends TestCase
             [
                 $php74 ? '' : '007 Property $prop1 not initialized by __construct(), add null doc type or set a default value',
             ],
+        ];
+
+        // #10
+        $dataSets[] = [
+            [
+                'useReflection' => false,
+            ],
+            __DIR__.'/fixtures/TestClass8.php',
+            [
+                '020 Add type hint in PHPDoc tag for return value, e.g. "null|string"',
+                '020 Add type hint in PHPDoc tag for return value, e.g. "null|string"',
+                '020 Returned property $foo is nullable, add null return doc type, e.g. null|string',
+            ],
+        ];
+
+        // #11
+        $dataSets[] = [
+            [
+                'useReflection' => false,
+                'FqcnMethodSniff.reportMissingTags' => false,
+            ],
+            __DIR__.'/fixtures/TestClass8.php',
+            [],
         ];
 
         // Remove empty warnings (some warnings disabled on PHP 7.4)
@@ -272,7 +295,7 @@ class CompositeCodeElementSniffTest extends TestCase
 
         // Elements are iterated by type first, then line. Need to resort to match test files.
         ksort($actualWarnings);
-        $actualWarnings = array_merge(...$actualWarnings);
+        $actualWarnings = $actualWarnings ? array_merge(...$actualWarnings) : [];
 
         static::assertEquals($expectedWarnings, $actualWarnings);
     }

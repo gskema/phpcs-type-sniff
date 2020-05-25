@@ -194,7 +194,7 @@ cause `phpcs` crashes while editing (not possible to catch `FatalError`).
     <rule ref="PSR2"/>
 
     <!-- phpcs-type-sniff configuration -->   
-    <arg name="bootstrap" value="./vendor/autoload.php"/>
+    <autoload>./vendor/autoload.php</autoload>
     <rule ref="./vendor/gskema/phpcs-type-sniff/src/Sniffs/CompositeCodeElementSniff.php">
         <properties>
             <property name="useReflection" value="true"/>
@@ -221,7 +221,7 @@ String `true/false` values are automatically converted to booleans.
 
     <!-- Includes an autoloader which is needed when using reflection API -->
     <!-- or custom code element sniff(s) -->
-    <arg name="bootstrap" value="./vendor/autoload.php"/>
+    <autoload>./vendor/autoload.php</autoload>
 
     <!-- Includes a standalone sniff to your custom coding standard -->
     <rule ref="./vendor/gskema/phpcs-type-sniff/src/Sniffs/CompositeCodeElementSniff.php">

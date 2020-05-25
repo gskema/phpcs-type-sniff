@@ -4,7 +4,7 @@
     <description>~</description>
 
     <arg name="extensions" value="php"/>
-    <arg name="bootstrap" value="./vendor/autoload.php"/>
+    <autoload>./vendor/autoload.php</autoload>
 
     <file>src</file>
     <file>tests</file>

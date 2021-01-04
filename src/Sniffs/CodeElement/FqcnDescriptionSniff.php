@@ -6,6 +6,7 @@ use Gskema\TypeSniff\Core\CodeElement\Element\ClassElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\CodeElementInterface;
 use Gskema\TypeSniff\Core\CodeElement\Element\InterfaceElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\TraitElement;
+use Gskema\TypeSniff\Core\SniffHelper;
 use PHP_CodeSniffer\Files\File;
 
 class FqcnDescriptionSniff implements CodeElementSniffInterface
@@ -22,6 +23,9 @@ class FqcnDescriptionSniff implements CodeElementSniffInterface
         '@package'
     ];
 
+    /** @var string */
+    protected $reportType = 'warning';
+
     /**
      * @inheritDoc
      */
@@ -36,6 +40,8 @@ class FqcnDescriptionSniff implements CodeElementSniffInterface
         foreach ($this->invalidTags as &$invalidTag) {
              $invalidTag = substr($invalidTag, 1);
         }
+
+        $this->reportType = $config['reportType'] ?? 'warning';
     }
 
     /**
@@ -58,7 +64,7 @@ class FqcnDescriptionSniff implements CodeElementSniffInterface
         foreach ($element->getDocBlock()->getDescriptionLines() as $lineNum => $descriptionLine) {
             foreach ($this->invalidPatterns as $invalidPattern) {
                 if (preg_match($invalidPattern, $descriptionLine)) {
-                    $file->addWarningOnLine('Useless description', $lineNum, static::CODE);
+                    SniffHelper::addViolation($file, 'Useless description', $lineNum, static::CODE, $this->reportType);
                 }
             }
         }
@@ -66,7 +72,7 @@ class FqcnDescriptionSniff implements CodeElementSniffInterface
         foreach ($element->getDocBlock()->getTags() as $tag) {
             foreach ($this->invalidTags as $invalidTagName) {
                 if ($tag->getName() === $invalidTagName) {
-                    $file->addWarningOnLine('Useless tag', $tag->getLine(), static::CODE);
+                    SniffHelper::addViolation($file, 'Useless tag', $tag->getLine(), static::CODE, $this->reportType);
                 }
             }
         }

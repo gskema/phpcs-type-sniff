@@ -4,6 +4,7 @@ namespace Gskema\TypeSniff\Sniffs\CodeElement;
 
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassElement;
 use Gskema\TypeSniff\Core\DocBlock\Tag\VarTag;
+use Gskema\TypeSniff\Core\SniffHelper;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
 use Gskema\TypeSniff\Core\Type\TypeHelper;
@@ -36,6 +37,9 @@ class FqcnMethodSniff implements CodeElementSniffInterface
     /** @var bool */
     protected $reportNullableBasicGetter = true;
 
+    /** @var string */
+    protected $reportType = 'warning';
+
     /**
      * @inheritDoc
      */
@@ -51,6 +55,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         $this->invalidTags = $invalidTags;
         $this->reportMissingTags = $config['reportMissingTags'] ?? true;
         $this->reportNullableBasicGetter = $config['reportNullableBasicGetter'] ?? true;
+        $this->reportType = $config['reportType'] ?? 'warning';
     }
 
     /**
@@ -73,12 +78,12 @@ class FqcnMethodSniff implements CodeElementSniffInterface
     {
         $warningCountBefore = $file->getWarningCount();
 
-        static::reportInvalidTags($file, $method, $this->invalidTags);
+        $this->reportInvalidTags($file, $method, $this->invalidTags);
         $this->processMethod($file, $method, $parentElement);
 
         $hasNewWarnings = $file->getWarningCount() > $warningCountBefore;
         if (!$hasNewWarnings && $this->hasUselessDocBlock($method)) {
-            $file->addWarningOnLine('Useless PHPDoc', $method->getLine(), static::CODE);
+            SniffHelper::addViolation($file, 'Useless PHPDoc', $method->getLine(), static::CODE, $this->reportType);
         }
     }
 
@@ -96,7 +101,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
             if ($hasInheritDocTag || $isMagicMethod) {
                 return;
             } elseif ($method->getMetadata()->isExtended()) {
-                $file->addWarningOnLine('Missing @inheritDoc tag. Remove duplicated parent PHPDoc content.', $method->getLine(), static::CODE);
+                SniffHelper::addViolation($file, 'Missing @inheritDoc tag. Remove duplicated parent PHPDoc content.', $method->getLine(), static::CODE, $this->reportType);
                 return;
             }
         }
@@ -106,7 +111,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
             $paramTag = $docBlock->getParamTag($fnParam->getName());
             $subject = ParamTypeSubject::fromParam($fnParam, $paramTag, $docBlock);
             $this->processSigType($subject);
-            $subject->writeWarningsTo($file, static::CODE);
+            $subject->writeViolationsTo($file, static::CODE, $this->reportType);
         }
 
         // @return
@@ -117,11 +122,11 @@ class FqcnMethodSniff implements CodeElementSniffInterface
             if ($method instanceof ClassMethodElement && $parent instanceof ClassElement) {
                 $this->reportNullableBasicGetter && $this->reportNullableBasicGetter($subject, $method, $parent);
             }
-            $subject->writeWarningsTo($file, static::CODE);
+            $subject->writeViolationsTo($file, static::CODE, $this->reportType);
         } else {
             foreach ($docBlock->getDescriptionLines() as $lineNum => $descLine) {
                 if (preg_match('#^\w+\s+constructor\.?$#', $descLine)) {
-                    $file->addWarningOnLine('Useless description.', $lineNum, static::CODE);
+                    SniffHelper::addViolation($file, 'Useless description.', $lineNum, static::CODE, $this->reportType);
                 }
             }
         }
@@ -201,12 +206,12 @@ class FqcnMethodSniff implements CodeElementSniffInterface
      * @param AbstractFqcnMethodElement $method
      * @param string[]                  $invalidTags
      */
-    protected static function reportInvalidTags(File $file, AbstractFqcnMethodElement $method, array $invalidTags): void
+    protected function reportInvalidTags(File $file, AbstractFqcnMethodElement $method, array $invalidTags): void
     {
         foreach ($method->getDocBlock()->getTags() as $tag) {
             foreach ($invalidTags as $invalidTagName) {
                 if ($tag->getName() === $invalidTagName) {
-                    $file->addWarningOnLine('Useless tag', $tag->getLine(), static::CODE);
+                    SniffHelper::addViolation($file, 'Useless tag', $tag->getLine(), static::CODE, $this->reportType);
                 }
             }
         }

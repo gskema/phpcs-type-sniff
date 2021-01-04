@@ -217,6 +217,6 @@ class DocBlockParserTest extends TestCase
 
         $actualDocBlock = DocBlockParser::fromRaw($givenRawDocBlock, $givenStartLine);
 
-        $this->assertEquals($expectedDocBlock, $actualDocBlock);
+        self::assertEquals($expectedDocBlock, $actualDocBlock);
     }
 }

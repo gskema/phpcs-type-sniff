@@ -36,14 +36,14 @@ class FqcnMethodSniffTest extends TestCase
                     4,
                     'func1',
                     [
-                        new FunctionParam(3, 'param1', new IntType(), new UndefinedType())
+                        new FunctionParam(3, 'param1', new IntType(), new UndefinedType()),
                     ],
                     new VoidType(),
                     5
                 ),
                 null
             ),
-            true
+            true,
         ];
 
         // #1 missing param tag
@@ -57,14 +57,14 @@ class FqcnMethodSniffTest extends TestCase
                     4,
                     'func1',
                     [
-                        new FunctionParam(3, 'param1', new IntType(), new UndefinedType())
+                        new FunctionParam(3, 'param1', new IntType(), new UndefinedType()),
                     ],
                     new VoidType(),
                     5
                 ),
                 null
             ),
-            false
+            false,
         ];
 
         // #2 has func description
@@ -79,14 +79,14 @@ class FqcnMethodSniffTest extends TestCase
                     4,
                     'func1',
                     [
-                        new FunctionParam(3, 'param1', new IntType(), new UndefinedType())
+                        new FunctionParam(3, 'param1', new IntType(), new UndefinedType()),
                     ],
                     new VoidType(),
                     5
                 ),
                 null
             ),
-            false
+            false,
         ];
 
         // #2 has param description
@@ -101,14 +101,14 @@ class FqcnMethodSniffTest extends TestCase
                     4,
                     'func1',
                     [
-                        new FunctionParam(3, 'param1', new IntType(), new UndefinedType())
+                        new FunctionParam(3, 'param1', new IntType(), new UndefinedType()),
                     ],
                     new VoidType(),
                     5
                 ),
                 null
             ),
-            false
+            false,
         ];
 
         // #2 different types
@@ -123,14 +123,14 @@ class FqcnMethodSniffTest extends TestCase
                     4,
                     'func1',
                     [
-                        new FunctionParam(3, 'param1', new IntType(), new UndefinedType())
+                        new FunctionParam(3, 'param1', new IntType(), new UndefinedType()),
                     ],
                     new VoidType(),
                     5
                 ),
                 null
             ),
-            false
+            false,
         ];
 
         return $dataSets;
@@ -138,6 +138,7 @@ class FqcnMethodSniffTest extends TestCase
 
     /**
      * @dataProvider dataHasUselessDocBlock
+     *
      * @param AbstractFqcnMethodElement $givenMethod
      * @param bool                      $expectedResult
      */

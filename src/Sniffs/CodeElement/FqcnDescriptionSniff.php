@@ -20,7 +20,7 @@ class FqcnDescriptionSniff implements CodeElementSniffInterface
 
     /** @var string[] */
     protected $invalidTags = [
-        '@package'
+        '@package',
     ];
 
     /** @var string */
@@ -33,12 +33,12 @@ class FqcnDescriptionSniff implements CodeElementSniffInterface
     {
         $this->invalidPatterns = array_merge($this->invalidPatterns, $config['invalidPatterns'] ?? []);
         foreach ($this->invalidPatterns as &$invalidPattern) {
-            $invalidPattern = '#'.$invalidPattern.'#i';
+            $invalidPattern = '#' . $invalidPattern . '#i';
         }
 
         $this->invalidTags = array_merge($this->invalidTags, $config['invalidTags'] ?? []);
         foreach ($this->invalidTags as &$invalidTag) {
-             $invalidTag = substr($invalidTag, 1);
+            $invalidTag = substr($invalidTag, 1);
         }
 
         $this->reportType = $config['reportType'] ?? 'warning';

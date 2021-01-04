@@ -158,7 +158,8 @@ class FqcnMethodSniff implements CodeElementSniffInterface
 
         $docReturnTag = $docBlock->getReturnTag();
 
-        if ($docBlock instanceof UndefinedDocBlock
+        if (
+            $docBlock instanceof UndefinedDocBlock
             || $docBlock->hasDescription()
             || ($docReturnTag && $docReturnTag->hasDescription())
             // check if other "useful" tags are present

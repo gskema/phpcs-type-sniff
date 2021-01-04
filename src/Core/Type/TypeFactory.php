@@ -77,7 +77,7 @@ class TypeFactory
 
         $basicType = static::$basicTypeMap[$rawType] ?? null;
         if (null !== $basicType) {
-            return new $basicType;
+            return new $basicType();
         }
 
         $rawType6 = substr($rawType, 0, 6);
@@ -107,6 +107,7 @@ class TypeFactory
         //       \SomeClass[][]
         if ($depth > 0) {
             $rawInnerType = substr($rawType, 0, -2 * $depth);
+
             return new TypedArrayType(static::fromRawType($rawInnerType), $depth);
         }
 
@@ -149,7 +150,7 @@ class TypeFactory
         $openScopes = ['<' => 0, '{' => 0, '(' => 0];
 
         $len = strlen($rawType);
-        for ($pos=0; $pos<=$len-1; $pos++) {
+        for ($pos = 0; $pos <= $len - 1; $pos++) {
             $ch = $rawType[$pos];
 
             '<' === $ch && $openScopes['<']++;

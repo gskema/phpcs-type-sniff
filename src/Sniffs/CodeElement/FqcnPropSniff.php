@@ -51,8 +51,9 @@ class FqcnPropSniff implements CodeElementSniffInterface
 
     /**
      * @inheritDoc
+     *
      * @param AbstractFqcnPropElement $prop
-     * @param AbstractFqcnElement $parentElement
+     * @param AbstractFqcnElement     $parentElement
      */
     public function process(File $file, CodeElementInterface $prop, CodeElementInterface $parentElement): void
     {
@@ -75,7 +76,7 @@ class FqcnPropSniff implements CodeElementSniffInterface
         $varTag = $subject->getDocBlock()->getTagsByName('var')[0] ?? null;
 
         if ($varTag && null !== $varTag->getParamName()) {
-            $subject->addDocTypeWarning('Remove property name $'.$varTag->getParamName().' from @var tag');
+            $subject->addDocTypeWarning('Remove property name $' . $varTag->getParamName() . ' from @var tag');
         }
     }
 
@@ -98,7 +99,8 @@ class FqcnPropSniff implements CodeElementSniffInterface
 
         $ownConstructor = $parent->getOwnConstructor();
 
-        if ((false === $propHasDefaultValue || $prop->getDefaultValueType() instanceof NullType)
+        if (
+            (false === $propHasDefaultValue || $prop->getDefaultValueType() instanceof NullType)
             && !TypeHelper::containsType($subject->getDocType(), NullType::class)
             && (!$ownConstructor || !static::hasNonNullAssignedProp($parent, $ownConstructor, $prop->getPropName()))
         ) {

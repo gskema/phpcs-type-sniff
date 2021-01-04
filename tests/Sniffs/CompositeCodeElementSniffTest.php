@@ -23,7 +23,7 @@ class CompositeCodeElementSniffTest extends TestCase
             [
                 'FqcnMethodSniff.enabled' => 'true',
             ],
-            __DIR__.'/fixtures/TestClass0.php',
+            __DIR__ . '/fixtures/TestClass0.php',
             [
                 '009 Replace array type with typed array type in PHPDoc for C2 constant, .e.g.: "string[]" or "SomeClass[]". Use mixed[] for generic arrays. Correct array depth must be specified.',
                 '009 Type hint "array" is not compatible with C2 constant value type',
@@ -47,7 +47,7 @@ class CompositeCodeElementSniffTest extends TestCase
                 '051 Remove redundant C6 constant type hints "array"',
                 '054 Use a more specific type in typed array hint "array[]" for C7 constant. Correct array depth must be specified.',
                 '057 Use a more specific type in typed array hint "array[][]" for property $prop11. Correct array depth must be specified.',
-            ]
+            ],
         ];
 
         // #1
@@ -55,7 +55,7 @@ class CompositeCodeElementSniffTest extends TestCase
             [
                 'FqcnMethodSniff.invalidTags' => ['@SmartTemplate'],
             ],
-            __DIR__.'/fixtures/TestClass1.php',
+            __DIR__ . '/fixtures/TestClass1.php',
             [
                 '007 Add type declaration for parameter $a or create PHPDoc with type hint',
                 '007 Create PHPDoc with typed array type hint for parameter $b, .e.g.: "string[]" or "SomeClass[]". Correct array depth must be specified.',
@@ -83,7 +83,7 @@ class CompositeCodeElementSniffTest extends TestCase
                 '070 Useless tag',
                 '087 Add @var tag for property $prop1',
                 $php74 ? '' : '087 Property $prop1 not initialized by __construct(), add null doc type or set a default value',
-            ]
+            ],
         ];
 
         // #2
@@ -91,11 +91,11 @@ class CompositeCodeElementSniffTest extends TestCase
             [
                 'FqcnMethodSniff.enabled' => 'false',
             ],
-            __DIR__.'/fixtures/TestClass1.php',
+            __DIR__ . '/fixtures/TestClass1.php',
             [
                 '087 Add @var tag for property $prop1',
                 $php74 ? '' : '087 Property $prop1 not initialized by __construct(), add null doc type or set a default value',
-            ]
+            ],
         ];
 
         // #3
@@ -103,7 +103,7 @@ class CompositeCodeElementSniffTest extends TestCase
             [
                 'useReflection' => true,
             ],
-            __DIR__.'/fixtures/TestClass3.php',
+            __DIR__ . '/fixtures/TestClass3.php',
             [
                 '007 Add type declaration for parameter $arg1 or create PHPDoc with type hint',
                 '022 Missing @inheritDoc tag. Remove duplicated parent PHPDoc content.',
@@ -113,7 +113,7 @@ class CompositeCodeElementSniffTest extends TestCase
                 '042 Missing "null, int" types in return value type hint',
                 '065 Type hint "string" is not compatible with return value value type',
                 '072 Type hint "string" is not compatible with return value value type',
-            ]
+            ],
         ];
 
         // #4
@@ -121,7 +121,7 @@ class CompositeCodeElementSniffTest extends TestCase
             [
                 'useReflection' => false,
             ],
-            __DIR__.'/fixtures/TestClass4.php',
+            __DIR__ . '/fixtures/TestClass4.php',
             [
                 '008 Replace array type with typed array type in PHPDoc for parameter $arg1, .e.g.: "string[]" or "SomeClass[]". Use mixed[] for generic arrays. Correct array depth must be specified.',
                 '037 Type hint "static" is not compatible with return value value type',
@@ -131,7 +131,7 @@ class CompositeCodeElementSniffTest extends TestCase
                 '117 Use a more specific type in typed array hint "array[]" for parameter $arg2. Correct array depth must be specified.',
                 '124 Type hint "mixed" is not compatible with parameter $arg1 value type',
                 '126 Type hint "mixed" is not compatible with return value value type',
-            ]
+            ],
         ];
 
         // #5
@@ -139,7 +139,7 @@ class CompositeCodeElementSniffTest extends TestCase
             [
                 'useReflection' => false,
             ],
-            __DIR__.'/fixtures/TestClass5.php',
+            __DIR__ . '/fixtures/TestClass5.php',
             [
                 '006 Useless description',
                 '007 Useless tag',
@@ -171,10 +171,10 @@ class CompositeCodeElementSniffTest extends TestCase
         // #6
         $dataSets[] = [
             [
-                'useReflection' => false,
+                'useReflection'                     => false,
                 'FqcnMethodSniff.reportMissingTags' => false,
             ],
-            __DIR__.'/fixtures/TestClass6.php',
+            __DIR__ . '/fixtures/TestClass6.php',
             [
                 '064 Add type declaration for parameter $arg1 or create PHPDoc with type hint',
                 '064 Add typed array type hint for parameter $arg2, .e.g.: "string[]" or "SomeClass[]". Correct array depth must be specified.',
@@ -192,7 +192,7 @@ class CompositeCodeElementSniffTest extends TestCase
             [
                 'useReflection' => false,
             ],
-            __DIR__.'/fixtures/TestTrait7.php',
+            __DIR__ . '/fixtures/TestTrait7.php',
             [
                 '007 Add @var tag for property $prop1',
                 $php74 ? '' : '007 Property $prop1 not initialized by __construct(), add null doc type or set a default value',
@@ -204,9 +204,9 @@ class CompositeCodeElementSniffTest extends TestCase
             [
                 'useReflection' => false,
             ],
-            __DIR__.'/fixtures/TestInterface8.php',
+            __DIR__ . '/fixtures/TestInterface8.php',
             [
-                '015 Add type declaration for return value or create PHPDoc with type hint'
+                '015 Add type declaration for return value or create PHPDoc with type hint',
             ],
         ];
 
@@ -215,7 +215,7 @@ class CompositeCodeElementSniffTest extends TestCase
             [
                 'useReflection' => false,
             ],
-            __DIR__.'/fixtures/TestClass7.php',
+            __DIR__ . '/fixtures/TestClass7.php',
             [
                 $php74 ? '' : '007 Property $prop1 not initialized by __construct(), add null doc type or set a default value',
             ],
@@ -226,7 +226,7 @@ class CompositeCodeElementSniffTest extends TestCase
             [
                 'useReflection' => false,
             ],
-            __DIR__.'/fixtures/TestClass8.php',
+            __DIR__ . '/fixtures/TestClass8.php',
             [
                 '020 Add type hint in PHPDoc tag for return value, e.g. "null|string"',
                 '020 Returned property $foo is nullable, add null return doc type, e.g. null|string',
@@ -236,10 +236,10 @@ class CompositeCodeElementSniffTest extends TestCase
         // #11
         $dataSets[] = [
             [
-                'useReflection' => false,
+                'useReflection'                     => false,
                 'FqcnMethodSniff.reportMissingTags' => false,
             ],
-            __DIR__.'/fixtures/TestClass8.php',
+            __DIR__ . '/fixtures/TestClass8.php',
             [],
         ];
 
@@ -270,7 +270,7 @@ class CompositeCodeElementSniffTest extends TestCase
 
         $ref = './src/Sniffs/CompositeCodeElementSniff.php'; // @see phpcs.xml
         $givenFile->ruleset->ruleset[$ref] = [
-            'properties' => $givenConfig
+            'properties' => $givenConfig,
         ];
 
         $sniff = new CompositeCodeElementSniff();
@@ -287,7 +287,7 @@ class CompositeCodeElementSniffTest extends TestCase
             foreach ($colWarnings as $column => $warnings) {
                 foreach ($warnings as $warning) {
                     $lineKey = str_pad($line, '3', '0', STR_PAD_LEFT);
-                    $actualWarnings[$line][] = $lineKey.' '.$warning['message'];
+                    $actualWarnings[$line][] = $lineKey . ' ' . $warning['message'];
                 }
             }
         }

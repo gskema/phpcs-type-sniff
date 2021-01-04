@@ -65,8 +65,10 @@ class TypeConverter
                     $isNullable = true;
                     continue;
                 }
-                if (!($type instanceof ArrayType)
-                 && !($type instanceof TypedArrayType)) {
+                if (
+                    !($type instanceof ArrayType)
+                    && !($type instanceof TypedArrayType)
+                ) {
                     $isArray = false;
                     break;
                 }
@@ -108,7 +110,8 @@ class TypeConverter
                 : null;
         }
 
-        if ($docType instanceof ObjectType
+        if (
+            $docType instanceof ObjectType
             && version_compare(PHP_VERSION, '7.2', '<')
         ) {
             return null;

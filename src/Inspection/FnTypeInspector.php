@@ -25,7 +25,8 @@ class FnTypeInspector
     public static function reportReplaceableTypes(AbstractTypeSubject $subject): void
     {
         // (string $arg1 = null) -> (?string $arg1 = null)
-        if ($subject->getValueType() instanceof NullType
+        if (
+            $subject->getValueType() instanceof NullType
             && !($subject->getFnType() instanceof UndefinedType)
             && !($subject->getFnType() instanceof NullableType)
         ) {
@@ -43,7 +44,8 @@ class FnTypeInspector
         }
 
         // Require fnType if possible (check, suggest from docType)
-        if (!$subject->hasDefinedFnType()
+        if (
+            !$subject->hasDefinedFnType()
             && $suggestedFnType = TypeConverter::toExampleFnType($subject->getDocType())
         ) {
             $subject->addFnTypeWarning(sprintf('Add type declaration for :subject:, e.g.: "%s"', $suggestedFnType->toString()));

@@ -156,7 +156,8 @@ class TypeComparator
             }
 
             // workaround for func1(float $arg1 = 1) :(
-            if ($valueType instanceof IntType
+            if (
+                $valueType instanceof IntType
                 && (FloatType::class === $flatDocTypeClass || DoubleType::class === $flatDocTypeClass)
             ) {
                 unset($missingDocTypeMap[IntType::class]);

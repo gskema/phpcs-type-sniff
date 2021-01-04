@@ -23,7 +23,8 @@ class DocTypeInspector
         $hasDocTypeTag = null !== $subject->getDocType();
 
         // e.g. $arg1 = [], C1 = [], $prop1 = [], ?array $arg1
-        if (!$hasDocTypeTag
+        if (
+            !$hasDocTypeTag
             && ($subject->getValueType() instanceof ArrayType || TypeHelper::containsType($subject->getFnType(), ArrayType::class))
         ) {
             $isNullable = $subject->getFnType() instanceof NullableType;
@@ -65,7 +66,8 @@ class DocTypeInspector
         }
 
         // @return void in not needed
-        if ($subject instanceof ReturnTypeSubject
+        if (
+            $subject instanceof ReturnTypeSubject
             && $subject->getFnType() instanceof VoidType
             && $subject->getDocType() instanceof VoidType
         ) {
@@ -137,7 +139,7 @@ class DocTypeInspector
                     $subject->addFnTypeWarning('Missing PHPDoc tag or void type declaration for :subject:');
                 }
             } else {
-                 $subject->addDocTypeWarning('Add type hint in PHPDoc tag for :subject:');
+                $subject->addDocTypeWarning('Add type hint in PHPDoc tag for :subject:');
             }
         }
     }

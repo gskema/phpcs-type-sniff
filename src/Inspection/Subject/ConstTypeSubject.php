@@ -46,7 +46,7 @@ class ConstTypeSubject extends AbstractTypeSubject
             $const->getValueType(),
             $varTag ? $varTag->getLine() : null,
             $const->getLine(),
-            $const->getConstName().' constant',
+            $const->getConstName() . ' constant',
             $docBlock
         );
     }

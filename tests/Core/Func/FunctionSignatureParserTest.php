@@ -28,7 +28,7 @@ class FunctionSignatureParserTest extends TestCase
 
         // #0
         $dataSets[] = [
-            __DIR__.'/fixtures/test_func0.php',
+            __DIR__ . '/fixtures/test_func0.php',
             2,
             new FunctionSignature(
                 3,
@@ -37,12 +37,12 @@ class FunctionSignatureParserTest extends TestCase
                 new UndefinedType(),
                 3
             ),
-            null
+            null,
         ];
 
         // #1
         $dataSets[] = [
-            __DIR__.'/fixtures/test_func0.php',
+            __DIR__ . '/fixtures/test_func0.php',
             13,
             new FunctionSignature(
                 5,
@@ -56,12 +56,12 @@ class FunctionSignatureParserTest extends TestCase
                 new ArrayType(),
                 5
             ),
-            null
+            null,
         ];
 
         // #2
         $dataSets[] = [
-            __DIR__.'/fixtures/test_func0.php',
+            __DIR__ . '/fixtures/test_func0.php',
             48,
             new FunctionSignature(
                 9,
@@ -76,32 +76,32 @@ class FunctionSignatureParserTest extends TestCase
                 new FqcnType('\Space1\Class2'),
                 15
             ),
-            null
+            null,
         ];
 
         // #3
         $dataSets[] = [
-            __DIR__.'/fixtures/test_func0.php',
+            __DIR__ . '/fixtures/test_func0.php',
             118,
             null,
-            \RuntimeException::class
+            \RuntimeException::class,
         ];
 
         // #4
         $dataSets[] = [
-            __DIR__.'/fixtures/test_func1.php',
+            __DIR__ . '/fixtures/test_func1.php',
             2,
             new FunctionSignature(
                 3,
                 'func1',
                 [
                     new FunctionParam(4, 'arg1', new IntType(), null),
-                    new FunctionParam(5, 'arg2', new StringType(), null)
+                    new FunctionParam(5, 'arg2', new StringType(), null),
                 ],
                 new UndefinedType(),
                 6
             ),
-            null
+            null,
         ];
 
         return $dataSets;

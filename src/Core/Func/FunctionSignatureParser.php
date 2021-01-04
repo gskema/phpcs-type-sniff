@@ -75,7 +75,7 @@ class FunctionSignatureParser
                 case T_CALLABLE:
                 case T_NULLABLE:
                     // these cannot be default
-                    $raw['type'] = ($raw['type'] ?? '').$token['content'];
+                    $raw['type'] = ($raw['type'] ?? '') . $token['content'];
                     break;
                 case T_EQUAL:
                     $raw['default'] = '';
@@ -87,7 +87,7 @@ class FunctionSignatureParser
                     if (isset($raw['default'])) {
                         $raw['default'] .= $token['content'];
                     } else {
-                        $raw['type'] = ($raw['type'] ?? '').$token['content'];
+                        $raw['type'] = ($raw['type'] ?? '') . $token['content'];
                     }
                     break;
                 case T_ELLIPSIS:

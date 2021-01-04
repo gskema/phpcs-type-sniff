@@ -70,7 +70,7 @@ class CodeElementDetector
                     break;
             }
 
-            $fqcn = ($namespace ? $namespace.'\\' : '').$className;
+            $fqcn = ($namespace ? $namespace . '\\' : '') . $className;
 
             // Instead of looking for doc blocks , we look for tokens
             // that should be preceded / followed by a doc block. This way we can

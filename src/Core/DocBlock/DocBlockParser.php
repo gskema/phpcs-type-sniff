@@ -44,7 +44,7 @@ class DocBlockParser
             }
 
             if (null !== $tagLineNum) {
-                $rawTags[$tagLineNum] = ($rawTags[$tagLineNum] ?? '').' '.trim($rawLine);
+                $rawTags[$tagLineNum] = ($rawTags[$tagLineNum] ?? '') . ' ' . trim($rawLine);
             } elseif (!empty($rawLine) || !empty($descLines)) {
                 // Always append non-empty lines, but also append empty lines if we have
                 // non-empty lines already. More non-empty lines might follow.

@@ -26,7 +26,7 @@ class PropTypeSubject extends AbstractTypeSubject
             $prop->getDefaultValueType(),
             $varTag ? $varTag->getLine() : $prop->getLine(),
             $prop->getLine(),
-            'property $'.$prop->getPropName(),
+            'property $' . $prop->getPropName(),
             $docBlock
         );
     }

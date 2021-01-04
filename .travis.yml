@@ -4,6 +4,11 @@ cache:
   directories:
     - $HOME/.composer/cache/files
 
+# https://travis-ci.community/t/xdebug-3-is-installed-by-default-breaking-builds/10748/6
+env:
+  global:
+    - XDEBUG_MODE=coverage
+
 matrix:
   include:
     - php: 7.1

@@ -19,6 +19,10 @@ matrix:
 before_install:
   - if [[ $COVERAGE != yes ]]; then phpenv config-rm xdebug.ini || true; fi;
 
+install:
+  - export COMPOSER_FLAGS="--prefer-dist --no-interaction"
+  - composer update $COMPOSER_FLAGS
+
 script:
   - vendor/bin/phpcs -p
   - if [[ $COVERAGE = yes ]]; then vendor/bin/phpunit --coverage-clover=coverage.clover; else vendor/bin/phpunit; fi

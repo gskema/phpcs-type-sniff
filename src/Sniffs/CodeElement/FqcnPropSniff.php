@@ -8,6 +8,7 @@ use Gskema\TypeSniff\Core\CodeElement\Element\ClassElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassMethodElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\TraitElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\TraitMethodElement;
+use Gskema\TypeSniff\Core\DocBlock\Tag\VarTag;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
 use Gskema\TypeSniff\Core\Type\TypeHelper;
 use Gskema\TypeSniff\Inspection\DocTypeInspector;
@@ -70,6 +71,7 @@ class FqcnPropSniff implements CodeElementSniffInterface
 
     protected static function reportInvalidDescription(PropTypeSubject $subject): void
     {
+        /** @var VarTag|null $varTag */
         $varTag = $subject->getDocBlock()->getTagsByName('var')[0] ?? null;
 
         if ($varTag && null !== $varTag->getParamName()) {

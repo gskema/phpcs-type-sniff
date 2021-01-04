@@ -16,12 +16,15 @@ class FqcnConstSniff implements CodeElementSniffInterface
 {
     protected const CODE = 'FqcnConstSniff';
 
+    /** @var string */
+    protected $reportType = 'warning';
+
     /**
      * @inheritDoc
      */
     public function configure(array $config): void
     {
-        // nothing to do
+        $this->reportType = $config['reportType'] ?? 'warning';
     }
 
     /**
@@ -52,7 +55,7 @@ class FqcnConstSniff implements CodeElementSniffInterface
 
         static::reportUselessDocBlock($subject);
 
-        $subject->writeWarningsTo($file, static::CODE);
+        $subject->writeViolationsTo($file, static::CODE, $this->reportType);
     }
 
     protected static function reportUselessDocBlock(ConstTypeSubject $subject): void

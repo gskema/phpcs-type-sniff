@@ -35,8 +35,9 @@ class TypeHelper
         }
 
         foreach ($typedArrayTypes as $typedArrayType) {
-            if ($typedArrayType->getType() instanceof ArrayType
-             || $typedArrayType->getType() instanceof UndefinedType
+            if (
+                $typedArrayType->getType() instanceof ArrayType
+                || $typedArrayType->getType() instanceof UndefinedType
             ) {
                 return $typedArrayType;  // e.g. array[][] or [][]
             }

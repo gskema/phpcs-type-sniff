@@ -29,6 +29,9 @@ class CompositeCodeElementSniff extends AbstractConfigurableSniff
      */
     protected function configure(array $config): void
     {
+        // 0. Global config
+        $globalReportType = $config['reportType'] ?? null;
+
         // 1. CompositeCodeElementSniff configuration
         $this->useReflection = $config['useReflection'] ?? false;
 
@@ -52,7 +55,7 @@ class CompositeCodeElementSniff extends AbstractConfigurableSniff
         // Property keys for CodeElementSniff(s) are applied by the short class name.
         // E.g. FqcnMethodSniff.invalidTags
         foreach ($config as $key => $val) {
-            if ('sniffs'!== $key && false !== strpos($key, '.')) {
+            if ('sniffs' !== $key && false !== strpos($key, '.')) {
                 [$shortClass, $cfgKey] = explode('.', $key, 2);
                 if (isset($rawSniffs[$shortClass])) {
                     $rawSniffs[$shortClass]['config'][$cfgKey] = $val;
@@ -65,8 +68,12 @@ class CompositeCodeElementSniff extends AbstractConfigurableSniff
             if (!$enabled) {
                 continue;
             }
+
+            // Modify individual sniff configs with global config values
+            $rawSniff['config']['reportType'] = $rawSniff['config']['reportType'] ?? $globalReportType ?? null;
+
             /** @var CodeElementSniffInterface $sniff */
-            $sniff = new $rawSniff['class'];
+            $sniff = new $rawSniff['class']();
             $sniff->configure($rawSniff['config']);
 
             $codeElementClasses = $sniff->register();

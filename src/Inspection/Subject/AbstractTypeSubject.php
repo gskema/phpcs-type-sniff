@@ -4,6 +4,7 @@ namespace Gskema\TypeSniff\Inspection\Subject;
 
 use Gskema\TypeSniff\Core\DocBlock\DocBlock;
 use Gskema\TypeSniff\Core\DocBlock\UndefinedDocBlock;
+use Gskema\TypeSniff\Core\SniffHelper;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\TypeInterface;
 use PHP_CodeSniffer\Files\File;
@@ -134,17 +135,27 @@ abstract class AbstractTypeSubject
         $this->fnTypeWarnings[] = $warning;
     }
 
+    /**
+     * @deprecated Use ::writeViolationsTo()
+     * @param File   $file
+     * @param string $sniffCode
+     */
     public function writeWarningsTo(File $file, string $sniffCode): void
+    {
+        $this->writeViolationsTo($file, $sniffCode, 'warning');
+    }
+
+    public function writeViolationsTo(File $file, string $sniffCode, string $reportType): void
     {
         $ucName = ucfirst($this->name);
         foreach ($this->docTypeWarnings as $docTypeWarning) {
             $warning = str_replace([':subject:', ':Subject:'], [$this->name, $ucName], $docTypeWarning);
-            $file->addWarningOnLine($warning, $this->docTypeLine ?? $this->fnTypeLine, $sniffCode);
+            SniffHelper::addViolation($file, $warning, $this->docTypeLine ?? $this->fnTypeLine, $sniffCode, $reportType);
         }
 
         foreach ($this->fnTypeWarnings as $fnTypeWarning) {
             $warning = str_replace([':subject:', ':Subject:'], [$this->name, $ucName], $fnTypeWarning);
-            $file->addWarningOnLine($warning, $this->fnTypeLine, $sniffCode);
+            SniffHelper::addViolation($file, $warning, $this->fnTypeLine, $sniffCode, $reportType);
         }
     }
 

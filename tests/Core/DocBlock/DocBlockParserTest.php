@@ -28,9 +28,9 @@ class DocBlockParserTest extends TestCase
 
         // #0
         $dataSets[] = [
-            'givenPath' => __DIR__.'/fixtures/TestDocBlock.php',
-            'givenPointers' => [2, 55],
-            'expectedDocBlock' => new DocBlock(
+            'givenPath'         => __DIR__ . '/fixtures/TestDocBlock.php',
+            'givenPointers'     => [2, 55],
+            'expectedDocBlock'  => new DocBlock(
                 [
                     4 => 'FuncDesc',
                     5 => 'oops',
@@ -40,7 +40,7 @@ class DocBlockParserTest extends TestCase
                 [
                     new ParamTag(10, new IntType(), 'param1', 'ParamDesc SecondLine'),
                     new GenericTag(12, 'inheritdoc', null),
-                    new ReturnTag(14, new ArrayType(), null)
+                    new ReturnTag(14, new ArrayType(), null),
                 ]
             ),
             'expectedException' => null,
@@ -48,9 +48,9 @@ class DocBlockParserTest extends TestCase
 
         // #1
         $dataSets[] = [
-            'givenPath' => __DIR__.'/fixtures/TestDocBlock.php',
-            'givenPointers' => [58, 63],
-            'expectedDocBlock' => new DocBlock(
+            'givenPath'         => __DIR__ . '/fixtures/TestDocBlock.php',
+            'givenPointers'     => [58, 63],
+            'expectedDocBlock'  => new DocBlock(
                 [],
                 [
                     new VarTag(17, new IntType(), null, 'SomeDesc'),
@@ -61,9 +61,9 @@ class DocBlockParserTest extends TestCase
 
         // #2
         $dataSets[] = [
-            'givenPath' => __DIR__.'/fixtures/TestDocBlock.php',
-            'givenPointers' => [66, 71],
-            'expectedDocBlock' => new DocBlock(
+            'givenPath'         => __DIR__ . '/fixtures/TestDocBlock.php',
+            'givenPointers'     => [66, 71],
+            'expectedDocBlock'  => new DocBlock(
                 [],
                 [
                     new VarTag(
@@ -79,9 +79,9 @@ class DocBlockParserTest extends TestCase
 
         // #3
         $dataSets[] = [
-            'givenPath' => __DIR__.'/fixtures/TestDocBlock.php',
-            'givenPointers' => [75, 158],
-            'expectedDocBlock' => new DocBlock(
+            'givenPath'         => __DIR__ . '/fixtures/TestDocBlock.php',
+            'givenPointers'     => [75, 158],
+            'expectedDocBlock'  => new DocBlock(
                 [
                     23 => 'FuncDesc',
                     24 => 'oops wtf',
@@ -101,7 +101,7 @@ class DocBlockParserTest extends TestCase
                     ),
                     new GenericTag(35, 'deprecated', null),
                     new GenericTag(36, 'inheritdoc', null),
-                    new ReturnTag(38, new TypedArrayType(new StringType(), 1), null)
+                    new ReturnTag(38, new TypedArrayType(new StringType(), 1), null),
                 ]
             ),
             'expectedException' => null,
@@ -155,7 +155,7 @@ class DocBlockParserTest extends TestCase
 
         // #1
         $dataSets[] = [
-            'givenRawDocBlock'  =>'/** @SmartTemplate() */',
+            'givenRawDocBlock'  => '/** @SmartTemplate() */',
             'givenStartLine'    => 2,
             'expectedDocBlock'  => new DocBlock(
                 [],
@@ -166,7 +166,7 @@ class DocBlockParserTest extends TestCase
 
         // #2 Var tag with multiple preceding spaces
         $dataSets[] = [
-            'givenRawDocBlock'  =>'/**  @var int */',
+            'givenRawDocBlock'  => '/**  @var int */',
             'givenStartLine'    => 2,
             'expectedDocBlock'  => new DocBlock(
                 [],
@@ -217,6 +217,6 @@ class DocBlockParserTest extends TestCase
 
         $actualDocBlock = DocBlockParser::fromRaw($givenRawDocBlock, $givenStartLine);
 
-        $this->assertEquals($expectedDocBlock, $actualDocBlock);
+        self::assertEquals($expectedDocBlock, $actualDocBlock);
     }
 }

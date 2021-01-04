@@ -165,7 +165,7 @@ class TokenHelper
         $codeSequence = [T_RETURN, T_THIS, T_OBJECT_OPERATOR, T_STRING, T_SEMICOLON];
 
         $propName = null;
-        for ($ptr=$openPtr+1; $ptr<$closePtr; $ptr++) {
+        for ($ptr = $openPtr + 1; $ptr < $closePtr; $ptr++) {
             $token = $tokens[$ptr];
             $code = $token['code'];
             if (in_array($code, Tokens::$emptyTokens)) {
@@ -206,7 +206,7 @@ class TokenHelper
         }
 
         $nonNullAssignedProps = [];
-        for ($ptr=$openPtr+1; $ptr<$closePtr; $ptr++) {
+        for ($ptr = $openPtr + 1; $ptr < $closePtr; $ptr++) {
             $token = $tokens[$ptr];
 
             // $this
@@ -285,7 +285,7 @@ class TokenHelper
 
         // @TODO [$this, 'name']
         $thisMethodCalls = [];
-        for ($ptr=$openPtr+1; $ptr<$closePtr; $ptr++) {
+        for ($ptr = $openPtr + 1; $ptr < $closePtr; $ptr++) {
             $token = $tokens[$ptr];
 
             // $this

@@ -38,6 +38,6 @@ class TypedArrayType implements TypeInterface
             $innerType = sprintf('(%s)', $innerType);
         }
 
-        return $innerType.str_repeat('[]', $this->depth);
+        return $innerType . str_repeat('[]', $this->depth);
     }
 }

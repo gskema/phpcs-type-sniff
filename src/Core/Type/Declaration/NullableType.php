@@ -29,7 +29,7 @@ class NullableType implements TypeInterface
      */
     public function toString(): string
     {
-        return '?'.$this->type->toString();
+        return '?' . $this->type->toString();
     }
 
     public function toDocString(): string
@@ -37,6 +37,6 @@ class NullableType implements TypeInterface
         $rawType = $this->type->toString();
 
         // This must match sorting in CompoundType::toString() for raw comparisons.
-        return $rawType > 'null' ? 'null|'.$rawType : $rawType.'|null';
+        return $rawType > 'null' ? 'null|' . $rawType : $rawType . '|null';
     }
 }

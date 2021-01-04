@@ -8,6 +8,7 @@ use Gskema\TypeSniff\Core\CodeElement\Element\ClassElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassMethodElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\TraitElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\TraitMethodElement;
+use Gskema\TypeSniff\Core\DocBlock\Tag\VarTag;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
 use Gskema\TypeSniff\Core\Type\TypeHelper;
 use Gskema\TypeSniff\Inspection\DocTypeInspector;
@@ -25,12 +26,16 @@ class FqcnPropSniff implements CodeElementSniffInterface
     /** @var bool */
     protected $reportUninitializedProp = true;
 
+    /** @var string */
+    protected $reportType = 'warning';
+
     /**
      * @inheritDoc
      */
     public function configure(array $config): void
     {
         $this->reportUninitializedProp = $config['reportUninitializedProp'] ?? true;
+        $this->reportType = $config['reportType'] ?? 'warning';
     }
 
     /**
@@ -46,8 +51,9 @@ class FqcnPropSniff implements CodeElementSniffInterface
 
     /**
      * @inheritDoc
+     *
      * @param AbstractFqcnPropElement $prop
-     * @param AbstractFqcnElement $parentElement
+     * @param AbstractFqcnElement     $parentElement
      */
     public function process(File $file, CodeElementInterface $prop, CodeElementInterface $parentElement): void
     {
@@ -61,15 +67,16 @@ class FqcnPropSniff implements CodeElementSniffInterface
         static::reportInvalidDescription($subject);
         $this->reportUninitializedProp && static::reportUninitializedProp($subject, $prop, $parentElement);
 
-        $subject->writeWarningsTo($file, static::CODE);
+        $subject->writeViolationsTo($file, static::CODE, $this->reportType);
     }
 
     protected static function reportInvalidDescription(PropTypeSubject $subject): void
     {
+        /** @var VarTag|null $varTag */
         $varTag = $subject->getDocBlock()->getTagsByName('var')[0] ?? null;
 
         if ($varTag && null !== $varTag->getParamName()) {
-            $subject->addDocTypeWarning('Remove property name $'.$varTag->getParamName().' from @var tag');
+            $subject->addDocTypeWarning('Remove property name $' . $varTag->getParamName() . ' from @var tag');
         }
     }
 
@@ -92,7 +99,8 @@ class FqcnPropSniff implements CodeElementSniffInterface
 
         $ownConstructor = $parent->getOwnConstructor();
 
-        if ((false === $propHasDefaultValue || $prop->getDefaultValueType() instanceof NullType)
+        if (
+            (false === $propHasDefaultValue || $prop->getDefaultValueType() instanceof NullType)
             && !TypeHelper::containsType($subject->getDocType(), NullType::class)
             && (!$ownConstructor || !static::hasNonNullAssignedProp($parent, $ownConstructor, $prop->getPropName()))
         ) {

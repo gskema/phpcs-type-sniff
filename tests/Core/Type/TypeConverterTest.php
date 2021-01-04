@@ -67,7 +67,7 @@ class TypeConverterTest extends TestCase
     ): void {
         $actualExampleDocType = TypeConverter::toExampleDocType($givenFnType);
 
-        $this->assertEquals($expectedExampleDocType, $actualExampleDocType);
+        self::assertEquals($expectedExampleDocType, $actualExampleDocType);
     }
 
     /**

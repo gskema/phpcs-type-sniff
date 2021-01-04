@@ -199,7 +199,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
     /**
      * @param File                      $file
      * @param AbstractFqcnMethodElement $method
-     * @param static[]                  $invalidTags
+     * @param string[]                  $invalidTags
      */
     protected static function reportInvalidTags(File $file, AbstractFqcnMethodElement $method, array $invalidTags): void
     {

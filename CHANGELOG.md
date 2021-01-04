@@ -4,6 +4,16 @@ All notable changes to `phpcs-type-sniff` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## 0.15.0 - 2021-01-04
+### Changed
+- Autoload file configuration examples in README
+### Added
+- Setting `reportType`
+- Setting `FqcnConstSniff.reportType`
+- Setting `FqcnDescriptionSniff.reportType`
+- Setting `FqcnMethodSniff.reportType`
+- Setting `FqcnPropSniff.reportType`
+
 ## 0.14.1 - 2020-04-14
 ### Fixed
 - Doc type `resource` cannot be type declaration, do not require

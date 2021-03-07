@@ -7,6 +7,7 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 ## 0.16.0 - 2021-03-??
 ### Added
 - Setting `addViolationId`
+- Script `phpcs_baseline.php` to subtract old warnings (baseline) from `phpcs` XML reports.
 
 ## 0.15.0 - 2021-01-04
 ### Changed

@@ -203,6 +203,35 @@ cause `phpcs` crashes while editing (not possible to catch `FatalError`).
 </ruleset>
 ```
 
+## PHPCS Baseline
+
+It may be hard to integrate new rules/standards into old projects because too many warnings
+may be detected. If you would like to fix them later, but use the standard for all new code,
+you can "save" warnings detected on current code, then ignore them on subsequent builds.
+The code standard remain the same, but on subsequent build you "subtract" the old (baseline)
+warnings:
+```shell
+# Add this configuration option to phpcs.xml (see [configuration](#Configuration)):
+# <property name="addViolationId" value="true"/>
+
+# Generate report with ignored warnings.
+# You may want to commit this file to your repository until you fix all the warnings.
+# You may also update this file once in a while. 
+./vendor/bin/phpcs --standard=phpcs.xml --report=checkstyle --report-file=baseline.xml
+
+# Run you main code style check command (on build) to generate a report.
+# This will contain all warnings, the ignored errors will be subtracted using a command below.
+./vendor/bin/phpcs --standard=phpcs.xml --report=checkstyle --report-file=report.xml
+
+# Run a custom PHP script (on build) that subtracts ignored warnings.
+# First argument is the baseline report file with ignored warnings,
+# second argument is target report file (that was just built).
+php phpcs_baseline.php ./baseline.xml ./report.xml
+```
+
+*Note*: This only works for *Gskema.Sniffs.CompositeCodeElement.** warnings, because
+`violationId` is used to recognize old warnings.
+
 ## Configuration
 
 Sniffs are registered and saved by their short class name.

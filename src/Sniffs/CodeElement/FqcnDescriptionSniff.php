@@ -26,6 +26,9 @@ class FqcnDescriptionSniff implements CodeElementSniffInterface
     /** @var string */
     protected $reportType = 'warning';
 
+    /** @var bool */
+    protected $addViolationId = false;
+
     /**
      * @inheritDoc
      */
@@ -42,6 +45,7 @@ class FqcnDescriptionSniff implements CodeElementSniffInterface
         }
 
         $this->reportType = $config['reportType'] ?? 'warning';
+        $this->addViolationId = $config['addViolationId'] ?? false;
     }
 
     /**

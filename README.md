@@ -231,6 +231,11 @@ String `true/false` values are automatically converted to booleans.
             <!-- Autoloader is needed. -->
             <property name="useReflection" value="true"/>
 
+            <!-- Appends violation ID to each error/warning. Default is false. -->
+            <!-- ID is useful for tracking old errors (baselines), -->
+            <!-- which you may want to ignore on build, but not in IDE. -->
+            <property name="addViolationId" value="true"/>
+
             <!-- Disables one of the default code element sniffs -->
             <property name="FqcnConstSniff.enabled" value="false" />
             <property name="FqcnMethodSniff.enabled" value="false" />

@@ -19,12 +19,16 @@ class FqcnConstSniff implements CodeElementSniffInterface
     /** @var string */
     protected $reportType = 'warning';
 
+    /** @var bool */
+    protected $addViolationId = false;
+
     /**
      * @inheritDoc
      */
     public function configure(array $config): void
     {
         $this->reportType = $config['reportType'] ?? 'warning';
+        $this->addViolationId = $config['addViolationId'] ?? false;
     }
 
     /**

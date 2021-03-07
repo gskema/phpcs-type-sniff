@@ -71,6 +71,7 @@ class CompositeCodeElementSniff extends AbstractConfigurableSniff
 
             // Modify individual sniff configs with global config values
             $rawSniff['config']['reportType'] = $rawSniff['config']['reportType'] ?? $globalReportType ?? null;
+            $rawSniff['config']['addViolationId'] = $rawSniff['config']['addViolationId'] ?? false;
 
             /** @var CodeElementSniffInterface $sniff */
             $sniff = new $rawSniff['class']();

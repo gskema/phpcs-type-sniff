@@ -40,6 +40,9 @@ class FqcnMethodSniff implements CodeElementSniffInterface
     /** @var string */
     protected $reportType = 'warning';
 
+    /** @var bool */
+    protected $addViolationId = false;
+
     /**
      * @inheritDoc
      */
@@ -56,6 +59,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         $this->reportMissingTags = $config['reportMissingTags'] ?? true;
         $this->reportNullableBasicGetter = $config['reportNullableBasicGetter'] ?? true;
         $this->reportType = $config['reportType'] ?? 'warning';
+        $this->addViolationId = $config['addViolationId'] ?? false;
     }
 
     /**

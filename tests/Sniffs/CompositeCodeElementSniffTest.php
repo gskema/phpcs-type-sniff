@@ -243,6 +243,42 @@ class CompositeCodeElementSniffTest extends TestCase
             [],
         ];
 
+
+        // #12
+        $dataSets[] = [
+            [
+                'useReflection' => false,
+                'addViolationId' => true
+            ],
+            __DIR__ . '/fixtures/TestClass5.php',
+            [
+                '006 Useless description [7f23a1e9428db071]',
+                '007 Useless tag [2ea1f782b8a5307c]',
+                '012 Useless description. [85953b0ff830ae61]',
+                '023 Change parameter $arg1 type declaration to nullable, e.g. ?string. Remove default null value if this argument is required. [cf5f1d5c5b01ed6e]',
+                '035 Remove redundant parameter $arg7 type hints "double" [1312f1309767c2a9]',
+                '036 Remove redundant parameter $arg8 type hints "double" [dd763f4a2ffdd9ca]',
+                '037 Remove redundant parameter $arg9 type hints "double" [e980b13da4c9e8c9]',
+                '042 Add type declaration for parameter $arg1, e.g.: "float" [cbfad85f968a3e4e]',
+                '045 Add type declaration for parameter $arg4, e.g.: "float" [7d078bc10c14c74e]',
+                '054 Change parameter $arg1 type declaration to nullable, e.g. ?string. Remove default null value if this argument is required. [b0d14463d8e6717f]',
+                '070 Change type hint for parameter $arg1 to compound, e.g. SomeClass|null [8b963bf03278b20f]',
+                '074 Add type declaration for parameter $arg1, e.g.: "?SomeClass" [32fc8bc2333f3c4d]',
+                '078 Create PHPDoc with typed array type hint for parameter $arg1, .e.g.: "string[]|null" or "SomeClass[]|null". Correct array depth must be specified. [6e7fdf0bab1792de]',
+                '083 Useless PHPDoc [81dfff54c0c60d71]',
+                '086 Useless PHPDoc [b3d61e873dc52dd3]',
+                '092 Use void return value type declaration or change type to compound, e.g. SomeClass|null [40ca7ff6ecc94007]',
+                '094 Add type declaration for return value, e.g.: "?SomeClass" [4969b01dfdbda587]',
+                '101 Useless PHPDoc [390da7987aaad158]',
+                '107 Use a more specific type in typed array hint "[]" for parameter $arg1. Correct array depth must be specified. [32f13f1f2c0119d7]',
+                '118 Replace array type with typed array type in PHPDoc for C4 constant, .e.g.: "string[]" or "SomeClass[]". Use mixed[] for generic arrays. Correct array depth must be specified. [629a111a8a1d4ead]',
+                '121 Use a more specific type in typed array hint "[]" for C5 constant. Correct array depth must be specified. [2e6b8365a803aeed]',
+                '124 Use a more specific type in typed array hint "[][]" for C6 constant. Correct array depth must be specified. [8a453fe54b051f80]',
+                '124 Type hint "null" is not compatible with C6 constant value type [79c7cfa740ac5627]',
+                '127 Use a more specific type in typed array hint "[][]" for property $prop2. Correct array depth must be specified. [2987854751394f1d]',
+            ],
+        ];
+
         // Remove empty warnings (some warnings disabled on PHP 7.4)
         foreach ($dataSets as &$dataSet) {
             $dataSet[2] = array_values(array_filter($dataSet[2]));

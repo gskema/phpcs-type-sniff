@@ -32,6 +32,9 @@ abstract class AbstractTypeSubject
     /** @var string */
     protected $name; // "parameter $param1", "property $prop1", "constant CONST1"
 
+    /** @var string */
+    protected $id; // TestClass::method1(), etc.
+
     /** @var DocBlock */
     protected $docBlock;
 
@@ -48,7 +51,8 @@ abstract class AbstractTypeSubject
         ?int $docTypeLine,
         int $fnTypeLine,
         string $name,
-        DocBlock $docBlock
+        DocBlock $docBlock,
+        string $id
     ) {
         $this->docType = $docType;
         $this->fnType = $fnType;
@@ -57,6 +61,7 @@ abstract class AbstractTypeSubject
         $this->fnTypeLine = $fnTypeLine;
         $this->name = $name;
         $this->docBlock = $docBlock;
+        $this->id = $id;
     }
 
     public function getDocType(): ?TypeInterface
@@ -87,6 +92,11 @@ abstract class AbstractTypeSubject
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
     }
 
     public function getDocBlock(): DocBlock
@@ -135,27 +145,19 @@ abstract class AbstractTypeSubject
         $this->fnTypeWarnings[] = $warning;
     }
 
-    /**
-     * @deprecated Use ::writeViolationsTo()
-     * @param File   $file
-     * @param string $sniffCode
-     */
-    public function writeWarningsTo(File $file, string $sniffCode): void
+    public function writeViolationsTo(File $file, string $sniffCode, string $reportType, bool $addViolationId): void
     {
-        $this->writeViolationsTo($file, $sniffCode, 'warning');
-    }
+        $originId = $addViolationId ? $this->getId() : null;
 
-    public function writeViolationsTo(File $file, string $sniffCode, string $reportType): void
-    {
         $ucName = ucfirst($this->name);
         foreach ($this->docTypeWarnings as $docTypeWarning) {
             $warning = str_replace([':subject:', ':Subject:'], [$this->name, $ucName], $docTypeWarning);
-            SniffHelper::addViolation($file, $warning, $this->docTypeLine ?? $this->fnTypeLine, $sniffCode, $reportType);
+            SniffHelper::addViolation($file, $warning, $this->docTypeLine ?? $this->fnTypeLine, $sniffCode, $reportType, $originId);
         }
 
         foreach ($this->fnTypeWarnings as $fnTypeWarning) {
             $warning = str_replace([':subject:', ':Subject:'], [$this->name, $ucName], $fnTypeWarning);
-            SniffHelper::addViolation($file, $warning, $this->fnTypeLine, $sniffCode, $reportType);
+            SniffHelper::addViolation($file, $warning, $this->fnTypeLine, $sniffCode, $reportType, $originId);
         }
     }
 

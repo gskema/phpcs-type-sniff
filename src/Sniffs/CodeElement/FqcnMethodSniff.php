@@ -87,7 +87,8 @@ class FqcnMethodSniff implements CodeElementSniffInterface
 
         $hasNewWarnings = $file->getWarningCount() > $warningCountBefore;
         if (!$hasNewWarnings && $this->hasUselessDocBlock($method)) {
-            SniffHelper::addViolation($file, 'Useless PHPDoc', $method->getLine(), static::CODE, $this->reportType);
+            $originId = $this->addViolationId ? $method->getId() : null;
+            SniffHelper::addViolation($file, 'Useless PHPDoc', $method->getLine(), static::CODE, $this->reportType, $originId);
         }
     }
 
@@ -105,7 +106,8 @@ class FqcnMethodSniff implements CodeElementSniffInterface
             if ($hasInheritDocTag || $isMagicMethod) {
                 return;
             } elseif ($method->getMetadata()->isExtended()) {
-                SniffHelper::addViolation($file, 'Missing @inheritDoc tag. Remove duplicated parent PHPDoc content.', $method->getLine(), static::CODE, $this->reportType);
+                $originId = $this->addViolationId ? $method->getId() : null;
+                SniffHelper::addViolation($file, 'Missing @inheritDoc tag. Remove duplicated parent PHPDoc content.', $method->getLine(), static::CODE, $this->reportType, $originId);
                 return;
             }
         }
@@ -113,24 +115,26 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         // @param
         foreach ($fnSig->getParams() as $fnParam) {
             $paramTag = $docBlock->getParamTag($fnParam->getName());
-            $subject = ParamTypeSubject::fromParam($fnParam, $paramTag, $docBlock);
+            $id = $method->getId() . $fnParam->getName();
+            $subject = ParamTypeSubject::fromParam($fnParam, $paramTag, $docBlock, $id);
             $this->processSigType($subject);
-            $subject->writeViolationsTo($file, static::CODE, $this->reportType);
+            $subject->writeViolationsTo($file, static::CODE, $this->reportType, $this->addViolationId);
         }
 
         // @return
         if (!$isConstructMethod) {
             $returnTag = $docBlock->getReturnTag();
-            $subject = ReturnTypeSubject::fromSignature($fnSig, $returnTag, $docBlock);
+            $subject = ReturnTypeSubject::fromSignature($fnSig, $returnTag, $docBlock, $method->getId());
             $this->processSigType($subject);
             if ($method instanceof ClassMethodElement && $parent instanceof ClassElement) {
                 $this->reportNullableBasicGetter && $this->reportNullableBasicGetter($subject, $method, $parent);
             }
-            $subject->writeViolationsTo($file, static::CODE, $this->reportType);
+            $subject->writeViolationsTo($file, static::CODE, $this->reportType, $this->addViolationId);
         } else {
             foreach ($docBlock->getDescriptionLines() as $lineNum => $descLine) {
                 if (preg_match('#^\w+\s+constructor\.?$#', $descLine)) {
-                    SniffHelper::addViolation($file, 'Useless description.', $lineNum, static::CODE, $this->reportType);
+                    $originId = $this->addViolationId ? $method->getId() : null;
+                    SniffHelper::addViolation($file, 'Useless description.', $lineNum, static::CODE, $this->reportType, $originId);
                 }
             }
         }
@@ -216,7 +220,8 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         foreach ($method->getDocBlock()->getTags() as $tag) {
             foreach ($invalidTags as $invalidTagName) {
                 if ($tag->getName() === $invalidTagName) {
-                    SniffHelper::addViolation($file, 'Useless tag', $tag->getLine(), static::CODE, $this->reportType);
+                    $originId = $this->addViolationId ? $method->getId() . $invalidTagName : null;
+                    SniffHelper::addViolation($file, 'Useless tag', $tag->getLine(), static::CODE, $this->reportType, $originId);
                 }
             }
         }

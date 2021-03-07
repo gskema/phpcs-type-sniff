@@ -71,7 +71,7 @@ class FqcnPropSniff implements CodeElementSniffInterface
         static::reportInvalidDescription($subject);
         $this->reportUninitializedProp && static::reportUninitializedProp($subject, $prop, $parentElement);
 
-        $subject->writeViolationsTo($file, static::CODE, $this->reportType);
+        $subject->writeViolationsTo($file, static::CODE, $this->reportType, $this->addViolationId);
     }
 
     protected static function reportInvalidDescription(PropTypeSubject $subject): void

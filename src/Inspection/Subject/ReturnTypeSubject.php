@@ -16,7 +16,8 @@ class ReturnTypeSubject extends AbstractTypeSubject
         ?int $docTypeLine,
         int $fnTypeLine,
         string $name,
-        DocBlock $docBlock
+        DocBlock $docBlock,
+        string $id
     ) {
         parent::__construct(
             $docType,
@@ -25,7 +26,8 @@ class ReturnTypeSubject extends AbstractTypeSubject
             $docTypeLine,
             $fnTypeLine,
             $name,
-            $docBlock
+            $docBlock,
+            $id
         );
     }
 
@@ -33,10 +35,11 @@ class ReturnTypeSubject extends AbstractTypeSubject
      * @param FunctionSignature $fnSig
      * @param ReturnTag|null    $returnTag
      * @param DocBlock          $docBlock
+     * @param string            $id
      *
      * @return static
      */
-    public static function fromSignature(FunctionSignature $fnSig, ?ReturnTag $returnTag, DocBlock $docBlock)
+    public static function fromSignature(FunctionSignature $fnSig, ?ReturnTag $returnTag, DocBlock $docBlock, string $id)
     {
         return new static(
             $returnTag ? $returnTag->getType() : null,
@@ -44,7 +47,8 @@ class ReturnTypeSubject extends AbstractTypeSubject
             $returnTag ? $returnTag->getLine() : $fnSig->getReturnLine(),
             $fnSig->getReturnLine(),
             'return value',
-            $docBlock
+            $docBlock,
+            $id
         );
     }
 }

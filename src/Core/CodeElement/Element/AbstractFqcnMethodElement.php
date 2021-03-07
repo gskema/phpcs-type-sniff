@@ -24,6 +24,11 @@ abstract class AbstractFqcnMethodElement extends AbstractFqcnElement
         return $this->signature;
     }
 
+    public function getId(): string
+    {
+        return sprintf('%s::%s()', $this->fqcn, $this->signature->getName());
+    }
+
     /**
      * @return ClassMethodMetadata|TraitMethodMetadata|InterfaceMethodMetadata
      */

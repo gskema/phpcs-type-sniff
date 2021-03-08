@@ -2,9 +2,11 @@
 
 $baselineFilePath = $argv[1] ?? null;
 $targetFilePath = $argv[2] ?? null;
-diffBaseline($baselineFilePath, $targetFilePath);
+$exitCode = diffBaseline($baselineFilePath, $targetFilePath);
 
-function diffBaseline(string $baselineFilePath, string $targetFilePath): void
+exit($exitCode);
+
+function diffBaseline(string $baselineFilePath, string $targetFilePath): int
 {
     $realBaselineFilePath = getRealFilePath($baselineFilePath);
     $realTargetFilePath = getRealFilePath($targetFilePath);
@@ -55,6 +57,8 @@ function diffBaseline(string $baselineFilePath, string $targetFilePath): void
     echo sprintf('Removed %s warning(s) from %s, %s warning(s) remain.%s', $removedWarningCount, $targetFilePath, $remainingWarningCount, PHP_EOL);
 
     file_put_contents($realTargetFilePath, implode('', $newFileLines));
+
+    return $remainingWarningCount > 0 ? 1 : 0;
 }
 
 function getRealFilePath(string $filePath): string

@@ -29,6 +29,9 @@ class FqcnPropSniff implements CodeElementSniffInterface
     /** @var string */
     protected $reportType = 'warning';
 
+    /** @var bool */
+    protected $addViolationId = false;
+
     /**
      * @inheritDoc
      */
@@ -36,6 +39,7 @@ class FqcnPropSniff implements CodeElementSniffInterface
     {
         $this->reportUninitializedProp = $config['reportUninitializedProp'] ?? true;
         $this->reportType = $config['reportType'] ?? 'warning';
+        $this->addViolationId = $config['addViolationId'] ?? false;
     }
 
     /**
@@ -67,7 +71,7 @@ class FqcnPropSniff implements CodeElementSniffInterface
         static::reportInvalidDescription($subject);
         $this->reportUninitializedProp && static::reportUninitializedProp($subject, $prop, $parentElement);
 
-        $subject->writeViolationsTo($file, static::CODE, $this->reportType);
+        $subject->writeViolationsTo($file, static::CODE, $this->reportType, $this->addViolationId);
     }
 
     protected static function reportInvalidDescription(PropTypeSubject $subject): void

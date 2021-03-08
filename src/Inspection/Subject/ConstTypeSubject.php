@@ -16,7 +16,8 @@ class ConstTypeSubject extends AbstractTypeSubject
         ?int $docTypeLine,
         int $fnTypeLine,
         string $name,
-        DocBlock $docBlock
+        DocBlock $docBlock,
+        string $id
     ) {
         parent::__construct(
             $docType,
@@ -25,7 +26,8 @@ class ConstTypeSubject extends AbstractTypeSubject
             $docTypeLine,
             $fnTypeLine,
             $name,
-            $docBlock
+            $docBlock,
+            $id
         );
     }
 
@@ -47,7 +49,8 @@ class ConstTypeSubject extends AbstractTypeSubject
             $varTag ? $varTag->getLine() : null,
             $const->getLine(),
             $const->getConstName() . ' constant',
-            $docBlock
+            $docBlock,
+            $const->getFqcn() . '::' . $const->getConstName()
         );
     }
 }

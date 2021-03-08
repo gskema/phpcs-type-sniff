@@ -2,6 +2,7 @@
 
 namespace Gskema\TypeSniff\Sniffs\CodeElement;
 
+use Gskema\TypeSniff\Core\CodeElement\Element\AbstractFqcnElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\CodeElementInterface;
 use Gskema\TypeSniff\Core\CodeElement\Element\InterfaceElement;
@@ -26,6 +27,9 @@ class FqcnDescriptionSniff implements CodeElementSniffInterface
     /** @var string */
     protected $reportType = 'warning';
 
+    /** @var bool */
+    protected $addViolationId = false;
+
     /**
      * @inheritDoc
      */
@@ -42,6 +46,7 @@ class FqcnDescriptionSniff implements CodeElementSniffInterface
         }
 
         $this->reportType = $config['reportType'] ?? 'warning';
+        $this->addViolationId = $config['addViolationId'] ?? false;
     }
 
     /**
@@ -58,13 +63,15 @@ class FqcnDescriptionSniff implements CodeElementSniffInterface
 
     /**
      * @inheritDoc
+     * @param AbstractFqcnElement $element
      */
     public function process(File $file, CodeElementInterface $element, CodeElementInterface $parentElement): void
     {
         foreach ($element->getDocBlock()->getDescriptionLines() as $lineNum => $descriptionLine) {
             foreach ($this->invalidPatterns as $invalidPattern) {
                 if (preg_match($invalidPattern, $descriptionLine)) {
-                    SniffHelper::addViolation($file, 'Useless description', $lineNum, static::CODE, $this->reportType);
+                    $originId = $this->addViolationId ? $element->getFqcn() . $descriptionLine : null;
+                    SniffHelper::addViolation($file, 'Useless description', $lineNum, static::CODE, $this->reportType, $originId);
                 }
             }
         }
@@ -72,7 +79,8 @@ class FqcnDescriptionSniff implements CodeElementSniffInterface
         foreach ($element->getDocBlock()->getTags() as $tag) {
             foreach ($this->invalidTags as $invalidTagName) {
                 if ($tag->getName() === $invalidTagName) {
-                    SniffHelper::addViolation($file, 'Useless tag', $tag->getLine(), static::CODE, $this->reportType);
+                    $originId = $this->addViolationId ? $element->getFqcn() . $invalidTagName : null;
+                    SniffHelper::addViolation($file, 'Useless tag', $tag->getLine(), static::CODE, $this->reportType, $originId);
                 }
             }
         }

@@ -31,6 +31,7 @@ class CompositeCodeElementSniff extends AbstractConfigurableSniff
     {
         // 0. Global config
         $globalReportType = $config['reportType'] ?? null;
+        $globalAddViolationId = $config['addViolationId'] ?? false;
 
         // 1. CompositeCodeElementSniff configuration
         $this->useReflection = $config['useReflection'] ?? false;
@@ -71,6 +72,7 @@ class CompositeCodeElementSniff extends AbstractConfigurableSniff
 
             // Modify individual sniff configs with global config values
             $rawSniff['config']['reportType'] = $rawSniff['config']['reportType'] ?? $globalReportType ?? null;
+            $rawSniff['config']['addViolationId'] = $globalAddViolationId;
 
             /** @var CodeElementSniffInterface $sniff */
             $sniff = new $rawSniff['class']();

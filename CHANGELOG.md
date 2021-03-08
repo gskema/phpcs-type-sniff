@@ -4,6 +4,11 @@ All notable changes to `phpcs-type-sniff` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## 0.16.0 - 2021-03-??
+### Added
+- Setting `addViolationId`
+- Script `phpcs_baseline.php` to subtract old warnings (baseline) from `phpcs` XML reports.
+
 ## 0.15.0 - 2021-01-04
 ### Changed
 - Autoload file configuration examples in README

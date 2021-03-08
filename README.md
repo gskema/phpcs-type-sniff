@@ -208,7 +208,7 @@ cause `phpcs` crashes while editing (not possible to catch `FatalError`).
 It may be hard to integrate new rules/standards into old projects because too many warnings
 may be detected. If you would like to fix them later, but use the standard for all new code,
 you can "save" warnings detected on current code, then ignore them on subsequent builds.
-The code standard remain the same, but on subsequent build you "subtract" the old (baseline)
+The code standard remains the same, but on subsequent builds you "subtract" the old (baseline)
 warnings:
 ```shell
 # Add this configuration option to phpcs.xml (see [configuration](#Configuration)):
@@ -229,7 +229,7 @@ warnings:
 php phpcs_baseline.php ./baseline.xml ./report.xml
 ```
 
-*Note*: This only works for *Gskema.Sniffs.CompositeCodeElement.** warnings, because
+**Note**: This only works for `Gskema.Sniffs.CompositeCodeElement.*` warnings, because
 `violationId` is used to recognize old warnings.
 
 ## Configuration

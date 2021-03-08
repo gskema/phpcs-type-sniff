@@ -6,14 +6,8 @@ diffBaseline($baselineFilePath, $targetFilePath);
 
 function diffBaseline(string $baselineFilePath, string $targetFilePath): void
 {
-    $realBaselineFilePath = realpath(__DIR__ . '/' . $baselineFilePath);
-    if (!file_exists($realBaselineFilePath)) {
-        throw new Exception(sprintf('File "%s" does not exist!', $baselineFilePath));
-    }
-    $realTargetFilePath = realpath(__DIR__ . '/' . $targetFilePath);
-    if (!file_exists($realTargetFilePath)) {
-        throw new Exception(sprintf('File "%s" does not exist!', $targetFilePath));
-    }
+    $realBaselineFilePath = getRealFilePath($baselineFilePath);
+    $realTargetFilePath = getRealFilePath($targetFilePath);
 
     $baselineXml = file_get_contents($realBaselineFilePath);
 
@@ -61,4 +55,19 @@ function diffBaseline(string $baselineFilePath, string $targetFilePath): void
     echo sprintf('Removed %s warning(s) from %s, %s warning(s) remain.%s', $removedWarningCount, $targetFilePath, $remainingWarningCount, PHP_EOL);
 
     file_put_contents($realTargetFilePath, implode('', $newFileLines));
+}
+
+function getRealFilePath(string $filePath): string
+{
+    if ('.' === $filePath[0]) {
+        $realFilePath = realpath(getcwd() . '/' . $filePath);
+    } else {
+        $realFilePath = $filePath;
+    }
+
+    if (!file_exists($realFilePath)) {
+        throw new Exception(sprintf('File "%s" does not exist!', $filePath));
+    }
+
+    return $realFilePath;
 }

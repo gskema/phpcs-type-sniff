@@ -23,6 +23,8 @@ function diffBaseline(string $baselineFilePath, string $targetFilePath): void
     $ignoredHashMap = array_flip($matches[1]);
     unset($matches);
 
+    $remainingWarningCount = 0;
+    $removedWarningCount = 0;
     $newFileLines = [];
     $errorFileLine = null;
     $errorLines = [];
@@ -43,7 +45,10 @@ function diffBaseline(string $baselineFilePath, string $targetFilePath): void
             $matches = [];
             preg_match('#\[(\w{16})\]#', $line, $matches);
             $errorHash = $matches[1] ?? null;
-            if (null === $errorHash || !key_exists($errorHash, $ignoredHashMap)) {
+            if (null !== $errorHash && key_exists($errorHash, $ignoredHashMap)) {
+                $removedWarningCount++;
+            } else {
+                $remainingWarningCount++;
                 $errorLines[] = $line;
             }
         } else {
@@ -51,6 +56,9 @@ function diffBaseline(string $baselineFilePath, string $targetFilePath): void
         }
     }
     fclose($realTargetFile);
+
+    echo sprintf('Found %s warning(s) in %s.%s', count($ignoredHashMap), $baselineFilePath, PHP_EOL);
+    echo sprintf('Removed %s warning(s) from %s, %s warning(s) remain.%s', $removedWarningCount, $targetFilePath, $remainingWarningCount, PHP_EOL);
 
     file_put_contents($realTargetFilePath, implode('', $newFileLines));
 }

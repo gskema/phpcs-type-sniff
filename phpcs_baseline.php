@@ -56,7 +56,9 @@ function diffBaseline(string $baselineFilePath, string $targetFilePath): int
     echo sprintf('Found %s warning(s) in %s.%s', count($ignoredHashMap), $baselineFilePath, PHP_EOL);
     echo sprintf('Removed %s warning(s) from %s, %s warning(s) remain.%s', $removedWarningCount, $targetFilePath, $remainingWarningCount, PHP_EOL);
 
-    file_put_contents($realTargetFilePath, implode('', $newFileLines));
+    if ($removedWarningCount > 0) {
+        file_put_contents($realTargetFilePath, implode('', $newFileLines));
+    }
 
     return $remainingWarningCount > 0 ? 1 : 0;
 }

@@ -11,18 +11,39 @@ function diffBaseline(string $baselineFilePath, string $targetFilePath): int
     $realBaselineFilePath = getRealFilePath($baselineFilePath);
     $realTargetFilePath = getRealFilePath($targetFilePath);
 
-    $baselineXml = file_get_contents($realBaselineFilePath);
+    // Collect violationIds from baseline file, put them into a map for faster lookup
+    // If violationId is not found, the use single filename + line + error hash. This works for simple errors e.g. PSR-12
+    $errorFileLine = '';
+    $violationIdMap = [];
+    $lineHashMap = [];
+    $baselineFile = fopen($realBaselineFilePath, 'r');
+    while (!feof($baselineFile)) {
+        $line = fgets($baselineFile);
+        if (false !== strpos($line, '<file')) {
+            $errorFileLine = $line;
+            continue;
+        }
 
-    $matches = [];
-    preg_match_all('#\[(\w{16})\]#', $baselineXml, $matches);
+        if (false === strpos($line, '<error')) {
+            continue;
+        }
 
-    $ignoredHashMap = array_flip($matches[1]);
-    unset($matches);
+        if ($violationId = findViolationId($line)) {
+            $violationIdMap[$violationId] = null;
+        } else {
+            $lineHash = getLineHash($errorFileLine, $line);
+            $lineHashMap[$lineHash] = null;
+        }
+    }
+    fclose($baselineFile);
 
+    // Iterate over report file, keep errors only if they are not in the ignored error maps.
+    // If a file segment contains new errors, then keep file segment with those new errors.
+    // In the end, write collected file (with errors) segments to the same file.
     $remainingWarningCount = 0;
     $removedWarningCount = 0;
     $newFileLines = [];
-    $errorFileLine = null;
+    $errorFileLine = '';
     $errorLines = [];
     $realTargetFile = fopen($realTargetFilePath, 'r');
     while (!feof($realTargetFile)) {
@@ -35,13 +56,13 @@ function diffBaseline(string $baselineFilePath, string $targetFilePath): int
                 array_push($newFileLines, $errorFileLine, ...$errorLines);
                 array_push($newFileLines, $line);
             }
-            $errorFileLine = null;
+            $errorFileLine = '';
             $errorLines = [];
         } elseif (false !== strpos($line, '<error')) {
-            $matches = [];
-            preg_match('#\[(\w{16})\]#', $line, $matches);
-            $errorHash = $matches[1] ?? null;
-            if (null !== $errorHash && key_exists($errorHash, $ignoredHashMap)) {
+            $violationId = findViolationId($line);
+            if (null !== $violationId && key_exists($violationId, $violationIdMap)) {
+                $removedWarningCount++;
+            } elseif (key_exists(getLineHash($errorFileLine, $line), $lineHashMap)) {
                 $removedWarningCount++;
             } else {
                 $remainingWarningCount++;
@@ -53,7 +74,7 @@ function diffBaseline(string $baselineFilePath, string $targetFilePath): int
     }
     fclose($realTargetFile);
 
-    echo sprintf('Found %s warning(s) in %s.%s', count($ignoredHashMap), $baselineFilePath, PHP_EOL);
+    echo sprintf('Found %s warning(s) in %s.%s', count($violationIdMap) + count($lineHashMap), $baselineFilePath, PHP_EOL);
     echo sprintf('Removed %s warning(s) from %s, %s warning(s) remain.%s', $removedWarningCount, $targetFilePath, $remainingWarningCount, PHP_EOL);
 
     if ($removedWarningCount > 0) {
@@ -76,4 +97,17 @@ function getRealFilePath(string $filePath): string
     }
 
     return $realFilePath;
+}
+
+function getLineHash(string $fileLine, string $errorLine): string
+{
+    return md5(trim($fileLine . $errorLine));
+}
+
+function findViolationId(string $line): ?string
+{
+    $matches = [];
+    preg_match('#\[(\w{16})\]#', $line, $matches);
+
+    return $matches[1] ?? null;
 }

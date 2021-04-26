@@ -41,5 +41,8 @@
     },
     "config": {
         "sort-packages": true
-    }
+    },
+    "bin": [
+        "bin/phpcs-subtract-baseline"
+    ]
 }

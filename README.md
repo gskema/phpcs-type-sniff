@@ -168,7 +168,7 @@ This is a standalone sniff file, you need to add it to your `phpcs.xml` file.
 ### Usage Without Reflection
 
 Inspections for methods with `@inheritdoc` tag are skipped.
-If a method does not have this tag, it is inspected. **This is the recommend setup**.
+If a method does not have this tag, it is inspected. **This is the recommended setup**.
 
 ```xml
 <ruleset name="your_ruleset">
@@ -226,11 +226,14 @@ warnings:
 # Run a custom PHP script (on build) that subtracts ignored warnings.
 # First argument is the baseline report file with ignored warnings,
 # second argument is target report file (that was just built).
-php phpcs_baseline.php ./baseline.xml ./report.xml
+./bin/phpcs-subtract-baseline ./baseline.xml ./report.xml
 ```
 
-**Note**: This only works for `Gskema.Sniffs.CompositeCodeElement.*` warnings, because
-`violationId` is used to recognize old warnings.
+**Note**: By default all baseline warnings are tracked by `filename + line + column + message` hash.
+By adding `<property name="addViolationId" value="true"/>` all warnings detected by this sniff
+will have a violation ID, which is used to track and compare baseline warnings independently of line and column.
+This allows you to change other things in the same file where these warnings are detected, the violation ID does
+not change because of line numbers / code style.
 
 ## Configuration
 
@@ -260,9 +263,9 @@ String `true/false` values are automatically converted to booleans.
             <!-- Autoloader is needed. -->
             <property name="useReflection" value="true"/>
 
-            <!-- Appends violation ID to each error/warning. Default is false. -->
-            <!-- ID is useful for tracking old errors (baselines), -->
-            <!-- which you may want to ignore on build, but not in IDE. -->
+            <!-- Appends violation ID to each error/warning detected by this sniff. -->
+            <!-- Used to track baseline warnings of this sniff -->
+            <!-- independently of line/column. Default is false. -->
             <property name="addViolationId" value="true"/>
 
             <!-- Disables one of the default code element sniffs -->

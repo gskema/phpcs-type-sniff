@@ -4,6 +4,11 @@ All notable changes to `phpcs-type-sniff` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## 0.17.0 - 2021-04-26
+### Added
+- Baseline support for tracking warnings from other sniffs. `filename + line + column + message` hash is used.
+- Bin executable `phpcs-subtract-baseline`
+
 ## 0.16.1 - 2021-03-08
 ### Changed
 - Exit code of CLI script `phpcs_baseline.php`

@@ -190,8 +190,8 @@ cause `phpcs` crashes while editing (not possible to catch `FatalError`).
 
 ```xml
 <ruleset name="your_ruleset">
-    <!-- your configuration -->
-    <rule ref="PSR2"/>
+    <!-- your base configuration -->
+    <rule ref="PSR12"/>
 
     <!-- phpcs-type-sniff configuration -->   
     <autoload>./vendor/autoload.php</autoload>

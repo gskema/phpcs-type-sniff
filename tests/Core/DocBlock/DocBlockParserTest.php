@@ -20,7 +20,7 @@ use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
 class DocBlockParserTest extends TestCase
 {
     /**
-     * @return mixed[]
+     * @return mixed[][]
      */
     public function dataDetectFromTokens(): array
     {
@@ -139,7 +139,7 @@ class DocBlockParserTest extends TestCase
     }
 
     /**
-     * @return mixed[]
+     * @return mixed[][]
      */
     public function dataFromRaw(): array
     {

@@ -59,7 +59,7 @@ use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
 class CodeElementDetectorTest extends TestCase
 {
     /**
-     * @return mixed[]
+     * @return mixed[][]
      */
     public function dataDetectFromTokens(): array
     {

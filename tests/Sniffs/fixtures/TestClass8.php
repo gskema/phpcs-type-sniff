@@ -37,4 +37,20 @@ class TestClass8
     {
         return [];
     }
+
+    /**
+     * Description
+     * @return mixed[]
+     */
+    #[ArrayShape(['foo' => 'int'])]
+    public function getRange3(): array { return ['foo' => 1]; }
+
+    #[Attr11]
+    /**
+     * Description
+     * @return mixed[]
+     */
+    #[Attr5]
+    #[ArrayShape(['foo' => 'int'])]
+    public function getRange4(): array { return ['foo' => 1]; }
 }

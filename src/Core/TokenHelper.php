@@ -25,7 +25,18 @@ class TokenHelper
      */
     public static function getPrevDocBlock(File $file, int $startPtr, array $skip): DocBlock
     {
-        $docClosePtr = $file->findPrevious($skip, $startPtr - 1, null, true);
+        do {
+            $notAttrEndPtr = $file->findPrevious($skip, $startPtr - 1, null, true);
+            $tokenCode = false === $notAttrEndPtr ? null : $file->getTokens()[$notAttrEndPtr]['code'];
+
+            $attrOpenPtr = null;
+            if (T_ATTRIBUTE_END === $tokenCode) {
+                $attrOpenPtr = $file->findPrevious(T_ATTRIBUTE, $notAttrEndPtr - 1);
+                $startPtr = $attrOpenPtr ?: null;
+            }
+        } while (null !== $attrOpenPtr);
+
+        $docClosePtr = $file->findPrevious($skip, $notAttrEndPtr, null, true);
         $tokenCode = false === $docClosePtr ? null : $file->getTokens()[$docClosePtr]['code'];
 
         if (T_DOC_COMMENT_CLOSE_TAG === $tokenCode) {

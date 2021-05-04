@@ -29,12 +29,13 @@ class CodeElementTest extends TestCase
 {
     public function test(): void
     {
-        $classConst = new ClassConstElement(1, $this->createDocBlock(), 'FQCN1', 'CONST1', new IntType());
+        $classConst = new ClassConstElement(1, $this->createDocBlock(), 'FQCN1', 'CONST1', new IntType(), ['aaa']);
         self::assertEquals('CONST1', $classConst->getConstName());
         self::assertEquals('FQCN1', $classConst->getFqcn());
         self::assertEquals($this->createDocBlock(), $classConst->getDocBlock());
         self::assertEquals(1, $classConst->getLine());
         self::assertEquals(new IntType(), $classConst->getValueType());
+        self::assertEquals(['aaa'], $classConst->getAttributeNames());
 
         $class = new ClassElement(2, $this->createDocBlock(), 'FQCN2');
         self::assertEquals('FQCN2', $class->getFqcn());
@@ -65,7 +66,7 @@ class CodeElementTest extends TestCase
         self::assertEquals('prop1', $classProp->getPropName());
         self::assertEquals(new IntType(), $classProp->getDefaultValueType());
 
-        $const = new ConstElement(5, $this->createDocBlock(), 'NS1', 'CONST1', new IntType());
+        $const = new ConstElement(5, $this->createDocBlock(), 'NS1', 'CONST1', new IntType(), []);
         self::assertEquals(5, $const->getLine());
         self::assertEquals($this->createDocBlock(), $const->getDocBlock());
         self::assertEquals('CONST1', $const->getName());
@@ -77,13 +78,13 @@ class CodeElementTest extends TestCase
         self::assertEquals(6, $file->getLine());
         self::assertEquals('path1', $file->getPath());
 
-        $func = new FunctionElement(7, $this->createDocBlock(), 'NS2', $this->createSignature());
+        $func = new FunctionElement(7, $this->createDocBlock(), 'NS2', $this->createSignature(), []);
         self::assertEquals(7, $func->getLine());
         self::assertEquals($this->createDocBlock(), $func->getDocBlock());
         self::assertEquals('NS2', $func->getNamespace());
         self::assertEquals($this->createSignature(), $func->getSignature());
 
-        $interfaceConst = new InterfaceConstElement(8, $this->createDocBlock(), 'FQCN5', 'CONST3', new IntType());
+        $interfaceConst = new InterfaceConstElement(8, $this->createDocBlock(), 'FQCN5', 'CONST3', new IntType(), []);
         self::assertEquals('CONST3', $interfaceConst->getConstName());
         self::assertEquals('FQCN5', $interfaceConst->getFqcn());
         self::assertEquals($this->createDocBlock(), $interfaceConst->getDocBlock());
@@ -135,7 +136,7 @@ class CodeElementTest extends TestCase
         return new FunctionSignature(
             3,
             'method1',
-            [new FunctionParam(20, 'arg1', new UndefinedType(), new UndefinedType())],
+            [new FunctionParam(20, 'arg1', new UndefinedType(), new UndefinedType(), [])],
             new StringType(),
             20
         );

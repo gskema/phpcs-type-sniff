@@ -19,16 +19,28 @@ class FunctionElement implements CodeElementInterface
     /** @var FunctionSignature */
     protected $signature;
 
+    /** @var string[] */
+    protected $attributeNames = [];
+
+    /**
+     * @param int               $line
+     * @param DocBlock          $docBlock
+     * @param string            $namespace
+     * @param FunctionSignature $signature
+     * @param string[]          $attributeNames
+     */
     public function __construct(
         int $line,
         DocBlock $docBlock,
         string $namespace,
-        FunctionSignature $signature
+        FunctionSignature $signature,
+        array $attributeNames
     ) {
         $this->line = $line;
         $this->docBlock = $docBlock;
         $this->namespace = $namespace;
         $this->signature = $signature;
+        $this->attributeNames = $attributeNames;
     }
 
     /**
@@ -55,5 +67,13 @@ class FunctionElement implements CodeElementInterface
     public function getSignature(): FunctionSignature
     {
         return $this->signature;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAttributeNames(): array
+    {
+        return $this->attributeNames;
     }
 }

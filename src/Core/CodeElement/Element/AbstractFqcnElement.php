@@ -15,11 +15,21 @@ abstract class AbstractFqcnElement implements CodeElementInterface
     /** @var string */
     protected $fqcn;
 
-    public function __construct(int $line, DocBlock $docBlock, string $fqcn)
+    /** @var string[] */
+    protected $attributeNames = [];
+
+    /**
+     * @param int      $line
+     * @param DocBlock $docBlock
+     * @param string   $fqcn
+     * @param string[] $attributeNames
+     */
+    public function __construct(int $line, DocBlock $docBlock, string $fqcn, array $attributeNames)
     {
         $this->line = $line;
         $this->docBlock = $docBlock;
         $this->fqcn = $fqcn;
+        $this->attributeNames = $attributeNames;
     }
 
     /**
@@ -41,5 +51,21 @@ abstract class AbstractFqcnElement implements CodeElementInterface
     public function getFqcn(): string
     {
         return $this->fqcn;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAttributeNames(): array
+    {
+        return $this->attributeNames;
+    }
+
+    /**
+     * @param string[] $attributeNames
+     */
+    public function setAttributeNames(array $attributeNames): void
+    {
+        $this->attributeNames = $attributeNames;
     }
 }

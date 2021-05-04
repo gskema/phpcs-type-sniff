@@ -18,15 +18,17 @@ class TraitElement extends AbstractFqcnElement
      * @param string               $fqcn
      * @param TraitPropElement[]   $properties
      * @param TraitMethodElement[] $methods
+     * @param string[]             $attributeNames
      */
     public function __construct(
         int $line,
         DocBlock $docBlock,
         string $fqcn,
         array $properties = [],
-        array $methods = []
+        array $methods = [],
+        array $attributeNames = []
     ) {
-        parent::__construct($line, $docBlock, $fqcn);
+        parent::__construct($line, $docBlock, $fqcn, $attributeNames);
         $this->properties = $properties;
         array_walk($methods, [$this, 'addMethod']);
     }

@@ -7,6 +7,8 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 ## Unreleased
 ### Fixed
 - Return tag parsing with `array<...>` notation
+### Changed
+- Minimum `squizlabs/php_codesniffer` version to `3.6.0`
 
 ## 0.17.0 - 2021-04-26
 ### Added

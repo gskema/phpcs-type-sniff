@@ -4,6 +4,10 @@ All notable changes to `phpcs-type-sniff` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## Unreleased
+### Fixed
+- Return tag parsing with `array<...>` notation
+
 ## 0.17.0 - 2021-04-26
 ### Added
 - Baseline support for tracking warnings from other sniffs. `filename + line + column + message` hash is used.

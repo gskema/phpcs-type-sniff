@@ -21,4 +21,20 @@ class TestClass8
     {
         return $this->foo;
     }
+
+    /**
+     * @return array<int, array<string, int>>|null Description
+     */
+    public function getRange1(): ?array
+    {
+        return [];
+    }
+
+    /**
+     * @return null|array<int, array<string, int>>
+     */
+    public function getRange2(): ?array
+    {
+        return [];
+    }
 }

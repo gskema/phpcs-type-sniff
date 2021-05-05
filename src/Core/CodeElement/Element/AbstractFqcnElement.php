@@ -68,4 +68,9 @@ abstract class AbstractFqcnElement implements CodeElementInterface
     {
         $this->attributeNames = $attributeNames;
     }
+
+    public function hasAttribute(string $attributeName): bool
+    {
+        return in_array($attributeName, $this->attributeNames);
+    }
 }

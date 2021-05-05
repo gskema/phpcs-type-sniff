@@ -4,6 +4,7 @@ namespace Gskema\TypeSniff\Sniffs\CodeElement;
 
 use Gskema\TypeSniff\Core\DocBlock\Tag\VarTag;
 use Gskema\TypeSniff\Core\Type\Common\ArrayType;
+use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
 use Gskema\TypeSniff\Inspection\DocTypeInspector;
 use Gskema\TypeSniff\Inspection\Subject\ConstTypeSubject;
 use PHP_CodeSniffer\Files\File;
@@ -68,6 +69,7 @@ class FqcnConstSniff implements CodeElementSniffInterface
             return;
         }
 
+        $hasArrayShape = $subject->hasAttribute('ArrayShape');
         $docBlock = $subject->getDocBlock();
 
         /** @var VarTag|null $varTag */
@@ -84,7 +86,8 @@ class FqcnConstSniff implements CodeElementSniffInterface
             || $docBlock->hasDescription()
             || ($varTag && $varTag->hasDescription())
             || $hasSpecificDocType
-            || $hasIncompleteDocType;
+            || $hasIncompleteDocType
+            || $hasArrayShape && !($docType instanceof TypedArrayType) && !($docType instanceof ArrayType);
 
         if (!$isUseful) {
             $subject->addFnTypeWarning('Useless PHPDoc');

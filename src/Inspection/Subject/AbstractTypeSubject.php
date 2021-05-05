@@ -44,6 +44,20 @@ abstract class AbstractTypeSubject
     /** @var string[] */
     protected $fnTypeWarnings = [];
 
+    /** @var string[] */
+    protected $attributeNames = [];
+
+    /**
+     * @param TypeInterface|null $docType
+     * @param TypeInterface      $fnType
+     * @param TypeInterface|null $valueType
+     * @param int|null           $docTypeLine
+     * @param int                $fnTypeLine
+     * @param string             $name
+     * @param DocBlock           $docBlock
+     * @param string[]           $attributeNames
+     * @param string             $id
+     */
     public function __construct(
         ?TypeInterface $docType,
         TypeInterface $fnType,
@@ -52,6 +66,7 @@ abstract class AbstractTypeSubject
         int $fnTypeLine,
         string $name,
         DocBlock $docBlock,
+        array $attributeNames,
         string $id
     ) {
         $this->docType = $docType;
@@ -61,6 +76,7 @@ abstract class AbstractTypeSubject
         $this->fnTypeLine = $fnTypeLine;
         $this->name = $name;
         $this->docBlock = $docBlock;
+        $this->attributeNames = $attributeNames;
         $this->id = $id;
     }
 
@@ -164,5 +180,10 @@ abstract class AbstractTypeSubject
     public function hasDocTypeTag(): bool
     {
         return null !== $this->docType;
+    }
+
+    public function hasAttribute(string $attributeName): bool
+    {
+        return in_array($attributeName, $this->attributeNames);
     }
 }

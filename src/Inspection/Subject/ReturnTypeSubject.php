@@ -10,6 +10,16 @@ use Gskema\TypeSniff\Core\Type\TypeInterface;
 
 class ReturnTypeSubject extends AbstractTypeSubject
 {
+    /**
+     * @param TypeInterface|null $docType
+     * @param TypeInterface      $fnType
+     * @param int|null           $docTypeLine
+     * @param int                $fnTypeLine
+     * @param string             $name
+     * @param DocBlock           $docBlock
+     * @param string[]           $attributeNames
+     * @param string             $id
+     */
     public function __construct(
         ?TypeInterface $docType,
         TypeInterface $fnType,
@@ -17,6 +27,7 @@ class ReturnTypeSubject extends AbstractTypeSubject
         int $fnTypeLine,
         string $name,
         DocBlock $docBlock,
+        array $attributeNames,
         string $id
     ) {
         parent::__construct(
@@ -27,6 +38,7 @@ class ReturnTypeSubject extends AbstractTypeSubject
             $fnTypeLine,
             $name,
             $docBlock,
+            $attributeNames,
             $id
         );
     }
@@ -36,11 +48,17 @@ class ReturnTypeSubject extends AbstractTypeSubject
      * @param ReturnTag|null    $returnTag
      * @param DocBlock          $docBlock
      * @param string            $id
+     * @param string[]          $attributeNames
      *
      * @return static
      */
-    public static function fromSignature(FunctionSignature $fnSig, ?ReturnTag $returnTag, DocBlock $docBlock, string $id)
-    {
+    public static function fromSignature(
+        FunctionSignature $fnSig,
+        ?ReturnTag $returnTag,
+        DocBlock $docBlock,
+        array $attributeNames,
+        string $id
+    ) {
         return new static(
             $returnTag ? $returnTag->getType() : null,
             $fnSig->getReturnType(),
@@ -48,6 +66,7 @@ class ReturnTypeSubject extends AbstractTypeSubject
             $fnSig->getReturnLine(),
             'return value',
             $docBlock,
+            $attributeNames,
             $id
         );
     }

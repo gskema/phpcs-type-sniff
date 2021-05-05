@@ -21,10 +21,11 @@ class DocTypeInspector
     {
         $hasDocBlock = $subject->hasDefinedDocBlock();
         $hasDocTypeTag = null !== $subject->getDocType();
+        $hasArrayShape = $subject->hasAttribute('ArrayShape');
 
         // e.g. $arg1 = [], C1 = [], $prop1 = [], ?array $arg1
         if (
-            !$hasDocTypeTag
+            (!$hasDocTypeTag && !$hasArrayShape)
             && ($subject->getValueType() instanceof ArrayType || TypeHelper::containsType($subject->getFnType(), ArrayType::class))
         ) {
             $isNullable = $subject->getFnType() instanceof NullableType;
@@ -46,12 +47,12 @@ class DocTypeInspector
 
         if ($subject instanceof ParamTypeSubject) {
             // doc block must not be missing any @param tag
-            if ($hasDocBlock && !$hasDocTypeTag) {
+            if ($hasDocBlock && !$hasDocTypeTag && !$hasArrayShape) {
                 $subject->addFnTypeWarning('Missing PHPDoc tag for :subject:');
             }
         } elseif ($subject instanceof PropTypeSubject) {
             // @var tags for props are mandatory
-            if (!$hasDocTypeTag) {
+            if (!$hasDocTypeTag && !$hasArrayShape) {
                 $subject->addDocTypeWarning('Add @var tag for :subject:');
             } elseif ($subject->getDocType() instanceof UndefinedType) {
                 $subject->addDocTypeWarning('Add type hint to @var tag for :subject:');
@@ -125,7 +126,7 @@ class DocTypeInspector
 
     public static function reportSuggestedTypes(AbstractTypeSubject $subject): void
     {
-        if (!$subject->hasDefinedDocBlock() || $subject->hasDefinedDocType()) {
+        if (!$subject->hasDefinedDocBlock() || $subject->hasDefinedDocType() || $subject->hasAttribute('ArrayShape')) {
             return;
         }
 
@@ -133,14 +134,12 @@ class DocTypeInspector
         $exampleDocType = TypeConverter::toExampleDocType($subject->getFnType());
         if (null !== $exampleDocType) {
             $subject->addDocTypeWarning(sprintf('Add type hint in PHPDoc tag for :subject:, e.g. "%s"', $exampleDocType->toString()));
-        } else {
-            if ($subject instanceof ReturnTypeSubject) {
-                if (!($subject->getFnType() instanceof VoidType)) {
-                    $subject->addFnTypeWarning('Missing PHPDoc tag or void type declaration for :subject:');
-                }
-            } else {
-                $subject->addDocTypeWarning('Add type hint in PHPDoc tag for :subject:');
+        } elseif ($subject instanceof ReturnTypeSubject) {
+            if (!($subject->getFnType() instanceof VoidType)) {
+                $subject->addFnTypeWarning('Missing PHPDoc tag or void type declaration for :subject:');
             }
+        } else {
+            $subject->addDocTypeWarning('Add type hint in PHPDoc tag for :subject:');
         }
     }
 
@@ -149,6 +148,15 @@ class DocTypeInspector
         // e.g. $param1 = null, mixed|null -> do not report
         if ($subject instanceof ParamTypeSubject && !$subject->hasDefinedFnType()) {
             return;
+        }
+
+        $hasArrayShape = $subject->hasAttribute('ArrayShape');
+        if (
+            $hasArrayShape
+            && $subject->hasDefinedFnType()
+            && !TypeHelper::containsType($subject->getFnType(), ArrayType::class)
+        ) {
+            $subject->addFnTypeWarning('Type declaration not compatible with ArrayShape attribute');
         }
 
         if (!$subject->hasDefinedDocType()) {

@@ -5,8 +5,10 @@ namespace Gskema\TypeSniff\Sniffs\CodeElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassElement;
 use Gskema\TypeSniff\Core\DocBlock\Tag\VarTag;
 use Gskema\TypeSniff\Core\SniffHelper;
+use Gskema\TypeSniff\Core\Type\Common\ArrayType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
+use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
 use Gskema\TypeSniff\Core\Type\TypeHelper;
 use Gskema\TypeSniff\Inspection\FnTypeInspector;
 use Gskema\TypeSniff\Inspection\DocTypeInspector;
@@ -124,7 +126,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         // @return
         if (!$isConstructMethod) {
             $returnTag = $docBlock->getReturnTag();
-            $subject = ReturnTypeSubject::fromSignature($fnSig, $returnTag, $docBlock, $method->getId());
+            $subject = ReturnTypeSubject::fromSignature($fnSig, $returnTag, $docBlock, $method->getAttributeNames(), $method->getId());
             $this->processSigType($subject);
             if ($method instanceof ClassMethodElement && $parent instanceof ClassElement) {
                 $this->reportNullableBasicGetter && $this->reportNullableBasicGetter($subject, $method, $parent);
@@ -193,6 +195,11 @@ class FqcnMethodSniff implements CodeElementSniffInterface
             if ($paramTag->getType()->toString() !== $rawFnType) {
                 return false;
             }
+
+            $hasArrayShape = $fnParam->hasAttribute('ArrayShape');
+            if ($hasArrayShape && !($paramTag instanceof TypedArrayType) && !($paramTag instanceof ArrayType)) {
+                return false;
+            }
         }
 
         $returnTag  = $docBlock->getReturnTag();
@@ -203,6 +210,11 @@ class FqcnMethodSniff implements CodeElementSniffInterface
                 ? $returnType->toDocString()
                 : $returnType->toString();
             if ($returnTag->getType()->toString() !== $rawReturnType) {
+                return false;
+            }
+
+            $hasArrayShape = $method->hasAttribute('ArrayShape');
+            if ($hasArrayShape && !($returnTag instanceof TypedArrayType) && !($returnTag instanceof ArrayType)) {
                 return false;
             }
         }

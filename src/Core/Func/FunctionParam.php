@@ -72,4 +72,9 @@ class FunctionParam
     {
         return $this->attributeNames;
     }
+
+    public function hasAttribute(string $attributeName): bool
+    {
+        return in_array($attributeName, $this->attributeNames);
+    }
 }

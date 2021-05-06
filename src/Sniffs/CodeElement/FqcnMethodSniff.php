@@ -195,11 +195,6 @@ class FqcnMethodSniff implements CodeElementSniffInterface
             if ($paramTag->getType()->toString() !== $rawFnType) {
                 return false;
             }
-
-            $hasArrayShape = $fnParam->hasAttribute('ArrayShape');
-            if ($hasArrayShape && !($paramTag instanceof TypedArrayType) && !($paramTag instanceof ArrayType)) {
-                return false;
-            }
         }
 
         $returnTag  = $docBlock->getReturnTag();
@@ -210,11 +205,6 @@ class FqcnMethodSniff implements CodeElementSniffInterface
                 ? $returnType->toDocString()
                 : $returnType->toString();
             if ($returnTag->getType()->toString() !== $rawReturnType) {
-                return false;
-            }
-
-            $hasArrayShape = $method->hasAttribute('ArrayShape');
-            if ($hasArrayShape && !($returnTag instanceof TypedArrayType) && !($returnTag instanceof ArrayType)) {
                 return false;
             }
         }

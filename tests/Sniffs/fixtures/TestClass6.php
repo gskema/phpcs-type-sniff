@@ -99,4 +99,13 @@ abstract class TestClass6
     {
         return $this->prop6;
     }
+
+    /**
+     * Description.
+     * @return array<int, array{key: string}>|null Description (a or b) || C
+     */
+    public function doSomething1(): ?array
+    {
+        return [];
+    }
 }

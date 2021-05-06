@@ -71,4 +71,18 @@ class TestClass9
     ) {
         return [$a, $b, $c, $d];
     }
+
+    /** @var ?int */
+    public $prop4;
+
+    /** @var ?int|string */
+    public $prop5;
+
+    /**
+     * @param ?string $a
+     * @return ?int
+     */
+    public function method3(?string $a): ?int
+    {
+    }
 }

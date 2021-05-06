@@ -295,6 +295,12 @@ class CompositeCodeElementSniffTest extends TestCase
                 '060 Missing "null" type in parameter $b type hint',
                 '070 Add type declaration for parameter $d, e.g.: "array"',
                 '071 Add type declaration for return value, e.g.: "array"',
+                '075 Property $prop4 not initialized by __construct(), add null doc type or set a default value',
+                '078 Property $prop5 not initialized by __construct(), add null doc type or set a default value',
+                '082 Type hint "?string" is not compatible with parameter $a value type',
+                '082 Missing "null, string" types in parameter $a type hint',
+                '083 Type hint "?int" is not compatible with return value value type',
+                '083 Missing "null, int" types in return value type hint',
             ],
         ];
 

@@ -97,6 +97,8 @@ class TypeFactory
         }
         $rawType = $rawTypes[0] ?? '';
 
+        // Supported for parsing function parameter type declaration, but doc type not valid.
+        // Usage as doc type detected by multiple warnings.
         if ('?' === ($rawType[0] ?? null)) {
             return new NullableType(static::fromRawTypes([substr($rawType, 1)])); // skip split
         }

@@ -75,6 +75,7 @@ class FunctionSignatureParser
                 case T_PARENT:
                 case T_CALLABLE:
                 case T_NULLABLE:
+                case T_INLINE_THEN: // looks like a phpcs bug
                     // these cannot be default
                     $raw['type'] = ($raw['type'] ?? '') . $token['content'];
                     break;

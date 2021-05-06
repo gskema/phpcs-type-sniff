@@ -156,7 +156,7 @@ class DocTypeInspector
             && $subject->hasDefinedFnType()
             && !TypeHelper::containsType($subject->getFnType(), ArrayType::class)
         ) {
-            $subject->addFnTypeWarning('Type declaration not compatible with ArrayShape attribute');
+            $subject->addFnTypeWarning('Type declaration of :subject: not compatible with ArrayShape attribute');
         }
 
         if (!$subject->hasDefinedDocType()) {

@@ -6,10 +6,12 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 
 ## Unreleased
 ### Fixed
-- Return tag parsing with `array<...>` notation
+- Return tag parsing with `array<...>` notation.
+## Added
 - Support for `ArrayShape` attribute using single line `#` comment.
 ### Changed
 - Minimum `squizlabs/php_codesniffer` version to `3.6.0`
+- Package version to reflect supported PHP version.
 
 ## 0.17.0 - 2021-04-26
 ### Added

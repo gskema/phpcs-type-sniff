@@ -374,10 +374,8 @@ class TokenHelper
 
     public static function parseAttributeName(string $rawAttribute): ?string
     {
-        if (preg_match('/#\[([\w\\\\]+)/', $rawAttribute, $matches)) {
-            return $matches[1] ?? null;
-        }
+        preg_match('/#\[([\w\\\\]+)/', $rawAttribute, $matches);
 
-        return null;
+        return $matches[1] ?? null;
     }
 }

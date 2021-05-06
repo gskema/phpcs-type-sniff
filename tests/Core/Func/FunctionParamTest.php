@@ -16,5 +16,6 @@ final class FunctionParamTest extends TestCase
         self::assertEquals('param1', $param->getName());
         self::assertEquals(new StringType(), $param->getType());
         self::assertEquals(['aaa'], $param->getAttributeNames());
+        self::assertEquals(true, $param->hasAttribute('aaa'));
     }
 }

@@ -301,7 +301,18 @@ class CompositeCodeElementSniffTest extends TestCase
                 '082 Missing "null, string" types in parameter $a type hint',
                 '083 Type hint "?int" is not compatible with return value value type',
                 '083 Missing "null, int" types in return value type hint',
+                '090 Type declaration of return value not compatible with ArrayShape attribute',
             ],
+        ];
+
+        // #14
+        $dataSets[] = [
+            [
+                'useReflection' => false,
+                'reportType' => 'error'
+            ],
+            __DIR__ . '/fixtures/TestInterface8.php',
+            [], // 1 error reported, 0 warnings
         ];
 
         // Remove empty warnings (some warnings disabled on PHP 7.4)

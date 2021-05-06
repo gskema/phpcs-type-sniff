@@ -85,4 +85,27 @@ class TestClass9
     public function method3(?string $a): ?int
     {
     }
+
+    #[ArrayShape(['a' => 'int'])]
+    public function method4(): int
+    {
+        return 1;
+    }
+
+    /**
+     * @param mixed[]|null $a
+     */
+    public function method5(
+        #[ArrayShape(['a' => 'int'])]
+        ?array $a
+    ): void {
+    }
+
+    /**
+     * @return mixed[]|null $a
+     */
+    #[ArrayShape(['a' => 'int'])]
+    public function method6(): ?array
+    {
+    }
 }

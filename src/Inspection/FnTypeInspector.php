@@ -13,7 +13,7 @@ class FnTypeInspector
 {
     public static function reportMandatoryTypes(AbstractTypeSubject $subject): void
     {
-        if ($subject->hasDocTypeTag()) {
+        if ($subject->hasDocTypeTag() || $subject->hasAttribute('ArrayShape')) {
             return;
         }
 

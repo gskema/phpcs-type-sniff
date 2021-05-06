@@ -44,5 +44,10 @@
     },
     "bin": [
         "bin/phpcs-subtract-baseline"
-    ]
+    ],
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "phpcs": "vendor/bin/phpcs -p",
+        "coverage": "debug vendor/bin/phpunit --coverage-html=build/coverage"
+    }
 }

@@ -36,7 +36,7 @@ class FqcnMethodSniffTest extends TestCase
                     4,
                     'func1',
                     [
-                        new FunctionParam(3, 'param1', new IntType(), new UndefinedType()),
+                        new FunctionParam(3, 'param1', new IntType(), new UndefinedType(), []),
                     ],
                     new VoidType(),
                     5
@@ -57,7 +57,7 @@ class FqcnMethodSniffTest extends TestCase
                     4,
                     'func1',
                     [
-                        new FunctionParam(3, 'param1', new IntType(), new UndefinedType()),
+                        new FunctionParam(3, 'param1', new IntType(), new UndefinedType(), []),
                     ],
                     new VoidType(),
                     5
@@ -79,7 +79,7 @@ class FqcnMethodSniffTest extends TestCase
                     4,
                     'func1',
                     [
-                        new FunctionParam(3, 'param1', new IntType(), new UndefinedType()),
+                        new FunctionParam(3, 'param1', new IntType(), new UndefinedType(), []),
                     ],
                     new VoidType(),
                     5
@@ -101,7 +101,7 @@ class FqcnMethodSniffTest extends TestCase
                     4,
                     'func1',
                     [
-                        new FunctionParam(3, 'param1', new IntType(), new UndefinedType()),
+                        new FunctionParam(3, 'param1', new IntType(), new UndefinedType(), []),
                     ],
                     new VoidType(),
                     5
@@ -123,7 +123,7 @@ class FqcnMethodSniffTest extends TestCase
                     4,
                     'func1',
                     [
-                        new FunctionParam(3, 'param1', new IntType(), new UndefinedType()),
+                        new FunctionParam(3, 'param1', new IntType(), new UndefinedType(), []),
                     ],
                     new VoidType(),
                     5

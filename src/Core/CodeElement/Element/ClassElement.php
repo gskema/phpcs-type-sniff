@@ -22,6 +22,7 @@ class ClassElement extends AbstractFqcnElement
      * @param ClassConstElement[]   $constants
      * @param ClassPropElement[]    $properties
      * @param ClassMethodElement[]  $methods
+     * @param string[]              $attributeNames
      */
     public function __construct(
         int $line,
@@ -29,9 +30,10 @@ class ClassElement extends AbstractFqcnElement
         string $fqcn,
         array $constants = [],
         array $properties = [],
-        array $methods = []
+        array $methods = [],
+        array $attributeNames = []
     ) {
-        parent::__construct($line, $docBlock, $fqcn);
+        parent::__construct($line, $docBlock, $fqcn, $attributeNames);
         $this->constants = $constants;
         array_walk($properties, [$this, 'addProperty']);
         array_walk($methods, [$this, 'addMethod']);

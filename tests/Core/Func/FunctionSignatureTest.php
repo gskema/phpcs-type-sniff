@@ -16,8 +16,8 @@ final class FunctionSignatureTest extends TestCase
             1,
             'fn1',
             [
-                new FunctionParam(1, 'param1', new IntType(), new UndefinedType()),
-                new FunctionParam(1, 'param2', new BoolType(), new UndefinedType())
+                new FunctionParam(1, 'param1', new IntType(), new UndefinedType(), []),
+                new FunctionParam(1, 'param2', new BoolType(), new UndefinedType(), [])
             ],
             new VoidType(),
             4
@@ -29,15 +29,15 @@ final class FunctionSignatureTest extends TestCase
         self::assertEquals(new VoidType(), $sig->getReturnType());
         self::assertEquals(
             [
-                new FunctionParam(1, 'param1', new IntType(), new UndefinedType()),
-                new FunctionParam(1, 'param2', new BoolType(), new UndefinedType())
+                new FunctionParam(1, 'param1', new IntType(), new UndefinedType(), []),
+                new FunctionParam(1, 'param2', new BoolType(), new UndefinedType(), [])
             ],
             $sig->getParams()
         );
         self::assertEquals(true, $sig->hasParam('param1'));
         self::assertEquals(false, $sig->hasParam('param3'));
         self::assertEquals(
-            new FunctionParam(1, 'param1', new IntType(), new UndefinedType()),
+            new FunctionParam(1, 'param1', new IntType(), new UndefinedType(), []),
             $sig->getParam('param1')
         );
         self::assertEquals(

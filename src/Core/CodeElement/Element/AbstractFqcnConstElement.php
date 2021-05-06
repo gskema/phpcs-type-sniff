@@ -13,14 +13,23 @@ abstract class AbstractFqcnConstElement extends AbstractFqcnElement
     /** @var TypeInterface|null */
     protected $valueType;
 
+    /**
+     * @param int                $line
+     * @param DocBlock           $docBlock
+     * @param string             $fqcn
+     * @param string             $constName
+     * @param TypeInterface|null $valueType
+     * @param string[]           $attributeNames
+     */
     public function __construct(
         int $line,
         DocBlock $docBlock,
         string $fqcn,
         string $constName,
-        ?TypeInterface $valueType
+        ?TypeInterface $valueType,
+        array $attributeNames
     ) {
-        parent::__construct($line, $docBlock, $fqcn);
+        parent::__construct($line, $docBlock, $fqcn, $attributeNames);
         $this->constName = $constName;
         $this->valueType = $valueType;
     }

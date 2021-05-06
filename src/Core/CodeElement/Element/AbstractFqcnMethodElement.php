@@ -13,9 +13,19 @@ abstract class AbstractFqcnMethodElement extends AbstractFqcnElement
     /** @var FunctionSignature */
     protected $signature;
 
-    public function __construct(DocBlock $docBlock, string $fqcn, FunctionSignature $signature)
-    {
-        parent::__construct($signature->getLine(), $docBlock, $fqcn);
+    /**
+     * @param DocBlock          $docBlock
+     * @param string            $fqcn
+     * @param FunctionSignature $signature
+     * @param string[]          $attributeNames
+     */
+    public function __construct(
+        DocBlock $docBlock,
+        string $fqcn,
+        FunctionSignature $signature,
+        array $attributeNames
+    ) {
+        parent::__construct($signature->getLine(), $docBlock, $fqcn, $attributeNames);
         $this->signature = $signature;
     }
 

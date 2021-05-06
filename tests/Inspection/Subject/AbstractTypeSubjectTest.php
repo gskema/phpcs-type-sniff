@@ -22,6 +22,7 @@ class AbstractTypeSubjectTest extends TestCase
             2,
             'parameter X',
             new DocBlock([2 => 'line2'], [new ReturnTag(3, new VoidType(), null)]),
+            ['aaa'],
             'FQCN::method1()x'
         );
 
@@ -43,5 +44,6 @@ class AbstractTypeSubjectTest extends TestCase
         );
         static::assertEquals(['warning3', 'warning4'], $subject->getDocTypeWarnings());
         static::assertEquals(['warning1', 'warning2'], $subject->getFnTypeWarnings());
+        static::assertEquals(true, $subject->hasAttribute('aaa'));
     }
 }

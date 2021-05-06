@@ -25,7 +25,18 @@ class TokenHelper
      */
     public static function getPrevDocBlock(File $file, int $startPtr, array $skip): DocBlock
     {
-        $docClosePtr = $file->findPrevious($skip, $startPtr - 1, null, true);
+        do {
+            $notAttrEndPtr = $file->findPrevious($skip, $startPtr - 1, null, true);
+            $tokenCode = false === $notAttrEndPtr ? null : $file->getTokens()[$notAttrEndPtr]['code'];
+
+            $attrOpenPtr = null;
+            if (T_ATTRIBUTE_END === $tokenCode) {
+                $attrOpenPtr = $file->findPrevious(T_ATTRIBUTE, $notAttrEndPtr - 1);
+                $startPtr = $attrOpenPtr ?: null;
+            }
+        } while (null !== $attrOpenPtr);
+
+        $docClosePtr = $file->findPrevious($skip, $notAttrEndPtr, null, true);
         $tokenCode = false === $docClosePtr ? null : $file->getTokens()[$docClosePtr]['code'];
 
         if (T_DOC_COMMENT_CLOSE_TAG === $tokenCode) {
@@ -318,5 +329,53 @@ class TokenHelper
         }
 
         return array_values(array_unique($thisMethodCalls));
+    }
+
+    /**
+     * @param File $file
+     * @param int  $ptr
+     *
+     * @return string[]
+     */
+    public static function getPrevAttributeNames(File $file, int $ptr): array
+    {
+        $tokens = $file->getTokens();
+        $skip = array_merge(Tokens::$emptyTokens, Tokens::$methodPrefixes, Tokens::$ooScopeTokens);
+
+        $attributeNames = [];
+
+        $searchStartPtr = $ptr;
+        while (false !== $attrEndPtr = $file->findPrevious($skip, $searchStartPtr - 1, null, true)) {
+            if (T_ATTRIBUTE_END !== $tokens[$attrEndPtr]['code']) {
+                break;
+            }
+
+            $attrStartPtr = $file->findPrevious(T_ATTRIBUTE, $attrEndPtr - 1);
+            if (false === $attrStartPtr) {
+                break;
+            }
+
+            $rawAttribute = $file->getTokensAsString($attrStartPtr, $attrEndPtr - $attrStartPtr + 1);
+
+            $attributeName = static::parseAttributeName($rawAttribute);
+            if (null !== $attributeName) {
+                $attributeNames[] = $attributeName;
+            }
+
+            $searchStartPtr = $attrStartPtr;
+        }
+
+        if (!empty($attributeNames)) {
+            $attributeNames = array_values(array_unique(array_reverse($attributeNames)));
+        }
+
+        return $attributeNames;
+    }
+
+    public static function parseAttributeName(string $rawAttribute): ?string
+    {
+        preg_match('/#\[([\w\\\\]+)/', $rawAttribute, $matches);
+
+        return $matches[1] ?? null;
     }
 }

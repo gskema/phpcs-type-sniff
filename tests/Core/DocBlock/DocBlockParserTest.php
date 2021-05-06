@@ -2,6 +2,8 @@
 
 namespace Gskema\TypeSniff\Core\DocBlock;
 
+use Gskema\TypeSniff\Core\Type\DocBlock\MixedType;
+use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
 use PHP_CodeSniffer\Config;
 use PHP_CodeSniffer\Exceptions\RuntimeException;
 use PHP_CodeSniffer\Files\LocalFile;
@@ -20,7 +22,7 @@ use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
 class DocBlockParserTest extends TestCase
 {
     /**
-     * @return mixed[]
+     * @return mixed[][]
      */
     public function dataDetectFromTokens(): array
     {
@@ -139,7 +141,7 @@ class DocBlockParserTest extends TestCase
     }
 
     /**
-     * @return mixed[]
+     * @return mixed[][]
      */
     public function dataFromRaw(): array
     {
@@ -189,6 +191,31 @@ class DocBlockParserTest extends TestCase
                 [
                     new GenericTag(3, 'route', '("/{id}", name="blog_post", requirements = {"id" = "\d+"})'),
                     new GenericTag(4, 'param-converter', '("user", class="AcmeBlogBundle:User", options={ "repository_method" = "findByFullName" })'),
+                ]
+            ),
+            'expectedException' => null,
+        ];
+
+        // #4 Return tags with custom array type
+        $dataSets[] = [
+            'givenRawDocBlock'  => '/**
+* @return array<int, array<string|null, int>>|null Description text
+* @return array|null Description option dsa asd
+* @return int
+*/',
+            'givenStartLine'    => 2,
+            'expectedDocBlock'  => new DocBlock(
+                [],
+                [
+                    new ReturnTag(3, new CompoundType([
+                        new TypedArrayType(new MixedType(), 1),
+                        new NullType(),
+                    ]), 'Description text'),
+                    new ReturnTag(4, new CompoundType([
+                        new ArrayType(),
+                        new NullType(),
+                    ]), 'Description option dsa asd'),
+                    new ReturnTag(5, new IntType(), null),
                 ]
             ),
             'expectedException' => null,

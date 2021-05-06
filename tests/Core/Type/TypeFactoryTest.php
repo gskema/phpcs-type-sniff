@@ -145,4 +145,50 @@ class TypeFactoryTest extends TestCase
 
         self::assertEquals($expectedType, $actualType);
     }
+
+    /**
+     * @return mixed[][]
+     */
+    public function dataSplit(): array
+    {
+        return [
+            ['int $param1', [['int'], '$param1']],
+            ['int', [['int'], '']],
+            ['int|null', [['int', 'null'], '']],
+            ['int|null Desc', [['int', 'null'], 'Desc']],
+            ['int |null Desc', [['int'], '|null Desc']],
+            ['array<int, int> Desc', [['array<int, int>'], 'Desc']],
+            ['int|array<int, int>|null Desc', [['int', 'array<int, int>', 'null'], 'Desc']],
+            [
+                'int|array<int|string, array<int, int|null>>|null Desc',
+                [['int', 'array<int|string, array<int, int|null>>', 'null'], 'Desc']
+            ],
+            [' int|null    Desc a a a a', [['int', 'null'], 'Desc a a a a']],
+            [
+                'int|string|bool|array<int|string, array{int, string}>| Desc',
+                [['int', 'string', 'bool', 'array<int|string, array{int, string}>'], 'Desc']
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataSplit
+     *
+     * @param string  $givenTagBody
+     * @param mixed[] $expectedSplit
+     */
+    public function testSplit(
+        string $givenTagBody,
+        array $expectedSplit
+    ): void {
+        $proxy = new class extends TypeFactory {
+            public static function doSplit(string $tagBody): array
+            {
+                return self::split($tagBody);
+            }
+        };
+        $actualSplit = $proxy::doSplit($givenTagBody);
+
+        self::assertEquals($expectedSplit, $actualSplit);
+    }
 }

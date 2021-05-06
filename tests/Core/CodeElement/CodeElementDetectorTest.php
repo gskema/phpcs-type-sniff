@@ -59,7 +59,7 @@ use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
 class CodeElementDetectorTest extends TestCase
 {
     /**
-     * @return mixed[]
+     * @return mixed[][]
      */
     public function dataDetectFromTokens(): array
     {
@@ -88,7 +88,8 @@ class CodeElementDetectorTest extends TestCase
                                 new UndefinedDocBlock(),
                                 'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass0',
                                 'CONST1',
-                                new IntType()
+                                new IntType(),
+                                []
                             ),
                             new ClassConstElement(
                                 18,
@@ -97,7 +98,8 @@ class CodeElementDetectorTest extends TestCase
                                 ]),
                                 'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass0',
                                 'CONST2',
-                                new IntType()
+                                new IntType(),
+                                []
                             ),
                         ],
                         [
@@ -156,7 +158,7 @@ class CodeElementDetectorTest extends TestCase
                                     44,
                                     'method2',
                                     [
-                                        new FunctionParam(44, 'param1', new IntType(), new UndefinedType()),
+                                        new FunctionParam(44, 'param1', new IntType(), new UndefinedType(), []),
                                     ],
                                     new NullableType(new ArrayType()),
                                     44
@@ -185,7 +187,8 @@ class CodeElementDetectorTest extends TestCase
                         new UndefinedDocBlock(),
                         'Gskema\TypeSniff\\Core\\CodeElement\\fixtures',
                         'CONST1',
-                        new IntType()
+                        new IntType(),
+                        []
                     ),
                 ],
                 [
@@ -193,7 +196,8 @@ class CodeElementDetectorTest extends TestCase
                         7,
                         new UndefinedDocBlock(),
                         'Gskema\TypeSniff\\Core\\CodeElement\\fixtures',
-                        new FunctionSignature(7, 'namedFunc', [], new UndefinedType(), 7)
+                        new FunctionSignature(7, 'namedFunc', [], new UndefinedType(), 7),
+                        []
                     ),
                 ],
                 [
@@ -207,7 +211,8 @@ class CodeElementDetectorTest extends TestCase
                                 new UndefinedDocBlock(),
                                 'Gskema\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass1',
                                 'CONST2',
-                                new IntType()
+                                new IntType(),
+                                []
                             ),
                         ],
                         [
@@ -257,98 +262,112 @@ class CodeElementDetectorTest extends TestCase
                                 new UndefinedDocBlock(),
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                                 'C01',
-                                new NullType()
+                                new NullType(),
+                                []
                             ),
                             new ClassConstElement(
                                 8,
                                 new UndefinedDocBlock(),
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                                 'C02',
-                                new BoolType()
+                                new BoolType(),
+                                []
                             ),
                             new ClassConstElement(
                                 9,
                                 new UndefinedDocBlock(),
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                                 'C03',
-                                new BoolType()
+                                new BoolType(),
+                                []
                             ),
                             new ClassConstElement(
                                 10,
                                 new UndefinedDocBlock(),
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                                 'C04',
-                                new IntType()
+                                new IntType(),
+                                []
                             ),
                             new ClassConstElement(
                                 11,
                                 new UndefinedDocBlock(),
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                                 'C05',
-                                new FloatType()
+                                new FloatType(),
+                                []
                             ),
                             new ClassConstElement(
                                 12,
                                 new UndefinedDocBlock(),
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                                 'C06',
-                                new IntType()
+                                new IntType(),
+                                []
                             ),
                             new ClassConstElement(
                                 13,
                                 new UndefinedDocBlock(),
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                                 'C07',
-                                new StringType()
+                                new StringType(),
+                                []
                             ),
                             new ClassConstElement(
                                 14,
                                 new UndefinedDocBlock(),
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                                 'C08',
-                                new StringType()
+                                new StringType(),
+                                []
                             ),
                             new ClassConstElement(
                                 15,
                                 new UndefinedDocBlock(),
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                                 'C09',
-                                new StringType()
+                                new StringType(),
+                                []
                             ),
                             new ClassConstElement(
                                 18,
                                 new UndefinedDocBlock(),
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                                 'C10',
-                                new ArrayType()
+                                new ArrayType(),
+                                []
                             ),
                             new ClassConstElement(
                                 19,
                                 new UndefinedDocBlock(),
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                                 'C11',
-                                new ArrayType()
+                                new ArrayType(),
+                                []
                             ),
                             new ClassConstElement(
                                 20,
                                 new UndefinedDocBlock(),
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                                 'C12',
-                                null
+                                null,
+                                []
                             ),
                             new ClassConstElement(
                                 21,
                                 new UndefinedDocBlock(),
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                                 'C13',
-                                null
+                                null,
+                                []
                             ),
                             new ClassConstElement(
                                 22,
                                 new UndefinedDocBlock(),
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                                 'C14',
-                                new IntType()
+                                new IntType(),
+                                []
                             ),
                         ],
                         [
@@ -394,7 +413,7 @@ class CodeElementDetectorTest extends TestCase
                         new UndefinedDocBlock(),
                         'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestInterface0',
                         [
-                            new InterfaceConstElement(7, new UndefinedDocBlock(), 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestInterface0', 'C1', new IntType()),
+                            new InterfaceConstElement(7, new UndefinedDocBlock(), 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestInterface0', 'C1', new IntType(), []),
                         ],
                         [
                             new InterfaceMethodElement(
@@ -443,7 +462,7 @@ class CodeElementDetectorTest extends TestCase
                                     9,
                                     'func1',
                                     [
-                                        new FunctionParam(9, 'arg1', new IntType(), new UndefinedType()),
+                                        new FunctionParam(9, 'arg1', new IntType(), new UndefinedType(), []),
                                     ],
                                     new IntType(),
                                     9
@@ -669,28 +688,28 @@ class CodeElementDetectorTest extends TestCase
                                     39,
                                     'method2',
                                     [
-                                        new FunctionParam(40, 'array', new ArrayType(), new UndefinedType()),
-                                        new FunctionParam(41, 'bool', new BoolType(), new UndefinedType()),
-                                        new FunctionParam(42, 'boolean', new UndefinedType(), new UndefinedType()),
-                                        new FunctionParam(43, 'callable', new CallableType(), new UndefinedType()),
-                                        new FunctionParam(44, 'double', new UndefinedType(), new UndefinedType()),
-                                        new FunctionParam(45, 'false', new UndefinedType(), new UndefinedType()),
-                                        new FunctionParam(46, 'float', new FloatType(), new UndefinedType()),
-                                        new FunctionParam(47, 'int', new IntType(), new UndefinedType()),
-                                        new FunctionParam(48, 'integer', new UndefinedType(), new UndefinedType()),
-                                        new FunctionParam(49, 'iterable', new IterableType(), new UndefinedType()),
-                                        new FunctionParam(50, 'mixed', new UndefinedType(), new UndefinedType()),
-                                        new FunctionParam(51, 'null', new UndefinedType(), new UndefinedType()),
-                                        new FunctionParam(52, 'object', new UndefinedType(), new UndefinedType()),
-                                        new FunctionParam(53, 'parent', new ParentType(), new UndefinedType()),
-                                        new FunctionParam(54, 'resource', new UndefinedType(), new UndefinedType()),
-                                        new FunctionParam(55, 'self', new SelfType(), new UndefinedType()),
-                                        new FunctionParam(56, 'static', new UndefinedType(), new UndefinedType()),
-                                        new FunctionParam(57, 'string', new StringType(), new UndefinedType()),
-                                        new FunctionParam(58, 'true', new UndefinedType(), new UndefinedType()),
-                                        new FunctionParam(59, 'undefined', new UndefinedType(), new UndefinedType()),
-                                        new FunctionParam(60, 'typedArray', new ArrayType(), new UndefinedType()),
-                                        new FunctionParam(61, 'nullableInt', new NullableType(new IntType()), new UndefinedType()),
+                                        new FunctionParam(40, 'array', new ArrayType(), new UndefinedType(), []),
+                                        new FunctionParam(41, 'bool', new BoolType(), new UndefinedType(), []),
+                                        new FunctionParam(42, 'boolean', new UndefinedType(), new UndefinedType(), []),
+                                        new FunctionParam(43, 'callable', new CallableType(), new UndefinedType(), []),
+                                        new FunctionParam(44, 'double', new UndefinedType(), new UndefinedType(), []),
+                                        new FunctionParam(45, 'false', new UndefinedType(), new UndefinedType(), []),
+                                        new FunctionParam(46, 'float', new FloatType(), new UndefinedType(), []),
+                                        new FunctionParam(47, 'int', new IntType(), new UndefinedType(), []),
+                                        new FunctionParam(48, 'integer', new UndefinedType(), new UndefinedType(), []),
+                                        new FunctionParam(49, 'iterable', new IterableType(), new UndefinedType(), []),
+                                        new FunctionParam(50, 'mixed', new UndefinedType(), new UndefinedType(), []),
+                                        new FunctionParam(51, 'null', new UndefinedType(), new UndefinedType(), []),
+                                        new FunctionParam(52, 'object', new UndefinedType(), new UndefinedType(), []),
+                                        new FunctionParam(53, 'parent', new ParentType(), new UndefinedType(), []),
+                                        new FunctionParam(54, 'resource', new UndefinedType(), new UndefinedType(), []),
+                                        new FunctionParam(55, 'self', new SelfType(), new UndefinedType(), []),
+                                        new FunctionParam(56, 'static', new UndefinedType(), new UndefinedType(), []),
+                                        new FunctionParam(57, 'string', new StringType(), new UndefinedType(), []),
+                                        new FunctionParam(58, 'true', new UndefinedType(), new UndefinedType(), []),
+                                        new FunctionParam(59, 'undefined', new UndefinedType(), new UndefinedType(), []),
+                                        new FunctionParam(60, 'typedArray', new ArrayType(), new UndefinedType(), []),
+                                        new FunctionParam(61, 'nullableInt', new NullableType(new IntType()), new UndefinedType(), []),
                                     ],
                                     new UndefinedType(),
                                     62
@@ -722,15 +741,15 @@ class CodeElementDetectorTest extends TestCase
                         new UndefinedDocBlock(),
                         $fqcn9,
                         [
-                            new ClassConstElement(9, new UndefinedDocBlock(), $fqcn9, 'C1', new ArrayType()),
-                            new ClassConstElement(10, new UndefinedDocBlock(), $fqcn9, 'C2', new BoolType()),
-                            new ClassConstElement(11, new UndefinedDocBlock(), $fqcn9, 'C3', new FloatType()),
-                            new ClassConstElement(12, new UndefinedDocBlock(), $fqcn9, 'C4', new IntType()),
-                            new ClassConstElement(13, new UndefinedDocBlock(), $fqcn9, 'C5', new StringType()),
-                            new ClassConstElement(14, new UndefinedDocBlock(), $fqcn9, 'C6', new NullType()),
-                            new ClassConstElement(15, new UndefinedDocBlock(), $fqcn9, 'C7', new ArrayType()),
-                            new ClassConstElement(16, new UndefinedDocBlock(), $fqcn9, 'C8', null),
-                            new ClassConstElement(17, new UndefinedDocBlock(), $fqcn9, 'C9', new StringType()),
+                            new ClassConstElement(9, new UndefinedDocBlock(), $fqcn9, 'C1', new ArrayType(), []),
+                            new ClassConstElement(10, new UndefinedDocBlock(), $fqcn9, 'C2', new BoolType(), []),
+                            new ClassConstElement(11, new UndefinedDocBlock(), $fqcn9, 'C3', new FloatType(), []),
+                            new ClassConstElement(12, new UndefinedDocBlock(), $fqcn9, 'C4', new IntType(), []),
+                            new ClassConstElement(13, new UndefinedDocBlock(), $fqcn9, 'C5', new StringType(), []),
+                            new ClassConstElement(14, new UndefinedDocBlock(), $fqcn9, 'C6', new NullType(), []),
+                            new ClassConstElement(15, new UndefinedDocBlock(), $fqcn9, 'C7', new ArrayType(), []),
+                            new ClassConstElement(16, new UndefinedDocBlock(), $fqcn9, 'C8', null, []),
+                            new ClassConstElement(17, new UndefinedDocBlock(), $fqcn9, 'C9', new StringType(), []),
                         ],
                         [],
                         [
@@ -741,31 +760,31 @@ class CodeElementDetectorTest extends TestCase
                                     21,
                                     'func1',
                                     [
-                                        new FunctionParam(22, 'arg1', new ArrayType(), new ArrayType()),
-                                        new FunctionParam(23, 'arg2', new BoolType(), new BoolType()),
-                                        new FunctionParam(24, 'arg3', new CallableType(), new NullType()),
-                                        new FunctionParam(25, 'arg4', new FloatType(), new FloatType()),
-                                        new FunctionParam(26, 'arg5', new FqcnType('stdClass'), new NullType()),
-                                        new FunctionParam(27, 'arg6', new IntType(), new IntType()),
-                                        new FunctionParam(28, 'arg7', new IterableType(), new ArrayType()),
-                                        new FunctionParam(29, 'arg8', new ParentType(), new NullType()),
-                                        new FunctionParam(30, 'arg9', new SelfType(), new NullType()),
-                                        new FunctionParam(31, 'arg10', new StringType(), new StringType()),
-                                        new FunctionParam(32, 'arg11', new UndefinedType(), new NullType()),
-                                        new FunctionParam(33, 'arg12', new NullableType(new StringType()), new NullType()),
+                                        new FunctionParam(22, 'arg1', new ArrayType(), new ArrayType(), []),
+                                        new FunctionParam(23, 'arg2', new BoolType(), new BoolType(), []),
+                                        new FunctionParam(24, 'arg3', new CallableType(), new NullType(), []),
+                                        new FunctionParam(25, 'arg4', new FloatType(), new FloatType(), []),
+                                        new FunctionParam(26, 'arg5', new FqcnType('stdClass'), new NullType(), []),
+                                        new FunctionParam(27, 'arg6', new IntType(), new IntType(), []),
+                                        new FunctionParam(28, 'arg7', new IterableType(), new ArrayType(), []),
+                                        new FunctionParam(29, 'arg8', new ParentType(), new NullType(), []),
+                                        new FunctionParam(30, 'arg9', new SelfType(), new NullType(), []),
+                                        new FunctionParam(31, 'arg10', new StringType(), new StringType(), []),
+                                        new FunctionParam(32, 'arg11', new UndefinedType(), new NullType(), []),
+                                        new FunctionParam(33, 'arg12', new NullableType(new StringType()), new NullType(), []),
 
-                                        new FunctionParam(35, 'arg13', new ArrayType(), null),
-                                        new FunctionParam(36, 'arg14', new BoolType(), null),
-                                        new FunctionParam(37, 'arg15', new FloatType(), null),
-                                        new FunctionParam(38, 'arg16', new IntType(), null),
-                                        new FunctionParam(39, 'arg17', new StringType(), null),
-                                        new FunctionParam(40, 'arg18', new NullableType(new StringType()), null),
-                                        new FunctionParam(41, 'arg19', new ArrayType(), null),
-                                        new FunctionParam(42, 'arg20', new NullableType(new IntType()), null),
-                                        new FunctionParam(43, 'arg21', new StringType(), null),
-                                        new FunctionParam(45, 'arg22', new ArrayType(), new ArrayType()),
-                                        new FunctionParam(46, 'arg23', new BoolType(), new BoolType()),
-                                        new FunctionParam(47, 'arg24', new UndefinedType(), null),
+                                        new FunctionParam(35, 'arg13', new ArrayType(), null, []),
+                                        new FunctionParam(36, 'arg14', new BoolType(), null, []),
+                                        new FunctionParam(37, 'arg15', new FloatType(), null, []),
+                                        new FunctionParam(38, 'arg16', new IntType(), null, []),
+                                        new FunctionParam(39, 'arg17', new StringType(), null, []),
+                                        new FunctionParam(40, 'arg18', new NullableType(new StringType()), null, []),
+                                        new FunctionParam(41, 'arg19', new ArrayType(), null, []),
+                                        new FunctionParam(42, 'arg20', new NullableType(new IntType()), null, []),
+                                        new FunctionParam(43, 'arg21', new StringType(), null, []),
+                                        new FunctionParam(45, 'arg22', new ArrayType(), new ArrayType(), []),
+                                        new FunctionParam(46, 'arg23', new BoolType(), new BoolType(), []),
+                                        new FunctionParam(47, 'arg24', new UndefinedType(), null, []),
                                     ],
                                     new VoidType(),
                                     48
@@ -915,6 +934,75 @@ class CodeElementDetectorTest extends TestCase
                                 new ClassMethodMetadata([], null, [])
                             )
                         ]
+                    )
+                ]
+            ),
+        ];
+
+        // #12
+        $dataSets[] = [
+            'givenUseReflection' => true,
+            'givenFile'          => __DIR__ . '/fixtures/TestClass6.php',
+            'expected'           => new FileElement(
+                1,
+                new UndefinedDocBlock(),
+                __DIR__ . '/fixtures/TestClass6.php',
+                [],
+                [],
+                [
+                    new ClassElement(
+                        6,
+                        new UndefinedDocBlock(),
+                        'Gskema\TypeSniff\Core\CodeElement\fixtures\TestClass6',
+                        [
+                            new ClassConstElement(
+                                10,
+                                new UndefinedDocBlock(),
+                                'Gskema\TypeSniff\Core\CodeElement\fixtures\TestClass6',
+                                'FOO_CONST',
+                                new IntType(),
+                                ['ConstAttr', 'FooAttribute']
+                            )
+                        ],
+                        [],
+                        [
+                            new ClassMethodElement(
+                                new UndefinedDocBlock(),
+                                'Gskema\TypeSniff\Core\CodeElement\fixtures\TestClass6',
+                                new FunctionSignature(
+                                    13,
+                                    'getFoo',
+                                    [
+                                        new FunctionParam(
+                                            15,
+                                            'a',
+                                            new UndefinedType(),
+                                            new UndefinedType(),
+                                            ['FooClassAttribe']
+                                        ),
+                                        new FunctionParam(
+                                            18,
+                                            'b',
+                                            new StringType(),
+                                            new UndefinedType(),
+                                            ['FooClassAttribe']
+                                        ),
+                                        new FunctionParam(
+                                            19,
+                                            'c',
+                                            new UndefinedType(),
+                                            new UndefinedType(),
+                                            []
+                                        )
+                                    ],
+                                    new StringType(),
+                                    20
+                                ),
+                                new ClassMethodMetadata([], null, [], false),
+                                ['SomeoneElse\FooMethodAttribe']
+                            )
+                        ],
+                        ['Attribute1']
                     )
                 ]
             ),

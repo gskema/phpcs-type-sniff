@@ -2,6 +2,7 @@
 
 namespace Gskema\TypeSniff\Core\Func;
 
+use Gskema\TypeSniff\Core\TokenHelper;
 use Gskema\TypeSniff\Core\Type\Common\FqcnType;
 use PHP_CodeSniffer\Files\File;
 use RuntimeException;
@@ -74,6 +75,7 @@ class FunctionSignatureParser
                 case T_PARENT:
                 case T_CALLABLE:
                 case T_NULLABLE:
+                case T_INLINE_THEN: // looks like a phpcs bug
                     // these cannot be default
                     $raw['type'] = ($raw['type'] ?? '') . $token['content'];
                     break;
@@ -113,6 +115,18 @@ class FunctionSignatureParser
                         $params[] = static::createParam($raw);
                     }
                     break 2;
+                case T_ATTRIBUTE:
+                    $attrEndPtr = $file->findNext(T_ATTRIBUTE_END, $ptr + 1);
+                    if (false !== $attrEndPtr) {
+                        $rawAttribute = $file->getTokensAsString($ptr, $attrEndPtr - $ptr + 1);
+                        $attributeName = TokenHelper::parseAttributeName($rawAttribute);
+                        if (null !== $attributeName) {
+                            $raw['attrNames'] = $raw['attrNames'] ?? [];
+                            $raw['attrNames'][] = $attributeName;
+                        }
+                        $ptr = $attrEndPtr;
+                    }
+                    break;
             }
         }
 
@@ -162,11 +176,17 @@ class FunctionSignatureParser
             $valueType = null; // e.g $arg = PHP_INT_MAX // @TODO
         }
 
+        $attrNames = [];
+        if ($raw['attrNames'] ?? []) {
+            $attrNames = array_values(array_unique($raw['attrNames']));
+        }
+
         return new FunctionParam(
             $raw['line'],
             $raw['name'],
             TypeFactory::fromRawType($raw['type'] ?? ''),
-            $valueType
+            $valueType,
+            $attrNames
         );
     }
 }

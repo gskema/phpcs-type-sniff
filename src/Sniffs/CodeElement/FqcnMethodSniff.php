@@ -5,8 +5,10 @@ namespace Gskema\TypeSniff\Sniffs\CodeElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassElement;
 use Gskema\TypeSniff\Core\DocBlock\Tag\VarTag;
 use Gskema\TypeSniff\Core\SniffHelper;
+use Gskema\TypeSniff\Core\Type\Common\ArrayType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
+use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
 use Gskema\TypeSniff\Core\Type\TypeHelper;
 use Gskema\TypeSniff\Inspection\FnTypeInspector;
 use Gskema\TypeSniff\Inspection\DocTypeInspector;
@@ -124,7 +126,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         // @return
         if (!$isConstructMethod) {
             $returnTag = $docBlock->getReturnTag();
-            $subject = ReturnTypeSubject::fromSignature($fnSig, $returnTag, $docBlock, $method->getId());
+            $subject = ReturnTypeSubject::fromSignature($fnSig, $returnTag, $docBlock, $method->getAttributeNames(), $method->getId());
             $this->processSigType($subject);
             if ($method instanceof ClassMethodElement && $parent instanceof ClassElement) {
                 $this->reportNullableBasicGetter && $this->reportNullableBasicGetter($subject, $method, $parent);

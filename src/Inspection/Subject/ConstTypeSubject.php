@@ -10,6 +10,16 @@ use Gskema\TypeSniff\Core\Type\TypeInterface;
 
 class ConstTypeSubject extends AbstractTypeSubject
 {
+    /**
+     * @param TypeInterface|null $docType
+     * @param TypeInterface|null $valueType
+     * @param int|null           $docTypeLine
+     * @param int                $fnTypeLine
+     * @param string             $name
+     * @param DocBlock           $docBlock
+     * @param string[]           $attributeNames
+     * @param string             $id
+     */
     public function __construct(
         ?TypeInterface $docType,
         ?TypeInterface $valueType,
@@ -17,6 +27,7 @@ class ConstTypeSubject extends AbstractTypeSubject
         int $fnTypeLine,
         string $name,
         DocBlock $docBlock,
+        array $attributeNames,
         string $id
     ) {
         parent::__construct(
@@ -27,6 +38,7 @@ class ConstTypeSubject extends AbstractTypeSubject
             $fnTypeLine,
             $name,
             $docBlock,
+            $attributeNames,
             $id
         );
     }
@@ -50,6 +62,7 @@ class ConstTypeSubject extends AbstractTypeSubject
             $const->getLine(),
             $const->getConstName() . ' constant',
             $docBlock,
+            $const->getAttributeNames(),
             $const->getFqcn() . '::' . $const->getConstName()
         );
     }

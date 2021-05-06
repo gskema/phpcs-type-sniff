@@ -243,7 +243,6 @@ class CompositeCodeElementSniffTest extends TestCase
             [],
         ];
 
-
         // #12
         $dataSets[] = [
             [
@@ -277,6 +276,43 @@ class CompositeCodeElementSniffTest extends TestCase
                 '124 Type hint "null" is not compatible with C6 constant value type [79c7cfa740ac5627]',
                 '127 Use a more specific type in typed array hint "[][]" for property $prop2. Correct array depth must be specified. [2987854751394f1d]',
             ],
+        ];
+
+        // #13
+        $dataSets[] = [
+            [
+                'useReflection'                     => false,
+            ],
+            __DIR__ . '/fixtures/TestClass9.php',
+            [
+                '006 Useless description',
+                '008 Useless tag',
+                '025 Type hint "string" is not compatible with CONST3 constant value type',
+                '025 Missing "array" type in CONST3 constant type hint',
+                '031 Type hint "null" is not compatible with CONST4 constant value type',
+                '043 Property $prop2 not initialized by __construct(), add null doc type or set a default value',
+                '053 Add type declaration for return value, e.g.: "array"',
+                '060 Missing "null" type in parameter $b type hint',
+                '070 Add type declaration for parameter $d, e.g.: "array"',
+                '071 Add type declaration for return value, e.g.: "array"',
+                '075 Property $prop4 not initialized by __construct(), add null doc type or set a default value',
+                '078 Property $prop5 not initialized by __construct(), add null doc type or set a default value',
+                '082 Type hint "?string" is not compatible with parameter $a value type',
+                '082 Missing "null, string" types in parameter $a type hint',
+                '083 Type hint "?int" is not compatible with return value value type',
+                '083 Missing "null, int" types in return value type hint',
+                '090 Type declaration of return value not compatible with ArrayShape attribute',
+            ],
+        ];
+
+        // #14
+        $dataSets[] = [
+            [
+                'useReflection' => false,
+                'reportType' => 'error'
+            ],
+            __DIR__ . '/fixtures/TestInterface8.php',
+            [], // 1 error reported, 0 warnings
         ];
 
         // Remove empty warnings (some warnings disabled on PHP 7.4)

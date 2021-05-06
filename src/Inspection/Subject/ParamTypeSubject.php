@@ -26,6 +26,7 @@ class ParamTypeSubject extends AbstractTypeSubject
             $param->getLine(),
             sprintf('parameter $%s', $param->getName()),
             $docBlock,
+            $param->getAttributeNames(),
             $id
         );
     }

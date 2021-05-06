@@ -58,21 +58,49 @@ class TypeFactory
         'void'     => VoidType::class,
     ];
 
+    /**
+     * @param string $rawType
+     *
+     * @return mixed[]
+     */
+    public static function fromRawTypeAndDescription(string $rawType): array
+    {
+        [$rawTypes, $description] = static::split($rawType);
+
+        $type = static::fromRawTypes($rawTypes);
+
+        return [$type, $description];
+    }
+
     public static function fromRawType(string $rawType): TypeInterface
     {
-        $rawTypes = array_filter(array_map('trim', static::explode($rawType)));
+        [$rawTypes, ] = static::split($rawType);
+
+        return static::fromRawTypes($rawTypes);
+    }
+
+    /**
+     * @param string[] $rawTypes
+     *
+     * @return TypeInterface
+     */
+    protected static function fromRawTypes(array $rawTypes): TypeInterface
+    {
+        $rawTypes = array_filter(array_map('trim', $rawTypes));
         if (count($rawTypes) > 1) {
             $types = [];
             foreach ($rawTypes as $rawType) {
-                $types[] = static::fromRawType($rawType);
+                $types[] = static::fromRawTypes([$rawType]); // skip split
             }
 
             return new CompoundType($types);
         }
         $rawType = $rawTypes[0] ?? '';
 
+        // Supported for parsing function parameter type declaration, but doc type not valid.
+        // Usage as doc type detected by multiple warnings.
         if ('?' === ($rawType[0] ?? null)) {
-            return new NullableType(static::fromRawType(substr($rawType, 1)));
+            return new NullableType(static::fromRawTypes([substr($rawType, 1)])); // skip split
         }
 
         $basicType = static::$basicTypeMap[$rawType] ?? null;
@@ -108,50 +136,56 @@ class TypeFactory
         if ($depth > 0) {
             $rawInnerType = substr($rawType, 0, -2 * $depth);
 
-            return new TypedArrayType(static::fromRawType($rawInnerType), $depth);
+            return new TypedArrayType(static::fromRawTypes([$rawInnerType]), $depth);
         }
 
         // e.g. (int|string)
         //      ((int|float)[]|(string|bool)[])
         if ('(' === $rawType[0] && ')' === $rawType[-1]) {
             // must not trim more than 1 char on each side!
-            return static::fromRawType(substr($rawType, 1, -1));
+            return static::fromRawType(substr($rawType, 1, -1)); // cannot skip split
         }
 
         return new FqcnType($rawType);
     }
 
     /**
-     * @param string $rawType
+     * @param string $tagBody
      *
-     * @return string[]
+     * @return mixed[]
      */
-    protected static function explode(string $rawType): array
+    protected static function split(string $tagBody): array
     {
-        $rawType = trim($rawType); // must be trimmed for logic below to work
+        // e.g. @param array<int|string, int>|null $param1
+        //      @return array{foo: string|int}|array<int|string, array<int>> Description for return tag
+        //      @param int|string
 
-        if (empty($rawType)) {
-            return [];
+        $tagBody = trim($tagBody);
+
+        // Shortcut to skip loop below. No need to check strings like 'array<' because we split raw type + description
+        // by ' ' char.
+        if (
+            false === strpos($tagBody, '<') &&
+            false === strpos($tagBody, '{') &&
+            false === strpos($tagBody, '(')
+        ) {
+            $spacePos = strpos($tagBody, ' ');
+            $rawType = false !== $spacePos ? substr($tagBody, 0, $spacePos) : $tagBody;
+            $remainingString = false !== $spacePos ? substr($tagBody, $spacePos + 1) : '';
+
+            $rawTypes = array_filter(array_map('trim', explode('|', $rawType)));
+            $remainingString = trim($remainingString);
+
+            return [$rawTypes, $remainingString];
         }
 
-        // e.g. 'int|string'
-        $hasScopeOpeners = false
-            || false !== strpos($rawType, '<')
-            || false !== strpos($rawType, '{')
-            || false !== strpos($rawType, '(');
-        if (!$hasScopeOpeners) {
-            return explode('|', $rawType);
-        }
-
-        // e.g. array<int|string, int>|null
-        //      array{foo: string|int}|array<int|string, array<int>>
         $rawTypes = [];
+        $remainingString = null;
         $lastSplitPos = 0;
         $openScopes = ['<' => 0, '{' => 0, '(' => 0];
-
-        $len = strlen($rawType);
+        $len = strlen($tagBody);
         for ($pos = 0; $pos <= $len - 1; $pos++) {
-            $ch = $rawType[$pos];
+            $ch = $tagBody[$pos];
 
             '<' === $ch && $openScopes['<']++;
             '{' === $ch && $openScopes['{']++;
@@ -163,13 +197,24 @@ class TypeFactory
             '}' === $ch && $openScopes['{'] > 0 && $openScopes['{']--;
             ')' === $ch && $openScopes['('] > 0 && $openScopes['(']--;
 
-            if ('|' === $ch && 0 === array_sum($openScopes)) {
-                $rawTypes[] = substr($rawType, $lastSplitPos, $pos - $lastSplitPos);
+            $openScopeCount = array_sum($openScopes);
+            if ('|' === $ch && 0 === $openScopeCount) {
+                $rawTypes[] = substr($tagBody, $lastSplitPos, $pos - $lastSplitPos);
                 $lastSplitPos = $pos + 1; // skip current char '|'
             }
+            if (' ' === $ch && 0 === $openScopeCount) {
+                $rawTypes[] = substr($tagBody, $lastSplitPos, $pos - $lastSplitPos);
+                $remainingString = substr($tagBody, $pos);
+                break;
+            }
         }
-        $rawTypes[] = substr($rawType, $lastSplitPos);
+        if (null === $remainingString) {
+            $rawTypes[] = substr($tagBody, $lastSplitPos);
+        }
 
-        return $rawTypes;
+        $rawTypes = array_filter(array_map('trim', $rawTypes));
+        $remainingString = trim($remainingString);
+
+        return [$rawTypes, $remainingString];
     }
 }

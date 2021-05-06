@@ -22,18 +22,31 @@ class ConstElement implements CodeElementInterface
     /** @var TypeInterface|null */
     protected $valueType;
 
+    /** @var string[] */
+    protected $attributeNames = [];
+
+    /**
+     * @param int                $line
+     * @param DocBlock           $docBlock
+     * @param string             $namespace
+     * @param string             $name
+     * @param TypeInterface|null $valueType
+     * @param string[]           $attributeNames
+     */
     public function __construct(
         int $line,
         DocBlock $docBlock,
         string $namespace,
         string $name,
-        ?TypeInterface $valueType
+        ?TypeInterface $valueType,
+        array $attributeNames
     ) {
         $this->line = $line;
         $this->docBlock = $docBlock;
         $this->namespace = $namespace;
         $this->name = $name;
         $this->valueType = $valueType;
+        $this->attributeNames = $attributeNames;
     }
 
     /**
@@ -65,5 +78,13 @@ class ConstElement implements CodeElementInterface
     public function getValueType(): ?TypeInterface
     {
         return $this->valueType;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAttributeNames(): array
+    {
+        return $this->attributeNames;
     }
 }

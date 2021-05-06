@@ -2,6 +2,7 @@
 
 namespace Gskema\TypeSniff\Inspection;
 
+use Gskema\TypeSniff\Core\Type\Common\ArrayType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
@@ -12,7 +13,7 @@ class FnTypeInspector
 {
     public static function reportMandatoryTypes(AbstractTypeSubject $subject): void
     {
-        if ($subject->hasDocTypeTag()) {
+        if ($subject->hasDocTypeTag() || $subject->hasAttribute('ArrayShape')) {
             return;
         }
 
@@ -39,15 +40,23 @@ class FnTypeInspector
 
     public static function reportSuggestedTypes(AbstractTypeSubject $subject): void
     {
-        if (!$subject->hasDefinedDocType()) {
+        if ($subject->hasDefinedFnType()) {
+            return;
+        }
+
+        $hasArrayShape = $subject->hasAttribute('ArrayShape');
+        if (!$subject->hasDefinedDocType() && !$hasArrayShape) {
             return;
         }
 
         // Require fnType if possible (check, suggest from docType)
-        if (
-            !$subject->hasDefinedFnType()
-            && $suggestedFnType = TypeConverter::toExampleFnType($subject->getDocType())
-        ) {
+        if ($hasArrayShape) {
+            $suggestedFnType = new ArrayType();
+        } else {
+            $suggestedFnType = TypeConverter::toExampleFnType($subject->getDocType());
+        }
+
+        if ($suggestedFnType) {
             $subject->addFnTypeWarning(sprintf('Add type declaration for :subject:, e.g.: "%s"', $suggestedFnType->toString()));
         }
     }

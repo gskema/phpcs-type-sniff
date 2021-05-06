@@ -30,6 +30,9 @@ class FileElement implements CodeElementInterface
     /** @var InterfaceElement[] */
     protected $interfaces = [];
 
+    /** @var string[] */
+    protected $attributeNames = [];
+
     /**
      * @param int                $line
      * @param DocBlock           $docBlock
@@ -144,5 +147,13 @@ class FileElement implements CodeElementInterface
     public function addInterface(InterfaceElement $element): void
     {
         $this->interfaces[] = $element;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAttributeNames(): array
+    {
+        return []; // files do not have attributes
     }
 }

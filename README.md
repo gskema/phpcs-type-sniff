@@ -46,6 +46,9 @@ class Banana
     /** @var int */
     const C6 = 1;                   // useless PHPDoc
 
+    #[ArrayShape(['foo' => 'int'])]
+    const C7 = ['foo' => 1];        // ArrayShape supported
+
     public $prop1 = [];             // missing typed array doc type
 
     /** @var array */               // must use typed array doc type
@@ -79,6 +82,9 @@ class Banana
 
     /** @var int */
     public $prop12;
+
+    #[ArrayShape(['foo' => 'int'])]
+    public $prop13 = ['foo' => 1];  // ArrayShape supported
 
     public function __construct()
     {
@@ -149,6 +155,17 @@ class Banana
         array $arg3,
         array $arg4
     ): void {
+    }
+
+    /**
+     * Description
+     */ 
+    #[ArrayShape(['foo' => 'int'])]     // ArrayShape supported
+    public function func5(
+        #[ArrayShape(['foo' => 'int'])]
+        array $arg1                     // ArrayShape supported
+    ): array {
+        return ['foo' => 1];
     }
 }
 ```

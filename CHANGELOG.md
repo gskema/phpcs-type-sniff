@@ -7,6 +7,7 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 ## Unreleased
 ## Added
 - Support for typed properties + warnings.
+- Warnings for nullable types (e.g. `?int`) in PHPDoc.
 ### Removed
 - Setting `FqcnPropSniff.reportUninitializedProp`.
 

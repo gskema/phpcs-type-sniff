@@ -87,15 +87,26 @@ class DocTypeInspector
             return;
         }
 
+        $docType = $subject->getDocType();
+
         // e.g. @param array $arg1 -> @param int[] $arg1
-        if (TypeHelper::containsType($subject->getDocType(), ArrayType::class)) {
+        if (TypeHelper::containsType($docType, NullableType::class)) {
+            $subject->addDocTypeWarning(sprintf(
+                'Replace nullable type "%s" with compound type with null "%s" for :subject:.',
+                $docType->toString(),
+                str_replace('?', '', $docType->toString()) . '|null' // @TODO Not ideal
+            ));
+        }
+
+        // e.g. @param array $arg1 -> @param int[] $arg1
+        if (TypeHelper::containsType($docType, ArrayType::class)) {
             $subject->addDocTypeWarning(
                 'Replace array type with typed array type in PHPDoc for :subject:, .e.g.: "string[]" or "SomeClass[]". Use mixed[] for generic arrays. Correct array depth must be specified.'
             );
         }
 
         // e.g. array[] -> mixed[][]
-        if ($fakeType = TypeHelper::getFakeTypedArrayType($subject->getDocType())) {
+        if ($fakeType = TypeHelper::getFakeTypedArrayType($docType)) {
             $subject->addDocTypeWarning(sprintf(
                 'Use a more specific type in typed array hint "%s" for :subject:. Correct array depth must be specified.',
                 $fakeType->toString()

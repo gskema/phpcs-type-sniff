@@ -27,76 +27,65 @@ namespace Fruits;
  */
 class Banana
 {
-    const C1 = [];                  // missing typed array doc type
+    public const C1 = [];           // missing typed array doc type
 
     /** @var array */               // must use typed array doc type
-    const C2 = [];
+    public const C2 = [];
 
     /** @var array[] */             // must use specific typed array doc type
-    const C3 = [[]];
+    public const C3 = [[]];
 
     /** @var bool|false */          // redundant false type
-    const C4 = false;
+    public const C4 = false;
 
     /**
      * @var int                     // incompatible int type, missing null type
      */
-    const C5 = null;
+    public const C5 = null;
 
     /** @var int */
-    const C6 = 1;                   // useless PHPDoc
+    public const C6 = 1;            // useless PHPDoc
 
     #[ArrayShape(['foo' => 'int'])]
-    const C7 = ['foo' => 1];        // ArrayShape supported
+    public const C7 = ['foo' => 1]; // ArrayShape supported
 
-    public $prop1 = [];             // missing typed array doc type
+    public $prop1 = [];             // missing typed array doc type + array type decl.
 
-    /** @var array */               // must use typed array doc type
+    /** @var array */               // must use typed array doc type + array type decl.
     public $prop2 = [];
 
-    public $prop3;                  // missing @var tag, missing null doc type
+    public $prop3;                  // missing type declaration
 
-    /** @var */                     // missing doc type, missing null doc type
+    /** @var */                     // missing doc type, missing type declaration
     public $prop4;
 
-    /** @var array[][] */           // must use specific typed array doc type, missing null doc type
-    public $prop5;
+    /** @var array[][] */           // must use specific typed array doc type
+    public $prop5;                  // + missing type declaration
 
-    /** @var array|string[] */      // redundant array type, missing null doc type
+    /** @var array|string[] */      // redundant array type, missing type declaration
     public $prop6;
 
-    /** @var int|string */          // missing null doc type
+    /** @var int|string */          // missing null doc type, missing type declaration
     public $prop7 = null;
 
-    /** @var int $prop8 */          // prop name must be removed, missing null doc type
+    /** @var int $prop8 */          // prop name must be removed, missing type decl.
     public $prop8;
 
-    /** @var int */
-    public $prop9;                  // Not initialized, missing null doc type
+    public int $prop9;
 
-    /** @var int */
-    public $prop10;                 // Initialized, missing null doc type
+    public ?int $prop10;
 
-    /** @var int */
-    public $prop11;
+    /** @var int|null */            // Useless PHPDoc
+    public ?int $prop11;
 
-    /** @var int */
-    public $prop12;
+    /** @var string|int */          // missing null type, wrong string type
+    public ?int $prop12;
+
+    /** @var string[] */
+    public array $prop13;
 
     #[ArrayShape(['foo' => 'int'])]
-    public $prop13 = ['foo' => 1];  // ArrayShape supported
-
-    public function __construct()
-    {
-        $this->prop10 = null;
-        $this->prop11 = 11;
-        $this->setProp12();
-    }
-
-    public function setProp12(): void
-    {
-        $this->prop12 = 1;
-    }
+    public $prop14 = ['foo' => 1];  // ArrayShape supported
 
     public function func1(
         $param1,                    // missing param type decl.
@@ -264,7 +253,7 @@ String `true/false` values are automatically converted to booleans.
 ```xml
 <ruleset name="your_ruleset">
     <!-- your configuration -->
-    <rule ref="PSR2"/>
+    <rule ref="PSR12"/>
 
     <!-- phpcs-type-sniff configuration -->   
 
@@ -321,11 +310,6 @@ String `true/false` values are automatically converted to booleans.
             <!-- Disables reporting missing null type in basic getter return PHPDoc -->
             <!-- and return type declaration -->
             <property name="FqcnPropSniff.reportNullableBasicGetter" value="false"/>
-
-            <!-- Disables reporting missing null type in property PHPDoc -->
-            <!-- when there is no default value and no assigned value in __construct() -->
-            <!--- Some false positives in exotic cases may be reported -->
-            <property name="FqcnPropSniff.reportUninitializedProp" value="false"/>
 
             <!-- Your own custom code element sniff(s). Autoloader is needed. -->
             <!-- These classes implement CodeElementSniffInterface -->

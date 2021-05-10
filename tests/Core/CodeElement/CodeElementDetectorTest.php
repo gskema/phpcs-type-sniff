@@ -108,7 +108,8 @@ class CodeElementDetectorTest extends TestCase
                                 new UndefinedDocBlock(),
                                 'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass0',
                                 'prop1',
-                                null
+                                new UndefinedType(),
+                                new UndefinedType()
                             ),
                             new ClassPropElement(
                                 25,
@@ -117,7 +118,8 @@ class CodeElementDetectorTest extends TestCase
                                 ]),
                                 'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass0',
                                 'prop2',
-                                null
+                                new UndefinedType(),
+                                new UndefinedType()
                             ),
                             new ClassPropElement(
                                 28,
@@ -126,7 +128,8 @@ class CodeElementDetectorTest extends TestCase
                                 ]),
                                 'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass0',
                                 'prop3',
-                                null
+                                new UndefinedType(),
+                                new UndefinedType()
                             ),
                         ],
                         [
@@ -223,7 +226,8 @@ class CodeElementDetectorTest extends TestCase
                                 ]),
                                 'Gskema\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass1',
                                 'prop1',
-                                null
+                                new UndefinedType(),
+                                new UndefinedType()
                             ),
                         ],
                         [
@@ -376,13 +380,15 @@ class CodeElementDetectorTest extends TestCase
                                 new UndefinedDocBlock(),
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                                 'prop1',
-                                null
+                                new UndefinedType(),
+                                new UndefinedType()
                             ),
                             new ClassPropElement(
                                 24,
                                 new UndefinedDocBlock(),
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                                 'prop2',
+                                new UndefinedType(),
                                 new IntType(),
                                 new ClassPropMetadata(true)
                             ),
@@ -450,6 +456,7 @@ class CodeElementDetectorTest extends TestCase
                                 new UndefinedDocBlock(),
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestTrait0',
                                 'prop1',
+                                new UndefinedType(),
                                 new IntType(),
                                 new TraitPropMetadata(true)
                             ),
@@ -561,6 +568,7 @@ class CodeElementDetectorTest extends TestCase
                                 new UndefinedDocBlock(),
                                 'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestParse0',
                                 'prop1',
+                                new UndefinedType(),
                                 null // failed to parse
                             ),
                         ],
@@ -817,10 +825,10 @@ class CodeElementDetectorTest extends TestCase
                         $fqcn10,
                         [],
                         [
-                            new ClassPropElement(7, new UndefinedDocBlock(), $fqcn10, 'prop1', null),
-                            new ClassPropElement(8, new UndefinedDocBlock(), $fqcn10, 'prop2', null),
-                            new ClassPropElement(9, new UndefinedDocBlock(), $fqcn10, 'prop3', null),
-                            new ClassPropElement(10, new UndefinedDocBlock(), $fqcn10, 'prop4', null)
+                            new ClassPropElement(7, new UndefinedDocBlock(), $fqcn10, 'prop1', new UndefinedType(), new UndefinedType()),
+                            new ClassPropElement(8, new UndefinedDocBlock(), $fqcn10, 'prop2', new UndefinedType(), new UndefinedType()),
+                            new ClassPropElement(9, new UndefinedDocBlock(), $fqcn10, 'prop3', new UndefinedType(), new UndefinedType()),
+                            new ClassPropElement(10, new UndefinedDocBlock(), $fqcn10, 'prop4', new UndefinedType(), new UndefinedType())
                         ],
                         [
                             new ClassMethodElement(

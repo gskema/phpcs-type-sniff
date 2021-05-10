@@ -63,12 +63,13 @@ class CodeElementTest extends TestCase
         self::assertEquals(['method'], $classMethod->getMetadata()->getThisMethodCalls());
         self::assertEquals(['a'], $classMethod->getAttributeNames());
 
-        $classProp = new ClassPropElement(4, $this->createDocBlock(), 'FQCN4', 'prop1', new IntType());
+        $classProp = new ClassPropElement(4, $this->createDocBlock(), 'FQCN4', 'prop1', new IntType(), new IntType());
         $classProp->setAttributeNames(['a']);
         self::assertEquals('FQCN4', $classProp->getFqcn());
         self::assertEquals($this->createDocBlock(), $classProp->getDocBlock());
         self::assertEquals(4, $classProp->getLine());
         self::assertEquals('prop1', $classProp->getPropName());
+        self::assertEquals(new IntType(), $classProp->getType());
         self::assertEquals(new IntType(), $classProp->getDefaultValueType());
         self::assertEquals(['a'], $classProp->getAttributeNames());
 
@@ -141,12 +142,13 @@ class CodeElementTest extends TestCase
         self::assertEquals(true, $traitMethod->getMetadata()->isExtended());
         self::assertEquals(['a'], $traitMethod->getAttributeNames());
 
-        $traitProp = new TraitPropElement(12, $this->createDocBlock(), 'FQCN10', 'prop2', new IntType());
+        $traitProp = new TraitPropElement(12, $this->createDocBlock(), 'FQCN10', 'prop2', new IntType(), new IntType());
         $traitProp->setAttributeNames(['a']);
         self::assertEquals('FQCN10', $traitProp->getFqcn());
         self::assertEquals($this->createDocBlock(), $traitProp->getDocBlock());
         self::assertEquals(12, $traitProp->getLine());
         self::assertEquals('prop2', $traitProp->getPropName());
+        self::assertEquals(new IntType(), $traitProp->getDefaultValueType());
         self::assertEquals(new IntType(), $traitProp->getDefaultValueType());
         self::assertEquals(['a'], $traitProp->getAttributeNames());
     }

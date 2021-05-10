@@ -56,11 +56,9 @@ class TestClass9
     }
 
     /**
-     * @param int     $a
-     * @param string  $b
-     * @param mixed[] $c
+     * @param array<int, int> $param1
+     * @return array<int, int> Descritopn
      */
-    #[ArrayShape(['a' => 'int'])]
     public function method2(
         int $a,
         ?string $b,

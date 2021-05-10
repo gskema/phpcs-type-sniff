@@ -48,6 +48,6 @@
     "scripts": {
         "test": "vendor/bin/phpunit",
         "phpcs": "vendor/bin/phpcs -p",
-        "coverage": "debug vendor/bin/phpunit --coverage-html=build/coverage"
+        "coverage": "xdebug-coverage vendor/bin/phpunit --coverage-html=build/coverage"
     }
 }

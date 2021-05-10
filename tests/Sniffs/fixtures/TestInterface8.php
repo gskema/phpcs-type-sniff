@@ -10,7 +10,7 @@ function func1()
 
 interface TestInterface8
 {
-    const C2 = 1;
+    public const C2 = 1;
 
     public function method1();
 }

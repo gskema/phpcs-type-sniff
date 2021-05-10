@@ -36,6 +36,7 @@ class FnTypeInspector
         $isProp = $subject instanceof PropTypeSubject;
         $valueType = $subject->getValueType();
         $hasDefaultValue = $valueType && !($valueType instanceof UndefinedType);
+        $hasDocType = $subject->hasDefinedDocType() || $subject->hasAttribute('ArrayShape');
 
         $requestAnyType = false;
         if ($subject->hasDefinedDocType()) {
@@ -49,11 +50,11 @@ class FnTypeInspector
         }
 
         if ($possibleFnType || $requestAnyType) {
-            $subject->addFnTypeWarning(sprintf(
-                'Add type declaration for :subject:%s or create PHPDoc with type hint%s',
-                $possibleFnType ? sprintf(', e.g.: "%s"', $possibleFnType->toString()) : '',
-                $isProp && !$hasDefaultValue ? '. Add default value or keep property in an uninitialized state.' : ''
-            ));
+            $warning = 'Add type declaration for :subject:';
+            $warning .= $possibleFnType ? sprintf(', e.g.: "%s"', $possibleFnType->toString()) : '';
+            $warning .= $hasDocType ? '' : ' or create PHPDoc with type hint';
+            $warning .= $isProp && !$hasDefaultValue ? '. Add default value or keep property in an uninitialized state.' : '.';
+            $subject->addFnTypeWarning($warning);
         }
     }
 }

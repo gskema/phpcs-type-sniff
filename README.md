@@ -162,8 +162,8 @@ class Banana
      */ 
     #[ArrayShape(['foo' => 'int'])]     // ArrayShape supported
     public function func5(
-        #[ArrayShape(['foo' => 'int'])]
-        array $arg1                     // ArrayShape supported
+        #[ArrayShape(['foo' => 'int'])] // ArrayShape supported
+        array $arg1
     ): array {
         return ['foo' => 1];
     }

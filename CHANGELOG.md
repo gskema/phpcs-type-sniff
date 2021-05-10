@@ -4,6 +4,12 @@ All notable changes to `phpcs-type-sniff` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## Unreleased
+## Added
+- Support for typed properties + warnings.
+### Removed
+- Setting `FqcnPropSniff.reportUninitializedProp`.
+
 ## 0.18.0 - 2021-05-10
 ### Fixed
 - Return tag parsing with `array<...>` notation.

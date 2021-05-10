@@ -101,13 +101,15 @@ class TypeComparator
      * @param TypeInterface      $fnType
      * @param TypeInterface|null $valueType Const value type, default prop type, default param value type.
      *                                      Null means it wasn't possible to detect the type.
+     * @param bool               $isProp
      *
      * @return TypeInterface[][]
      */
     public static function compare(
         TypeInterface $docType,
         TypeInterface $fnType,
-        ?TypeInterface $valueType
+        ?TypeInterface $valueType,
+        bool $isProp
     ): array {
         $docTypeDefined = !($docType instanceof UndefinedType);
         $fnTypeDefined = !($fnType instanceof UndefinedType);
@@ -173,8 +175,8 @@ class TypeComparator
 
         // Assigned value type could not be detected, so we cannot accurately report wrong types.
         // E.g. function func1(int $arg1 = SomeClass::CONST1) - CONST1 may be null and we would
-        // report doc type "null" as wrong.
-        if (null === $valueType) {
+        // report doc type "null" as wrong. This is not relevant for props.
+        if (null === $valueType && !$isProp) {
             $wrongDocTypes = [];
         }
 

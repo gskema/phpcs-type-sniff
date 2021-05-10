@@ -51,10 +51,8 @@ class DocTypeInspector
                 $subject->addFnTypeWarning('Missing PHPDoc tag for :subject:');
             }
         } elseif ($subject instanceof PropTypeSubject) {
-            // @var tags for props are mandatory
-            if (!$hasDocTypeTag && !$hasArrayShape) {
-                $subject->addDocTypeWarning('Add @var tag for :subject:');
-            } elseif ($subject->getDocType() instanceof UndefinedType) {
+            // properties: ask to add fn type first
+            if ($subject->getDocType() instanceof UndefinedType) {
                 $subject->addDocTypeWarning('Add type hint to @var tag for :subject:');
             }
         }
@@ -164,13 +162,15 @@ class DocTypeInspector
         }
 
         // e.g. ?int, int|string -> ?int, int|null (wrong: string, missing: null)
+        $isProp = $subject instanceof PropTypeSubject;
         [$wrongDocTypes, $missingDocTypes] = TypeComparator::compare(
             $subject->getDocType(),
             $subject->getFnType(),
-            $subject->getValueType()
+            $subject->getValueType(),
+            $isProp
         );
 
-        if ($subject instanceof PropTypeSubject) {
+        if ($isProp && !$subject->hasDefinedFnType()) {
             $wrongDocTypes = []; // not reported because props have dynamic values
         }
 

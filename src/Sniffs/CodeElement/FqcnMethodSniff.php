@@ -144,7 +144,6 @@ class FqcnMethodSniff implements CodeElementSniffInterface
 
     protected function processSigType(AbstractTypeSubject $subject): void
     {
-        FnTypeInspector::reportMandatoryTypes($subject);
         FnTypeInspector::reportSuggestedTypes($subject);
         FnTypeInspector::reportReplaceableTypes($subject);
 

@@ -5,10 +5,8 @@ namespace Gskema\TypeSniff\Sniffs\CodeElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassElement;
 use Gskema\TypeSniff\Core\DocBlock\Tag\VarTag;
 use Gskema\TypeSniff\Core\SniffHelper;
-use Gskema\TypeSniff\Core\Type\Common\ArrayType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
-use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
 use Gskema\TypeSniff\Core\Type\TypeHelper;
 use Gskema\TypeSniff\Inspection\FnTypeInspector;
 use Gskema\TypeSniff\Inspection\DocTypeInspector;
@@ -31,19 +29,15 @@ class FqcnMethodSniff implements CodeElementSniffInterface
     protected const CODE = 'FqcnMethodSniff';
 
     /** @var string[] */
-    protected $invalidTags = [];
+    protected array $invalidTags = [];
 
-    /** @var bool */
-    protected $reportMissingTags = true;
+    protected bool $reportMissingTags = true;
 
-    /** @var bool */
-    protected $reportNullableBasicGetter = true;
+    protected bool $reportNullableBasicGetter = true;
 
-    /** @var string */
-    protected $reportType = 'warning';
+    protected string $reportType = 'warning';
 
-    /** @var bool */
-    protected $addViolationId = false;
+    protected bool $addViolationId = false;
 
     /**
      * @inheritDoc
@@ -58,10 +52,10 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         $invalidTags = array_unique($invalidTags);
 
         $this->invalidTags = $invalidTags;
-        $this->reportMissingTags = $config['reportMissingTags'] ?? true;
-        $this->reportNullableBasicGetter = $config['reportNullableBasicGetter'] ?? true;
-        $this->reportType = $config['reportType'] ?? 'warning';
-        $this->addViolationId = $config['addViolationId'] ?? false;
+        $this->reportMissingTags = (bool)($config['reportMissingTags'] ?? true);
+        $this->reportNullableBasicGetter = (bool)($config['reportNullableBasicGetter'] ?? true);
+        $this->reportType = (string)($config['reportType'] ?? 'warning');
+        $this->addViolationId = (bool)($config['addViolationId'] ?? false);
     }
 
     /**

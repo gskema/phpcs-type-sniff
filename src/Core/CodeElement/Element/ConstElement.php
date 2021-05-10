@@ -7,23 +7,18 @@ use Gskema\TypeSniff\Core\Type\TypeInterface;
 
 class ConstElement implements CodeElementInterface
 {
-    /** @var int */
-    protected $line;
+    protected int $line;
 
-    /** @var DocBlock */
-    protected $docBlock;
+    protected DocBlock $docBlock;
 
-    /** @var string */
-    protected $namespace;
+    protected string $namespace;
 
-    /** @var string */
-    protected $name;
+    protected string $name;
 
-    /** @var TypeInterface|null */
-    protected $valueType;
+    protected ?TypeInterface $valueType;
 
     /** @var string[] */
-    protected $attributeNames = [];
+    protected array $attributeNames = [];
 
     /**
      * @param int                $line

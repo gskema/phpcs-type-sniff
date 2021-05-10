@@ -12,10 +12,10 @@ use Gskema\TypeSniff\Core\DocBlock\Tag\TagInterface;
 class DocBlock
 {
     /** @var string[] [ptr => string, ...] */
-    protected $descriptionLines;
+    protected array $descriptionLines;
 
     /** @var TagInterface[] */
-    protected $tags = [];
+    protected array $tags = [];
 
     /**
      * @param string[]       $descLines

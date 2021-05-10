@@ -130,7 +130,6 @@ class TokenHelper
         $endCodes[] = T_STATIC;
 
         $tokens = $file->getTokens();
-        $token = $tokens[$propNamePtr];
 
         $typeEndPtr = $file->findPrevious(Tokens::$emptyTokens, $propNamePtr - 1, null, true);
         $code = false !== $typeEndPtr ? $tokens[$typeEndPtr]['code'] : null;

@@ -29,7 +29,7 @@ use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
 class TypeComparator
 {
     /** @var string[] */
-    protected static $redundantTypeMap = [
+    protected static array $redundantTypeMap = [
         ArrayType::class => TypedArrayType::class,
         DoubleType::class => FloatType::class,
         FalseType::class => BoolType::class,
@@ -43,7 +43,7 @@ class TypeComparator
      *
      * @var string[][]
      */
-    protected static $coveredFnTypeClassMap = [
+    protected static array $coveredFnTypeClassMap = [
         ArrayType::class => [
             IterableType::class,
         ],

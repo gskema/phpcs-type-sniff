@@ -4,8 +4,7 @@ namespace Gskema\TypeSniff\Core\CodeElement\Element\Metadata;
 
 class InterfaceMethodMetadata
 {
-    /** @var bool|null */
-    protected $extended;
+    protected ?bool $extended;
 
     public function __construct(?bool $extended = null)
     {

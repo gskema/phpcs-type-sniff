@@ -7,20 +7,16 @@ use Gskema\TypeSniff\Core\Func\FunctionSignature;
 
 class FunctionElement implements CodeElementInterface
 {
-    /** @var int */
-    protected $line;
+    protected int $line;
 
-    /** @var DocBlock */
-    protected $docBlock;
+    protected DocBlock $docBlock;
 
-    /** @var string */
-    protected $namespace;
+    protected string $namespace;
 
-    /** @var FunctionSignature */
-    protected $signature;
+    protected FunctionSignature $signature;
 
     /** @var string[] */
-    protected $attributeNames = [];
+    protected array $attributeNames = [];
 
     /**
      * @param int               $line

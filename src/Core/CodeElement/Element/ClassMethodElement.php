@@ -8,8 +8,7 @@ use Gskema\TypeSniff\Core\Func\FunctionSignature;
 
 class ClassMethodElement extends AbstractFqcnMethodElement
 {
-    /** @var ClassMethodMetadata */
-    protected $metadata;
+    protected ClassMethodMetadata $metadata;
 
     /**
      * @param DocBlock                 $docBlock

@@ -9,20 +9,16 @@ use Gskema\TypeSniff\Core\Type\TypeInterface;
  */
 class FunctionSignature
 {
-    /** @var int */
-    protected $line;
+    protected int $line;
 
-    /** @var string */
-    protected $name;
+    protected string $name;
 
     /** @var FunctionParam[] */
-    protected $params = [];
+    protected array $params = [];
 
-    /** @var TypeInterface */
-    protected $returnType;
+    protected TypeInterface $returnType;
 
-    /** @var int */
-    protected $returnLine;
+    protected int $returnLine;
 
     /**
      * @param int             $line

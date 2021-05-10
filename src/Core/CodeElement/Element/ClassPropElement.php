@@ -8,8 +8,7 @@ use Gskema\TypeSniff\Core\Type\TypeInterface;
 
 class ClassPropElement extends AbstractFqcnPropElement
 {
-    /** @var ClassPropMetadata */
-    protected $metadata;
+    protected ClassPropMetadata $metadata;
 
     /**
      * @param int                    $line

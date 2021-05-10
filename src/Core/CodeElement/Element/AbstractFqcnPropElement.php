@@ -7,14 +7,11 @@ use Gskema\TypeSniff\Core\Type\TypeInterface;
 
 abstract class AbstractFqcnPropElement extends AbstractFqcnElement
 {
-    /** @var string */
-    protected $propName;
+    protected string $propName;
 
-    /** @var TypeInterface */
-    protected $type;
+    protected TypeInterface $type;
 
-    /** @var TypeInterface|null */
-    protected $defaultValueType;
+    protected ?TypeInterface $defaultValueType;
 
     /**
      * @param int                $line

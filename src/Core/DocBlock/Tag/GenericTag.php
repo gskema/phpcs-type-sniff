@@ -4,14 +4,11 @@ namespace Gskema\TypeSniff\Core\DocBlock\Tag;
 
 class GenericTag implements TagInterface
 {
-    /** @var int */
-    protected $line;
+    protected int $line;
 
-    /** @var string */
-    protected $name;
+    protected string $name;
 
-    /** @var string|null */
-    protected $content;
+    protected ?string $content;
 
     public function __construct(int $line, string $name, ?string $content)
     {

@@ -8,8 +8,7 @@ use Gskema\TypeSniff\Core\Func\FunctionSignature;
 
 class TraitMethodElement extends AbstractFqcnMethodElement
 {
-    /** @var TraitMethodMetadata */
-    protected $metadata;
+    protected TraitMethodMetadata $metadata;
 
     /**
      * @param DocBlock                 $docBlock

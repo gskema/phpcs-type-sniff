@@ -7,13 +7,13 @@ use Gskema\TypeSniff\Core\DocBlock\DocBlock;
 class ClassElement extends AbstractFqcnElement
 {
     /** @var ClassConstElement[] */
-    protected $constants = [];
+    protected array $constants = [];
 
     /** @var ClassPropElement[] */
-    protected $properties = [];
+    protected array $properties = [];
 
     /** @var ClassMethodElement[] */
-    protected $methods = [];
+    protected array $methods = [];
 
     /**
      * @param int                   $line

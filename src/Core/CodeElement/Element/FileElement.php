@@ -6,32 +6,29 @@ use Gskema\TypeSniff\Core\DocBlock\DocBlock;
 
 class FileElement implements CodeElementInterface
 {
-    /** @var int */
-    protected $line;
+    protected int $line;
 
-    /** @var DocBlock */
-    protected $docBlock;
+    protected DocBlock $docBlock;
 
-    /** @var string */
-    protected $path;
+    protected string $path;
 
     /** @var ConstElement[] */
-    protected $constants = [];
+    protected array $constants = [];
 
     /** @var FunctionElement[] */
-    protected $functions = [];
+    protected array $functions = [];
 
     /** @var ClassElement[] */
-    protected $classes = [];
+    protected array $classes = [];
 
     /** @var TraitElement[] */
-    protected $traits = [];
+    protected array $traits = [];
 
     /** @var InterfaceElement[] */
-    protected $interfaces = [];
+    protected array $interfaces = [];
 
     /** @var string[] */
-    protected $attributeNames = [];
+    protected array $attributeNames = [];
 
     /**
      * @param int                $line

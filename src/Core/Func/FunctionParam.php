@@ -9,20 +9,16 @@ use Gskema\TypeSniff\Core\Type\TypeInterface;
  */
 class FunctionParam
 {
-    /** @var int */
-    protected $line;
+    protected int $line;
 
-    /** @var string */
-    protected $name;
+    protected string $name;
 
-    /** @var TypeInterface */
-    protected $type;
+    protected TypeInterface $type;
 
-    /** @var TypeInterface|null */
-    protected $valueType;
+    protected ?TypeInterface $valueType;
 
     /** @var string[] */
-    protected $attributeNames = [];
+    protected array $attributeNames = [];
 
     /**
      * @param int                $line

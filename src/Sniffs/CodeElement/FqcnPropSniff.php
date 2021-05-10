@@ -18,19 +18,17 @@ class FqcnPropSniff implements CodeElementSniffInterface
 {
     protected const CODE = 'FqcnPropSniff';
 
-    /** @var string */
-    protected $reportType = 'warning';
+    protected string $reportType = 'warning';
 
-    /** @var bool */
-    protected $addViolationId = false;
+    protected bool $addViolationId = false;
 
     /**
      * @inheritDoc
      */
     public function configure(array $config): void
     {
-        $this->reportType = $config['reportType'] ?? 'warning';
-        $this->addViolationId = $config['addViolationId'] ?? false;
+        $this->reportType = (string)($config['reportType'] ?? 'warning');
+        $this->addViolationId = (bool)($config['addViolationId'] ?? false);
     }
 
     /**

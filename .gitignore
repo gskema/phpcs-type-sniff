@@ -3,3 +3,4 @@
 /.vagrant/
 /composer.lock
 /build/
+.phpunit.result.cache

@@ -4,7 +4,6 @@ namespace Gskema\TypeSniff\Inspection\Subject;
 
 use Gskema\TypeSniff\Core\CodeElement\Element\AbstractFqcnPropElement;
 use Gskema\TypeSniff\Core\DocBlock\Tag\VarTag;
-use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 
 class PropTypeSubject extends AbstractTypeSubject
 {
@@ -22,7 +21,7 @@ class PropTypeSubject extends AbstractTypeSubject
 
         return new static(
             $varTag ? $varTag->getType() : null,
-            new UndefinedType(),
+            $prop->getType(),
             $prop->getDefaultValueType(),
             $varTag ? $varTag->getLine() : $prop->getLine(),
             $prop->getLine(),

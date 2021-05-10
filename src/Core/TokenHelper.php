@@ -10,12 +10,32 @@ use Gskema\TypeSniff\Core\Type\Common\BoolType;
 use Gskema\TypeSniff\Core\Type\Common\FloatType;
 use Gskema\TypeSniff\Core\Type\Common\IntType;
 use Gskema\TypeSniff\Core\Type\Common\StringType;
+use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
+use Gskema\TypeSniff\Core\Type\TypeFactory;
+use Gskema\TypeSniff\Core\Type\TypeInterface;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 
 class TokenHelper
 {
+    /**
+     * @param File           $file
+     * @param int            $propPtr
+     * @param int[]|string[] $skip
+     *
+     * @return DocBlock
+     */
+    public static function getPrevPropDocBlock(File $file, int $propPtr, array $skip): DocBlock
+    {
+        $scopePtr = $file->findPrevious(Tokens::$scopeModifiers, $propPtr - 1);
+        if (false === $scopePtr) {
+            return new UndefinedDocBlock(); // unfinished file
+        }
+
+        return self::getPrevDocBlock($file, $scopePtr, $skip);
+    }
+
     /**
      * @param File           $file
      * @param int            $startPtr
@@ -104,6 +124,31 @@ class TokenHelper
         return $name;
     }
 
+    public static function getPropDeclarationType(File $file, int $propNamePtr): TypeInterface
+    {
+        $endCodes = Tokens::$scopeModifiers;
+        $endCodes[] = T_STATIC;
+
+        $tokens = $file->getTokens();
+
+        $typeEndPtr = $file->findPrevious(Tokens::$emptyTokens, $propNamePtr - 1, null, true);
+        $code = false !== $typeEndPtr ? $tokens[$typeEndPtr]['code'] : null;
+
+        if (null === $code || in_array($code, $endCodes)) {
+            return new UndefinedType();
+        }
+
+        $beforeTypeStartPtr = $file->findPrevious(Tokens::$emptyTokens, $typeEndPtr - 1);
+        if (false === $beforeTypeStartPtr) {
+            return new UndefinedType();
+        }
+        $typeStartPtr = $beforeTypeStartPtr + 1;
+
+        $rawType = $file->getTokensAsString($typeStartPtr, $typeEndPtr - $typeStartPtr + 1);
+
+        return TypeFactory::fromRawType($rawType);
+    }
+
     /**
      * @param File $file
      * @param int  $constVarPtr
@@ -128,7 +173,7 @@ class TokenHelper
         switch ($valueToken['code']) {
             case T_CONST:
             case T_VARIABLE:
-                return [null, false];
+                return [new UndefinedType(), false];
             case T_NULL:
                 $valueType = new NullType();
                 break;
@@ -151,7 +196,7 @@ class TokenHelper
                 $valueType = new ArrayType();
                 break;
             default:
-                // We COULD returned UndefinedType for T_STRING (no assigment), but this conflicts
+                // We COULD return UndefinedType for T_STRING (no assigment), but this conflicts
                 // with values that are other classes' constants (contains T_STRING tokens),
                 // where we CANNOT detect the type yet.
                 $valueType = null;
@@ -329,6 +374,22 @@ class TokenHelper
         }
 
         return array_values(array_unique($thisMethodCalls));
+    }
+
+    /**
+     * @param File $file
+     * @param int  $propPtr
+     *
+     * @return string[]
+     */
+    public static function getPrevPropAttributeNames(File $file, int $propPtr): array
+    {
+        $scopePtr = $file->findPrevious(Tokens::$scopeModifiers, $propPtr - 1);
+        if (false === $scopePtr) {
+            return []; // unfinished editing
+        }
+
+        return static::getPrevAttributeNames($file, $scopePtr);
     }
 
     /**

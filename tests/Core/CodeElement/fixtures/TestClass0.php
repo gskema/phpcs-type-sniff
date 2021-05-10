@@ -12,10 +12,10 @@ namespace Gskema\TypeSniff\Core\CodeElement\fixtures;
  */
 class TestClass0
 {
-    const CONST1 = 1;
+    public const CONST1 = 1;
 
     /** @var int */
-    const CONST2 = 3;
+    public const CONST2 = 3;
 
     protected $prop1;
 

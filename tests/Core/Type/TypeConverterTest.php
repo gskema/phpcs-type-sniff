@@ -150,7 +150,7 @@ class TypeConverterTest extends TestCase
      */
     public function testToExampleFnType(TypeInterface $givenDocType, ?TypeInterface $expectedFnType): void
     {
-        $actualFnType = TypeConverter::toExampleFnType($givenDocType);
+        $actualFnType = TypeConverter::toExampleFnType($givenDocType, false);
 
         self::assertEquals($expectedFnType, $actualFnType);
     }

@@ -4,9 +4,9 @@ namespace Gskema\TypeSniff\Core\Type;
 
 use Gskema\TypeSniff\Core\Type\Common\ArrayType;
 use Gskema\TypeSniff\Core\Type\Common\BoolType;
+use Gskema\TypeSniff\Core\Type\Common\CallableType;
 use Gskema\TypeSniff\Core\Type\Common\FloatType;
 use Gskema\TypeSniff\Core\Type\Common\FqcnType;
-use Gskema\TypeSniff\Core\Type\Common\ObjectType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Common\VoidType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
@@ -46,13 +46,13 @@ class TypeConverter
         return $fnType;
     }
 
-    public static function toExampleFnType(TypeInterface $docType): ?TypeInterface
+    public static function toExampleFnType(TypeInterface $docType, bool $isProp): ?TypeInterface
     {
         if ($docType instanceof CompoundType) {
             $types = $docType->getTypes();
             if (2 === $docType->getCount() && $docType->containsType(NullType::class)) {
                 $otherType = $types[0] instanceof NullType ? $types[1] : $types[0];
-                $suggestedType = static::toExampleFnType($otherType);
+                $suggestedType = static::toExampleFnType($otherType, $isProp);
                 if (null !== $suggestedType) {
                     return new NullableType($suggestedType);
                 }
@@ -110,11 +110,8 @@ class TypeConverter
                 : null;
         }
 
-        if (
-            $docType instanceof ObjectType
-            && version_compare(PHP_VERSION, '7.2', '<')
-        ) {
-            return null;
+        if ($isProp && $docType instanceof CallableType) {
+            return null; // supported for arguments, but not callables
         }
 
         if ($docType instanceof ResourceType) {

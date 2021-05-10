@@ -14,38 +14,30 @@ use PHP_CodeSniffer\Files\File;
  */
 abstract class AbstractTypeSubject
 {
-    /** @var TypeInterface|null */
-    protected $docType; // null = missing in PHPDoc
+    protected ?TypeInterface $docType; // null = missing in PHPDoc
 
-    /** @var TypeInterface */
-    protected $fnType;
+    protected TypeInterface $fnType;
 
-    /** @var TypeInterface|null */
-    protected $valueType; // null = could not be detected
+    protected ?TypeInterface $valueType; // null = could not be detected
 
-    /** @var int|null */
-    protected $docTypeLine; // null = missing in PHPDoc
+    protected ?int $docTypeLine; // null = missing in PHPDoc
 
-    /** @var int */
-    protected $fnTypeLine;
+    protected int $fnTypeLine;
 
-    /** @var string */
-    protected $name; // "parameter $param1", "property $prop1", "constant CONST1"
+    protected string $name; // "parameter $param1", "property $prop1", "constant CONST1"
 
-    /** @var string */
-    protected $id; // TestClass::method1(), etc.
+    protected string $id; // TestClass::method1(), etc.
 
-    /** @var DocBlock */
-    protected $docBlock;
+    protected DocBlock $docBlock;
 
     /** @var string[] */
-    protected $docTypeWarnings = [];
+    protected array $docTypeWarnings = [];
 
     /** @var string[] */
-    protected $fnTypeWarnings = [];
+    protected array $fnTypeWarnings = [];
 
     /** @var string[] */
-    protected $attributeNames = [];
+    protected array $attributeNames = [];
 
     /**
      * @param TypeInterface|null $docType

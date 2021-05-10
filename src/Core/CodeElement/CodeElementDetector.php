@@ -142,10 +142,11 @@ class CodeElementDetector
                         $parentElement->addConstant($currentElement);
                         break;
                     case T_VARIABLE:
-                        $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
-                        $attrNames = TokenHelper::getPrevAttributeNames($file, $ptr);
+                        $docBlock = TokenHelper::getPrevPropDocBlock($file, $ptr, $skip);
+                        $attrNames = TokenHelper::getPrevPropAttributeNames($file, $ptr);
+                        $declType = TokenHelper::getPropDeclarationType($file, $ptr);
                         [$defValueType, $hasDefValue] = TokenHelper::getAssignmentType($file, $ptr);
-                        $currentElement = new ClassPropElement($line, $docBlock, $fqcn, $decName, $defValueType);
+                        $currentElement = new ClassPropElement($line, $docBlock, $fqcn, $decName, $declType, $defValueType);
                         $currentElement->setAttributeNames($attrNames);
                         $currentElement->getMetadata()->setHasDefaultValue($hasDefValue);
                         $parentElement->addProperty($currentElement);
@@ -168,10 +169,11 @@ class CodeElementDetector
                 $decName = TokenHelper::getDeclarationName($file, $ptr);
                 switch ($tokenCode) {
                     case T_VARIABLE:
-                        $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
-                        $attrNames = TokenHelper::getPrevAttributeNames($file, $ptr);
+                        $docBlock = TokenHelper::getPrevPropDocBlock($file, $ptr, $skip);
+                        $attrNames = TokenHelper::getPrevPropAttributeNames($file, $ptr);
+                        $declType = TokenHelper::getPropDeclarationType($file, $ptr);
                         [$defValueType, $hasDefValue] = TokenHelper::getAssignmentType($file, $ptr);
-                        $currentElement = new TraitPropElement($line, $docBlock, $fqcn, $decName, $defValueType);
+                        $currentElement = new TraitPropElement($line, $docBlock, $fqcn, $decName, $declType, $defValueType);
                         $currentElement->setAttributeNames($attrNames);
                         $currentElement->getMetadata()->setHasDefaultValue($hasDefValue);
                         $parentElement->addProperty($currentElement);

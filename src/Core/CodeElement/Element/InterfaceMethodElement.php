@@ -8,8 +8,7 @@ use Gskema\TypeSniff\Core\Func\FunctionSignature;
 
 class InterfaceMethodElement extends AbstractFqcnMethodElement
 {
-    /** @var InterfaceMethodMetadata */
-    protected $metadata;
+    protected InterfaceMethodMetadata $metadata;
 
     /**
      * @param DocBlock                     $docBlock

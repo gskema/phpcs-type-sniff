@@ -6,17 +6,14 @@ use Gskema\TypeSniff\Core\DocBlock\DocBlock;
 
 abstract class AbstractFqcnElement implements CodeElementInterface
 {
-    /** @var int */
-    protected $line;
+    protected int $line;
 
-    /** @var DocBlock */
-    protected $docBlock;
+    protected DocBlock $docBlock;
 
-    /** @var string */
-    protected $fqcn;
+    protected string $fqcn;
 
     /** @var string[] */
-    protected $attributeNames = [];
+    protected array $attributeNames = [];
 
     /**
      * @param int      $line

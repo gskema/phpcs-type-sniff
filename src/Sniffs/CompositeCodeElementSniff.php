@@ -18,11 +18,10 @@ use Gskema\TypeSniff\Sniffs\CodeElement\FqcnPropSniff;
  */
 class CompositeCodeElementSniff extends AbstractConfigurableSniff
 {
-    /** @var bool */
-    protected $useReflection = false;
+    protected bool $useReflection = false;
 
     /** @var CodeElementSniffInterface[][] */
-    protected $sniffs = [];
+    protected array $sniffs = [];
 
     /**
      * @inheritDoc
@@ -34,7 +33,7 @@ class CompositeCodeElementSniff extends AbstractConfigurableSniff
         $globalAddViolationId = $config['addViolationId'] ?? false;
 
         // 1. CompositeCodeElementSniff configuration
-        $this->useReflection = $config['useReflection'] ?? false;
+        $this->useReflection = (bool)($config['useReflection'] ?? false);
 
         // 2. CodeElementSniff(s) configuration
         // Default sniffs. They can be removed by specifying <property name="FqcnMethodSniff.enabled" value="false"/>

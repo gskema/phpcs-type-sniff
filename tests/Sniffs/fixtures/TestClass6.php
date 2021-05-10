@@ -8,13 +8,13 @@ namespace Gskema\TypeSniff\Sniffs\fixtures;
 abstract class TestClass6
 {
     /** @var array<int, string> */
-    const C2 = [];
+    public const C2 = [];
 
     /** @var array{foo: string, bar: int} */
-    const C3 = [];
+    public const C3 = [];
 
     /** @var array{b:bool,d:string}[] */
-    const C4 = [];
+    public const C4 = [];
 
     /** @var array<int, string> */
     private $prop2 = [];

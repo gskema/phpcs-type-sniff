@@ -8,14 +8,14 @@ use Gskema\TypeSniff\Core\Type\TypeInterface;
 
 class TraitPropElement extends AbstractFqcnPropElement
 {
-    /** @var TraitPropMetadata */
-    protected $metadata;
+    protected TraitPropMetadata $metadata;
 
     /**
      * @param int                    $line
      * @param DocBlock               $docBlock
      * @param string                 $fqcn
      * @param string                 $propName
+     * @param TypeInterface          $type
      * @param TypeInterface|null     $defaultValueType
      * @param TraitPropMetadata|null $metadata
      * @param string[]               $attributeNames
@@ -25,11 +25,12 @@ class TraitPropElement extends AbstractFqcnPropElement
         DocBlock $docBlock,
         string $fqcn,
         string $propName,
+        TypeInterface $type,
         ?TypeInterface $defaultValueType,
         ?TraitPropMetadata $metadata = null,
         array $attributeNames = []
     ) {
-        parent::__construct($line, $docBlock, $fqcn, $propName, $defaultValueType, $attributeNames);
+        parent::__construct($line, $docBlock, $fqcn, $propName, $type, $defaultValueType, $attributeNames);
         $this->metadata = $metadata ?? new TraitPropMetadata();
     }
 

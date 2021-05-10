@@ -33,7 +33,7 @@ use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
 class TypeFactory
 {
     /** @var string[] */
-    protected static $basicTypeMap = [
+    protected static array $basicTypeMap = [
         'array'    => ArrayType::class,
         'bool'     => BoolType::class,
         'boolean'  => BoolType::class,

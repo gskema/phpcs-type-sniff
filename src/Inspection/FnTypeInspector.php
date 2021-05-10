@@ -8,21 +8,10 @@ use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
 use Gskema\TypeSniff\Core\Type\TypeConverter;
 use Gskema\TypeSniff\Inspection\Subject\AbstractTypeSubject;
+use Gskema\TypeSniff\Inspection\Subject\PropTypeSubject;
 
 class FnTypeInspector
 {
-    public static function reportMandatoryTypes(AbstractTypeSubject $subject): void
-    {
-        if ($subject->hasDocTypeTag() || $subject->hasAttribute('ArrayShape')) {
-            return;
-        }
-
-        // e.g. func1(array $arg1) -> must have DocBlock with TypedArrayType
-        if ($subject->getFnType() instanceof UndefinedType) {
-            $subject->addFnTypeWarning('Add type declaration for :subject: or create PHPDoc with type hint');
-        }
-    }
-
     public static function reportReplaceableTypes(AbstractTypeSubject $subject): void
     {
         // (string $arg1 = null) -> (?string $arg1 = null)
@@ -44,20 +33,28 @@ class FnTypeInspector
             return;
         }
 
-        $hasArrayShape = $subject->hasAttribute('ArrayShape');
-        if (!$subject->hasDefinedDocType() && !$hasArrayShape) {
-            return;
-        }
+        $isProp = $subject instanceof PropTypeSubject;
+        $valueType = $subject->getValueType();
+        $hasDefaultValue = $valueType && !($valueType instanceof UndefinedType);
+        $hasDocType = $subject->hasDefinedDocType() || $subject->hasAttribute('ArrayShape');
 
-        // Require fnType if possible (check, suggest from docType)
-        if ($hasArrayShape) {
-            $suggestedFnType = new ArrayType();
+        $requestAnyType = false;
+        if ($subject->hasDefinedDocType()) {
+            $possibleFnType = TypeConverter::toExampleFnType($subject->getDocType(), $isProp);
+        } elseif ($subject->hasAttribute('ArrayShape')) {
+            $possibleFnType = new ArrayType();
         } else {
-            $suggestedFnType = TypeConverter::toExampleFnType($subject->getDocType());
+            // Doc type and ArrayShape undefined, require any type decl. or suggest from value type.
+            $possibleFnType = $hasDefaultValue ? TypeConverter::toExampleFnType($valueType, $isProp) : null;
+            $requestAnyType = true;
         }
 
-        if ($suggestedFnType) {
-            $subject->addFnTypeWarning(sprintf('Add type declaration for :subject:, e.g.: "%s"', $suggestedFnType->toString()));
+        if ($possibleFnType || $requestAnyType) {
+            $warning = 'Add type declaration for :subject:';
+            $warning .= $possibleFnType ? sprintf(', e.g.: "%s"', $possibleFnType->toString()) : '';
+            $warning .= $hasDocType ? '' : ' or create PHPDoc with type hint';
+            $warning .= $isProp && !$hasDefaultValue ? '. Add default value or keep property in an uninitialized state.' : '.';
+            $subject->addFnTypeWarning($warning);
         }
     }
 }

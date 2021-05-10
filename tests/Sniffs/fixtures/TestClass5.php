@@ -80,10 +80,10 @@ class TestClass5
     }
 
     /** @var string */
-    const C1 = '';
+    public const C1 = '';
 
     /** @var null */
-    const C2 = null;
+    public const C2 = null;
 
     /** @var null */
     public $prop1;
@@ -113,16 +113,16 @@ class TestClass5
     /**
      * @see Something
      */
-    const C3 = '?';
+    public const C3 = '?';
 
     /** @var array */
-    const C4 = [];
+    public const C4 = [];
 
     /** @var [] */
-    const C5 = [];
+    public const C5 = [];
 
     /** @var [][]|null */
-    const C6 = [];
+    public const C6 = [];
 
     /** @var [][]|null */
     public $prop2 = [];

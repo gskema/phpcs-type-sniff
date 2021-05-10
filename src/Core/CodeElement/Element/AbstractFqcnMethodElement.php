@@ -10,8 +10,7 @@ use Gskema\TypeSniff\Core\Func\FunctionSignature;
 
 abstract class AbstractFqcnMethodElement extends AbstractFqcnElement
 {
-    /** @var FunctionSignature */
-    protected $signature;
+    protected FunctionSignature $signature;
 
     /**
      * @param DocBlock          $docBlock

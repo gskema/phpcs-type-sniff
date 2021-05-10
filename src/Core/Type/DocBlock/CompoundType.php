@@ -7,7 +7,7 @@ use Gskema\TypeSniff\Core\Type\TypeInterface;
 class CompoundType implements TypeInterface
 {
     /** @var TypeInterface[] */
-    protected $types = [];
+    protected array $types = [];
 
     /**
      * @param TypeInterface[] $types

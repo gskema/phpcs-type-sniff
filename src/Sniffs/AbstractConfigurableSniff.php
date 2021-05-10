@@ -7,8 +7,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 abstract class AbstractConfigurableSniff implements Sniff
 {
-    /** @var bool */
-    protected $configured = false;
+    protected bool $configured = false;
 
     /**
      * @inheritDoc

@@ -7,10 +7,10 @@ use Gskema\TypeSniff\Core\DocBlock\DocBlock;
 class TraitElement extends AbstractFqcnElement
 {
     /** @var TraitPropElement[] */
-    protected $properties = [];
+    protected array $properties = [];
 
     /** @var TraitMethodElement[] */
-    protected $methods = [];
+    protected array $methods = [];
 
     /**
      * @param int                  $line

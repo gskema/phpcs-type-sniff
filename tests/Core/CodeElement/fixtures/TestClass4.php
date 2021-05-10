@@ -6,15 +6,15 @@ use stdClass;
 
 class TestClass4 extends stdClass
 {
-    const C1 = [];
-    const C2 = false;
-    const C3 = 1.00;
-    const C4 = 1;
-    const C5 = '';
-    const C6 = null;
-    const C7 = array(1, 2, 3);
-    const C8 = self::C4;
-    const C9 = <<<MUL
+    public const C1 = [];
+    public const C2 = false;
+    public const C3 = 1.00;
+    public const C4 = 1;
+    public const C5 = '';
+    public const C6 = null;
+    public const C7 = array(1, 2, 3);
+    public const C8 = self::C4;
+    public const C9 = <<<MUL
 c
 MUL;
 

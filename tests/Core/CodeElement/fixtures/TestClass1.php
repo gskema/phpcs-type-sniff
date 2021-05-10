@@ -56,6 +56,6 @@ if (1) {
         /** @var int */
         protected $prop1;
 
-        const CONST2 = 1;
+        public const CONST2 = 1;
     }
 }

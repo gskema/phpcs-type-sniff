@@ -99,7 +99,7 @@ class TypeComparatorTest extends TestCase
         $givenFnType = TypeFactory::fromRawType($givenRawFnType);
         $givenValType = null !== $givenRawValueType ? TypeFactory::fromRawType($givenRawValueType) : null;
 
-        [$actualWrongDocTypes, $actualMissingDocTypes] = TypeComparator::compare($givenDocType, $givenFnType, $givenValType);
+        [$actualWrongDocTypes, $actualMissingDocTypes] = TypeComparator::compare($givenDocType, $givenFnType, $givenValType, false);
 
         static::assertEquals($expectedWrongRawDocTypes, $this->implodeTypes($actualWrongDocTypes));
         static::assertEquals($expectedMissingRawDocTypes, $this->implodeTypes($actualMissingDocTypes));

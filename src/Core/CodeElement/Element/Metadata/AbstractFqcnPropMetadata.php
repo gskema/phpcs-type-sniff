@@ -4,8 +4,7 @@ namespace Gskema\TypeSniff\Core\CodeElement\Element\Metadata;
 
 abstract class AbstractFqcnPropMetadata
 {
-    /** @var bool|null */
-    protected $hasDefaultValue;
+    protected ?bool $hasDefaultValue;
 
     public function __construct(?bool $hasDefaultValue = null)
     {

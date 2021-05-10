@@ -3,15 +3,10 @@
 namespace Gskema\TypeSniff\Sniffs\CodeElement;
 
 use Gskema\TypeSniff\Core\CodeElement\Element\AbstractFqcnElement;
-use Gskema\TypeSniff\Core\CodeElement\Element\AbstractFqcnMethodElement;
-use Gskema\TypeSniff\Core\CodeElement\Element\ClassElement;
-use Gskema\TypeSniff\Core\CodeElement\Element\ClassMethodElement;
-use Gskema\TypeSniff\Core\CodeElement\Element\TraitElement;
-use Gskema\TypeSniff\Core\CodeElement\Element\TraitMethodElement;
 use Gskema\TypeSniff\Core\DocBlock\Tag\VarTag;
-use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
-use Gskema\TypeSniff\Core\Type\TypeHelper;
+use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
 use Gskema\TypeSniff\Inspection\DocTypeInspector;
+use Gskema\TypeSniff\Inspection\FnTypeInspector;
 use Gskema\TypeSniff\Inspection\Subject\PropTypeSubject;
 use PHP_CodeSniffer\Files\File;
 use Gskema\TypeSniff\Core\CodeElement\Element\AbstractFqcnPropElement;
@@ -23,23 +18,17 @@ class FqcnPropSniff implements CodeElementSniffInterface
 {
     protected const CODE = 'FqcnPropSniff';
 
-    /** @var bool */
-    protected $reportUninitializedProp = true;
+    protected string $reportType = 'warning';
 
-    /** @var string */
-    protected $reportType = 'warning';
-
-    /** @var bool */
-    protected $addViolationId = false;
+    protected bool $addViolationId = false;
 
     /**
      * @inheritDoc
      */
     public function configure(array $config): void
     {
-        $this->reportUninitializedProp = $config['reportUninitializedProp'] ?? true;
-        $this->reportType = $config['reportType'] ?? 'warning';
-        $this->addViolationId = $config['addViolationId'] ?? false;
+        $this->reportType = (string)($config['reportType'] ?? 'warning');
+        $this->addViolationId = (bool)($config['addViolationId'] ?? false);
     }
 
     /**
@@ -63,13 +52,16 @@ class FqcnPropSniff implements CodeElementSniffInterface
     {
         $subject = PropTypeSubject::fromElement($prop);
 
+        FnTypeInspector::reportSuggestedTypes($subject);
+        FnTypeInspector::reportReplaceableTypes($subject);
+
         DocTypeInspector::reportMandatoryTypes($subject);
         DocTypeInspector::reportReplaceableTypes($subject);
         DocTypeInspector::reportRemovableTypes($subject);
         DocTypeInspector::reportMissingOrWrongTypes($subject);
 
         static::reportInvalidDescription($subject);
-        $this->reportUninitializedProp && static::reportUninitializedProp($subject, $prop, $parentElement);
+        static::reportUselessPHPDoc($subject);
 
         $subject->writeViolationsTo($file, static::CODE, $this->reportType, $this->addViolationId);
     }
@@ -84,68 +76,28 @@ class FqcnPropSniff implements CodeElementSniffInterface
         }
     }
 
-    /**
-     * @param PropTypeSubject                                           $subject
-     * @param AbstractFqcnPropElement|ClassPropElement|TraitPropElement $prop
-     * @param AbstractFqcnElement|ClassElement|TraitElement             $parent
-     */
-    protected static function reportUninitializedProp(
-        PropTypeSubject $subject,
-        AbstractFqcnPropElement $prop,
-        AbstractFqcnElement $parent
-    ): void {
-        // Report nothing for PHP7.4 instead of reporting wrong
-        if (version_compare(PHP_VERSION, '7.4', '>=')) {
-            return; // @TODO Exit when prop has defined fnType
+    protected static function reportUselessPHPDoc(PropTypeSubject $subject): void
+    {
+        if (!$subject->hasDefinedFnType() || !$subject->hasDefinedDocBlock()) {
+            return; // nothing to do
         }
 
-        $propHasDefaultValue = $prop->getMetadata()->hasDefaultValue(); // null = not detected
+        $docBlock = $subject->getDocBlock();
 
-        $ownConstructor = $parent->getOwnConstructor();
+        /** @var VarTag|null $varTag */
+        $varTag = $docBlock->getTagsByName('var')[0] ?? null;
 
-        if (
-            (false === $propHasDefaultValue || $prop->getDefaultValueType() instanceof NullType)
-            && !TypeHelper::containsType($subject->getDocType(), NullType::class)
-            && (!$ownConstructor || !static::hasNonNullAssignedProp($parent, $ownConstructor, $prop->getPropName()))
-        ) {
-            $subject->addDocTypeWarning(':Subject: not initialized by __construct(), add null doc type or set a default value');
+        $fnType = $subject->getFnType();
+        $rawFnType = $fnType instanceof NullableType ? $fnType->toDocString() : $fnType->toString();
+        $rawDocType = $subject->getDocType()->toString();
+
+        $isUseful = $rawFnType !== $rawDocType
+            || $docBlock->hasDescription()
+            || ($varTag && $varTag->hasDescription())
+            || array_diff($docBlock->getTagNames(), ['var']);
+
+        if (!$isUseful) {
+            $subject->addFnTypeWarning('Useless PHPDoc');
         }
-    }
-
-    /**
-     * @param ClassElement|TraitElement|AbstractFqcnElement                   $parent
-     * @param ClassMethodElement|TraitMethodElement|AbstractFqcnMethodElement $method
-     * @param string                                                          $propName
-     *
-     * @return bool|null
-     */
-    public static function hasNonNullAssignedProp(
-        AbstractFqcnElement $parent,
-        AbstractFqcnMethodElement $method,
-        string $propName
-    ): ?bool {
-        // Not ideal because we have to descend on every prop inspection.
-        // However early exit is used, so we don't have to descend fully each time.
-        $visitedNames = [];
-        $unvisitedNames = [$method->getSignature()->getName()];
-        while (!empty($unvisitedNames)) {
-            $callNames = [];
-            foreach ($unvisitedNames as $unvisitedName) {
-                $unvisitedMethod = $parent->getMethod($unvisitedName);
-                if (null === $unvisitedMethod) {
-                    continue;
-                }
-                $nonNullAssignedProps = $unvisitedMethod->getMetadata()->getNonNullAssignedProps() ?? []; // never null
-                if (in_array($propName, $nonNullAssignedProps)) {
-                    return true;
-                }
-                $callNameChunk = $unvisitedMethod->getMetadata()->getThisMethodCalls() ?? []; // never null
-                $callNames = array_merge($callNames, $callNameChunk);
-            }
-            $visitedNames = array_merge($visitedNames, $unvisitedNames);
-            $unvisitedNames = array_diff($callNames, $visitedNames);
-        }
-
-        return false;
     }
 }

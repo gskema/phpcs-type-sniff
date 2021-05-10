@@ -6,14 +6,11 @@ use Gskema\TypeSniff\Core\Type\TypeInterface;
 
 class ReturnTag implements TagInterface
 {
-    /** @var int */
-    protected $line;
+    protected int $line;
 
-    /** @var TypeInterface */
-    protected $type;
+    protected TypeInterface $type;
 
-    /** @var string */
-    protected $description;
+    protected ?string $description;
 
     public function __construct(int $line, TypeInterface $type, ?string $description)
     {

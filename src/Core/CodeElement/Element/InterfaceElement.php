@@ -7,10 +7,10 @@ use Gskema\TypeSniff\Core\DocBlock\DocBlock;
 class InterfaceElement extends AbstractFqcnElement
 {
     /** @var InterfaceConstElement[] */
-    protected $constants = [];
+    protected array $constants = [];
 
     /** @var InterfaceMethodElement[] */
-    protected $methods = [];
+    protected array $methods = [];
 
     /**
      * @param int                      $line

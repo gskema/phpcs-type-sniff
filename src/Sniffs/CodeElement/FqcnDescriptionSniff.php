@@ -15,20 +15,18 @@ class FqcnDescriptionSniff implements CodeElementSniffInterface
     protected const CODE = 'FqcnDescriptionSniff';
 
     /** @var string[] */
-    protected $invalidPatterns = [
+    protected array $invalidPatterns = [
         '^(Class|Trait|Interface)\s+\w+\s*$',
     ];
 
     /** @var string[] */
-    protected $invalidTags = [
+    protected array $invalidTags = [
         '@package',
     ];
 
-    /** @var string */
-    protected $reportType = 'warning';
+    protected string $reportType = 'warning';
 
-    /** @var bool */
-    protected $addViolationId = false;
+    protected bool $addViolationId = false;
 
     /**
      * @inheritDoc
@@ -45,8 +43,8 @@ class FqcnDescriptionSniff implements CodeElementSniffInterface
             $invalidTag = substr($invalidTag, 1);
         }
 
-        $this->reportType = $config['reportType'] ?? 'warning';
-        $this->addViolationId = $config['addViolationId'] ?? false;
+        $this->reportType = (string)($config['reportType'] ?? 'warning');
+        $this->addViolationId = (bool)($config['addViolationId'] ?? false);
     }
 
     /**

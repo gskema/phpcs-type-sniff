@@ -5,16 +5,14 @@ namespace Gskema\TypeSniff\Core\CodeElement\Element\Metadata;
 abstract class AbstractFqcnMethodMetadata
 {
     /** @var string[]|null */
-    protected $nonNullAssignedProps;
+    protected ?array $nonNullAssignedProps;
 
-    /** @var string|null */
-    protected $basicGetterPropName;
+    protected ?string $basicGetterPropName;
 
     /** @var string[]|null */
-    protected $thisMethodCalls;
+    protected ?array $thisMethodCalls;
 
-    /** @var bool|null */
-    protected $extended;
+    protected ?bool $extended;
 
     /**
      * @param string[]|null $nonNullAssignedProps

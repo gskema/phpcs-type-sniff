@@ -2,12 +2,22 @@
 
 $baselineFilePath = $argv[1] ?? null;
 $targetFilePath = $argv[2] ?? null;
-$exitCode = diffBaseline($baselineFilePath, $targetFilePath);
+$targetBasePath = $argv[3] ?? null; // optional
+$baselineBasePath = $argv[4] ?? null; // optional
+
+$exitCode = diffBaseline($baselineFilePath, $targetFilePath, $targetBasePath, $baselineBasePath);
 
 exit($exitCode);
 
-function diffBaseline(string $baselineFilePath, string $targetFilePath): int
-{
+function diffBaseline(
+    string $baselineFilePath,
+    string $targetFilePath,
+    ?string $targetBasePath,
+    ?string $baselineBasePath
+): int {
+    $targetBasePath = $targetBasePath ? resolveAbsolutePath($targetBasePath) : null;
+    $baselineBasePath = $baselineBasePath ? resolveAbsolutePath($baselineBasePath) : null;
+
     $realBaselineFilePath = getRealFilePath($baselineFilePath);
     $realTargetFilePath = getRealFilePath($targetFilePath);
 
@@ -31,7 +41,7 @@ function diffBaseline(string $baselineFilePath, string $targetFilePath): int
         if ($violationId = findViolationId($line)) {
             $violationIdMap[$violationId] = null;
         } else {
-            $lineHash = getLineHash($errorFileLine, $line);
+            $lineHash = getLineHash($errorFileLine, $line, $baselineBasePath);
             $lineHashMap[$lineHash] = null;
         }
     }
@@ -62,7 +72,7 @@ function diffBaseline(string $baselineFilePath, string $targetFilePath): int
             $violationId = findViolationId($line);
             if (null !== $violationId && key_exists($violationId, $violationIdMap)) {
                 $removedWarningCount++;
-            } elseif (key_exists(getLineHash($errorFileLine, $line), $lineHashMap)) {
+            } elseif (key_exists(getLineHash($errorFileLine, $line, $targetBasePath), $lineHashMap)) {
                 $removedWarningCount++;
             } else {
                 $remainingWarningCount++;
@@ -99,9 +109,13 @@ function getRealFilePath(string $filePath): string
     return $realFilePath;
 }
 
-function getLineHash(string $fileLine, string $errorLine): string
+function getLineHash(string $fileLine, string $errorLine, ?string $basePath): string
 {
-    return md5(trim($fileLine . $errorLine));
+    if (null !== $basePath) {
+        $fileLine = str_replace('<file name="' . $basePath, '<file name="', $fileLine);
+    }
+
+    return md5(trim($fileLine) . trim($errorLine));
 }
 
 function findViolationId(string $line): ?string
@@ -110,4 +124,14 @@ function findViolationId(string $line): ?string
     preg_match('#\[(\w{16})\]#', $line, $matches);
 
     return $matches[1] ?? null;
+}
+
+function resolveAbsolutePath(string $path): string
+{
+    $absolutePath = false !== strpos($path, '.') ? realpath($path) : $path;
+    if (empty($absolutePath)) {
+        throw new Exception(sprintf('Cannot resolve path to absolute: %s', $path));
+    }
+
+    return rtrim($absolutePath, '/') . '/';
 }

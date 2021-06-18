@@ -4,6 +4,10 @@ All notable changes to `phpcs-type-sniff` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## 74.0.1 - 2021-06-18
+### Added
+- Base path args for `phpcs-subtract-baseline` script for diffing reports build on different environments.
+
 ## 74.0.0
 ## Added
 - Support for typed properties + warnings.

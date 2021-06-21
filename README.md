@@ -233,6 +233,13 @@ warnings:
 # First argument is the baseline report file with ignored warnings,
 # second argument is target report file (that was just built).
 ./bin/phpcs-subtract-baseline ./baseline.xml ./report.xml
+
+# If you generate baseline file locally, but execute build on a different environment,
+# you may need to specify additional path arguments to make it work:
+./bin/phpcs-subtract-baseline ./baseline.xml ./report.xml /remote/project1/ /local/project1/
+
+# Or you may add this option to generate phpcs report with relative paths:
+<arg line="-p --basepath=."/>
 ```
 
 **Note**: By default all baseline warnings are tracked by `filename + line + column + message` hash.

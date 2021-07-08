@@ -15,6 +15,7 @@ use Gskema\TypeSniff\Core\CodeElement\Element\AbstractFqcnPropElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassPropElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\CodeElementInterface;
 use Gskema\TypeSniff\Core\CodeElement\Element\TraitPropElement;
+use Throwable;
 
 class FqcnPropSniff implements CodeElementSniffInterface
 {
@@ -54,14 +55,24 @@ class FqcnPropSniff implements CodeElementSniffInterface
     {
         $subject = PropTypeSubject::fromElement($prop);
 
-        $isPropExtended = false;
-        if ($parentElement instanceof ClassElement && $parentElement->isExtended()) {
+        // Do not report required fn type if prop is extended. To do this, reflection is needed.
+        // If prop has fn type or class is not extended, then there is no point in checking for parent props, skip.
+        $skipRequireFnType = false;
+        if (
+            !$subject->hasDefinedFnType()
+            && $parentElement instanceof ClassElement
+            && $parentElement->isExtended()
+        ) {
             // Extended class = prop may be extended.
-            $parentPropNames = ReflectionCache::getPropsRecursive($parentElement->getFqcn(), false);
-            $isPropExtended = in_array($prop->getPropName(), $parentPropNames);
+            try {
+                $parentPropNames = ReflectionCache::getPropsRecursive($parentElement->getFqcn(), false);
+                $skipRequireFnType = in_array($prop->getPropName(), $parentPropNames); // is prop extended?
+            } catch (Throwable $e) {
+                $skipRequireFnType = true; // most likely parent class not found, don't report
+            }
         }
 
-        if (!$isPropExtended) {
+        if (!$skipRequireFnType) {
             FnTypeInspector::reportSuggestedTypes($subject);
         }
         // else: if prop is extended and doesn't have fn type, PHP will crash.

@@ -3,7 +3,9 @@
 namespace Gskema\TypeSniff\Sniffs\CodeElement;
 
 use Gskema\TypeSniff\Core\CodeElement\Element\AbstractFqcnElement;
+use Gskema\TypeSniff\Core\CodeElement\Element\ClassElement;
 use Gskema\TypeSniff\Core\DocBlock\Tag\VarTag;
+use Gskema\TypeSniff\Core\ReflectionCache;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
 use Gskema\TypeSniff\Inspection\DocTypeInspector;
 use Gskema\TypeSniff\Inspection\FnTypeInspector;
@@ -52,7 +54,18 @@ class FqcnPropSniff implements CodeElementSniffInterface
     {
         $subject = PropTypeSubject::fromElement($prop);
 
-        FnTypeInspector::reportSuggestedTypes($subject);
+        $isPropExtended = false;
+        if ($parentElement instanceof ClassElement && $parentElement->isExtended()) {
+            // Extended class = prop may be extended.
+            $parentPropNames = ReflectionCache::getPropsRecursive($parentElement->getFqcn(), false);
+            $isPropExtended = in_array($prop->getPropName(), $parentPropNames);
+        }
+
+        if (!$isPropExtended) {
+            FnTypeInspector::reportSuggestedTypes($subject);
+        }
+        // else: if prop is extended and doesn't have fn type, PHP will crash.
+
         FnTypeInspector::reportReplaceableTypes($subject);
 
         DocTypeInspector::reportMandatoryTypes($subject);

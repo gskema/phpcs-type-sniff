@@ -355,6 +355,17 @@ class CompositeCodeElementSniffTest extends TestCase
             ],
         ];
 
+        // #16
+        $dataSets[] = [
+            [
+                'useReflection' => false,
+            ],
+            __DIR__ . '/fixtures/TestClass11.php',
+            [
+                '009 Add type declaration for property $prop2, e.g.: "string" or create PHPDoc with type hint.',
+            ],
+        ];
+
         return $dataSets;
     }
 

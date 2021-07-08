@@ -82,6 +82,7 @@ class CodeElementDetectorTest extends TestCase
                             new GenericTag(11, 'package', 'Gskema\TypeSniff\Core\DocBlock\fixtures'),
                         ]),
                         'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass0',
+                        false,
                         [
                             new ClassConstElement(
                                 15,
@@ -208,6 +209,7 @@ class CodeElementDetectorTest extends TestCase
                         14,
                         new UndefinedDocBlock(),
                         'Gskema\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass1',
+                        false,
                         [
                             new ClassConstElement(
                                 59,
@@ -260,6 +262,7 @@ class CodeElementDetectorTest extends TestCase
                         5,
                         new UndefinedDocBlock(),
                         'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
+                        false,
                         [
                             new ClassConstElement(
                                 7,
@@ -499,6 +502,7 @@ class CodeElementDetectorTest extends TestCase
                         5,
                         new UndefinedDocBlock(),
                         'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestRef2',
+                        true,
                         [],
                         [],
                         [
@@ -561,6 +565,7 @@ class CodeElementDetectorTest extends TestCase
                         5,
                         new UndefinedDocBlock(),
                         'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestParse0',
+                        false,
                         [],
                         [
                             new ClassPropElement(
@@ -609,6 +614,7 @@ class CodeElementDetectorTest extends TestCase
                         5,
                         new UndefinedDocBlock(),
                         'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestParse1',
+                        true,
                         [],
                         [],
                         [
@@ -648,6 +654,7 @@ class CodeElementDetectorTest extends TestCase
                         5,
                         new UndefinedDocBlock(),
                         'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass3',
+                        true,
                         [],
                         [],
                         [
@@ -748,6 +755,7 @@ class CodeElementDetectorTest extends TestCase
                         7,
                         new UndefinedDocBlock(),
                         $fqcn9,
+                        true,
                         [
                             new ClassConstElement(9, new UndefinedDocBlock(), $fqcn9, 'C1', new ArrayType(), []),
                             new ClassConstElement(10, new UndefinedDocBlock(), $fqcn9, 'C2', new BoolType(), []),
@@ -823,6 +831,7 @@ class CodeElementDetectorTest extends TestCase
                         5,
                         new UndefinedDocBlock(),
                         $fqcn10,
+                        false,
                         [],
                         [
                             new ClassPropElement(7, new UndefinedDocBlock(), $fqcn10, 'prop1', new UndefinedType(), new UndefinedType()),
@@ -926,6 +935,7 @@ class CodeElementDetectorTest extends TestCase
                         5,
                         new UndefinedDocBlock(),
                         'Gskema\TypeSniff\Core\CodeElement\fixtures\TestRef3',
+                        false,
                         [],
                         [],
                         [
@@ -962,6 +972,7 @@ class CodeElementDetectorTest extends TestCase
                         6,
                         new UndefinedDocBlock(),
                         'Gskema\TypeSniff\Core\CodeElement\fixtures\TestClass6',
+                        false,
                         [
                             new ClassConstElement(
                                 10,

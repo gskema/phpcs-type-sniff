@@ -439,4 +439,17 @@ class TokenHelper
 
         return $matches[1] ?? null;
     }
+
+    public static function isClassExtended(File $file, int $classPtr): bool
+    {
+        $classNamePtr = $file->findNext(Tokens::$emptyTokens, $classPtr + 1, null, true);
+        if (false === $classNamePtr) {
+            return false; // not finished editing?
+        }
+
+        $extendsPtr = $file->findNext(Tokens::$emptyTokens, $classNamePtr + 1, null, true);
+        $extendsCode = $file->getTokens()[$extendsPtr]['code'] ?? null;
+
+        return T_EXTENDS === $extendsCode;
+    }
 }

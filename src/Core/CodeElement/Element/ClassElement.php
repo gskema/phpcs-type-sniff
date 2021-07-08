@@ -15,10 +15,13 @@ class ClassElement extends AbstractFqcnElement
     /** @var ClassMethodElement[] */
     protected array $methods = [];
 
+    protected bool $extended;
+
     /**
      * @param int                   $line
      * @param DocBlock              $docBlock
      * @param string                $fqcn
+     * @param bool                  $extended
      * @param ClassConstElement[]   $constants
      * @param ClassPropElement[]    $properties
      * @param ClassMethodElement[]  $methods
@@ -28,15 +31,22 @@ class ClassElement extends AbstractFqcnElement
         int $line,
         DocBlock $docBlock,
         string $fqcn,
+        bool $extended,
         array $constants = [],
         array $properties = [],
         array $methods = [],
         array $attributeNames = []
     ) {
         parent::__construct($line, $docBlock, $fqcn, $attributeNames);
+        $this->extended = $extended;
         $this->constants = $constants;
         array_walk($properties, [$this, 'addProperty']);
         array_walk($methods, [$this, 'addMethod']);
+    }
+
+    public function isExtended(): bool
+    {
+        return $this->extended;
     }
 
     /**

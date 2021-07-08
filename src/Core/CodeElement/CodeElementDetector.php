@@ -109,7 +109,8 @@ class CodeElementDetector
                     case T_CLASS:
                         $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
                         $attrNames = TokenHelper::getPrevAttributeNames($file, $ptr);
-                        $currentElement = new ClassElement($line, $docBlock, $fqcn);
+                        $extended = TokenHelper::isClassExtended($file, $ptr);
+                        $currentElement = new ClassElement($line, $docBlock, $fqcn, $extended);
                         $currentElement->setAttributeNames($attrNames);
                         $fileElement->addClass($currentElement);
                         $parentElement = $currentElement;

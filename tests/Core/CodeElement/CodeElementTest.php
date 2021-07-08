@@ -37,12 +37,13 @@ class CodeElementTest extends TestCase
         self::assertEquals(new IntType(), $classConst->getValueType());
         self::assertEquals(['aaa'], $classConst->getAttributeNames());
 
-        $class = new ClassElement(2, $this->createDocBlock(), 'FQCN2');
+        $class = new ClassElement(2, $this->createDocBlock(), 'FQCN2', false);
         $class->setAttributeNames(['a']);
         self::assertEquals('FQCN2', $class->getFqcn());
         self::assertEquals($this->createDocBlock(), $class->getDocBlock());
         self::assertEquals(2, $class->getLine());
         self::assertEquals(['a'], $class->getAttributeNames());
+        self::assertEquals(false, $class->isExtended());
 
         $classMethod = new ClassMethodElement(
             $this->createDocBlock(),

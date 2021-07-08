@@ -42,4 +42,38 @@ class ReflectionCache
 
         return $methodNames;
     }
+
+    /**
+     * @param string $fqcn
+     * @param bool   $includeOwn
+     *
+     * @return string[]
+     */
+    public static function getPropsRecursive(string $fqcn, bool $includeOwn): array
+    {
+        try {
+            $classRef = new ReflectionClass($fqcn);
+        } catch (ParseError $e) {
+            return []; // suppress error popups when editing .php file
+        }
+
+        $propNames = [];
+        if ($includeOwn) {
+            foreach ($classRef->getProperties() as $propRef) {
+                $propNames[] = $propRef->getName();
+            }
+        }
+
+        $parentClasses = $classRef->getTraitNames();
+        if ($classRef->getParentClass()) {
+            $parentClasses[] = $classRef->getParentClass()->getName();
+        }
+
+        foreach ($parentClasses as $parentClass) {
+            $parentPropNames = static::getPropsRecursive($parentClass, true);
+            $propNames = array_merge($propNames, $parentPropNames);
+        }
+
+        return $propNames;
+    }
 }

@@ -221,6 +221,31 @@ class DocBlockParserTest extends TestCase
             'expectedException' => null,
         ];
 
+        // #5 Var tags with custom array type
+        $dataSets[] = [
+            'givenRawDocBlock'  => '/**
+* @var array<int, array<string|null, int>>|null Description text
+* @var array|null Description option dsa asd
+* @var int
+*/',
+            'givenStartLine'    => 2,
+            'expectedDocBlock'  => new DocBlock(
+                [],
+                [
+                    new VarTag(3, new CompoundType([
+                        new TypedArrayType(new MixedType(), 1),
+                        new NullType(),
+                    ]), null, 'Description text'),
+                    new VarTag(4, new CompoundType([
+                        new ArrayType(),
+                        new NullType(),
+                    ]), null, 'Description option dsa asd'),
+                    new VarTag(5, new IntType(), null, null),
+                ]
+            ),
+            'expectedException' => null,
+        ];
+
         return $dataSets;
     }
 

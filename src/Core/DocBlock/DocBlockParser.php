@@ -79,11 +79,9 @@ class DocBlockParser
             $paramName = $matches[3];
             $description = $matches[4] ?? null;
             $tag = new ParamTag($line, $type, $paramName, $description);
-        } elseif (preg_match('#^@var\s*([^ ]*)\s*(\$\w*)?\s*(.*)$#', $rawTag, $matches)) {
-            // Allows malformed @var tag without any body
-            $type = TypeFactory::fromRawType($matches[1] ?? '');
-            $paramName = !empty($matches[2]) ? substr($matches[2], 1) : null;
-            $description = $matches[3] ?? null;
+        } elseif (preg_match('#^@var\s*(.*)$#', $rawTag, $matches)) {
+            [$type, $description] = TypeFactory::fromRawTypeAndDescription($matches[1] ?? '');
+            [$paramName, $description] = self::splitVarDescription($description);
             $tag = new VarTag($line, $type, $paramName, $description);
         } elseif (preg_match('#^@return\s+(.*)$#', $rawTag, $matches)) {
             [$type, $description] = TypeFactory::fromRawTypeAndDescription($matches[1] ?? '');
@@ -97,5 +95,26 @@ class DocBlockParser
         }
 
         return $tag;
+    }
+
+    /**
+     * @param string $description
+     *
+     * @return string[]|null[]
+     */
+    protected static function splitVarDescription(string $description): array
+    {
+        $paramName = null;
+        if ('$' === ($description[0] ?? null)) {
+            $spacePos = strpos($description, ' ');
+            if (false !== $spacePos) {
+                $paramName = substr($description, 1, $spacePos - 1);
+                $description = trim(substr($description, $spacePos));
+            } else {
+                $paramName = substr($description, 1);
+            }
+        }
+
+        return [$paramName ?: null, $description ?: null];
     }
 }

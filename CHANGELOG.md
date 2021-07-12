@@ -7,6 +7,8 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 ## 0.18.2 - 2021-07-12
 ### Fixed
 - `@var` tag parsing with `array<...>` notation.
+### Changed
+- Default value of setting `FqcnMethodSniff.reportMissingTags` to `false`.
 
 ## 0.18.1 - 2021-06-18
 ### Added

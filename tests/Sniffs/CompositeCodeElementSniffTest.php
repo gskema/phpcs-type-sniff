@@ -20,6 +20,7 @@ class CompositeCodeElementSniffTest extends TestCase
         $dataSets[] = [
             [
                 'FqcnMethodSniff.enabled' => 'true',
+                'FqcnMethodSniff.reportMissingTags' => true,
             ],
             __DIR__ . '/fixtures/TestClass0.php',
             [
@@ -55,6 +56,7 @@ class CompositeCodeElementSniffTest extends TestCase
         $dataSets[] = [
             [
                 'FqcnMethodSniff.invalidTags' => ['@SmartTemplate'],
+                'FqcnMethodSniff.reportMissingTags' => true,
             ],
             __DIR__ . '/fixtures/TestClass1.php',
             [
@@ -92,6 +94,7 @@ class CompositeCodeElementSniffTest extends TestCase
         $dataSets[] = [
             [
                 'FqcnMethodSniff.enabled' => 'false',
+                'FqcnMethodSniff.reportMissingTags' => true,
             ],
             __DIR__ . '/fixtures/TestClass1.php',
             [
@@ -103,6 +106,7 @@ class CompositeCodeElementSniffTest extends TestCase
         $dataSets[] = [
             [
                 'useReflection' => true,
+                'FqcnMethodSniff.reportMissingTags' => true,
             ],
             __DIR__ . '/fixtures/TestClass3.php',
             [
@@ -121,6 +125,7 @@ class CompositeCodeElementSniffTest extends TestCase
         $dataSets[] = [
             [
                 'useReflection' => false,
+                'FqcnMethodSniff.reportMissingTags' => true,
             ],
             __DIR__ . '/fixtures/TestClass4.php',
             [
@@ -139,6 +144,7 @@ class CompositeCodeElementSniffTest extends TestCase
         $dataSets[] = [
             [
                 'useReflection' => false,
+                'FqcnMethodSniff.reportMissingTags' => true,
             ],
             __DIR__ . '/fixtures/TestClass5.php',
             [
@@ -197,6 +203,7 @@ class CompositeCodeElementSniffTest extends TestCase
         $dataSets[] = [
             [
                 'useReflection' => false,
+                'FqcnMethodSniff.reportMissingTags' => true,
             ],
             __DIR__ . '/fixtures/TestTrait7.php',
             [
@@ -208,6 +215,7 @@ class CompositeCodeElementSniffTest extends TestCase
         $dataSets[] = [
             [
                 'useReflection' => false,
+                'FqcnMethodSniff.reportMissingTags' => true,
             ],
             __DIR__ . '/fixtures/TestInterface8.php',
             [
@@ -219,6 +227,7 @@ class CompositeCodeElementSniffTest extends TestCase
         $dataSets[] = [
             [
                 'useReflection' => false,
+                'FqcnMethodSniff.reportMissingTags' => true,
             ],
             __DIR__ . '/fixtures/TestClass7.php',
             [
@@ -233,6 +242,7 @@ class CompositeCodeElementSniffTest extends TestCase
         $dataSets[] = [
             [
                 'useReflection' => false,
+                'FqcnMethodSniff.reportMissingTags' => true,
             ],
             __DIR__ . '/fixtures/TestClass8.php',
             [
@@ -258,7 +268,8 @@ class CompositeCodeElementSniffTest extends TestCase
         $dataSets[] = [
             [
                 'useReflection' => false,
-                'addViolationId' => true
+                'addViolationId' => true,
+                'FqcnMethodSniff.reportMissingTags' => true,
             ],
             __DIR__ . '/fixtures/TestClass5.php',
             [
@@ -295,6 +306,7 @@ class CompositeCodeElementSniffTest extends TestCase
         $dataSets[] = [
             [
                 'useReflection'                     => false,
+                'FqcnMethodSniff.reportMissingTags' => true,
             ],
             __DIR__ . '/fixtures/TestClass9.php',
             [
@@ -330,7 +342,8 @@ class CompositeCodeElementSniffTest extends TestCase
         $dataSets[] = [
             [
                 'useReflection' => false,
-                'reportType' => 'error'
+                'reportType' => 'error',
+                'FqcnMethodSniff.reportMissingTags' => true,
             ],
             __DIR__ . '/fixtures/TestInterface8.php',
             [], // 1 error reported, 0 warnings
@@ -340,6 +353,7 @@ class CompositeCodeElementSniffTest extends TestCase
         $dataSets[] = [
             [
                 'useReflection' => false,
+                'FqcnMethodSniff.reportMissingTags' => true,
             ],
             __DIR__ . '/fixtures/TestClass10.php',
             [
@@ -359,6 +373,7 @@ class CompositeCodeElementSniffTest extends TestCase
         $dataSets[] = [
             [
                 'useReflection' => false,
+                'FqcnMethodSniff.reportMissingTags' => true,
             ],
             __DIR__ . '/fixtures/TestClass11.php',
             [

@@ -310,9 +310,9 @@ String `true/false` values are automatically converted to booleans.
                 <element value="@api"/>
             </property>
 
-            <!-- Disables reporting missing @param, @return tags in non-empty method PHPDoc -->
+            <!-- Enables reporting missing @param, @return tags in non-empty method PHPDoc -->
             <!-- when method type declarations are present -->
-            <property name="FqcnMethodSniff.reportMissingTags" value="false"/>
+            <property name="FqcnMethodSniff.reportMissingTags" value="true"/>
 
             <!-- Disables reporting missing null type in basic getter return PHPDoc -->
             <!-- and return type declaration -->

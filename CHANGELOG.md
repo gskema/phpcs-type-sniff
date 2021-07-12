@@ -4,6 +4,10 @@ All notable changes to `phpcs-type-sniff` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## 74.0.3 - 2021-07-12
+### Changed
+- Default value of setting `FqcnMethodSniff.reportMissingTags` to `false`.
+
 ## 74.0.2 - 2021-07-08
 ### Fixed
 - Removed required type decl. warning for extended class properties. Detected by lazy reflection.

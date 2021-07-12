@@ -31,7 +31,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
     /** @var string[] */
     protected array $invalidTags = [];
 
-    protected bool $reportMissingTags = true;
+    protected bool $reportMissingTags = false;
 
     protected bool $reportNullableBasicGetter = true;
 
@@ -52,7 +52,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         $invalidTags = array_unique($invalidTags);
 
         $this->invalidTags = $invalidTags;
-        $this->reportMissingTags = (bool)($config['reportMissingTags'] ?? true);
+        $this->reportMissingTags = (bool)($config['reportMissingTags'] ?? false);
         $this->reportNullableBasicGetter = (bool)($config['reportNullableBasicGetter'] ?? true);
         $this->reportType = (string)($config['reportType'] ?? 'warning');
         $this->addViolationId = (bool)($config['addViolationId'] ?? false);

@@ -113,9 +113,10 @@ class FqcnPropSniff implements CodeElementSniffInterface
 
         $fnType = $subject->getFnType();
         $rawFnType = $fnType instanceof NullableType ? $fnType->toDocString() : $fnType->toString();
-        $rawDocType = $subject->getDocType()->toString();
+        // @var tag might be missing
+        $rawDocType = $subject->getDocType() ? $subject->getDocType()->toString() : null;
 
-        $isUseful = $rawFnType !== $rawDocType
+        $isUseful = ($rawDocType && $rawFnType !== $rawDocType)
             || $docBlock->hasDescription()
             || ($varTag && $varTag->hasDescription())
             || array_diff($docBlock->getTagNames(), ['var']);

@@ -35,4 +35,16 @@ class TestClass10
 
     #[ArrayShape(['key' => 'int'])]
     public array $prop11;
+
+    /**
+     * @Assert\Length(max="255")
+     * @Assert\NotBlank()
+     */
+    private string $prop12;
+
+    /**
+     * @Assert\Range(min="1", max="5")
+     * @var int
+     */
+    private int $prop13;
 }

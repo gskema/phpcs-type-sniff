@@ -2,21 +2,26 @@
 
 $baselineFilePath = $argv[1] ?? null;
 $targetFilePath = $argv[2] ?? null;
-$targetBasePath = $argv[3] ?? null; // optional
-$baselineBasePath = $argv[4] ?? null; // optional
+$trimBasePaths = [$argv[3] ?? null, $argv[4] ?? null];
+$trimBasePaths = array_filter($trimBasePaths);
 
-$exitCode = diffBaseline($baselineFilePath, $targetFilePath, $targetBasePath, $baselineBasePath);
+$exitCode = diffBaseline($baselineFilePath, $targetFilePath, $trimBasePaths);
 
 exit($exitCode);
 
+/**
+ * @param string   $baselineFilePath
+ * @param string   $targetFilePath
+ * @param string[] $trimBasePaths
+ *
+ * @return int
+ */
 function diffBaseline(
     string $baselineFilePath,
     string $targetFilePath,
-    ?string $targetBasePath,
-    ?string $baselineBasePath
+    array $trimBasePaths
 ): int {
-    $targetBasePath = $targetBasePath ? resolveAbsolutePath($targetBasePath) : null;
-    $baselineBasePath = $baselineBasePath ? resolveAbsolutePath($baselineBasePath) : null;
+    $trimBasePaths = array_map('resolveAbsolutePath', $trimBasePaths);
 
     $realBaselineFilePath = getRealFilePath($baselineFilePath);
     $realTargetFilePath = getRealFilePath($targetFilePath);
@@ -41,7 +46,7 @@ function diffBaseline(
         if ($violationId = findViolationId($line)) {
             $violationIdMap[$violationId] = null;
         } else {
-            $lineHash = getLineHash($errorFileLine, $line, $baselineBasePath);
+            $lineHash = getLineHash($errorFileLine, $line, $trimBasePaths);
             $lineHashMap[$lineHash] = null;
         }
     }
@@ -72,7 +77,7 @@ function diffBaseline(
             $violationId = findViolationId($line);
             if (null !== $violationId && key_exists($violationId, $violationIdMap)) {
                 $removedWarningCount++;
-            } elseif (key_exists(getLineHash($errorFileLine, $line, $targetBasePath), $lineHashMap)) {
+            } elseif (key_exists(getLineHash($errorFileLine, $line, $trimBasePaths), $lineHashMap)) {
                 $removedWarningCount++;
             } else {
                 $remainingWarningCount++;
@@ -109,10 +114,21 @@ function getRealFilePath(string $filePath): string
     return $realFilePath;
 }
 
-function getLineHash(string $fileLine, string $errorLine, ?string $basePath): string
+/**
+ * @param string   $fileLine
+ * @param string   $errorLine
+ * @param string[] $trimBasePaths
+ *
+ * @return string
+ */
+function getLineHash(string $fileLine, string $errorLine, array $trimBasePaths): string
 {
-    if (null !== $basePath) {
-        $fileLine = str_replace('<file name="' . $basePath, '<file name="', $fileLine);
+    $count = 0;
+    foreach ($trimBasePaths as $trimBasePath) {
+        $fileLine = str_replace('<file name="' . $trimBasePath, '<file name="', $fileLine, $count);
+        if ($count > 0) {
+            break;
+        }
     }
 
     return md5(trim($fileLine) . trim($errorLine));

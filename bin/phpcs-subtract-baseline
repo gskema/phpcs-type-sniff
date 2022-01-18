@@ -1,4 +1,35 @@
 #!/usr/bin/env php
 <?php
 
-include __DIR__ . '/../phpcs_baseline.php';
+include __DIR__ . '/../scripts/phpcs_baseline_source.php';
+
+// @TODO general script for options
+$args = [];
+$opts = [];
+$isOptNext = false;
+foreach ($argv as $value) {
+    if ($isOptNext) {
+        $opts['--trim-basepath'][] = $value;
+        $isOptNext = false;
+    } elseif (0 === strpos($value, '--trim-basepath')) {
+        if (false !== strpos($value, '=')) {
+            $bits = explode('=', $value, 2);
+            $optValue = $bits[1] ?? '';
+            $optValue = trim($optValue, '"');
+            $opts['--trim-basepath'][] = $optValue;
+        } else {
+            $isOptNext = true;
+        }
+    } else {
+        $args[] = $value;
+    }
+}
+
+// $args[0]: script filename
+$targetFilePath = $args[1] ?? null;
+$baselineFilePath = $args[2] ?? null;
+$trimBasePaths = $opts['--trim-basepath'] ?? [];
+
+$exitCode = diffBaseline($baselineFilePath, $targetFilePath, $trimBasePaths);
+
+exit($exitCode);

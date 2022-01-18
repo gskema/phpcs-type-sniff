@@ -230,21 +230,25 @@ warnings:
 ./vendor/bin/phpcs --standard=phpcs.xml --report=checkstyle --report-file=report.xml
 
 # Run a custom PHP script (on build) that subtracts ignored warnings.
-# First argument is the baseline report file with ignored warnings,
-# second argument is target report file (that was just built).
-./bin/phpcs-subtract-baseline ./baseline.xml ./report.xml
+# First argument is target report file (that was just built).
+# second argument is the baseline report file with ignored warnings which we want to subtract.
+# "Subtract baseline.xml warnings from report.xml (report - baseline)":
+./bin/phpcs-subtract-baseline ./report.xml ./baseline.xml
 
 # If you generate baseline file locally, but execute build on a different environment,
-# you may need to specify additional path arguments to make it work:
-./bin/phpcs-subtract-baseline ./baseline.xml ./report.xml /remote/project1/ /local/project1/
+# you may need to specify additional options to trim filename base paths
+# to ensure same relative filename is used when subtracting baseline:
+./bin/phpcs-subtract-baseline ./report.xml ./baseline.xml \
+  --trim-basepath="/remote/project1/" --trim-basepath="/local/project1/"
 
-# Or you may add this option to generate phpcs report with relative paths:
+# Or you may add this option to generate phpcs report with relative paths, which will
+# generate same relative paths. However, some tools may not fully work with relative paths (e.g. Jenkins checkstyle) 
 <arg line="-p --basepath=."/>
 ```
 
 **Note**: By default all baseline warnings are tracked by `filename + line + column + message` hash.
-By adding `<property name="addViolationId" value="true"/>` all warnings detected by this sniff
-will have a violation ID, which is used to track and compare baseline warnings independently of line and column.
+By default, all warnings detected by this sniff (`CompositeCodeElementSniff`) will have a violation ID,
+which is used to track and compare baseline warnings independently of line and column.
 This allows you to change other things in the same file where these warnings are detected, the violation ID does
 not change because of line numbers / code style.
 

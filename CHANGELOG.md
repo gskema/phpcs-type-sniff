@@ -4,6 +4,16 @@ All notable changes to `phpcs-type-sniff` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## 74.1.0 - 2022-01-18
+### Changed
+- Default value of `addViolationId` to true.
+- `phpcs-subtract-baseline`: removed 3rd and 4th parameters.
+- `phpcs-subtract-baseline`: added `--trim-basepath` multi value option. Basepaths are trimmed for both target and baseline files.
+- `phpcs-subtract-baseline`: changed argument order.
+- `phpcs_baseline.php`: both 3rd and 4th parameters are always used as trim basepaths for both target and baseline files.
+### Deprecated
+- `phpcs_baseline.php` script.
+
 ## 74.0.5 - 2021-12-16
 ### Fixed
 - Useless prop PHPDoc check when `@var` is not present.

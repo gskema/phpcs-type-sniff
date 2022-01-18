@@ -4,6 +4,10 @@ All notable changes to `phpcs-type-sniff` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## 74.1.1 - 2022-01-18
+### Fixed
+- Option description in README
+
 ## 74.1.0 - 2022-01-18
 ### Changed
 - Default value of `addViolationId` to true.

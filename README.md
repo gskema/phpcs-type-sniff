@@ -282,8 +282,8 @@ String `true/false` values are automatically converted to booleans.
 
             <!-- Appends violation ID to each error/warning detected by this sniff. -->
             <!-- Used to track baseline warnings of this sniff -->
-            <!-- independently of line/column. Default is false. -->
-            <property name="addViolationId" value="true"/>
+            <!-- independently of line/column. Default is true. -->
+            <property name="addViolationId" value="false"/>
 
             <!-- Disables one of the default code element sniffs -->
             <property name="FqcnConstSniff.enabled" value="false" />

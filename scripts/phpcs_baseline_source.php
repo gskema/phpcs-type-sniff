@@ -135,10 +135,8 @@ function findViolationId(string $line): ?string
 
 function resolveAbsolutePath(string $path): string
 {
-    $absolutePath = false !== strpos($path, '.') ? realpath($path) : $path;
-    if (empty($absolutePath)) {
-        throw new Exception(sprintf('Cannot resolve path to absolute: %s', $path));
-    }
+    $absolutePath = 0 === strpos($path, '.') ? realpath($path) : $path;
+    $absolutePath = $absolutePath ?: $path;
 
     return rtrim($absolutePath, '/') . '/';
 }

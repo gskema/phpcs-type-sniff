@@ -38,7 +38,7 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 ### Added
 - Base path args for `phpcs-subtract-baseline` script for diffing reports build on different environments.
 
-## 74.0.0
+## 74.0.0 - 2021-05-10
 ## Added
 - Support for typed properties + warnings.
 - Warnings for nullable types (e.g. `?int`) in PHPDoc.

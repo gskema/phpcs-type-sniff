@@ -268,37 +268,36 @@ class CompositeCodeElementSniffTest extends TestCase
         $dataSets[] = [
             [
                 'useReflection' => false,
-                'addViolationId' => true,
                 'FqcnMethodSniff.reportMissingTags' => true,
             ],
             __DIR__ . '/fixtures/TestClass5.php',
             [
-                '006 Useless description [7f23a1e9428db071]',
-                '007 Useless tag [2ea1f782b8a5307c]',
-                '012 Useless description. [85953b0ff830ae61]',
-                '023 Change parameter $arg1 type declaration to nullable, e.g. ?string. Remove default null value if this argument is required. [cf5f1d5c5b01ed6e]',
-                '035 Remove redundant parameter $arg7 type hints "double" [1312f1309767c2a9]',
-                '036 Remove redundant parameter $arg8 type hints "double" [dd763f4a2ffdd9ca]',
-                '037 Remove redundant parameter $arg9 type hints "double" [e980b13da4c9e8c9]',
-                '042 Add type declaration for parameter $arg1, e.g.: "float". [bdee84f416f32c43]',
-                '045 Add type declaration for parameter $arg4, e.g.: "float". [ace615cc4193b56d]',
-                '054 Change parameter $arg1 type declaration to nullable, e.g. ?string. Remove default null value if this argument is required. [b0d14463d8e6717f]',
-                '070 Change type hint for parameter $arg1 to compound, e.g. SomeClass|null [8b963bf03278b20f]',
-                '074 Add type declaration for parameter $arg1, e.g.: "?SomeClass". [d6bfc821faa4a339]',
-                '078 Create PHPDoc with typed array type hint for parameter $arg1, .e.g.: "string[]|null" or "SomeClass[]|null". Correct array depth must be specified. [6e7fdf0bab1792de]',
-                '083 Useless PHPDoc [81dfff54c0c60d71]',
-                '086 Useless PHPDoc [b3d61e873dc52dd3]',
-                '089 Add type declaration for property $prop1, e.g.: "?SomeClass". Add default value or keep property in an uninitialized state. [96581e1f88581ab2]',
-                '092 Use void return value type declaration or change type to compound, e.g. SomeClass|null [40ca7ff6ecc94007]',
-                '094 Add type declaration for return value, e.g.: "?SomeClass". [25d1eef607958faf]',
-                '101 Useless PHPDoc [390da7987aaad158]',
-                '107 Use a more specific type in typed array hint "[]" for parameter $arg1. Correct array depth must be specified. [32f13f1f2c0119d7]',
-                '118 Replace array type with typed array type in PHPDoc for C4 constant, .e.g.: "string[]" or "SomeClass[]". Use mixed[] for generic arrays. Correct array depth must be specified. [629a111a8a1d4ead]',
-                '121 Use a more specific type in typed array hint "[]" for C5 constant. Correct array depth must be specified. [2e6b8365a803aeed]',
-                '124 Use a more specific type in typed array hint "[][]" for C6 constant. Correct array depth must be specified. [8a453fe54b051f80]',
-                '124 Type hint "null" is not compatible with C6 constant value type [79c7cfa740ac5627]',
-                '127 Use a more specific type in typed array hint "[][]" for property $prop2. Correct array depth must be specified. [2987854751394f1d]',
-                '128 Add type declaration for property $prop2, e.g.: "?array". [fd2210f6d65edbe6]',
+                '006 Useless description',
+                '007 Useless tag',
+                '012 Useless description.',
+                '023 Change parameter $arg1 type declaration to nullable, e.g. ?string. Remove default null value if this argument is required.',
+                '035 Remove redundant parameter $arg7 type hints "double"',
+                '036 Remove redundant parameter $arg8 type hints "double"',
+                '037 Remove redundant parameter $arg9 type hints "double"',
+                '042 Add type declaration for parameter $arg1, e.g.: "float".',
+                '045 Add type declaration for parameter $arg4, e.g.: "float".',
+                '054 Change parameter $arg1 type declaration to nullable, e.g. ?string. Remove default null value if this argument is required.',
+                '070 Change type hint for parameter $arg1 to compound, e.g. SomeClass|null',
+                '074 Add type declaration for parameter $arg1, e.g.: "?SomeClass".',
+                '078 Create PHPDoc with typed array type hint for parameter $arg1, .e.g.: "string[]|null" or "SomeClass[]|null". Correct array depth must be specified.',
+                '083 Useless PHPDoc',
+                '086 Useless PHPDoc',
+                '089 Add type declaration for property $prop1, e.g.: "?SomeClass". Add default value or keep property in an uninitialized state.',
+                '092 Use void return value type declaration or change type to compound, e.g. SomeClass|null',
+                '094 Add type declaration for return value, e.g.: "?SomeClass".',
+                '101 Useless PHPDoc',
+                '107 Use a more specific type in typed array hint "[]" for parameter $arg1. Correct array depth must be specified.',
+                '118 Replace array type with typed array type in PHPDoc for C4 constant, .e.g.: "string[]" or "SomeClass[]". Use mixed[] for generic arrays. Correct array depth must be specified.',
+                '121 Use a more specific type in typed array hint "[]" for C5 constant. Correct array depth must be specified.',
+                '124 Use a more specific type in typed array hint "[][]" for C6 constant. Correct array depth must be specified.',
+                '124 Type hint "null" is not compatible with C6 constant value type',
+                '127 Use a more specific type in typed array hint "[][]" for property $prop2. Correct array depth must be specified.',
+                '128 Add type declaration for property $prop2, e.g.: "?array".',
             ],
         ];
 
@@ -420,7 +419,8 @@ class CompositeCodeElementSniffTest extends TestCase
             foreach ($colWarnings as $warnings) {
                 foreach ($warnings as $warning) {
                     $lineKey = str_pad($line, '3', '0', STR_PAD_LEFT);
-                    $actualWarnings[$line][] = $lineKey . ' ' . $warning['message'];
+                    $actualWarnings[$line][] = $lineKey . ' '
+                        . preg_replace('/(.+) \[[a-f0-9]{16}\]+$/', '$1', $warning['message']);
                 }
             }
         }

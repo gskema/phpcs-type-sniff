@@ -213,7 +213,7 @@ class TypeFactory
         }
 
         $rawTypes = array_filter(array_map('trim', $rawTypes));
-        $remainingString = trim($remainingString);
+        $remainingString = trim((string)$remainingString);
 
         return [$rawTypes, $remainingString];
     }

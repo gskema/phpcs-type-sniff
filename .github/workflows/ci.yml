@@ -36,5 +36,6 @@ jobs:
           composer test-coverage
           composer phpcs
 
-      - name: Coverage Badge
-        uses: timkrase/phpunit-coverage-badge@v1.2.0
+      - name: Upload Coverage
+        run:
+          composer upload-coverage

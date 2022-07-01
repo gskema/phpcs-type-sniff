@@ -48,6 +48,7 @@
     "scripts": {
         "test": "vendor/bin/phpunit",
         "test-coverage": "vendor/bin/phpunit --coverage-clover=clover.xml",
+        "upload-coverage": "wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover coverage.xml;",
         "phpcs": "vendor/bin/phpcs -p"
     }
 }

@@ -19,6 +19,7 @@ class CompositeCodeElementSniffTest extends TestCase
         // #0
         $dataSets[] = [
             [
+                'addViolationId' => false,
                 'FqcnMethodSniff.enabled' => 'true',
                 'FqcnMethodSniff.reportMissingTags' => true,
             ],
@@ -55,6 +56,7 @@ class CompositeCodeElementSniffTest extends TestCase
         // #1
         $dataSets[] = [
             [
+                'addViolationId' => false,
                 'FqcnMethodSniff.invalidTags' => ['@SmartTemplate'],
                 'FqcnMethodSniff.reportMissingTags' => true,
             ],
@@ -93,6 +95,7 @@ class CompositeCodeElementSniffTest extends TestCase
         // #2
         $dataSets[] = [
             [
+                'addViolationId' => false,
                 'FqcnMethodSniff.enabled' => 'false',
                 'FqcnMethodSniff.reportMissingTags' => true,
             ],
@@ -105,6 +108,7 @@ class CompositeCodeElementSniffTest extends TestCase
         // #3
         $dataSets[] = [
             [
+                'addViolationId' => false,
                 'useReflection' => true,
                 'FqcnMethodSniff.reportMissingTags' => true,
             ],
@@ -124,6 +128,7 @@ class CompositeCodeElementSniffTest extends TestCase
         // #4
         $dataSets[] = [
             [
+                'addViolationId' => false,
                 'useReflection' => false,
                 'FqcnMethodSniff.reportMissingTags' => true,
             ],
@@ -143,6 +148,7 @@ class CompositeCodeElementSniffTest extends TestCase
         // #5
         $dataSets[] = [
             [
+                'addViolationId' => false,
                 'useReflection' => false,
                 'FqcnMethodSniff.reportMissingTags' => true,
             ],
@@ -180,6 +186,7 @@ class CompositeCodeElementSniffTest extends TestCase
         // #6
         $dataSets[] = [
             [
+                'addViolationId' => false,
                 'useReflection'                     => false,
                 'FqcnMethodSniff.reportMissingTags' => false,
             ],
@@ -202,6 +209,7 @@ class CompositeCodeElementSniffTest extends TestCase
         // #7
         $dataSets[] = [
             [
+                'addViolationId' => false,
                 'useReflection' => false,
                 'FqcnMethodSniff.reportMissingTags' => true,
             ],
@@ -214,6 +222,7 @@ class CompositeCodeElementSniffTest extends TestCase
         // #8
         $dataSets[] = [
             [
+                'addViolationId' => false,
                 'useReflection' => false,
                 'FqcnMethodSniff.reportMissingTags' => true,
             ],
@@ -226,6 +235,7 @@ class CompositeCodeElementSniffTest extends TestCase
         // #9
         $dataSets[] = [
             [
+                'addViolationId' => false,
                 'useReflection' => false,
                 'FqcnMethodSniff.reportMissingTags' => true,
             ],
@@ -241,6 +251,7 @@ class CompositeCodeElementSniffTest extends TestCase
         // #10
         $dataSets[] = [
             [
+                'addViolationId' => false,
                 'useReflection' => false,
                 'FqcnMethodSniff.reportMissingTags' => true,
             ],
@@ -255,6 +266,7 @@ class CompositeCodeElementSniffTest extends TestCase
         // #11
         $dataSets[] = [
             [
+                'addViolationId' => false,
                 'useReflection'                     => false,
                 'FqcnMethodSniff.reportMissingTags' => false,
             ],
@@ -305,6 +317,7 @@ class CompositeCodeElementSniffTest extends TestCase
         // #13
         $dataSets[] = [
             [
+                'addViolationId' => false,
                 'useReflection'                     => false,
                 'FqcnMethodSniff.reportMissingTags' => true,
             ],
@@ -341,6 +354,7 @@ class CompositeCodeElementSniffTest extends TestCase
         // #14
         $dataSets[] = [
             [
+                'addViolationId' => false,
                 'useReflection' => false,
                 'reportType' => 'error',
                 'FqcnMethodSniff.reportMissingTags' => true,
@@ -352,6 +366,7 @@ class CompositeCodeElementSniffTest extends TestCase
         // #15
         $dataSets[] = [
             [
+                'addViolationId' => false,
                 'useReflection' => false,
                 'FqcnMethodSniff.reportMissingTags' => true,
             ],
@@ -372,6 +387,7 @@ class CompositeCodeElementSniffTest extends TestCase
         // #16
         $dataSets[] = [
             [
+                'addViolationId' => false,
                 'useReflection' => false,
                 'FqcnMethodSniff.reportMissingTags' => true,
             ],

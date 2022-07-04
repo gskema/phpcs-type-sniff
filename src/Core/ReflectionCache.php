@@ -6,6 +6,9 @@ use ParseError;
 use ReflectionClass;
 use ReflectionException;
 
+/**
+ * @see ReflectionCacheTest
+ */
 class ReflectionCache
 {
     /**

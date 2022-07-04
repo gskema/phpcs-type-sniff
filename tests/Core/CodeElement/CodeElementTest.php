@@ -37,14 +37,6 @@ class CodeElementTest extends TestCase
         self::assertEquals(new IntType(), $classConst->getValueType());
         self::assertEquals(['aaa'], $classConst->getAttributeNames());
 
-        $class = new ClassElement(2, $this->createDocBlock(), 'FQCN2', false);
-        $class->setAttributeNames(['a']);
-        self::assertEquals('FQCN2', $class->getFqcn());
-        self::assertEquals($this->createDocBlock(), $class->getDocBlock());
-        self::assertEquals(2, $class->getLine());
-        self::assertEquals(['a'], $class->getAttributeNames());
-        self::assertEquals(false, $class->isExtended());
-
         $classMethod = new ClassMethodElement(
             $this->createDocBlock(),
             'FQCN3',
@@ -66,6 +58,7 @@ class CodeElementTest extends TestCase
 
         $classProp = new ClassPropElement(4, $this->createDocBlock(), 'FQCN4', 'prop1', new IntType(), new IntType());
         $classProp->setAttributeNames(['a']);
+        self::assertEquals(false, $classProp->getMetadata()->hasDefaultValue());
         self::assertEquals('FQCN4', $classProp->getFqcn());
         self::assertEquals($this->createDocBlock(), $classProp->getDocBlock());
         self::assertEquals(4, $classProp->getLine());
@@ -73,6 +66,18 @@ class CodeElementTest extends TestCase
         self::assertEquals(new IntType(), $classProp->getType());
         self::assertEquals(new IntType(), $classProp->getDefaultValueType());
         self::assertEquals(['a'], $classProp->getAttributeNames());
+
+        $class = new ClassElement(2, $this->createDocBlock(), 'FQCN2', false);
+        $class->addMethod($classMethod);
+        $class->setAttributeNames(['a']);
+        self::assertEquals('FQCN2', $class->getFqcn());
+        self::assertEquals($this->createDocBlock(), $class->getDocBlock());
+        self::assertEquals(2, $class->getLine());
+        self::assertEquals(['a'], $class->getAttributeNames());
+        self::assertEquals(false, $class->isExtended());
+        self::assertEquals($classMethod, $class->getMethod($classMethod->getSignature()->getName()));
+        self::assertEquals(null, $class->getOwnConstructor());
+        self::assertEquals(false, $class->hasAttribute('ArrayShape'));
 
         $const = new ConstElement(5, $this->createDocBlock(), 'NS1', 'CONST1', new IntType(), ['a']);
         self::assertEquals(5, $const->getLine());

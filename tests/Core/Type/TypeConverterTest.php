@@ -139,18 +139,23 @@ class TypeConverterTest extends TestCase
             ],
             [new ResourceType(), null],
             [new StringType(), new StringType()],
+            [new CallableType(), null, true],
         ];
     }
 
     /**
      * @dataProvider dataToExampleFnType
      *
-     * @param TypeInterface      $givenDocType
+     * @param TypeInterface $givenDocType
      * @param TypeInterface|null $expectedFnType
+     * @param bool $givenIsProp
      */
-    public function testToExampleFnType(TypeInterface $givenDocType, ?TypeInterface $expectedFnType): void
-    {
-        $actualFnType = TypeConverter::toExampleFnType($givenDocType, false);
+    public function testToExampleFnType(
+        TypeInterface $givenDocType,
+        ?TypeInterface $expectedFnType,
+        bool $givenIsProp = false
+    ): void {
+        $actualFnType = TypeConverter::toExampleFnType($givenDocType, $givenIsProp);
 
         self::assertEquals($expectedFnType, $actualFnType);
     }

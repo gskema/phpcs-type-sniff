@@ -397,6 +397,17 @@ class CompositeCodeElementSniffTest extends TestCase
             ],
         ];
 
+        // #17
+        $dataSets[] = [
+            [
+                'addViolationId' => false,
+                'useReflection' => false,
+                'FqcnMethodSniff.reportMissingTags' => true,
+            ],
+            __DIR__ . '/fixtures/TestClass12NoParent.php',
+            [], // parent class not found, 007 error ignored
+        ];
+
         return $dataSets;
     }
 

@@ -17,6 +17,9 @@ use Gskema\TypeSniff\Core\Type\TypeInterface;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 
+/**
+ * @see TokenHelperTest
+ */
 class TokenHelper
 {
     /**
@@ -139,9 +142,7 @@ class TokenHelper
         }
 
         $beforeTypeStartPtr = $file->findPrevious(Tokens::$emptyTokens, $typeEndPtr - 1);
-        if (false === $beforeTypeStartPtr) {
-            return new UndefinedType();
-        }
+        // $beforeTypeStartPtr: false not possible: type token was found = file parsed by phpcs is valid
         $typeStartPtr = $beforeTypeStartPtr + 1;
 
         $rawType = $file->getTokensAsString($typeStartPtr, $typeEndPtr - $typeStartPtr + 1);

@@ -111,7 +111,7 @@ class TypeConverter
         }
 
         if ($isProp && $docType instanceof CallableType) {
-            return null; // supported for arguments, but not callables
+            return null; // supported for function arguments, but not props
         }
 
         if ($docType instanceof ResourceType) {

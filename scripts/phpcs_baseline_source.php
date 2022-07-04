@@ -25,12 +25,12 @@ function diffBaseline(
     $baselineFile = fopen($realBaselineFilePath, 'r');
     while (!feof($baselineFile)) {
         $line = fgets($baselineFile);
-        if (false !== strpos($line, '<file')) {
+        if (str_contains($line, '<file')) {
             $errorFileLine = $line;
             continue;
         }
 
-        if (false === strpos($line, '<error')) {
+        if (!str_contains($line, '<error')) {
             continue;
         }
 
@@ -55,16 +55,16 @@ function diffBaseline(
     while (!feof($realTargetFile)) {
         $line = fgets($realTargetFile);
 
-        if (false !== strpos($line, '<file')) {
+        if (str_contains($line, '<file')) {
             $errorFileLine = $line;
-        } elseif (false !== strpos($line, '</file')) {
+        } elseif (str_contains($line, '</file')) {
             if (!empty($errorLines)) {
                 array_push($newFileLines, $errorFileLine, ...$errorLines);
                 array_push($newFileLines, $line);
             }
             $errorFileLine = '';
             $errorLines = [];
-        } elseif (false !== strpos($line, '<error')) {
+        } elseif (str_contains($line, '<error')) {
             $violationId = findViolationId($line);
             if (null !== $violationId && key_exists($violationId, $violationIdMap)) {
                 $removedWarningCount++;
@@ -135,7 +135,7 @@ function findViolationId(string $line): ?string
 
 function resolveAbsolutePath(string $path): string
 {
-    $absolutePath = 0 === strpos($path, '.') ? realpath($path) : $path;
+    $absolutePath = str_starts_with($path, '.') ? realpath($path) : $path;
     $absolutePath = $absolutePath ?: $path;
 
     return rtrim($absolutePath, '/') . '/';

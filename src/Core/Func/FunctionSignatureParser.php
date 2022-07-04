@@ -166,7 +166,7 @@ class FunctionSignatureParser
     protected static function createParam(array $raw): FunctionParam
     {
         $rawValueType = $raw['default'] ?? '';
-        if (false !== strpos($rawValueType, '::')) {
+        if (str_contains($rawValueType, '::')) {
             $valueType = null; // a constant is used, need reflection :(
         } else {
             $valueType = TypeFactory::fromRawType($raw['default'] ?? '');

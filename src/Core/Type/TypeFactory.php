@@ -165,9 +165,9 @@ class TypeFactory
         // Shortcut to skip loop below. No need to check strings like 'array<' because we split raw type + description
         // by ' ' char.
         if (
-            false === strpos($tagBody, '<') &&
-            false === strpos($tagBody, '{') &&
-            false === strpos($tagBody, '(')
+            !str_contains($tagBody, '<') &&
+            !str_contains($tagBody, '{') &&
+            !str_contains($tagBody, '(')
         ) {
             $spacePos = strpos($tagBody, ' ');
             $rawType = false !== $spacePos ? substr($tagBody, 0, $spacePos) : $tagBody;

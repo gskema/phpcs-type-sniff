@@ -11,8 +11,8 @@ foreach ($argv as $value) {
     if ($isOptNext) {
         $opts['--trim-basepath'][] = $value;
         $isOptNext = false;
-    } elseif (0 === strpos($value, '--trim-basepath')) {
-        if (false !== strpos($value, '=')) {
+    } elseif (str_starts_with($value, '--trim-basepath')) {
+        if (str_contains($value, '=')) {
             $bits = explode('=', $value, 2);
             $optValue = $bits[1] ?? '';
             $optValue = trim($optValue, '"');

@@ -10,7 +10,7 @@
 function diffBaseline(
     string $baselineFilePath,
     string $targetFilePath,
-    array $trimBasePaths
+    array $trimBasePaths,
 ): int {
     $trimBasePaths = array_map('resolveAbsolutePath', $trimBasePaths);
 

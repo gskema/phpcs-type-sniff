@@ -22,7 +22,7 @@ class FnTypeInspector
         ) {
             $subject->addFnTypeWarning(sprintf(
                 'Change :subject: type declaration to nullable, e.g. %s. Remove default null value if this argument is required.',
-                (new NullableType($subject->getFnType()))->toString()
+                (new NullableType($subject->getFnType()))->toString(),
             ));
         }
     }

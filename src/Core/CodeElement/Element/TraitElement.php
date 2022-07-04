@@ -26,7 +26,7 @@ class TraitElement extends AbstractFqcnElement
         string $fqcn,
         array $properties = [],
         array $methods = [],
-        array $attributeNames = []
+        array $attributeNames = [],
     ) {
         parent::__construct($line, $docBlock, $fqcn, $attributeNames);
         $this->properties = $properties;

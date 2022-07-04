@@ -28,7 +28,7 @@ class ClassPropElement extends AbstractFqcnPropElement
         TypeInterface $type,
         ?TypeInterface $defaultValueType,
         ?ClassPropMetadata $metadata = null,
-        array $attributeNames = []
+        array $attributeNames = [],
     ) {
         parent::__construct($line, $docBlock, $fqcn, $propName, $type, $defaultValueType, $attributeNames);
         $this->metadata = $metadata ?? new ClassPropMetadata();

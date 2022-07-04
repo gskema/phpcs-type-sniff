@@ -32,7 +32,7 @@ class FunctionSignature
         string $name,
         array $params,
         TypeInterface $returnType,
-        int $returnLine
+        int $returnLine,
     ) {
         $this->line = $line;
         $this->name = $name;

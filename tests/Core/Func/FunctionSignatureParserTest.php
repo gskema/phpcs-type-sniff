@@ -35,7 +35,7 @@ class FunctionSignatureParserTest extends TestCase
                 'func1',
                 [],
                 new UndefinedType(),
-                3
+                3,
             ),
             null,
         ];
@@ -54,7 +54,7 @@ class FunctionSignatureParserTest extends TestCase
                     new FunctionParam(5, 'd', new SelfType(), new UndefinedType(), []),
                 ],
                 new ArrayType(),
-                5
+                5,
             ),
             null,
         ];
@@ -74,7 +74,7 @@ class FunctionSignatureParserTest extends TestCase
                     new FunctionParam(14, 'arg5', new IntType(), null, []),
                 ],
                 new FqcnType('\Space1\Class2'),
-                15
+                15,
             ),
             null,
         ];
@@ -99,7 +99,7 @@ class FunctionSignatureParserTest extends TestCase
                     new FunctionParam(5, 'arg2', new StringType(), null, []),
                 ],
                 new UndefinedType(),
-                6
+                6,
             ),
             null,
         ];
@@ -121,7 +121,7 @@ class FunctionSignatureParserTest extends TestCase
         string $givenPath,
         int $givenFnPtr,
         ?FunctionSignature $expectedFun,
-        ?string $expectedException
+        ?string $expectedException,
     ): void {
         $givenFile = new LocalFile($givenPath, new Ruleset(new Config()), new Config());
         $givenFile->parse();

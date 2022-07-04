@@ -29,7 +29,7 @@ abstract class AbstractFqcnPropElement extends AbstractFqcnElement
         string $propName,
         TypeInterface $type,
         ?TypeInterface $defaultValueType,
-        array $attributeNames
+        array $attributeNames,
     ) {
         parent::__construct($line, $docBlock, $fqcn, $attributeNames);
         $this->propName = $propName;

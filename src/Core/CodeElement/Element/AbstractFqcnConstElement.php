@@ -25,7 +25,7 @@ abstract class AbstractFqcnConstElement extends AbstractFqcnElement
         string $fqcn,
         string $constName,
         ?TypeInterface $valueType,
-        array $attributeNames
+        array $attributeNames,
     ) {
         parent::__construct($line, $docBlock, $fqcn, $attributeNames);
         $this->constName = $constName;

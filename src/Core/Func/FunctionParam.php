@@ -32,7 +32,7 @@ class FunctionParam
         string $name,
         TypeInterface $declarationType,
         ?TypeInterface $valueType,
-        array $attributeNames
+        array $attributeNames,
     ) {
         $this->line = $line;
         $this->name = $name;

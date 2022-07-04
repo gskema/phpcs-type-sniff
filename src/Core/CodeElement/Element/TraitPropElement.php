@@ -28,7 +28,7 @@ class TraitPropElement extends AbstractFqcnPropElement
         TypeInterface $type,
         ?TypeInterface $defaultValueType,
         ?TraitPropMetadata $metadata = null,
-        array $attributeNames = []
+        array $attributeNames = [],
     ) {
         parent::__construct($line, $docBlock, $fqcn, $propName, $type, $defaultValueType, $attributeNames);
         $this->metadata = $metadata ?? new TraitPropMetadata();

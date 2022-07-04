@@ -18,7 +18,7 @@ class ParamTag implements TagInterface
         int $line,
         TypeInterface $type,
         string $paramName,
-        ?string $description
+        ?string $description,
     ) {
         $this->line = $line;
         $this->type = $type;

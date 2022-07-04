@@ -12,7 +12,7 @@ class SniffHelper
         int $line,
         string $sniffCode,
         string $reportType,
-        ?string $originId
+        ?string $originId,
     ): void {
         if (null !== $originId) {
             $violationId = substr(md5($message . $originId), 0, 16);

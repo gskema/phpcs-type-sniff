@@ -59,7 +59,7 @@ abstract class AbstractTypeSubject
         string $name,
         DocBlock $docBlock,
         array $attributeNames,
-        string $id
+        string $id,
     ) {
         $this->docType = $docType;
         $this->fnType = $fnType;

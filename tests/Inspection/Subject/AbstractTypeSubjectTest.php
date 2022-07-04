@@ -23,7 +23,7 @@ class AbstractTypeSubjectTest extends TestCase
             'parameter X',
             new DocBlock([2 => 'line2'], [new ReturnTag(3, new VoidType(), null)]),
             ['aaa'],
-            'FQCN::method1()x'
+            'FQCN::method1()x',
         );
 
         $subject->addFnTypeWarning('warning1');

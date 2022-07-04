@@ -90,7 +90,7 @@ class CodeElementDetectorTest extends TestCase
                                 'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass0',
                                 'CONST1',
                                 new IntType(),
-                                []
+                                [],
                             ),
                             new ClassConstElement(
                                 18,
@@ -100,7 +100,7 @@ class CodeElementDetectorTest extends TestCase
                                 'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass0',
                                 'CONST2',
                                 new IntType(),
-                                []
+                                [],
                             ),
                         ],
                         [
@@ -110,7 +110,7 @@ class CodeElementDetectorTest extends TestCase
                                 'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass0',
                                 'prop1',
                                 new UndefinedType(),
-                                new UndefinedType()
+                                new UndefinedType(),
                             ),
                             new ClassPropElement(
                                 25,
@@ -120,7 +120,7 @@ class CodeElementDetectorTest extends TestCase
                                 'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass0',
                                 'prop2',
                                 new UndefinedType(),
-                                new UndefinedType()
+                                new UndefinedType(),
                             ),
                             new ClassPropElement(
                                 28,
@@ -130,7 +130,7 @@ class CodeElementDetectorTest extends TestCase
                                 'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass0',
                                 'prop3',
                                 new UndefinedType(),
-                                new UndefinedType()
+                                new UndefinedType(),
                             ),
                         ],
                         [
@@ -142,15 +142,15 @@ class CodeElementDetectorTest extends TestCase
                                     '__construct',
                                     [],
                                     new UndefinedType(),
-                                    30
+                                    30,
                                 ),
-                                new ClassMethodMetadata([], null, [])
+                                new ClassMethodMetadata([], null, []),
                             ),
                             new ClassMethodElement(
                                 new UndefinedDocBlock(),
                                 'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass0',
                                 new FunctionSignature(34, 'method1', [], new StringType(), 34),
-                                new ClassMethodMetadata([], null, [])
+                                new ClassMethodMetadata([], null, []),
                             ),
                             new ClassMethodElement(
                                 new DocBlock([], [
@@ -165,15 +165,15 @@ class CodeElementDetectorTest extends TestCase
                                         new FunctionParam(44, 'param1', new IntType(), new UndefinedType(), []),
                                     ],
                                     new NullableType(new ArrayType()),
-                                    44
+                                    44,
                                 ),
-                                new ClassMethodMetadata([], null, [])
+                                new ClassMethodMetadata([], null, []),
                             ),
-                        ]
+                        ],
                     ),
                 ],
                 [],
-                []
+                [],
             ),
         ];
 
@@ -192,7 +192,7 @@ class CodeElementDetectorTest extends TestCase
                         'Gskema\TypeSniff\\Core\\CodeElement\\fixtures',
                         'CONST1',
                         new IntType(),
-                        []
+                        [],
                     ),
                 ],
                 [
@@ -201,7 +201,7 @@ class CodeElementDetectorTest extends TestCase
                         new UndefinedDocBlock(),
                         'Gskema\TypeSniff\\Core\\CodeElement\\fixtures',
                         new FunctionSignature(7, 'namedFunc', [], new UndefinedType(), 7),
-                        []
+                        [],
                     ),
                 ],
                 [
@@ -217,7 +217,7 @@ class CodeElementDetectorTest extends TestCase
                                 'Gskema\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass1',
                                 'CONST2',
                                 new IntType(),
-                                []
+                                [],
                             ),
                         ],
                         [
@@ -229,7 +229,7 @@ class CodeElementDetectorTest extends TestCase
                                 'Gskema\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass1',
                                 'prop1',
                                 new UndefinedType(),
-                                new UndefinedType()
+                                new UndefinedType(),
                             ),
                         ],
                         [
@@ -237,13 +237,13 @@ class CodeElementDetectorTest extends TestCase
                                 new UndefinedDocBlock(),
                                 'Gskema\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass1',
                                 new FunctionSignature(16, 'method1', [], new UndefinedType(), 16),
-                                new ClassMethodMetadata([], null, ['method1'])
+                                new ClassMethodMetadata([], null, ['method1']),
                             ),
-                        ]
+                        ],
                     ),
                 ],
                 [],
-                []
+                [],
             ),
         ];
 
@@ -270,7 +270,7 @@ class CodeElementDetectorTest extends TestCase
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                                 'C01',
                                 new NullType(),
-                                []
+                                [],
                             ),
                             new ClassConstElement(
                                 8,
@@ -278,7 +278,7 @@ class CodeElementDetectorTest extends TestCase
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                                 'C02',
                                 new BoolType(),
-                                []
+                                [],
                             ),
                             new ClassConstElement(
                                 9,
@@ -294,7 +294,7 @@ class CodeElementDetectorTest extends TestCase
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                                 'C04',
                                 new IntType(),
-                                []
+                                [],
                             ),
                             new ClassConstElement(
                                 11,
@@ -302,7 +302,7 @@ class CodeElementDetectorTest extends TestCase
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                                 'C05',
                                 new FloatType(),
-                                []
+                                [],
                             ),
                             new ClassConstElement(
                                 12,
@@ -310,7 +310,7 @@ class CodeElementDetectorTest extends TestCase
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                                 'C06',
                                 new IntType(),
-                                []
+                                [],
                             ),
                             new ClassConstElement(
                                 13,
@@ -318,7 +318,7 @@ class CodeElementDetectorTest extends TestCase
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                                 'C07',
                                 new StringType(),
-                                []
+                                [],
                             ),
                             new ClassConstElement(
                                 14,
@@ -326,7 +326,7 @@ class CodeElementDetectorTest extends TestCase
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                                 'C08',
                                 new StringType(),
-                                []
+                                [],
                             ),
                             new ClassConstElement(
                                 15,
@@ -334,7 +334,7 @@ class CodeElementDetectorTest extends TestCase
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                                 'C09',
                                 new StringType(),
-                                []
+                                [],
                             ),
                             new ClassConstElement(
                                 18,
@@ -342,7 +342,7 @@ class CodeElementDetectorTest extends TestCase
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                                 'C10',
                                 new ArrayType(),
-                                []
+                                [],
                             ),
                             new ClassConstElement(
                                 19,
@@ -350,7 +350,7 @@ class CodeElementDetectorTest extends TestCase
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                                 'C11',
                                 new ArrayType(),
-                                []
+                                [],
                             ),
                             new ClassConstElement(
                                 20,
@@ -358,7 +358,7 @@ class CodeElementDetectorTest extends TestCase
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                                 'C12',
                                 null,
-                                []
+                                [],
                             ),
                             new ClassConstElement(
                                 21,
@@ -366,7 +366,7 @@ class CodeElementDetectorTest extends TestCase
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                                 'C13',
                                 null,
-                                []
+                                [],
                             ),
                             new ClassConstElement(
                                 22,
@@ -374,7 +374,7 @@ class CodeElementDetectorTest extends TestCase
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                                 'C14',
                                 new IntType(),
-                                []
+                                [],
                             ),
                         ],
                         [
@@ -384,7 +384,7 @@ class CodeElementDetectorTest extends TestCase
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestClass2',
                                 'prop1',
                                 new UndefinedType(),
-                                new UndefinedType()
+                                new UndefinedType(),
                             ),
                             new ClassPropElement(
                                 24,
@@ -393,14 +393,14 @@ class CodeElementDetectorTest extends TestCase
                                 'prop2',
                                 new UndefinedType(),
                                 new IntType(),
-                                new ClassPropMetadata(true)
+                                new ClassPropMetadata(true),
                             ),
                         ],
-                        []
+                        [],
                     ),
                 ],
                 [],
-                []
+                [],
             ),
         ];
 
@@ -430,11 +430,10 @@ class CodeElementDetectorTest extends TestCase
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestInterface0',
                                 new FunctionSignature(9, 'func1', [], new VoidType(), 9)
                             ),
-                        ]
+                        ],
                     ),
-                ]
+                ],
             ),
-
         ];
 
         // #4
@@ -461,7 +460,7 @@ class CodeElementDetectorTest extends TestCase
                                 'prop1',
                                 new UndefinedType(),
                                 new IntType(),
-                                new TraitPropMetadata(true)
+                                new TraitPropMetadata(true),
                             ),
                         ],
                         [
@@ -477,12 +476,12 @@ class CodeElementDetectorTest extends TestCase
                                     new IntType(),
                                     9
                                 ),
-                                new TraitMethodMetadata([], null, [])
+                                new TraitMethodMetadata([], null, []),
                             ),
-                        ]
+                        ],
                     ),
                 ],
-                []
+                [],
             ),
 
         ];
@@ -514,9 +513,9 @@ class CodeElementDetectorTest extends TestCase
                                     'func0',
                                     [],
                                     new VoidType(),
-                                    7
+                                    7,
                                 ),
-                                new ClassMethodMetadata([], null, [], true)
+                                new ClassMethodMetadata([], null, [], true),
                             ),
                             new ClassMethodElement(
                                 new UndefinedDocBlock(),
@@ -526,9 +525,9 @@ class CodeElementDetectorTest extends TestCase
                                     'func1',
                                     [],
                                     new VoidType(),
-                                    12
+                                    12,
                                 ),
-                                new ClassMethodMetadata([], null, [], true)
+                                new ClassMethodMetadata([], null, [], true),
                             ),
                             new ClassMethodElement(
                                 new UndefinedDocBlock(),
@@ -538,15 +537,15 @@ class CodeElementDetectorTest extends TestCase
                                     'func2',
                                     [],
                                     new UndefinedType(),
-                                    15
+                                    15,
                                 ),
-                                new ClassMethodMetadata([], null, [], false)
+                                new ClassMethodMetadata([], null, [], false),
                             ),
-                        ]
+                        ],
                     ),
                 ],
                 [],
-                []
+                [],
             ),
         ];
 
@@ -574,7 +573,7 @@ class CodeElementDetectorTest extends TestCase
                                 'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestParse0',
                                 'prop1',
                                 new UndefinedType(),
-                                null // failed to parse
+                                null, // failed to parse
                             ),
                         ],
                         [
@@ -586,15 +585,15 @@ class CodeElementDetectorTest extends TestCase
                                     'func1',
                                     [],
                                     new VoidType(),
-                                    7
+                                    7,
                                 ),
-                                new ClassMethodMetadata([], null, [])
+                                new ClassMethodMetadata([], null, []),
                             ),
-                        ]
+                        ],
                     ),
                 ],
                 [],
-                []
+                [],
             ),
 
         ];
@@ -626,17 +625,16 @@ class CodeElementDetectorTest extends TestCase
                                     'func1',
                                     [],
                                     new VoidType(),
-                                    7
+                                    7,
                                 ),
-                                new ClassMethodMetadata([], null, [], false) // ParseError
+                                new ClassMethodMetadata([], null, [], false), // ParseError
                             ),
-                        ]
+                        ],
                     ),
                 ],
                 [],
-                []
+                [],
             ),
-
         ];
 
         // #8
@@ -668,9 +666,9 @@ class CodeElementDetectorTest extends TestCase
                                     'method1',
                                     [],
                                     new VoidType(),
-                                    10
+                                    10,
                                 ),
-                                new ClassMethodMetadata([], null, [])
+                                new ClassMethodMetadata([], null, []),
                             ),
                             new ClassMethodElement(
                                 new DocBlock([], [
@@ -727,15 +725,15 @@ class CodeElementDetectorTest extends TestCase
                                         new FunctionParam(61, 'nullableInt', new NullableType(new IntType()), new UndefinedType(), []),
                                     ],
                                     new UndefinedType(),
-                                    62
+                                    62,
                                 ),
-                                new ClassMethodMetadata([], null, [])
+                                new ClassMethodMetadata([], null, []),
                             ),
-                        ]
+                        ],
                     ),
                 ],
                 [],
-                []
+                [],
             ),
         ];
 
@@ -803,15 +801,15 @@ class CodeElementDetectorTest extends TestCase
                                         new FunctionParam(47, 'arg24', new UndefinedType(), null, []),
                                     ],
                                     new VoidType(),
-                                    48
+                                    48,
                                 ),
-                                new ClassMethodMetadata([], null, [], false)
+                                new ClassMethodMetadata([], null, [], false),
                             ),
-                        ]
+                        ],
                     ),
                 ],
                 [],
-                []
+                [],
             ),
         ];
 
@@ -848,9 +846,9 @@ class CodeElementDetectorTest extends TestCase
                                     '__construct',
                                     [],
                                     new UndefinedType(),
-                                    12
+                                    12,
                                 ),
-                                new ClassMethodMetadata(['prop2', 'prop3', 'prop4'], null, [])
+                                new ClassMethodMetadata(['prop2', 'prop3', 'prop4'], null, []),
                             ),
                             new ClassMethodElement(
                                 new UndefinedDocBlock(),
@@ -860,9 +858,9 @@ class CodeElementDetectorTest extends TestCase
                                     'getProp1',
                                     [],
                                     new IntType(),
-                                    20
+                                    20,
                                 ),
-                                new ClassMethodMetadata([], 'prop1', [])
+                                new ClassMethodMetadata([], 'prop1', []),
                             ),
                             new ClassMethodElement(
                                 new UndefinedDocBlock(),
@@ -872,9 +870,9 @@ class CodeElementDetectorTest extends TestCase
                                     'getProp2',
                                     [],
                                     new IntType(),
-                                    25
+                                    25,
                                 ),
-                                new ClassMethodMetadata([], null, [])
+                                new ClassMethodMetadata([], null, []),
                             ),
                             new ClassMethodElement(
                                 new UndefinedDocBlock(),
@@ -884,9 +882,9 @@ class CodeElementDetectorTest extends TestCase
                                     'getProp3',
                                     [],
                                     new IntType(),
-                                    30
+                                    30,
                                 ),
-                                new ClassMethodMetadata([], 'prop3', [])
+                                new ClassMethodMetadata([], 'prop3', []),
                             ),
                             new ClassMethodElement(
                                 new UndefinedDocBlock(),
@@ -896,9 +894,9 @@ class CodeElementDetectorTest extends TestCase
                                     'getProp4',
                                     [],
                                     new IntType(),
-                                    41
+                                    41,
                                 ),
-                                new ClassMethodMetadata([], null, [])
+                                new ClassMethodMetadata([], null, []),
                             ),
                             new ClassMethodElement(
                                 new UndefinedDocBlock(),
@@ -908,15 +906,15 @@ class CodeElementDetectorTest extends TestCase
                                     'method3',
                                     [],
                                     new VoidType(),
-                                    47
+                                    47,
                                 ),
-                                new ClassMethodMetadata([], null, ['getProp4'])
+                                new ClassMethodMetadata([], null, ['getProp4']),
                             ),
-                        ]
+                        ],
                     ),
                 ],
                 [],
-                []
+                [],
             ),
         ];
 
@@ -947,13 +945,13 @@ class CodeElementDetectorTest extends TestCase
                                     'testMethod',
                                     [],
                                     new UndefinedType(),
-                                    7
+                                    7,
                                 ),
-                                new ClassMethodMetadata([], null, [])
-                            )
-                        ]
-                    )
-                ]
+                                new ClassMethodMetadata([], null, []),
+                            ),
+                        ],
+                    ),
+                ],
             ),
         ];
 
@@ -980,8 +978,8 @@ class CodeElementDetectorTest extends TestCase
                                 'Gskema\TypeSniff\Core\CodeElement\fixtures\TestClass6',
                                 'FOO_CONST',
                                 new IntType(),
-                                ['ConstAttr', 'FooAttribute']
-                            )
+                                ['ConstAttr', 'FooAttribute'],
+                            ),
                         ],
                         [],
                         [
@@ -997,33 +995,33 @@ class CodeElementDetectorTest extends TestCase
                                             'a',
                                             new UndefinedType(),
                                             new UndefinedType(),
-                                            ['FooClassAttribe']
+                                            ['FooClassAttribe'],
                                         ),
                                         new FunctionParam(
                                             18,
                                             'b',
                                             new StringType(),
                                             new UndefinedType(),
-                                            ['FooClassAttribe']
+                                            ['FooClassAttribe'],
                                         ),
                                         new FunctionParam(
                                             19,
                                             'c',
                                             new UndefinedType(),
                                             new UndefinedType(),
-                                            []
+                                            [],
                                         )
                                     ],
                                     new StringType(),
-                                    20
+                                    20,
                                 ),
                                 new ClassMethodMetadata([], null, [], false),
-                                ['SomeoneElse\FooMethodAttribe']
-                            )
+                                ['SomeoneElse\FooMethodAttribe'],
+                            ),
                         ],
                         ['Attribute1']
-                    )
-                ]
+                    ),
+                ],
             ),
         ];
 

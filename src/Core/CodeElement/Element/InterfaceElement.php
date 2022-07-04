@@ -26,7 +26,7 @@ class InterfaceElement extends AbstractFqcnElement
         string $fqcn,
         array $constants = [],
         array $methods = [],
-        array $attributeNames = []
+        array $attributeNames = [],
     ) {
         parent::__construct($line, $docBlock, $fqcn, $attributeNames);
         $this->constants = $constants;

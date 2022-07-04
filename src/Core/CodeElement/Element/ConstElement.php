@@ -34,7 +34,7 @@ class ConstElement implements CodeElementInterface
         string $namespace,
         string $name,
         ?TypeInterface $valueType,
-        array $attributeNames
+        array $attributeNames,
     ) {
         $this->line = $line;
         $this->docBlock = $docBlock;

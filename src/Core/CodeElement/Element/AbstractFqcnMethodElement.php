@@ -22,7 +22,7 @@ abstract class AbstractFqcnMethodElement extends AbstractFqcnElement
         DocBlock $docBlock,
         string $fqcn,
         FunctionSignature $signature,
-        array $attributeNames
+        array $attributeNames,
     ) {
         parent::__construct($signature->getLine(), $docBlock, $fqcn, $attributeNames);
         $this->signature = $signature;

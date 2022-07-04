@@ -30,7 +30,7 @@ class FunctionElement implements CodeElementInterface
         DocBlock $docBlock,
         string $namespace,
         FunctionSignature $signature,
-        array $attributeNames
+        array $attributeNames,
     ) {
         $this->line = $line;
         $this->docBlock = $docBlock;

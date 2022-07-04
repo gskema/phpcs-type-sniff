@@ -63,7 +63,7 @@ class TypeConverterTest extends TestCase
      */
     public function testToExampleDocType(
         TypeInterface $givenFnType,
-        ?TypeInterface $expectedExampleDocType
+        ?TypeInterface $expectedExampleDocType,
     ): void {
         $actualExampleDocType = TypeConverter::toExampleDocType($givenFnType);
 
@@ -92,7 +92,7 @@ class TypeConverterTest extends TestCase
                 new CompoundType([
                     new TypedArrayType(new StringType(), 1),
                     new FalseType(),
-                    new NullType()
+                    new NullType(),
                 ]),
                 null,
             ],
@@ -109,7 +109,7 @@ class TypeConverterTest extends TestCase
                     new TypedArrayType(new StringType(), 1),
                     new TypedArrayType(new IntType(), 2),
                     new ArrayType(),
-                    new NullType()
+                    new NullType(),
                 ]),
                 new NullableType(new ArrayType()),
             ],
@@ -153,7 +153,7 @@ class TypeConverterTest extends TestCase
     public function testToExampleFnType(
         TypeInterface $givenDocType,
         ?TypeInterface $expectedFnType,
-        bool $givenIsProp = false
+        bool $givenIsProp = false,
     ): void {
         $actualFnType = TypeConverter::toExampleFnType($givenDocType, $givenIsProp);
 

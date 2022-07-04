@@ -28,7 +28,7 @@ class PropTypeSubject extends AbstractTypeSubject
             'property $' . $prop->getPropName(),
             $docBlock,
             $prop->getAttributeNames(),
-            $prop->getFqcn() . '::' . $prop->getPropName()
+            $prop->getFqcn() . '::' . $prop->getPropName(),
         );
     }
 }

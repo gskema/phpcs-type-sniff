@@ -225,7 +225,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
     protected function reportNullableBasicGetter(
         ReturnTypeSubject $subject,
         ClassMethodElement $method,
-        ClassElement $class
+        ClassElement $class,
     ): void {
         $propName = $method->getMetadata()->getBasicGetterPropName();
         if (null === $propName) {
@@ -256,7 +256,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
                 $subject->addDocTypeWarning(sprintf(
                     'Returned property $%s is nullable, add null return doc type, e.g. %s',
                     $propName,
-                    $propDocType->toString()
+                    $propDocType->toString(),
                 ));
             }
         }
@@ -267,7 +267,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
             $subject->addFnTypeWarning(sprintf(
                 'Returned property $%s is nullable, use nullable return type declaration, e.g. ?%s',
                 $propName,
-                $returnFnType->toString()
+                $returnFnType->toString(),
             ));
         }
     }

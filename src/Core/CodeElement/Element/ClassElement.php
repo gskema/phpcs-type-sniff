@@ -35,7 +35,7 @@ class ClassElement extends AbstractFqcnElement
         array $constants = [],
         array $properties = [],
         array $methods = [],
-        array $attributeNames = []
+        array $attributeNames = [],
     ) {
         parent::__construct($line, $docBlock, $fqcn, $attributeNames);
         $this->extended = $extended;

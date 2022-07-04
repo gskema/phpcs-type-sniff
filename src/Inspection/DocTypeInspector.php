@@ -33,7 +33,7 @@ class DocTypeInspector
                 '%s typed array type hint for :subject:, .e.g.: "string[]%s" or "SomeClass[]%s". Correct array depth must be specified.',
                 $subject->hasDefinedDocBlock() ? 'Add' : 'Create PHPDoc with',
                 $isNullable ? '|null' : '',
-                $isNullable ? '|null' : ''
+                $isNullable ? '|null' : '',
             ));
 
             return; // exit
@@ -94,14 +94,14 @@ class DocTypeInspector
             $subject->addDocTypeWarning(sprintf(
                 'Replace nullable type "%s" with compound type with null "%s" for :subject:.',
                 $docType->toString(),
-                str_replace('?', '', $docType->toString()) . '|null' // @TODO Not ideal
+                str_replace('?', '', $docType->toString()) . '|null', // @TODO Not ideal
             ));
         }
 
         // e.g. @param array $arg1 -> @param int[] $arg1
         if (TypeHelper::containsType($docType, ArrayType::class)) {
             $subject->addDocTypeWarning(
-                'Replace array type with typed array type in PHPDoc for :subject:, .e.g.: "string[]" or "SomeClass[]". Use mixed[] for generic arrays. Correct array depth must be specified.'
+                'Replace array type with typed array type in PHPDoc for :subject:, .e.g.: "string[]" or "SomeClass[]". Use mixed[] for generic arrays. Correct array depth must be specified.',
             );
         }
 
@@ -109,7 +109,7 @@ class DocTypeInspector
         if ($fakeType = TypeHelper::getFakeTypedArrayType($docType)) {
             $subject->addDocTypeWarning(sprintf(
                 'Use a more specific type in typed array hint "%s" for :subject:. Correct array depth must be specified.',
-                $fakeType->toString()
+                $fakeType->toString(),
             ));
         }
     }
@@ -178,7 +178,7 @@ class DocTypeInspector
             $subject->getDocType(),
             $subject->getFnType(),
             $subject->getValueType(),
-            $isProp
+            $isProp,
         );
 
         if ($isProp && !$subject->hasDefinedFnType()) {
@@ -191,7 +191,7 @@ class DocTypeInspector
                 'Type %s "%s" %s not compatible with :subject: value type',
                 isset($wrongDocTypes[1]) ? 'hints' : 'hint',
                 TypeHelper::listRawTypes($wrongDocTypes),
-                isset($wrongDocTypes[1]) ? 'are' : 'is'
+                isset($wrongDocTypes[1]) ? 'are' : 'is',
             ));
         }
 
@@ -199,7 +199,7 @@ class DocTypeInspector
             $subject->addDocTypeWarning(sprintf(
                 'Missing "%s" %s in :subject: type hint',
                 TypeHelper::listRawTypes($missingDocTypes),
-                isset($missingDocTypes[1]) ? 'types' : 'type'
+                isset($missingDocTypes[1]) ? 'types' : 'type',
             ));
         }
     }

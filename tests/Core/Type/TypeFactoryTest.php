@@ -75,8 +75,8 @@ class TypeFactoryTest extends TestCase
                 new CompoundType([
                     new TypedArrayType(new StringType(), 1),
                     new IntType(),
-                    new NullType()
-                ])
+                    new NullType(),
+                ]),
             ],
             [
                 'string|NodeList|Node|(Node|Location)[]',
@@ -87,19 +87,19 @@ class TypeFactoryTest extends TestCase
                     new TypedArrayType(new CompoundType([
                         new FqcnType('Node'),
                         new FqcnType('Location')
-                    ]), 1)
-                ])
+                    ]), 1),
+                ]),
             ],
             [
                 'array<string,array<string,string>>|\Zend\ServiceManager\Config',
                 new CompoundType([
                     new TypedArrayType(new MixedType(), 1),
-                    new FqcnType('\Zend\ServiceManager\Config')
-                ])
+                    new FqcnType('\Zend\ServiceManager\Config'),
+                ]),
             ],
             [
                 'array<string,array<string,(int[]|string)[])>>',
-                new TypedArrayType(new MixedType(), 1)
+                new TypedArrayType(new MixedType(), 1),
             ],
             [
                 '(int[]|string)[]|null',
@@ -108,19 +108,19 @@ class TypeFactoryTest extends TestCase
                         new TypedArrayType(new IntType(), 1),
                         new StringType(),
                     ]), 1),
-                    new NullType()
+                    new NullType(),
                 ])
             ],
             [
                 'array<int>|',
-                new TypedArrayType(new MixedType(), 1)
+                new TypedArrayType(new MixedType(), 1),
             ],
             [
                 '((bool|int)[][]|(string|float)[])[]',
                 new TypedArrayType(new CompoundType([
                     new TypedArrayType(new CompoundType([new BoolType(), new IntType()]), 2), // (bool|int)[][]
                     new TypedArrayType(new CompoundType([new StringType(), new FloatType()]), 1), // (string|float)[]
-                ]), 1)
+                ]), 1),
             ],
             ['[]', new TypedArrayType(new UndefinedType(), 1)],
             ['[][]', new TypedArrayType(new UndefinedType(), 2)],
@@ -129,7 +129,7 @@ class TypeFactoryTest extends TestCase
                 new CompoundType([
                     new TypedArrayType(new UndefinedType(), 1),
                     new NullType(),
-                ])
+                ]),
             ],
         ];
     }
@@ -179,7 +179,7 @@ class TypeFactoryTest extends TestCase
      */
     public function testSplit(
         string $givenTagBody,
-        array $expectedSplit
+        array $expectedSplit,
     ): void {
         $proxy = new class extends TypeFactory {
             public static function doSplit(string $tagBody): array

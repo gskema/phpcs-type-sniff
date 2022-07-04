@@ -29,7 +29,7 @@ class FqcnMethodSniffTest extends TestCase
             new ClassMethodElement(
                 new DocBlock([], [
                     new ParamTag(1, new IntType(), 'param1', null),
-                    new ReturnTag(2, new VoidType(), null)
+                    new ReturnTag(2, new VoidType(), null),
                 ]),
                 '',
                 new FunctionSignature(
@@ -39,9 +39,9 @@ class FqcnMethodSniffTest extends TestCase
                         new FunctionParam(3, 'param1', new IntType(), new UndefinedType(), []),
                     ],
                     new VoidType(),
-                    5
+                    5,
                 ),
-                null
+                null,
             ),
             true,
         ];
@@ -50,7 +50,7 @@ class FqcnMethodSniffTest extends TestCase
         $dataSets[] = [
             new ClassMethodElement(
                 new DocBlock([], [
-                    new ReturnTag(2, new VoidType(), null)
+                    new ReturnTag(2, new VoidType(), null),
                 ]),
                 '',
                 new FunctionSignature(
@@ -60,9 +60,9 @@ class FqcnMethodSniffTest extends TestCase
                         new FunctionParam(3, 'param1', new IntType(), new UndefinedType(), []),
                     ],
                     new VoidType(),
-                    5
+                    5,
                 ),
-                null
+                null,
             ),
             false,
         ];
@@ -72,7 +72,7 @@ class FqcnMethodSniffTest extends TestCase
             new ClassMethodElement(
                 new DocBlock([0 => 'description1'], [
                     new ParamTag(1, new IntType(), 'param1', null),
-                    new ReturnTag(2, new VoidType(), null)
+                    new ReturnTag(2, new VoidType(), null),
                 ]),
                 '',
                 new FunctionSignature(
@@ -82,9 +82,9 @@ class FqcnMethodSniffTest extends TestCase
                         new FunctionParam(3, 'param1', new IntType(), new UndefinedType(), []),
                     ],
                     new VoidType(),
-                    5
+                    5,
                 ),
-                null
+                null,
             ),
             false,
         ];
@@ -94,7 +94,7 @@ class FqcnMethodSniffTest extends TestCase
             new ClassMethodElement(
                 new DocBlock([], [
                     new ParamTag(1, new IntType(), 'param1', 'desc1'),
-                    new ReturnTag(2, new VoidType(), null)
+                    new ReturnTag(2, new VoidType(), null),
                 ]),
                 '',
                 new FunctionSignature(
@@ -104,9 +104,9 @@ class FqcnMethodSniffTest extends TestCase
                         new FunctionParam(3, 'param1', new IntType(), new UndefinedType(), []),
                     ],
                     new VoidType(),
-                    5
+                    5,
                 ),
-                null
+                null,
             ),
             false,
         ];
@@ -116,7 +116,7 @@ class FqcnMethodSniffTest extends TestCase
             new ClassMethodElement(
                 new DocBlock([], [
                     new ParamTag(1, new IntType(), 'param1', 'desc1'),
-                    new ReturnTag(2, new IntType(), null)
+                    new ReturnTag(2, new IntType(), null),
                 ]),
                 '',
                 new FunctionSignature(
@@ -126,9 +126,9 @@ class FqcnMethodSniffTest extends TestCase
                         new FunctionParam(3, 'param1', new IntType(), new UndefinedType(), []),
                     ],
                     new VoidType(),
-                    5
+                    5,
                 ),
-                null
+                null,
             ),
             false,
         ];
@@ -144,7 +144,7 @@ class FqcnMethodSniffTest extends TestCase
      */
     public function testHasUselessDocBlock(
         AbstractFqcnMethodElement $givenMethod,
-        bool $expectedResult
+        bool $expectedResult,
     ): void {
         $sniff = new class extends FqcnMethodSniff {
             public function hasUselessDocBlockPublic(AbstractFqcnMethodElement $method): bool

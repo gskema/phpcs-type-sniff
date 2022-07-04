@@ -421,7 +421,7 @@ class CompositeCodeElementSniffTest extends TestCase
     public function testProcess(
         array $givenConfig,
         string $givenPath,
-        array $expectedWarnings
+        array $expectedWarnings,
     ): void {
         static::assertFileExists($givenPath);
 

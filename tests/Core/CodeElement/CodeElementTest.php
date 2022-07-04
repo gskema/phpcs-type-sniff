@@ -42,7 +42,7 @@ class CodeElementTest extends TestCase
             'FQCN3',
             $this->createSignature(),
             new ClassMethodMetadata(['prop1', 'prop2'], 'prop3', ['method'], false),
-            ['a']
+            ['a'],
         );
         $classMethod->getMetadata()->setExtended(false);
         self::assertEquals(3, $classMethod->getLine());
@@ -166,7 +166,7 @@ class CodeElementTest extends TestCase
             'method1',
             [new FunctionParam(20, 'arg1', new UndefinedType(), new UndefinedType(), [])],
             new StringType(),
-            20
+            20,
         );
     }
 

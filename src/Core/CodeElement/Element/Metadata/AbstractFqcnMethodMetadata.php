@@ -24,7 +24,7 @@ abstract class AbstractFqcnMethodMetadata
         ?array $nonNullAssignedProps = null,
         ?string $basicGetterPropName = null,
         ?array $thisMethodCalls = null,
-        ?bool $extended = null
+        ?bool $extended = null,
     ) {
         $this->nonNullAssignedProps = $nonNullAssignedProps;
         $this->basicGetterPropName = $basicGetterPropName;

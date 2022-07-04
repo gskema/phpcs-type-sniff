@@ -43,7 +43,7 @@ class DocBlockParserTest extends TestCase
                     new ParamTag(10, new IntType(), 'param1', 'ParamDesc SecondLine'),
                     new GenericTag(12, 'inheritdoc', null),
                     new ReturnTag(14, new ArrayType(), null),
-                ]
+                ],
             ),
             'expectedException' => null,
         ];
@@ -56,7 +56,7 @@ class DocBlockParserTest extends TestCase
                 [],
                 [
                     new VarTag(17, new IntType(), null, 'SomeDesc'),
-                ]
+                ],
             ),
             'expectedException' => null,
         ];
@@ -72,9 +72,9 @@ class DocBlockParserTest extends TestCase
                         19,
                         new TypedArrayType(new StringType(), 1),
                         'inlineVar',
-                        'Desc1'
+                        'Desc1',
                     ),
-                ]
+                ],
             ),
             'expectedException' => null,
         ];
@@ -99,7 +99,7 @@ class DocBlockParserTest extends TestCase
                         34,
                         new CompoundType([new TypedArrayType(new StringType(), 1), new IntType()]),
                         'param2',
-                        null
+                        null,
                     ),
                     new GenericTag(35, 'deprecated', null),
                     new GenericTag(36, 'inheritdoc', null),
@@ -126,7 +126,7 @@ class DocBlockParserTest extends TestCase
         string $givenPath,
         array $givenPointers,
         ?DocBlock $expectedDocBlock,
-        ?string $expectedException
+        ?string $expectedException,
     ): void {
         $givenFile = new LocalFile($givenPath, new Ruleset(new Config()), new Config());
         $givenFile->parse();
@@ -161,7 +161,7 @@ class DocBlockParserTest extends TestCase
             'givenStartLine'    => 2,
             'expectedDocBlock'  => new DocBlock(
                 [],
-                [new GenericTag(2, 'smarttemplate', '()')]
+                [new GenericTag(2, 'smarttemplate', '()')],
             ),
             'expectedException' => null,
         ];
@@ -172,7 +172,7 @@ class DocBlockParserTest extends TestCase
             'givenStartLine'    => 2,
             'expectedDocBlock'  => new DocBlock(
                 [],
-                [new VarTag(2, new IntType(), null, null)]
+                [new VarTag(2, new IntType(), null, null)],
             ),
             'expectedException' => null,
         ];
@@ -191,7 +191,7 @@ class DocBlockParserTest extends TestCase
                 [
                     new GenericTag(3, 'route', '("/{id}", name="blog_post", requirements = {"id" = "\d+"})'),
                     new GenericTag(4, 'param-converter', '("user", class="AcmeBlogBundle:User", options={ "repository_method" = "findByFullName" })'),
-                ]
+                ],
             ),
             'expectedException' => null,
         ];
@@ -216,7 +216,7 @@ class DocBlockParserTest extends TestCase
                         new NullType(),
                     ]), 'Description option dsa asd'),
                     new ReturnTag(5, new IntType(), null),
-                ]
+                ],
             ),
             'expectedException' => null,
         ];
@@ -241,7 +241,7 @@ class DocBlockParserTest extends TestCase
                         new NullType(),
                     ]), null, 'Description option dsa asd'),
                     new VarTag(5, new IntType(), null, null),
-                ]
+                ],
             ),
             'expectedException' => null,
         ];
@@ -261,7 +261,7 @@ class DocBlockParserTest extends TestCase
         string $givenRawDocBlock,
         int $givenStartLine,
         ?DocBlock $expectedDocBlock,
-        ?string $expectedException
+        ?string $expectedException,
     ): void {
         if (null !== $expectedException) {
             $this->expectException($expectedException);

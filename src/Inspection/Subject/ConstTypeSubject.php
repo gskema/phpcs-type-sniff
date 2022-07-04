@@ -28,7 +28,7 @@ class ConstTypeSubject extends AbstractTypeSubject
         string $name,
         DocBlock $docBlock,
         array $attributeNames,
-        string $id
+        string $id,
     ) {
         parent::__construct(
             $docType,
@@ -39,7 +39,7 @@ class ConstTypeSubject extends AbstractTypeSubject
             $name,
             $docBlock,
             $attributeNames,
-            $id
+            $id,
         );
     }
 
@@ -63,7 +63,7 @@ class ConstTypeSubject extends AbstractTypeSubject
             $const->getConstName() . ' constant',
             $docBlock,
             $const->getAttributeNames(),
-            $const->getFqcn() . '::' . $const->getConstName()
+            $const->getFqcn() . '::' . $const->getConstName(),
         );
     }
 }

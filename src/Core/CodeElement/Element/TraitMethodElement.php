@@ -22,7 +22,7 @@ class TraitMethodElement extends AbstractFqcnMethodElement
         string $fqcn,
         FunctionSignature $signature,
         ?TraitMethodMetadata $metadata = null,
-        array $attributeNames = []
+        array $attributeNames = [],
     ) {
         parent::__construct($docBlock, $fqcn, $signature, $attributeNames);
         $this->metadata = $metadata ?? new TraitMethodMetadata();

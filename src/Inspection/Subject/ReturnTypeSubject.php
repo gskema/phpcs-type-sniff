@@ -28,7 +28,7 @@ class ReturnTypeSubject extends AbstractTypeSubject
         string $name,
         DocBlock $docBlock,
         array $attributeNames,
-        string $id
+        string $id,
     ) {
         parent::__construct(
             $docType,
@@ -39,7 +39,7 @@ class ReturnTypeSubject extends AbstractTypeSubject
             $name,
             $docBlock,
             $attributeNames,
-            $id
+            $id,
         );
     }
 
@@ -57,7 +57,7 @@ class ReturnTypeSubject extends AbstractTypeSubject
         ?ReturnTag $returnTag,
         DocBlock $docBlock,
         array $attributeNames,
-        string $id
+        string $id,
     ): static {
         return new static(
             $returnTag ? $returnTag->getType() : null,
@@ -67,7 +67,7 @@ class ReturnTypeSubject extends AbstractTypeSubject
             'return value',
             $docBlock,
             $attributeNames,
-            $id
+            $id,
         );
     }
 }

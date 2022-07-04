@@ -63,7 +63,7 @@ class TypeTest extends TestCase
         self::assertEquals(
             '(int|string)[]',
             (new TypedArrayType(new CompoundType([new StringType(), new IntType()]), 1))
-                ->toString()
+                ->toString(),
         );
 
         self::assertEquals('double', (new DoubleType())->toString());

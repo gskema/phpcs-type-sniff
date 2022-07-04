@@ -48,7 +48,7 @@ class FileElement implements CodeElementInterface
         array $functions = [],
         array $classes = [],
         array $traits = [],
-        array $interfaces = []
+        array $interfaces = [],
     ) {
         $this->line = $line;
         $this->docBlock = $docBlock;

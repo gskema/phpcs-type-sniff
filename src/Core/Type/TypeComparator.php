@@ -109,7 +109,7 @@ class TypeComparator
         TypeInterface $docType,
         TypeInterface $fnType,
         ?TypeInterface $valueType,
-        bool $isProp
+        bool $isProp,
     ): array {
         $docTypeDefined = !($docType instanceof UndefinedType);
         $fnTypeDefined = !($fnType instanceof UndefinedType);

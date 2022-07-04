@@ -93,7 +93,7 @@ class TypeComparatorTest extends TestCase
         string $givenRawFnType,
         ?string $givenRawValueType,
         string $expectedWrongRawDocTypes,
-        string $expectedMissingRawDocTypes
+        string $expectedMissingRawDocTypes,
     ): void {
         $givenDocType = TypeFactory::fromRawType($givenRawDocType);
         $givenFnType = TypeFactory::fromRawType($givenRawFnType);

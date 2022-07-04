@@ -48,7 +48,7 @@ class ConstTypeSubject extends AbstractTypeSubject
      *
      * @return static
      */
-    public static function fromElement(AbstractFqcnConstElement $const)
+    public static function fromElement(AbstractFqcnConstElement $const): static
     {
         $docBlock = $const->getDocBlock();
 

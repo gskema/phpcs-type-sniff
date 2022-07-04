@@ -58,7 +58,7 @@ class ReturnTypeSubject extends AbstractTypeSubject
         DocBlock $docBlock,
         array $attributeNames,
         string $id
-    ) {
+    ): static {
         return new static(
             $returnTag ? $returnTag->getType() : null,
             $fnSig->getReturnType(),

@@ -12,7 +12,7 @@ class PropTypeSubject extends AbstractTypeSubject
      *
      * @return static
      */
-    public static function fromElement(AbstractFqcnPropElement $prop)
+    public static function fromElement(AbstractFqcnPropElement $prop): static
     {
         $docBlock = $prop->getDocBlock();
 

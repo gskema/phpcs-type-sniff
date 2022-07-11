@@ -32,6 +32,7 @@ class FqcnMethodSniffTest extends TestCase
                     new ReturnTag(2, new VoidType(), null),
                 ]),
                 '',
+                [],
                 new FunctionSignature(
                     4,
                     'func1',
@@ -53,6 +54,7 @@ class FqcnMethodSniffTest extends TestCase
                     new ReturnTag(2, new VoidType(), null),
                 ]),
                 '',
+                [],
                 new FunctionSignature(
                     4,
                     'func1',
@@ -75,6 +77,7 @@ class FqcnMethodSniffTest extends TestCase
                     new ReturnTag(2, new VoidType(), null),
                 ]),
                 '',
+                [],
                 new FunctionSignature(
                     4,
                     'func1',
@@ -97,6 +100,7 @@ class FqcnMethodSniffTest extends TestCase
                     new ReturnTag(2, new VoidType(), null),
                 ]),
                 '',
+                [],
                 new FunctionSignature(
                     4,
                     'func1',
@@ -119,6 +123,7 @@ class FqcnMethodSniffTest extends TestCase
                     new ReturnTag(2, new IntType(), null),
                 ]),
                 '',
+                [],
                 new FunctionSignature(
                     4,
                     'func1',

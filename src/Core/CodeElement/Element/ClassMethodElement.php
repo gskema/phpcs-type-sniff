@@ -16,11 +16,11 @@ class ClassMethodElement extends AbstractFqcnMethodElement
     public function __construct(
         DocBlock $docBlock,
         string $fqcn,
+        array $attributeNames,
         FunctionSignature $signature,
         ?ClassMethodMetadata $metadata = null,
-        array $attributeNames = [],
     ) {
-        parent::__construct($docBlock, $fqcn, $signature, $attributeNames);
+        parent::__construct($docBlock, $fqcn, $attributeNames, $signature);
         $this->metadata = $metadata ?? new ClassMethodMetadata();
     }
 

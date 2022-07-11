@@ -13,7 +13,7 @@ class FunctionSignature
         protected int $line,
         protected string $name,
         /** @var FunctionParam[] */
-        protected array $params = [],
+        protected array $params,
         protected TypeInterface $returnType,
         protected int $returnLine,
     ) {

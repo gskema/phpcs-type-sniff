@@ -14,10 +14,10 @@ abstract class AbstractFqcnPropElement extends AbstractFqcnElement
         int $line,
         DocBlock $docBlock,
         string $fqcn,
+        array $attributeNames,
         protected string $propName,
         protected TypeInterface $type,
         protected ?TypeInterface $defaultValueType,
-        array $attributeNames,
     ) {
         parent::__construct($line, $docBlock, $fqcn, $attributeNames);
     }

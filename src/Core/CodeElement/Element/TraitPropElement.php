@@ -17,13 +17,13 @@ class TraitPropElement extends AbstractFqcnPropElement
         int $line,
         DocBlock $docBlock,
         string $fqcn,
+        array $attributeNames,
         string $propName,
         TypeInterface $type,
         ?TypeInterface $defaultValueType,
         ?TraitPropMetadata $metadata = null,
-        array $attributeNames = [],
     ) {
-        parent::__construct($line, $docBlock, $fqcn, $propName, $type, $defaultValueType, $attributeNames);
+        parent::__construct($line, $docBlock, $fqcn, $attributeNames, $propName, $type, $defaultValueType);
         $this->metadata = $metadata ?? new TraitPropMetadata();
     }
 

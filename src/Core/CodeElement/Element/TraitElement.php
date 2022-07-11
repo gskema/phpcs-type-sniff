@@ -6,27 +6,23 @@ use Gskema\TypeSniff\Core\DocBlock\DocBlock;
 
 class TraitElement extends AbstractFqcnElement
 {
-    /** @var TraitPropElement[] */
-    protected array $properties = [];
-
     /** @var TraitMethodElement[] */
     protected array $methods = [];
 
     /**
-     * @param TraitPropElement[]   $properties
-     * @param TraitMethodElement[] $methods
      * @param string[]             $attributeNames
+     * @param TraitMethodElement[] $methods
      */
     public function __construct(
         int $line,
         DocBlock $docBlock,
         string $fqcn,
-        array $properties = [],
-        array $methods = [],
         array $attributeNames = [],
+        /** @var TraitPropElement[] */
+        protected array $properties = [],
+        array $methods = [],
     ) {
         parent::__construct($line, $docBlock, $fqcn, $attributeNames);
-        $this->properties = $properties;
         array_walk($methods, [$this, 'addMethod']);
     }
 

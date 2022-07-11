@@ -6,13 +6,10 @@ use Gskema\TypeSniff\Core\DocBlock\DocBlock;
 
 class ClassElement extends AbstractFqcnElement
 {
-    /** @var ClassConstElement[] */
-    protected array $constants = [];
     /** @var ClassPropElement[] */
     protected array $properties = [];
     /** @var ClassMethodElement[] */
     protected array $methods = [];
-    protected bool $extended;
 
     /**
      * @param ClassConstElement[]  $constants
@@ -24,15 +21,14 @@ class ClassElement extends AbstractFqcnElement
         int $line,
         DocBlock $docBlock,
         string $fqcn,
-        bool $extended,
-        array $constants = [],
+        array $attributeNames,
+        protected bool $extended,
+        /** @var ClassConstElement[] */
+        protected array $constants = [],
         array $properties = [],
         array $methods = [],
-        array $attributeNames = [],
     ) {
         parent::__construct($line, $docBlock, $fqcn, $attributeNames);
-        $this->extended = $extended;
-        $this->constants = $constants;
         array_walk($properties, [$this, 'addProperty']);
         array_walk($methods, [$this, 'addMethod']);
     }

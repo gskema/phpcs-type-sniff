@@ -16,11 +16,11 @@ class InterfaceMethodElement extends AbstractFqcnMethodElement
     public function __construct(
         DocBlock $docBlock,
         string $fqcn,
+        array $attributeNames,
         FunctionSignature $signature,
         ?InterfaceMethodMetadata $metadata = null,
-        array $attributeNames = [],
     ) {
-        parent::__construct($docBlock, $fqcn, $signature, $attributeNames);
+        parent::__construct($docBlock, $fqcn, $attributeNames, $signature);
         $this->metadata = $metadata ?? new InterfaceMethodMetadata();
     }
 

@@ -17,13 +17,13 @@ class ClassPropElement extends AbstractFqcnPropElement
         int $line,
         DocBlock $docBlock,
         string $fqcn,
+        array $attributeNames,
         string $propName,
         TypeInterface $type,
         ?TypeInterface $defaultValueType,
         ?ClassPropMetadata $metadata = null,
-        array $attributeNames = [],
     ) {
-        parent::__construct($line, $docBlock, $fqcn, $propName, $type, $defaultValueType, $attributeNames);
+        parent::__construct($line, $docBlock, $fqcn, $attributeNames, $propName, $type, $defaultValueType);
         $this->metadata = $metadata ?? new ClassPropMetadata();
     }
 

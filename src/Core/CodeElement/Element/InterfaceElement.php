@@ -10,11 +10,11 @@ class InterfaceElement extends AbstractFqcnElement
         int $line,
         DocBlock $docBlock,
         string $fqcn,
+        array $attributeNames = [],
         /** @var InterfaceConstElement[] */
         protected array $constants = [],
         /** @var InterfaceMethodElement[] */
         protected array $methods = [],
-        array $attributeNames = [],
     ) {
         parent::__construct($line, $docBlock, $fqcn, $attributeNames);
     }

@@ -28,7 +28,7 @@ abstract class AbstractTypeSubject
         protected string $name, // "parameter $param1", "property $prop1", "constant CONST1"
         protected DocBlock $docBlock,
         /** @var string[] */
-        protected array $attributeNames = [],
+        protected array $attributeNames,
         protected string $id, // TestClass::method1(), etc.
     ) {
     }

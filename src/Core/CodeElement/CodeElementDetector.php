@@ -110,7 +110,7 @@ class CodeElementDetector
                         $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
                         $attrNames = TokenHelper::getPrevAttributeNames($file, $ptr);
                         $extended = TokenHelper::isClassExtended($file, $ptr);
-                        $currentElement = new ClassElement($line, $docBlock, $fqcn, $extended);
+                        $currentElement = new ClassElement($line, $docBlock, $fqcn, [], $extended);
                         $currentElement->setAttributeNames($attrNames);
                         $fileElement->addClass($currentElement);
                         $parentElement = $currentElement;
@@ -139,7 +139,7 @@ class CodeElementDetector
                         $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
                         $attrNames = TokenHelper::getPrevAttributeNames($file, $ptr);
                         [$valueType,] = TokenHelper::getAssignmentType($file, $ptr);
-                        $currentElement = new ClassConstElement($line, $docBlock, $fqcn, $decName, $valueType, $attrNames);
+                        $currentElement = new ClassConstElement($line, $docBlock, $fqcn, $attrNames, $decName, $valueType);
                         $parentElement->addConstant($currentElement);
                         break;
                     case T_VARIABLE:
@@ -147,7 +147,7 @@ class CodeElementDetector
                         $attrNames = TokenHelper::getPrevPropAttributeNames($file, $ptr);
                         $declType = TokenHelper::getPropDeclarationType($file, $ptr);
                         [$defValueType, $hasDefValue] = TokenHelper::getAssignmentType($file, $ptr);
-                        $currentElement = new ClassPropElement($line, $docBlock, $fqcn, $decName, $declType, $defValueType);
+                        $currentElement = new ClassPropElement($line, $docBlock, $fqcn, [], $decName, $declType, $defValueType);
                         $currentElement->setAttributeNames($attrNames);
                         $currentElement->getMetadata()->setHasDefaultValue($hasDefValue);
                         $parentElement->addProperty($currentElement);
@@ -157,7 +157,7 @@ class CodeElementDetector
                         $fnSig = FunctionSignatureParser::fromTokens($file, $ptr);
                         $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
                         $attrNames = TokenHelper::getPrevAttributeNames($file, $ptr);
-                        $currentElement = new ClassMethodElement($docBlock, $fqcn, $fnSig);
+                        $currentElement = new ClassMethodElement($docBlock, $fqcn, [], $fnSig);
                         $currentElement->setAttributeNames($attrNames);
                         $currentElement->getMetadata()->setExtended($extended);
                         $currentElement->getMetadata()->setBasicGetterPropName(TokenHelper::getBasicGetterPropName($file, $ptr));
@@ -174,7 +174,7 @@ class CodeElementDetector
                         $attrNames = TokenHelper::getPrevPropAttributeNames($file, $ptr);
                         $declType = TokenHelper::getPropDeclarationType($file, $ptr);
                         [$defValueType, $hasDefValue] = TokenHelper::getAssignmentType($file, $ptr);
-                        $currentElement = new TraitPropElement($line, $docBlock, $fqcn, $decName, $declType, $defValueType);
+                        $currentElement = new TraitPropElement($line, $docBlock, $fqcn, [], $decName, $declType, $defValueType);
                         $currentElement->setAttributeNames($attrNames);
                         $currentElement->getMetadata()->setHasDefaultValue($hasDefValue);
                         $parentElement->addProperty($currentElement);
@@ -184,7 +184,7 @@ class CodeElementDetector
                         $fnSig = FunctionSignatureParser::fromTokens($file, $ptr);
                         $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
                         $attrNames = TokenHelper::getPrevAttributeNames($file, $ptr);
-                        $currentElement = new TraitMethodElement($docBlock, $fqcn, $fnSig);
+                        $currentElement = new TraitMethodElement($docBlock, $fqcn, [], $fnSig);
                         $currentElement->setAttributeNames($attrNames);
                         $currentElement->getMetadata()->setExtended($extended);
                         $currentElement->getMetadata()->setBasicGetterPropName(TokenHelper::getBasicGetterPropName($file, $ptr));
@@ -200,7 +200,7 @@ class CodeElementDetector
                         $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
                         $attrNames = TokenHelper::getPrevAttributeNames($file, $ptr);
                         [$valueType,] = TokenHelper::getAssignmentType($file, $ptr);
-                        $currentElement = new InterfaceConstElement($line, $docBlock, $fqcn, $decName, $valueType, $attrNames);
+                        $currentElement = new InterfaceConstElement($line, $docBlock, $fqcn, $attrNames, $decName, $valueType);
                         $parentElement->addConstant($currentElement);
                         break;
                     case T_FUNCTION:
@@ -208,7 +208,7 @@ class CodeElementDetector
                         $fnSig = FunctionSignatureParser::fromTokens($file, $ptr);
                         $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
                         $attrNames = TokenHelper::getPrevAttributeNames($file, $ptr);
-                        $currentElement = new InterfaceMethodElement($docBlock, $fqcn, $fnSig);
+                        $currentElement = new InterfaceMethodElement($docBlock, $fqcn, [], $fnSig);
                         $currentElement->setAttributeNames($attrNames);
                         $currentElement->getMetadata()->setExtended($extended);
                         $parentElement->addMethod($currentElement);

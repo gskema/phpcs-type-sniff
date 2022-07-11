@@ -29,7 +29,7 @@ class CodeElementTest extends TestCase
 {
     public function test(): void
     {
-        $classConst = new ClassConstElement(1, $this->createDocBlock(), 'FQCN1', 'CONST1', new IntType(), ['aaa']);
+        $classConst = new ClassConstElement(1, $this->createDocBlock(), 'FQCN1', ['aaa'], 'CONST1', new IntType());
         self::assertEquals('CONST1', $classConst->getConstName());
         self::assertEquals('FQCN1', $classConst->getFqcn());
         self::assertEquals($this->createDocBlock(), $classConst->getDocBlock());
@@ -40,9 +40,9 @@ class CodeElementTest extends TestCase
         $classMethod = new ClassMethodElement(
             $this->createDocBlock(),
             'FQCN3',
+            ['a'],
             $this->createSignature(),
             new ClassMethodMetadata(['prop1', 'prop2'], 'prop3', ['method'], false),
-            ['a'],
         );
         $classMethod->getMetadata()->setExtended(false);
         self::assertEquals(3, $classMethod->getLine());
@@ -56,7 +56,7 @@ class CodeElementTest extends TestCase
         self::assertEquals(['method'], $classMethod->getMetadata()->getThisMethodCalls());
         self::assertEquals(['a'], $classMethod->getAttributeNames());
 
-        $classProp = new ClassPropElement(4, $this->createDocBlock(), 'FQCN4', 'prop1', new IntType(), new IntType());
+        $classProp = new ClassPropElement(4, $this->createDocBlock(), 'FQCN4', [], 'prop1', new IntType(), new IntType());
         $classProp->setAttributeNames(['a']);
         self::assertEquals(false, $classProp->getMetadata()->hasDefaultValue());
         self::assertEquals('FQCN4', $classProp->getFqcn());
@@ -67,7 +67,7 @@ class CodeElementTest extends TestCase
         self::assertEquals(new IntType(), $classProp->getDefaultValueType());
         self::assertEquals(['a'], $classProp->getAttributeNames());
 
-        $class = new ClassElement(2, $this->createDocBlock(), 'FQCN2', false);
+        $class = new ClassElement(2, $this->createDocBlock(), 'FQCN2', [], false);
         $class->addMethod($classMethod);
         $class->setAttributeNames(['a']);
         self::assertEquals('FQCN2', $class->getFqcn());
@@ -100,7 +100,7 @@ class CodeElementTest extends TestCase
         self::assertEquals($this->createSignature(), $func->getSignature());
         self::assertEquals(['a'], $func->getAttributeNames());
 
-        $interfaceConst = new InterfaceConstElement(8, $this->createDocBlock(), 'FQCN5', 'CONST3', new IntType(), ['a']);
+        $interfaceConst = new InterfaceConstElement(8, $this->createDocBlock(), 'FQCN5', ['a'], 'CONST3', new IntType());
         self::assertEquals('CONST3', $interfaceConst->getConstName());
         self::assertEquals('FQCN5', $interfaceConst->getFqcn());
         self::assertEquals($this->createDocBlock(), $interfaceConst->getDocBlock());
@@ -117,7 +117,7 @@ class CodeElementTest extends TestCase
         self::assertEquals([], $interface->getMethods());
         self::assertEquals(['a'], $interface->getAttributeNames());
 
-        $interfaceMethod = new InterfaceMethodElement($this->createDocBlock(), 'FQCN7', $this->createSignature());
+        $interfaceMethod = new InterfaceMethodElement($this->createDocBlock(), 'FQCN7', [], $this->createSignature());
         $interfaceMethod->getMetadata()->setExtended(true);
         $interfaceMethod->setAttributeNames(['a']);
         self::assertEquals(3, $interfaceMethod->getLine());
@@ -138,7 +138,7 @@ class CodeElementTest extends TestCase
         self::assertEquals(null, $trait->getMethod('who'));
         self::assertEquals(['a'], $trait->getAttributeNames());
 
-        $traitMethod = new TraitMethodElement($this->createDocBlock(), 'FQCN9', $this->createSignature());
+        $traitMethod = new TraitMethodElement($this->createDocBlock(), 'FQCN9', [], $this->createSignature());
         $traitMethod->getMetadata()->setExtended(true);
         $traitMethod->setAttributeNames(['a']);
         self::assertEquals(3, $traitMethod->getLine());
@@ -148,7 +148,7 @@ class CodeElementTest extends TestCase
         self::assertEquals(true, $traitMethod->getMetadata()->isExtended());
         self::assertEquals(['a'], $traitMethod->getAttributeNames());
 
-        $traitProp = new TraitPropElement(12, $this->createDocBlock(), 'FQCN10', 'prop2', new IntType(), new IntType());
+        $traitProp = new TraitPropElement(12, $this->createDocBlock(), 'FQCN10', [], 'prop2', new IntType(), new IntType());
         $traitProp->setAttributeNames(['a']);
         self::assertEquals('FQCN10', $traitProp->getFqcn());
         self::assertEquals($this->createDocBlock(), $traitProp->getDocBlock());

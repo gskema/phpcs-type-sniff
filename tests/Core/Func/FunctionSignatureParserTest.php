@@ -2,7 +2,11 @@
 
 namespace Gskema\TypeSniff\Core\Func;
 
+use Gskema\TypeSniff\Core\DocBlock\DocBlock;
+use Gskema\TypeSniff\Core\DocBlock\Tag\VarTag;
+use Gskema\TypeSniff\Core\DocBlock\UndefinedDocBlock;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
+use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
 use PHP_CodeSniffer\Config;
 use PHP_CodeSniffer\Exceptions\RuntimeException;
 use PHP_CodeSniffer\Files\LocalFile;
@@ -100,6 +104,27 @@ class FunctionSignatureParserTest extends TestCase
                 ],
                 new UndefinedType(),
                 6,
+            ),
+            null,
+        ];
+
+        // #5
+        $dataSets[] = [
+            __DIR__ . '/fixtures/test_func1.php',
+            46,
+            new FunctionSignature(
+                11,
+                '__construct',
+                [
+                    new FunctionParam(12, 'arg1', new IntType(), new UndefinedType(), [], new UndefinedDocBlock(), true),
+                    new FunctionParam(13, 'arg2', new UndefinedType(), new UndefinedType(), [], new UndefinedDocBlock(), false),
+                    new FunctionParam(15, 'arg3', new ArrayType(), new UndefinedType(), [], new DocBlock([], [
+                        new VarTag(14, new TypedArrayType(new IntType(), 1), null, null)
+                    ]), true),
+                    new FunctionParam(16, 'arg4', new NullableType(new BoolType()), new BoolType(), [], new UndefinedDocBlock(), true),
+                ],
+                new UndefinedType(),
+                17,
             ),
             null,
         ];

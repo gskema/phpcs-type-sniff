@@ -2,6 +2,8 @@
 
 namespace Gskema\TypeSniff\Core\Func;
 
+use Gskema\TypeSniff\Core\DocBlock\DocBlock;
+use Gskema\TypeSniff\Core\DocBlock\UndefinedDocBlock;
 use Gskema\TypeSniff\Core\Type\TypeInterface;
 
 /**
@@ -15,8 +17,11 @@ class FunctionParam
         protected TypeInterface $type,
         protected ?TypeInterface $valueType,
         /** @var string[] */
-        protected array $attributeNames = [],
+        protected array $attributeNames,
+        protected ?DocBlock $docBlock = null, // relevant for promoted props
+        protected bool $promotedProp = false
     ) {
+        $this->docBlock ??= new UndefinedDocBlock();
     }
 
     public function getLine(): int
@@ -45,6 +50,16 @@ class FunctionParam
     public function getAttributeNames(): array
     {
         return $this->attributeNames;
+    }
+
+    public function getDocBlock(): DocBlock
+    {
+        return $this->docBlock;
+    }
+
+    public function isPromotedProp(): bool
+    {
+        return $this->promotedProp;
     }
 
     public function hasAttribute(string $attributeName): bool

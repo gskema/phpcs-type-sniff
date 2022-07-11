@@ -2,6 +2,8 @@
 
 namespace Gskema\TypeSniff\Core\Func;
 
+use Gskema\TypeSniff\Core\DocBlock\DocBlockParser;
+use Gskema\TypeSniff\Core\DocBlock\UndefinedDocBlock;
 use Gskema\TypeSniff\Core\TokenHelper;
 use Gskema\TypeSniff\Core\Type\Common\FqcnType;
 use PHP_CodeSniffer\Files\File;
@@ -127,6 +129,18 @@ class FunctionSignatureParser
                         $ptr = $attrEndPtr;
                     }
                     break;
+                case T_PUBLIC:
+                case T_PROTECTED:
+                case T_PRIVATE:
+                    $raw['promoted'] = true;
+                    break;
+                case T_DOC_COMMENT_OPEN_TAG:
+                    $docEndPtr = $file->findNext(T_DOC_COMMENT_CLOSE_TAG, $ptr + 1);
+                    if (false !== $docEndPtr) {
+                        $raw['doc_block'] = DocBlockParser::fromTokens($file, $ptr, $docEndPtr);
+                        $ptr = $docEndPtr;
+                    }
+                    break;
             }
         }
 
@@ -186,7 +200,9 @@ class FunctionSignatureParser
             $raw['name'],
             TypeFactory::fromRawType($raw['type'] ?? ''),
             $valueType,
-            $attrNames
+            $attrNames,
+            $raw['doc_block'] ?? new UndefinedDocBlock(),
+            $raw['promoted'] ?? false
         );
     }
 }

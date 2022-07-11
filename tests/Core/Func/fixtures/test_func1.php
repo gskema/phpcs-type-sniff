@@ -6,3 +6,14 @@ function func1(
 )
 {
 }
+
+class Acme {
+    public function __construct(
+        public int $arg1,
+        $arg2,
+        /** @var int[] */
+        protected array $arg3,
+        protected ?bool $arg4 = false,
+    ) {
+    }
+}

@@ -112,7 +112,7 @@ class CompositeCodeElementSniff extends AbstractConfigurableSniff
     /**
      * @param FileElement $file
      *
-     * @return Generator|CodeElementInterface[][]
+     * @return Generator<CodeElementInterface[]>
      */
     protected function getArgIterator(FileElement $file): Generator
     {

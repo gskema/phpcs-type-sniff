@@ -92,7 +92,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
     {
         $fnSig = $method->getSignature();
         $docBlock = $method->getDocBlock();
-        $isMagicMethod = '__' === substr($fnSig->getName(), 0, 2);
+        $isMagicMethod = str_starts_with($fnSig->getName(), '__');
         $isConstructMethod = '__construct' === $fnSig->getName();
         $hasInheritDocTag = $docBlock->hasTag('inheritdoc');
 
@@ -193,7 +193,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         $returnTag  = $docBlock->getReturnTag();
         $returnType = $fnSig->getReturnType();
 
-        if ($returnTag && $returnType) {
+        if ($returnTag) {
             $rawReturnType = $returnType instanceof NullableType
                 ? $returnType->toDocString()
                 : $returnType->toString();

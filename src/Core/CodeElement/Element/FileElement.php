@@ -27,9 +27,6 @@ class FileElement implements CodeElementInterface
     /** @var InterfaceElement[] */
     protected array $interfaces = [];
 
-    /** @var string[] */
-    protected array $attributeNames = [];
-
     /**
      * @param int                $line
      * @param DocBlock           $docBlock

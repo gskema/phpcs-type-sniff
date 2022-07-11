@@ -135,7 +135,7 @@ abstract class AbstractTypeSubject
 
     public function hasDefinedFnType(): bool
     {
-        return $this->fnType && !($this->fnType instanceof UndefinedType);
+        return !($this->fnType instanceof UndefinedType);
     }
 
     public function hasDefinedDocBlock(): bool

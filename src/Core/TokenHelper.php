@@ -154,14 +154,14 @@ class TokenHelper
      * @param File $file
      * @param int  $constVarPtr
      *
-     * @return mixed[] [?TypeInterface, bool]
+     * @return array{0: TypeInterface|null, 1: bool} 0: type, 1: has_default_value?
      */
     public static function getAssignmentType(File $file, int $constVarPtr): array
     {
         // @TODO Move function somewhere?
         $tokens = $file->getTokens();
 
-        // $ptr is at const or variable (prop), it safer and easier to search backwards
+        // $ptr is at const or variable (prop), it's safer and easier to search backwards
         $semiPtr = $file->findNext([T_SEMICOLON], $constVarPtr + 1);
         if (false === $semiPtr) {
             return [null, false];

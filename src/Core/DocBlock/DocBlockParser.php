@@ -71,7 +71,6 @@ class DocBlockParser
 
     protected static function parseTag(int $line, string $rawTag): TagInterface
     {
-        $tag = null;
         if (preg_match('#^@param\s+(.*?)\s*(\.\.\.)?\$(\w+)\s*(.*)$#', $rawTag, $matches)) {
             $type = TypeFactory::fromRawType($matches[1] ?? '');
             // $isVariableLength = !empty($matches[2]);

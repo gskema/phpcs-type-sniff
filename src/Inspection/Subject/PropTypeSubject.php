@@ -20,7 +20,7 @@ class PropTypeSubject extends AbstractTypeSubject
         $varTag = $docBlock->getTagsByName('var')[0] ?? null;
 
         return new static(
-            $varTag ? $varTag->getType() : null,
+            $varTag?->getType(),
             $prop->getType(),
             $prop->getDefaultValueType(),
             $varTag ? $varTag->getLine() : $prop->getLine(),

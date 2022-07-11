@@ -60,7 +60,7 @@ class ReturnTypeSubject extends AbstractTypeSubject
         string $id,
     ): static {
         return new static(
-            $returnTag ? $returnTag->getType() : null,
+            $returnTag?->getType(),
             $fnSig->getReturnType(),
             $returnTag ? $returnTag->getLine() : $fnSig->getReturnLine(),
             $fnSig->getReturnLine(),

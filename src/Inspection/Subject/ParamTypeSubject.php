@@ -19,7 +19,7 @@ class ParamTypeSubject extends AbstractTypeSubject
     public static function fromParam(FunctionParam $param, ?ParamTag $tag, DocBlock $docBlock, string $id): static
     {
         return new static(
-            $tag ? $tag->getType() : null,
+            $tag?->getType(),
             $param->getType(),
             $param->getValueType(),
             $tag ? $tag->getLine() : $param->getLine(),

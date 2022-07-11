@@ -72,7 +72,7 @@ class FqcnConstSniff implements CodeElementSniffInterface
 
         /** @var VarTag|null $varTag */
         $varTag = $docBlock->getTagsByName('var')[0] ?? null;
-        $docType = $varTag ? $varTag->getType() : null;
+        $docType = $varTag?->getType();
 
         $tagCount = count($docBlock->getTags());
         $hasOtherTags = (!$varTag && $tagCount >= 1) || ($varTag && $tagCount >= 2);

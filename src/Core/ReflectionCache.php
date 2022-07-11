@@ -22,7 +22,7 @@ class ReflectionCache
     {
         try {
             $classRef = new ReflectionClass($fqcn);
-        } catch (ParseError $e) {
+        } catch (ParseError) {
             return []; // suppress error popups when editing .php file
         }
 
@@ -56,7 +56,7 @@ class ReflectionCache
     {
         try {
             $classRef = new ReflectionClass($fqcn);
-        } catch (ParseError $e) {
+        } catch (ParseError) {
             return []; // suppress error popups when editing .php file
         }
 

@@ -228,7 +228,7 @@ class CodeElementDetector
 
         try {
             return in_array($method, ReflectionCache::getMethodsRecursive($fqcn, false));
-        } catch (ReflectionException $e) {
+        } catch (ReflectionException) {
             return null;
         }
     }

@@ -67,7 +67,7 @@ class FqcnPropSniff implements CodeElementSniffInterface
             try {
                 $parentPropNames = ReflectionCache::getPropsRecursive($parentElement->getFqcn(), false);
                 $skipRequireFnType = in_array($prop->getPropName(), $parentPropNames); // is prop extended?
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 $skipRequireFnType = true; // most likely parent class not found, don't report
             }
         }

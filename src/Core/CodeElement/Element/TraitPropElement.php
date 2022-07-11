@@ -11,14 +11,7 @@ class TraitPropElement extends AbstractFqcnPropElement
     protected TraitPropMetadata $metadata;
 
     /**
-     * @param int                    $line
-     * @param DocBlock               $docBlock
-     * @param string                 $fqcn
-     * @param string                 $propName
-     * @param TypeInterface          $type
-     * @param TypeInterface|null     $defaultValueType
-     * @param TraitPropMetadata|null $metadata
-     * @param string[]               $attributeNames
+     * @param string[] $attributeNames
      */
     public function __construct(
         int $line,

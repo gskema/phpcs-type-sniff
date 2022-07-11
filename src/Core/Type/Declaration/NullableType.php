@@ -6,11 +6,9 @@ use Gskema\TypeSniff\Core\Type\TypeInterface;
 
 class NullableType implements TypeInterface
 {
-    protected TypeInterface $type;
-
-    public function __construct(TypeInterface $type)
-    {
-        $this->type = $type;
+    public function __construct(
+        protected TypeInterface $type
+    ) {
     }
 
     public function getType(): TypeInterface

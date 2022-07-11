@@ -8,24 +8,17 @@ class ClassElement extends AbstractFqcnElement
 {
     /** @var ClassConstElement[] */
     protected array $constants = [];
-
     /** @var ClassPropElement[] */
     protected array $properties = [];
-
     /** @var ClassMethodElement[] */
     protected array $methods = [];
-
     protected bool $extended;
 
     /**
-     * @param int                   $line
-     * @param DocBlock              $docBlock
-     * @param string                $fqcn
-     * @param bool                  $extended
-     * @param ClassConstElement[]   $constants
-     * @param ClassPropElement[]    $properties
-     * @param ClassMethodElement[]  $methods
-     * @param string[]              $attributeNames
+     * @param ClassConstElement[]  $constants
+     * @param ClassPropElement[]   $properties
+     * @param ClassMethodElement[] $methods
+     * @param string[]             $attributeNames
      */
     public function __construct(
         int $line,

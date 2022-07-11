@@ -11,14 +11,7 @@ use Gskema\TypeSniff\Core\Type\TypeInterface;
 class ReturnTypeSubject extends AbstractTypeSubject
 {
     /**
-     * @param TypeInterface|null $docType
-     * @param TypeInterface      $fnType
-     * @param int|null           $docTypeLine
-     * @param int                $fnTypeLine
-     * @param string             $name
-     * @param DocBlock           $docBlock
-     * @param string[]           $attributeNames
-     * @param string             $id
+     * @param string[] $attributeNames
      */
     public function __construct(
         ?TypeInterface $docType,

@@ -7,34 +7,19 @@ use Gskema\TypeSniff\Core\Type\TypeInterface;
 
 abstract class AbstractFqcnPropElement extends AbstractFqcnElement
 {
-    protected string $propName;
-
-    protected TypeInterface $type;
-
-    protected ?TypeInterface $defaultValueType;
-
     /**
-     * @param int                $line
-     * @param DocBlock           $docBlock
-     * @param string             $fqcn
-     * @param string             $propName
-     * @param TypeInterface      $type
-     * @param TypeInterface|null $defaultValueType
-     * @param string[]           $attributeNames
+     * @param string[] $attributeNames
      */
     public function __construct(
         int $line,
         DocBlock $docBlock,
         string $fqcn,
-        string $propName,
-        TypeInterface $type,
-        ?TypeInterface $defaultValueType,
+        protected string $propName,
+        protected TypeInterface $type,
+        protected ?TypeInterface $defaultValueType,
         array $attributeNames,
     ) {
         parent::__construct($line, $docBlock, $fqcn, $attributeNames);
-        $this->propName = $propName;
-        $this->type = $type;
-        $this->defaultValueType = $defaultValueType;
     }
 
     public function getPropName(): string

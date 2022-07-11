@@ -4,32 +4,14 @@ namespace Gskema\TypeSniff\Core\CodeElement\Element\Metadata;
 
 abstract class AbstractFqcnMethodMetadata
 {
-    /** @var string[]|null */
-    protected ?array $nonNullAssignedProps;
-
-    protected ?string $basicGetterPropName;
-
-    /** @var string[]|null */
-    protected ?array $thisMethodCalls;
-
-    protected ?bool $extended;
-
-    /**
-     * @param string[]|null $nonNullAssignedProps
-     * @param string|null   $basicGetterPropName
-     * @param string[]|null $thisMethodCalls
-     * @param bool|null     $extended
-     */
     public function __construct(
-        ?array $nonNullAssignedProps = null,
-        ?string $basicGetterPropName = null,
-        ?array $thisMethodCalls = null,
-        ?bool $extended = null,
+        /** @var string[]|null */
+        protected ?array $nonNullAssignedProps = null,
+        protected ?string $basicGetterPropName = null,
+        /** @var string[]|null */
+        protected ?array $thisMethodCalls = null,
+        protected ?bool $extended = null,
     ) {
-        $this->nonNullAssignedProps = $nonNullAssignedProps;
-        $this->basicGetterPropName = $basicGetterPropName;
-        $this->thisMethodCalls = $thisMethodCalls;
-        $this->extended = $extended;
     }
 
     /**

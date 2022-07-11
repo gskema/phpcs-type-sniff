@@ -11,11 +11,7 @@ class ClassMethodElement extends AbstractFqcnMethodElement
     protected ClassMethodMetadata $metadata;
 
     /**
-     * @param DocBlock                 $docBlock
-     * @param string                   $fqcn
-     * @param FunctionSignature        $signature
-     * @param ClassMethodMetadata|null $metadata
-     * @param string[]                 $attributeNames
+     * @param string[] $attributeNames
      */
     public function __construct(
         DocBlock $docBlock,

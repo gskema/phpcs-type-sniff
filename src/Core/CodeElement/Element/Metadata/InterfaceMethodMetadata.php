@@ -4,11 +4,9 @@ namespace Gskema\TypeSniff\Core\CodeElement\Element\Metadata;
 
 class InterfaceMethodMetadata
 {
-    protected ?bool $extended;
-
-    public function __construct(?bool $extended = null)
-    {
-        $this->extended = $extended;
+    public function __construct(
+        protected ?bool $extended = null
+    ) {
     }
 
     public function isExtended(): ?bool

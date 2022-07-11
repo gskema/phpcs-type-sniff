@@ -13,9 +13,6 @@ class TraitElement extends AbstractFqcnElement
     protected array $methods = [];
 
     /**
-     * @param int                  $line
-     * @param DocBlock             $docBlock
-     * @param string               $fqcn
      * @param TraitPropElement[]   $properties
      * @param TraitMethodElement[] $methods
      * @param string[]             $attributeNames

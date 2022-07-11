@@ -14,62 +14,23 @@ use PHP_CodeSniffer\Files\File;
  */
 abstract class AbstractTypeSubject
 {
-    protected ?TypeInterface $docType; // null = missing in PHPDoc
-
-    protected TypeInterface $fnType;
-
-    protected ?TypeInterface $valueType; // null = could not be detected
-
-    protected ?int $docTypeLine; // null = missing in PHPDoc
-
-    protected int $fnTypeLine;
-
-    protected string $name; // "parameter $param1", "property $prop1", "constant CONST1"
-
-    protected string $id; // TestClass::method1(), etc.
-
-    protected DocBlock $docBlock;
-
     /** @var string[] */
     protected array $docTypeWarnings = [];
-
     /** @var string[] */
     protected array $fnTypeWarnings = [];
 
-    /** @var string[] */
-    protected array $attributeNames = [];
-
-    /**
-     * @param TypeInterface|null $docType
-     * @param TypeInterface      $fnType
-     * @param TypeInterface|null $valueType
-     * @param int|null           $docTypeLine
-     * @param int                $fnTypeLine
-     * @param string             $name
-     * @param DocBlock           $docBlock
-     * @param string[]           $attributeNames
-     * @param string             $id
-     */
     public function __construct(
-        ?TypeInterface $docType,
-        TypeInterface $fnType,
-        ?TypeInterface $valueType,
-        ?int $docTypeLine,
-        int $fnTypeLine,
-        string $name,
-        DocBlock $docBlock,
-        array $attributeNames,
-        string $id,
+        protected ?TypeInterface $docType, // null = missing in PHPDoc
+        protected TypeInterface $fnType,
+        protected ?TypeInterface $valueType, // null = could not be detected
+        protected ?int $docTypeLine, // null = missing in PHPDoc
+        protected int $fnTypeLine,
+        protected string $name, // "parameter $param1", "property $prop1", "constant CONST1"
+        protected DocBlock $docBlock,
+        /** @var string[] */
+        protected array $attributeNames = [],
+        protected string $id, // TestClass::method1(), etc.
     ) {
-        $this->docType = $docType;
-        $this->fnType = $fnType;
-        $this->valueType = $valueType;
-        $this->docTypeLine = $docTypeLine;
-        $this->fnTypeLine = $fnTypeLine;
-        $this->name = $name;
-        $this->docBlock = $docBlock;
-        $this->attributeNames = $attributeNames;
-        $this->id = $id;
     }
 
     public function getDocType(): ?TypeInterface

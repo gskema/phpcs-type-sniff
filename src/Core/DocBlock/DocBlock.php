@@ -11,20 +11,12 @@ use Gskema\TypeSniff\Core\DocBlock\Tag\TagInterface;
  */
 class DocBlock
 {
-    /** @var string[] [ptr => string, ...] */
-    protected array $descriptionLines;
-
-    /** @var TagInterface[] */
-    protected array $tags = [];
-
-    /**
-     * @param string[]       $descLines
-     * @param TagInterface[] $tags
-     */
-    public function __construct(array $descLines, array $tags)
-    {
-        $this->descriptionLines = $descLines;
-        $this->tags = $tags;
+    public function __construct(
+        /** @var string[] [ptr => string, ...] */
+        protected array $descriptionLines,
+        /** @var TagInterface[] */
+        protected array $tags = [],
+    ) {
     }
 
     /**

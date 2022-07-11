@@ -11,11 +11,7 @@ class InterfaceMethodElement extends AbstractFqcnMethodElement
     protected InterfaceMethodMetadata $metadata;
 
     /**
-     * @param DocBlock                     $docBlock
-     * @param string                       $fqcn
-     * @param FunctionSignature            $signature
-     * @param InterfaceMethodMetadata|null $metadata
-     * @param string[]                     $attributeNames
+     * @param string[] $attributeNames
      */
     public function __construct(
         DocBlock $docBlock,

@@ -9,36 +9,14 @@ use Gskema\TypeSniff\Core\Type\TypeInterface;
  */
 class FunctionSignature
 {
-    protected int $line;
-
-    protected string $name;
-
-    /** @var FunctionParam[] */
-    protected array $params = [];
-
-    protected TypeInterface $returnType;
-
-    protected int $returnLine;
-
-    /**
-     * @param int             $line
-     * @param string          $name
-     * @param FunctionParam[] $params
-     * @param TypeInterface   $returnType
-     * @param int             $returnLine
-     */
     public function __construct(
-        int $line,
-        string $name,
-        array $params,
-        TypeInterface $returnType,
-        int $returnLine,
+        protected int $line,
+        protected string $name,
+        /** @var FunctionParam[] */
+        protected array $params = [],
+        protected TypeInterface $returnType,
+        protected int $returnLine,
     ) {
-        $this->line = $line;
-        $this->name = $name;
-        $this->params = $params;
-        $this->returnType = $returnType;
-        $this->returnLine = $returnLine;
     }
 
     public function getLine(): int

@@ -6,11 +6,9 @@ use Gskema\TypeSniff\Core\Type\TypeInterface;
 
 class FqcnType implements TypeInterface
 {
-    protected string $fqcn;
-
-    public function __construct(string $fqcn)
-    {
-        $this->fqcn = $fqcn;
+    public function __construct(
+        protected string $fqcn,
+    ) {
     }
 
     /**

@@ -9,36 +9,14 @@ use Gskema\TypeSniff\Core\Type\TypeInterface;
  */
 class FunctionParam
 {
-    protected int $line;
-
-    protected string $name;
-
-    protected TypeInterface $type;
-
-    protected ?TypeInterface $valueType;
-
-    /** @var string[] */
-    protected array $attributeNames = [];
-
-    /**
-     * @param int                $line
-     * @param string             $name
-     * @param TypeInterface      $declarationType
-     * @param TypeInterface|null $valueType
-     * @param string[]           $attributeNames
-     */
     public function __construct(
-        int $line,
-        string $name,
-        TypeInterface $declarationType,
-        ?TypeInterface $valueType,
-        array $attributeNames,
+        protected int $line,
+        protected string $name,
+        protected TypeInterface $type,
+        protected ?TypeInterface $valueType,
+        /** @var string[] */
+        protected array $attributeNames = [],
     ) {
-        $this->line = $line;
-        $this->name = $name;
-        $this->type = $declarationType;
-        $this->valueType = $valueType;
-        $this->attributeNames = $attributeNames;
     }
 
     public function getLine(): int

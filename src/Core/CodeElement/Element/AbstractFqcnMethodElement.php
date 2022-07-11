@@ -10,22 +10,16 @@ use Gskema\TypeSniff\Core\Func\FunctionSignature;
 
 abstract class AbstractFqcnMethodElement extends AbstractFqcnElement
 {
-    protected FunctionSignature $signature;
-
     /**
-     * @param DocBlock          $docBlock
-     * @param string            $fqcn
-     * @param FunctionSignature $signature
-     * @param string[]          $attributeNames
+     * @param string[] $attributeNames
      */
     public function __construct(
         DocBlock $docBlock,
         string $fqcn,
-        FunctionSignature $signature,
+        protected FunctionSignature $signature,
         array $attributeNames,
     ) {
         parent::__construct($signature->getLine(), $docBlock, $fqcn, $attributeNames);
-        $this->signature = $signature;
     }
 
     public function getSignature(): FunctionSignature

@@ -6,55 +6,21 @@ use Gskema\TypeSniff\Core\DocBlock\DocBlock;
 
 class FileElement implements CodeElementInterface
 {
-    protected int $line;
-
-    protected DocBlock $docBlock;
-
-    protected string $path;
-
-    /** @var ConstElement[] */
-    protected array $constants = [];
-
-    /** @var FunctionElement[] */
-    protected array $functions = [];
-
-    /** @var ClassElement[] */
-    protected array $classes = [];
-
-    /** @var TraitElement[] */
-    protected array $traits = [];
-
-    /** @var InterfaceElement[] */
-    protected array $interfaces = [];
-
-    /**
-     * @param int                $line
-     * @param DocBlock           $docBlock
-     * @param string             $path
-     * @param ConstElement[]     $constants
-     * @param FunctionElement[]  $functions
-     * @param ClassElement[]     $classes
-     * @param TraitElement[]     $traits
-     * @param InterfaceElement[] $interfaces
-     */
     public function __construct(
-        int $line,
-        DocBlock $docBlock,
-        string $path,
-        array $constants = [],
-        array $functions = [],
-        array $classes = [],
-        array $traits = [],
-        array $interfaces = [],
+        protected int $line,
+        protected DocBlock $docBlock,
+        protected string $path,
+        /** @var ConstElement[] */
+        protected array $constants = [],
+        /** @var FunctionElement[] */
+        protected array $functions = [],
+        /** @var ClassElement[] */
+        protected array $classes = [],
+        /** @var TraitElement[] */
+        protected array $traits = [],
+        /** @var InterfaceElement[] */
+        protected array $interfaces = [],
     ) {
-        $this->line = $line;
-        $this->docBlock = $docBlock;
-        $this->path = $path;
-        $this->constants = $constants;
-        $this->functions = $functions;
-        $this->classes = $classes;
-        $this->traits = $traits;
-        $this->interfaces = $interfaces;
     }
 
     /**

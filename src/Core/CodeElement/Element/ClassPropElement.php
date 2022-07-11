@@ -11,14 +11,7 @@ class ClassPropElement extends AbstractFqcnPropElement
     protected ClassPropMetadata $metadata;
 
     /**
-     * @param int                    $line
-     * @param DocBlock               $docBlock
-     * @param string                 $fqcn
-     * @param string                 $propName
-     * @param TypeInterface          $type
-     * @param TypeInterface|null     $defaultValueType
-     * @param ClassPropMetadata|null $metadata
-     * @param string[]               $attributeNames
+     * @param string[] $attributeNames
      */
     public function __construct(
         int $line,

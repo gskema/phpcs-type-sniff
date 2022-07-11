@@ -11,11 +11,7 @@ class TraitMethodElement extends AbstractFqcnMethodElement
     protected TraitMethodMetadata $metadata;
 
     /**
-     * @param DocBlock                 $docBlock
-     * @param string                   $fqcn
-     * @param FunctionSignature        $signature
-     * @param TraitMethodMetadata|null $metadata
-     * @param string[]                 $attributeNames
+     * @param string[] $attributeNames
      */
     public function __construct(
         DocBlock $docBlock,

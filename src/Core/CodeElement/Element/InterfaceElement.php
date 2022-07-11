@@ -6,31 +6,17 @@ use Gskema\TypeSniff\Core\DocBlock\DocBlock;
 
 class InterfaceElement extends AbstractFqcnElement
 {
-    /** @var InterfaceConstElement[] */
-    protected array $constants = [];
-
-    /** @var InterfaceMethodElement[] */
-    protected array $methods = [];
-
-    /**
-     * @param int                      $line
-     * @param DocBlock                 $docBlock
-     * @param string                   $fqcn
-     * @param InterfaceConstElement[]  $constants
-     * @param InterfaceMethodElement[] $methods
-     * @param string[]                 $attributeNames
-     */
     public function __construct(
         int $line,
         DocBlock $docBlock,
         string $fqcn,
-        array $constants = [],
-        array $methods = [],
+        /** @var InterfaceConstElement[] */
+        protected array $constants = [],
+        /** @var InterfaceMethodElement[] */
+        protected array $methods = [],
         array $attributeNames = [],
     ) {
         parent::__construct($line, $docBlock, $fqcn, $attributeNames);
-        $this->constants = $constants;
-        $this->methods = $methods;
     }
 
     /**

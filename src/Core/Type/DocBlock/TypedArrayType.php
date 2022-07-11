@@ -6,14 +6,10 @@ use Gskema\TypeSniff\Core\Type\TypeInterface;
 
 class TypedArrayType implements TypeInterface
 {
-    protected TypeInterface $type;
-
-    protected int $depth;
-
-    public function __construct(TypeInterface $type, int $depth)
-    {
-        $this->type = $type;
-        $this->depth = $depth;
+    public function __construct(
+        protected TypeInterface $type,
+        protected int $depth
+    ) {
     }
 
     public function getType(): TypeInterface

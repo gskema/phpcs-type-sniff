@@ -6,24 +6,12 @@ use Gskema\TypeSniff\Core\Type\TypeInterface;
 
 class ParamTag implements TagInterface
 {
-    protected int $line;
-
-    protected TypeInterface $type;
-
-    protected string $paramName;
-
-    protected ?string $description;
-
     public function __construct(
-        int $line,
-        TypeInterface $type,
-        string $paramName,
-        ?string $description,
+        protected int $line,
+        protected TypeInterface $type,
+        protected string $paramName,
+        protected ?string $description,
     ) {
-        $this->line = $line;
-        $this->type = $type;
-        $this->paramName = $paramName;
-        $this->description = $description;
     }
 
     /**

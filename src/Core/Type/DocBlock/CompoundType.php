@@ -6,15 +6,10 @@ use Gskema\TypeSniff\Core\Type\TypeInterface;
 
 class CompoundType implements TypeInterface
 {
-    /** @var TypeInterface[] */
-    protected array $types = [];
-
-    /**
-     * @param TypeInterface[] $types
-     */
-    public function __construct(array $types)
-    {
-        $this->types = $types;
+    public function __construct(
+        /** @var TypeInterface[] */
+        protected array $types = [],
+    ) {
     }
 
     /**

@@ -12,10 +12,9 @@ class ClassElement extends AbstractFqcnElement
     protected array $methods = [];
 
     /**
-     * @param ClassConstElement[]  $constants
+     * @param string[]             $attributeNames
      * @param ClassPropElement[]   $properties
      * @param ClassMethodElement[] $methods
-     * @param string[]             $attributeNames
      */
     public function __construct(
         int $line,

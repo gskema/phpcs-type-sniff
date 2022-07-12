@@ -22,8 +22,8 @@ class FqcnPropSniff implements CodeElementSniffInterface
     protected const CODE = 'FqcnPropSniff';
 
     protected string $reportType = 'warning';
-
     protected bool $addViolationId = true;
+    protected bool $treatPcpAsProp = true;
 
     /**
      * @inheritDoc
@@ -32,6 +32,7 @@ class FqcnPropSniff implements CodeElementSniffInterface
     {
         $this->reportType = (string)($config['reportType'] ?? 'warning');
         $this->addViolationId = (bool)($config['addViolationId'] ?? true);
+        $this->treatPcpAsProp = 'prop' === ($config['treatPromotedConstructorPropertyAs'] ?? 'prop');
     }
 
     /**
@@ -54,6 +55,13 @@ class FqcnPropSniff implements CodeElementSniffInterface
     public function process(File $file, CodeElementInterface $prop, CodeElementInterface $parentElement): void
     {
         $subject = PropTypeSubject::fromElement($prop);
+
+        if (!$this->treatPcpAsProp && $prop->isPromoted()) {
+            // ask to remove inline doc block = treat as function param
+            $this->reportUnneededInlineDocBlock($subject);
+            $subject->writeViolationsTo($file, static::CODE, $this->reportType, $this->addViolationId);
+            return;
+        }
 
         // Do not report required fn type if prop is extended. To do this, reflection is needed.
         // If prop has fn type or class is not extended, then there is no point in checking for parent props, skip.
@@ -123,6 +131,16 @@ class FqcnPropSniff implements CodeElementSniffInterface
 
         if (!$isUseful) {
             $subject->addFnTypeWarning('Useless PHPDoc');
+        }
+    }
+
+    protected function reportUnneededInlineDocBlock(PropTypeSubject $subject): void
+    {
+        if ($subject->hasDefinedDocBlock()) {
+            $subject->addDocTypeWarning(
+                'Promoted constructor property is configured to be documented using __construct() PHPDoc block as param, '
+                . 'remove inline @var tag'
+            );
         }
     }
 }

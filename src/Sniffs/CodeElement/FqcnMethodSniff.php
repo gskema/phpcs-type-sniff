@@ -3,6 +3,7 @@
 namespace Gskema\TypeSniff\Sniffs\CodeElement;
 
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassElement;
+use Gskema\TypeSniff\Core\DocBlock\Tag\ParamTag;
 use Gskema\TypeSniff\Core\DocBlock\Tag\VarTag;
 use Gskema\TypeSniff\Core\SniffHelper;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
@@ -30,14 +31,11 @@ class FqcnMethodSniff implements CodeElementSniffInterface
 
     /** @var string[] */
     protected array $invalidTags = [];
-
     protected bool $reportMissingTags = false;
-
     protected bool $reportNullableBasicGetter = true;
-
     protected string $reportType = 'warning';
-
     protected bool $addViolationId = true;
+    protected bool $treatPcpAsParam = false;
 
     /**
      * @inheritDoc
@@ -56,6 +54,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         $this->reportNullableBasicGetter = (bool)($config['reportNullableBasicGetter'] ?? true);
         $this->reportType = (string)($config['reportType'] ?? 'warning');
         $this->addViolationId = (bool)($config['addViolationId'] ?? true);
+        $this->treatPcpAsParam = 'param' === ($config['treatPromotedConstructorPropertyAs'] ?? 'prop');
     }
 
     /**
@@ -113,7 +112,11 @@ class FqcnMethodSniff implements CodeElementSniffInterface
             $paramTag = $docBlock->getParamTag($fnParam->getName());
             $id = $method->getId() . $fnParam->getName();
             $subject = ParamTypeSubject::fromParam($fnParam, $paramTag, $docBlock, $id);
-            $this->processSigType($subject);
+            if ($this->treatPcpAsParam || !$fnParam->isPromotedProp()) {
+                $this->processParam($subject); // basic param or pcp treated as param
+            } else {
+                $this->processPromotedProp($subject, $paramTag); // request to remove @param tag
+            }
             $subject->writeViolationsTo($file, static::CODE, $this->reportType, $this->addViolationId);
         }
 
@@ -121,7 +124,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         if (!$isConstructMethod) {
             $returnTag = $docBlock->getReturnTag();
             $subject = ReturnTypeSubject::fromSignature($fnSig, $returnTag, $docBlock, $method->getAttributeNames(), $method->getId());
-            $this->processSigType($subject);
+            $this->processParam($subject);
             if ($method instanceof ClassMethodElement && $parent instanceof ClassElement) {
                 $this->reportNullableBasicGetter && $this->reportNullableBasicGetter($subject, $method, $parent);
             }
@@ -136,7 +139,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         }
     }
 
-    protected function processSigType(AbstractTypeSubject $subject): void
+    protected function processParam(AbstractTypeSubject $subject): void
     {
         FnTypeInspector::reportSuggestedTypes($subject);
         FnTypeInspector::reportReplaceableTypes($subject);
@@ -269,6 +272,16 @@ class FqcnMethodSniff implements CodeElementSniffInterface
                 $propName,
                 $returnFnType->toString(),
             ));
+        }
+    }
+
+    protected function processPromotedProp(ParamTypeSubject $subject, ?ParamTag $paramTag): void
+    {
+        if (null !== $paramTag) {
+            $subject->addDocTypeWarning(
+                'Promoted constructor property is configured to be documented using inline PHPDoc as prop, '
+                . 'remove @param tag from __construct() PHPDoc block.'
+            );
         }
     }
 }

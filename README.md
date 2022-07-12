@@ -322,6 +322,11 @@ String `true/false` values are automatically converted to booleans.
             <!-- and return type declaration -->
             <property name="FqcnPropSniff.reportNullableBasicGetter" value="false"/>
 
+            <!-- Promoted properties in __construct can be treated ) as: 'prop' or 'param'. Default: 'prop' -->
+            <!-- If set to 'prop', all prop sniffs will apply (but not FqcnMethodSniff parameter sniffs). -->
+            <!-- If set to 'param', all parameter sniffs  will apply (but not FqcnPropSniff prop sniffs). -->
+            <property name="treatPromotedConstructorPropertyAs" value="prop"/>
+
             <!-- Your own custom code element sniff(s). Autoloader is needed. -->
             <!-- These classes implement CodeElementSniffInterface -->
             <property name="sniffs" type="array">

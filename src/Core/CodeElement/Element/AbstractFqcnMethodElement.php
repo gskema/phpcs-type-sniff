@@ -2,10 +2,12 @@
 
 namespace Gskema\TypeSniff\Core\CodeElement\Element;
 
+use Generator;
 use Gskema\TypeSniff\Core\CodeElement\Element\Metadata\ClassMethodMetadata;
 use Gskema\TypeSniff\Core\CodeElement\Element\Metadata\InterfaceMethodMetadata;
 use Gskema\TypeSniff\Core\CodeElement\Element\Metadata\TraitMethodMetadata;
 use Gskema\TypeSniff\Core\DocBlock\DocBlock;
+use Gskema\TypeSniff\Core\Func\FunctionParam;
 use Gskema\TypeSniff\Core\Func\FunctionSignature;
 
 abstract class AbstractFqcnMethodElement extends AbstractFqcnElement
@@ -30,6 +32,20 @@ abstract class AbstractFqcnMethodElement extends AbstractFqcnElement
     public function getId(): string
     {
         return sprintf('%s::%s()', $this->fqcn, $this->signature->getName());
+    }
+
+    /**
+     * @return Generator<FunctionParam>|FunctionParam[]
+     */
+    public function getPromotedPropParams(): Generator
+    {
+        if ('__construct' === $this->signature->getName()) {
+            foreach ($this->signature->getParams() as $param) {
+                if ($param->isPromotedProp()) {
+                    yield $param;
+                }
+            }
+        }
     }
 
     /**

@@ -18,6 +18,7 @@ abstract class AbstractFqcnPropElement extends AbstractFqcnElement
         protected string $propName,
         protected TypeInterface $type,
         protected ?TypeInterface $defaultValueType,
+        protected bool $promoted
     ) {
         parent::__construct($line, $docBlock, $fqcn, $attributeNames);
     }
@@ -35,5 +36,10 @@ abstract class AbstractFqcnPropElement extends AbstractFqcnElement
     public function getDefaultValueType(): ?TypeInterface
     {
         return $this->defaultValueType;
+    }
+
+    public function isPromoted(): bool
+    {
+        return $this->promoted;
     }
 }

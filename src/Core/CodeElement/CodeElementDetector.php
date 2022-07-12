@@ -59,6 +59,8 @@ class CodeElementDetector
             $inTrait = T_TRAIT === end($path) && !$inParentheses;
             $inInterface = T_INTERFACE === end($path) && !$inParentheses;
 
+            // @TODO continue early
+
             switch ($token['code']) {
                 case T_CLASS:
                 case T_TRAIT:
@@ -147,7 +149,7 @@ class CodeElementDetector
                         $attrNames = TokenHelper::getPrevPropAttributeNames($file, $ptr);
                         $declType = TokenHelper::getPropDeclarationType($file, $ptr);
                         [$defValueType, $hasDefValue] = TokenHelper::getAssignmentType($file, $ptr);
-                        $currentElement = new ClassPropElement($line, $docBlock, $fqcn, [], $decName, $declType, $defValueType);
+                        $currentElement = new ClassPropElement($line, $docBlock, $fqcn, [], $decName, $declType, $defValueType, false);
                         $currentElement->setAttributeNames($attrNames);
                         $currentElement->getMetadata()->setHasDefaultValue($hasDefValue);
                         $parentElement->addProperty($currentElement);
@@ -164,6 +166,9 @@ class CodeElementDetector
                         $currentElement->getMetadata()->setNonNullAssignedProps(TokenHelper::getNonNullAssignedProps($file, $ptr));
                         $currentElement->getMetadata()->setThisMethodCalls(TokenHelper::getThisMethodCalls($file, $ptr));
                         $parentElement->addMethod($currentElement);
+                        foreach ($currentElement->getPromotedPropParams() as $param) {
+                            $parentElement->addProperty(ClassPropElement::fromFunctionParam($param, $fqcn));
+                        }
                         break;
                 }
             } elseif ($inTrait) {
@@ -174,7 +179,7 @@ class CodeElementDetector
                         $attrNames = TokenHelper::getPrevPropAttributeNames($file, $ptr);
                         $declType = TokenHelper::getPropDeclarationType($file, $ptr);
                         [$defValueType, $hasDefValue] = TokenHelper::getAssignmentType($file, $ptr);
-                        $currentElement = new TraitPropElement($line, $docBlock, $fqcn, [], $decName, $declType, $defValueType);
+                        $currentElement = new TraitPropElement($line, $docBlock, $fqcn, [], $decName, $declType, $defValueType, false);
                         $currentElement->setAttributeNames($attrNames);
                         $currentElement->getMetadata()->setHasDefaultValue($hasDefValue);
                         $parentElement->addProperty($currentElement);
@@ -191,6 +196,9 @@ class CodeElementDetector
                         $currentElement->getMetadata()->setNonNullAssignedProps(TokenHelper::getNonNullAssignedProps($file, $ptr));
                         $currentElement->getMetadata()->setThisMethodCalls(TokenHelper::getThisMethodCalls($file, $ptr));
                         $parentElement->addMethod($currentElement);
+                        foreach ($currentElement->getPromotedPropParams() as $param) {
+                            $parentElement->addProperty(TraitPropElement::fromFunctionParam($param, $fqcn));
+                        }
                         break;
                 }
             } elseif ($inInterface) {

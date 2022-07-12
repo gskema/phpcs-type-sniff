@@ -408,6 +408,51 @@ class CompositeCodeElementSniffTest extends TestCase
             [], // parent class not found, 007 error ignored
         ];
 
+        // #18
+        $dataSets[] = [
+            [
+                'addViolationId' => false,
+                'useReflection' => false,
+                'treatPromotedConstructorPropertyAs' => 'prop'
+            ],
+            __DIR__ . '/fixtures/TestClass12.php',
+            [
+                '008 Add type hint in PHPDoc tag for parameter $prop1',
+                '010 Replace array type with typed array type in PHPDoc for parameter $prop3, .e.g.: "string[]" or "SomeClass[]". Use mixed[] for generic arrays. Correct array depth must be specified.',
+                '012 Promoted constructor property is configured to be documented using inline PHPDoc as prop, remove @param tag from __construct() PHPDoc block.',
+                '013 Promoted constructor property is configured to be documented using inline PHPDoc as prop, remove @param tag from __construct() PHPDoc block.',
+                '014 Promoted constructor property is configured to be documented using inline PHPDoc as prop, remove @param tag from __construct() PHPDoc block.',
+                '015 Promoted constructor property is configured to be documented using inline PHPDoc as prop, remove @param tag from __construct() PHPDoc block.',
+                '016 Promoted constructor property is configured to be documented using inline PHPDoc as prop, remove @param tag from __construct() PHPDoc block.',
+                '019 Add type declaration for parameter $prop1 or create PHPDoc with type hint.',
+                '023 Add type declaration for property $prop5 or create PHPDoc with type hint. Add default value or keep property in an uninitialized state.',
+                '025 Create PHPDoc with typed array type hint for property $prop7, .e.g.: "string[]" or "SomeClass[]". Correct array depth must be specified.',
+                '030 Create PHPDoc with typed array type hint for property $prop10, .e.g.: "string[]" or "SomeClass[]". Correct array depth must be specified.',
+            ],
+        ];
+
+        // #19
+        $dataSets[] = [
+            [
+                'addViolationId' => false,
+                'useReflection' => false,
+                'treatPromotedConstructorPropertyAs' => 'param'
+            ],
+            __DIR__ . '/fixtures/TestClass12.php',
+            [
+                '008 Add type hint in PHPDoc tag for parameter $prop1',
+                '010 Replace array type with typed array type in PHPDoc for parameter $prop3, .e.g.: "string[]" or "SomeClass[]". Use mixed[] for generic arrays. Correct array depth must be specified.',
+                '012 Add type hint in PHPDoc tag for parameter $prop5',
+                '014 Replace array type with typed array type in PHPDoc for parameter $prop7, .e.g.: "string[]" or "SomeClass[]". Use mixed[] for generic arrays. Correct array depth must be specified.',
+                '016 Add type hint in PHPDoc tag for parameter $prop10, e.g. "SomeClass[]"',
+                '019 Add type declaration for parameter $prop1 or create PHPDoc with type hint.',
+                '023 Add type declaration for parameter $prop5 or create PHPDoc with type hint.',
+                '026 Promoted constructor property is configured to be documented using __construct() PHPDoc block as param, remove inline @var tag',
+                '028 Promoted constructor property is configured to be documented using __construct() PHPDoc block as param, remove inline @var tag',
+                '029 Add typed array type hint for parameter $prop9, .e.g.: "string[]" or "SomeClass[]". Correct array depth must be specified.',
+            ],
+        ];
+
         return $dataSets;
     }
 

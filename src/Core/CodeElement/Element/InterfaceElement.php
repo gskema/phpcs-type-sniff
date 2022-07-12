@@ -6,6 +6,9 @@ use Gskema\TypeSniff\Core\DocBlock\DocBlock;
 
 class InterfaceElement extends AbstractFqcnElement
 {
+    /**
+     * @param string[] $attributeNames
+     */
     public function __construct(
         int $line,
         DocBlock $docBlock,

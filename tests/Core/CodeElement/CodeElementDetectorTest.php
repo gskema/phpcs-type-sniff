@@ -113,6 +113,7 @@ class CodeElementDetectorTest extends TestCase
                                 'prop1',
                                 new UndefinedType(),
                                 new UndefinedType(),
+                                false,
                             ),
                             new ClassPropElement(
                                 25,
@@ -124,6 +125,7 @@ class CodeElementDetectorTest extends TestCase
                                 'prop2',
                                 new UndefinedType(),
                                 new UndefinedType(),
+                                false,
                             ),
                             new ClassPropElement(
                                 28,
@@ -135,6 +137,7 @@ class CodeElementDetectorTest extends TestCase
                                 'prop3',
                                 new UndefinedType(),
                                 new UndefinedType(),
+                                false,
                             ),
                         ],
                         [
@@ -239,6 +242,7 @@ class CodeElementDetectorTest extends TestCase
                                 'prop1',
                                 new UndefinedType(),
                                 new UndefinedType(),
+                                false,
                             ),
                         ],
                         [
@@ -397,6 +401,7 @@ class CodeElementDetectorTest extends TestCase
                                 'prop1',
                                 new UndefinedType(),
                                 new UndefinedType(),
+                                false,
                             ),
                             new ClassPropElement(
                                 24,
@@ -406,6 +411,7 @@ class CodeElementDetectorTest extends TestCase
                                 'prop2',
                                 new UndefinedType(),
                                 new IntType(),
+                                false,
                                 new ClassPropMetadata(true),
                             ),
                         ],
@@ -477,6 +483,7 @@ class CodeElementDetectorTest extends TestCase
                                 'prop1',
                                 new UndefinedType(),
                                 new IntType(),
+                                false,
                                 new TraitPropMetadata(true),
                             ),
                         ],
@@ -598,6 +605,7 @@ class CodeElementDetectorTest extends TestCase
                                 'prop1',
                                 new UndefinedType(),
                                 null, // failed to parse
+                                false,
                             ),
                         ],
                         [
@@ -865,10 +873,10 @@ class CodeElementDetectorTest extends TestCase
                         false,
                         [],
                         [
-                            new ClassPropElement(7, new UndefinedDocBlock(), $fqcn10, [], 'prop1', new UndefinedType(), new UndefinedType()),
-                            new ClassPropElement(8, new UndefinedDocBlock(), $fqcn10, [], 'prop2', new UndefinedType(), new UndefinedType()),
-                            new ClassPropElement(9, new UndefinedDocBlock(), $fqcn10, [], 'prop3', new UndefinedType(), new UndefinedType()),
-                            new ClassPropElement(10, new UndefinedDocBlock(), $fqcn10, [], 'prop4', new UndefinedType(), new UndefinedType())
+                            new ClassPropElement(7, new UndefinedDocBlock(), $fqcn10, [], 'prop1', new UndefinedType(), new UndefinedType(), false),
+                            new ClassPropElement(8, new UndefinedDocBlock(), $fqcn10, [], 'prop2', new UndefinedType(), new UndefinedType(), false),
+                            new ClassPropElement(9, new UndefinedDocBlock(), $fqcn10, [], 'prop3', new UndefinedType(), new UndefinedType(), false),
+                            new ClassPropElement(10, new UndefinedDocBlock(), $fqcn10, [], 'prop4', new UndefinedType(), new UndefinedType(), false),
                         ],
                         [
                             new ClassMethodElement(

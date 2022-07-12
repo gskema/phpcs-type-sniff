@@ -4,6 +4,7 @@ namespace Gskema\TypeSniff\Core\CodeElement\Element;
 
 use Gskema\TypeSniff\Core\CodeElement\Element\Metadata\ClassPropMetadata;
 use Gskema\TypeSniff\Core\DocBlock\DocBlock;
+use Gskema\TypeSniff\Core\Func\FunctionParam;
 use Gskema\TypeSniff\Core\Type\TypeInterface;
 
 class ClassPropElement extends AbstractFqcnPropElement
@@ -21,10 +22,25 @@ class ClassPropElement extends AbstractFqcnPropElement
         string $propName,
         TypeInterface $type,
         ?TypeInterface $defaultValueType,
+        bool $promoted,
         ?ClassPropMetadata $metadata = null,
     ) {
-        parent::__construct($line, $docBlock, $fqcn, $attributeNames, $propName, $type, $defaultValueType);
+        parent::__construct($line, $docBlock, $fqcn, $attributeNames, $propName, $type, $defaultValueType, $promoted);
         $this->metadata = $metadata ?? new ClassPropMetadata();
+    }
+
+    public static function fromFunctionParam(FunctionParam $param, string $fqcn): static
+    {
+        return new static(
+            $param->getLine(),
+            $param->getDocBlock(),
+            $fqcn,
+            $param->getAttributeNames(),
+            $param->getName(),
+            $param->getType(),
+            $param->getValueType(),
+            $param->isPromotedProp()
+        );
     }
 
     public function getMetadata(): ClassPropMetadata

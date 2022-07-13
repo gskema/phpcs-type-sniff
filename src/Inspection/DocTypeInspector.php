@@ -3,10 +3,10 @@
 namespace Gskema\TypeSniff\Inspection;
 
 use Gskema\TypeSniff\Core\Type\Common\ArrayType;
+use Gskema\TypeSniff\Core\Type\Common\NullType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Common\VoidType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
-use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
 use Gskema\TypeSniff\Core\Type\TypeComparator;
 use Gskema\TypeSniff\Core\Type\TypeConverter;
 use Gskema\TypeSniff\Core\Type\TypeHelper;

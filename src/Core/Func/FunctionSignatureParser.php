@@ -60,9 +60,19 @@ class FunctionSignatureParser
                     $raw['default'] = 'float';
                     break;
                 case T_NULL:
-                    $raw['default'] = 'null';
+                    if (isset($raw['default'])) {
+                        $raw['default'] = 'null'; // after T_EQUAL
+                    } else {
+                        $raw['type'] = ($raw['type'] ?? '') . $token['content'];
+                    }
                     break;
                 case T_FALSE:
+                    if (isset($raw['default'])) {
+                        $raw['default'] = 'bool'; // after T_EQUAL
+                    } else {
+                        $raw['type'] = ($raw['type'] ?? '') . $token['content'];
+                    }
+                    break;
                 case T_TRUE:
                     $raw['default'] = 'bool';
                     break;
@@ -87,6 +97,7 @@ class FunctionSignatureParser
                 case T_STRING:
                 case T_SELF:
                 case T_DOUBLE_COLON:
+                case T_TYPE_UNION:
                 case T_NS_SEPARATOR:
                     if (isset($raw['default'])) {
                         $raw['default'] .= $token['content'];
@@ -153,6 +164,9 @@ class FunctionSignatureParser
                 case T_CALLABLE:
                 case T_NULLABLE:
                 case T_STRING:
+                case T_TYPE_UNION:
+                case T_FALSE:
+                case T_NULL:
                 case T_NS_SEPARATOR:
                     $returnLine = $token['line'];
                     $rawReturnType .= $token['content'];

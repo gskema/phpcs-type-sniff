@@ -2,25 +2,25 @@
 
 namespace Gskema\TypeSniff\Sniffs\CodeElement;
 
+use Gskema\TypeSniff\Core\CodeElement\Element\AbstractFqcnMethodElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassElement;
+use Gskema\TypeSniff\Core\CodeElement\Element\ClassMethodElement;
+use Gskema\TypeSniff\Core\CodeElement\Element\CodeElementInterface;
+use Gskema\TypeSniff\Core\CodeElement\Element\InterfaceMethodElement;
 use Gskema\TypeSniff\Core\DocBlock\Tag\ParamTag;
 use Gskema\TypeSniff\Core\DocBlock\Tag\VarTag;
+use Gskema\TypeSniff\Core\DocBlock\UndefinedDocBlock;
 use Gskema\TypeSniff\Core\SniffHelper;
+use Gskema\TypeSniff\Core\Type\Common\NullType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
-use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
+use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
 use Gskema\TypeSniff\Core\Type\TypeHelper;
-use Gskema\TypeSniff\Inspection\FnTypeInspector;
 use Gskema\TypeSniff\Inspection\DocTypeInspector;
+use Gskema\TypeSniff\Inspection\FnTypeInspector;
 use Gskema\TypeSniff\Inspection\Subject\AbstractTypeSubject;
 use Gskema\TypeSniff\Inspection\Subject\ParamTypeSubject;
 use Gskema\TypeSniff\Inspection\Subject\ReturnTypeSubject;
 use PHP_CodeSniffer\Files\File;
-use Gskema\TypeSniff\Core\CodeElement\Element\AbstractFqcnMethodElement;
-use Gskema\TypeSniff\Core\CodeElement\Element\ClassMethodElement;
-use Gskema\TypeSniff\Core\CodeElement\Element\CodeElementInterface;
-use Gskema\TypeSniff\Core\CodeElement\Element\InterfaceMethodElement;
-use Gskema\TypeSniff\Core\DocBlock\UndefinedDocBlock;
-use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
 
 /**
  * @see FqcnMethodSniffTest

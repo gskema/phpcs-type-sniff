@@ -2,8 +2,6 @@
 
 namespace Gskema\TypeSniff\Core\Type;
 
-use Gskema\TypeSniff\Core\Type\DocBlock\ResourceType;
-use PHPUnit\Framework\TestCase;
 use Gskema\TypeSniff\Core\Type\Common\ArrayType;
 use Gskema\TypeSniff\Core\Type\Common\BoolType;
 use Gskema\TypeSniff\Core\Type\Common\CallableType;
@@ -13,6 +11,7 @@ use Gskema\TypeSniff\Core\Type\Common\IntType;
 use Gskema\TypeSniff\Core\Type\Common\IterableType;
 use Gskema\TypeSniff\Core\Type\Common\ObjectType;
 use Gskema\TypeSniff\Core\Type\Common\SelfType;
+use Gskema\TypeSniff\Core\Type\Common\StaticType;
 use Gskema\TypeSniff\Core\Type\Common\StringType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Common\VoidType;
@@ -22,10 +21,11 @@ use Gskema\TypeSniff\Core\Type\DocBlock\DoubleType;
 use Gskema\TypeSniff\Core\Type\DocBlock\FalseType;
 use Gskema\TypeSniff\Core\Type\DocBlock\MixedType;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
-use Gskema\TypeSniff\Core\Type\DocBlock\StaticType;
+use Gskema\TypeSniff\Core\Type\DocBlock\ResourceType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ThisType;
 use Gskema\TypeSniff\Core\Type\DocBlock\TrueType;
 use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
+use PHPUnit\Framework\TestCase;
 
 class TypeConverterTest extends TestCase
 {
@@ -82,7 +82,7 @@ class TypeConverterTest extends TestCase
             ],
             [
                 new CompoundType([new ThisType(), new NullType()]),
-                null,
+                new NullableType(new StaticType()),
             ],
             [
                 new CompoundType([new TypedArrayType(new StringType(), 1), new NullType()]),
@@ -121,8 +121,8 @@ class TypeConverterTest extends TestCase
             [new MixedType(), null],
             [new NullType(), new NullableType(new FqcnType('SomeClass'))],
             [new SelfType(), new SelfType()],
-            [new StaticType(), null],
-            [new ThisType(), null],
+            [new StaticType(), new StaticType()],
+            [new ThisType(), new StaticType()],
             [new TrueType(), new BoolType()],
             [new TypedArrayType(new StringType(), 1), new ArrayType()],
 

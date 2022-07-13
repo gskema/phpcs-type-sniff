@@ -12,13 +12,13 @@ use Gskema\TypeSniff\Core\Type\Common\IterableType;
 use Gskema\TypeSniff\Core\Type\Common\ObjectType;
 use Gskema\TypeSniff\Core\Type\Common\ParentType;
 use Gskema\TypeSniff\Core\Type\Common\SelfType;
+use Gskema\TypeSniff\Core\Type\Common\StaticType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
 use Gskema\TypeSniff\Core\Type\DocBlock\CompoundType;
 use Gskema\TypeSniff\Core\Type\DocBlock\DoubleType;
 use Gskema\TypeSniff\Core\Type\DocBlock\FalseType;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
-use Gskema\TypeSniff\Core\Type\DocBlock\StaticType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ThisType;
 use Gskema\TypeSniff\Core\Type\DocBlock\TrueType;
 use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
@@ -40,6 +40,10 @@ class TypeComparator
      * If return declaration is "iterable", but PHPDoc has "array",
      * then no warning for wrong/missing type will be issued because "array" is more specific
      * than "iterable".
+     *
+     * More specific types are useful when chain calling, e.g.:
+     * $acme->makeCallable()->specificAcmeMethod() when makeCallable(): callable has PHPDoc
+     * with specific return type: self, static, $this, FQCN.
      *
      * @var string[][]
      */
@@ -84,7 +88,7 @@ class TypeComparator
             FqcnType::class,
             IterableType::class,
             ObjectType::class,
-            SelfType::class,
+            SelfType::class, // '$this' doesn't provide any additional code intel over 'self', better trim PHPDoc.
         ],
         TrueType::class => [
             BoolType::class,

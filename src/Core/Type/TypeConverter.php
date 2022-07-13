@@ -7,6 +7,7 @@ use Gskema\TypeSniff\Core\Type\Common\BoolType;
 use Gskema\TypeSniff\Core\Type\Common\CallableType;
 use Gskema\TypeSniff\Core\Type\Common\FloatType;
 use Gskema\TypeSniff\Core\Type\Common\FqcnType;
+use Gskema\TypeSniff\Core\Type\Common\StaticType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Common\VoidType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
@@ -16,7 +17,6 @@ use Gskema\TypeSniff\Core\Type\DocBlock\FalseType;
 use Gskema\TypeSniff\Core\Type\DocBlock\MixedType;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ResourceType;
-use Gskema\TypeSniff\Core\Type\DocBlock\StaticType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ThisType;
 use Gskema\TypeSniff\Core\Type\DocBlock\TrueType;
 use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
@@ -87,8 +87,6 @@ class TypeConverter
             return new NullableType(new FqcnType('SomeClass'));
         }
 
-        // "static", "$this" type hints cannot be forced into "self" type declaration
-        // because it is incompatible with extended classes.
         $map = [
             UndefinedType::class => null,
             CompoundType::class => null,
@@ -96,8 +94,7 @@ class TypeConverter
             FalseType::class => BoolType::class,
             MixedType::class => null,
             NullType::class => null,
-            StaticType::class => null,
-            ThisType::class => null,
+            ThisType::class => StaticType::class,
             TrueType::class => BoolType::class,
             TypedArrayType::class => ArrayType::class,
         ];

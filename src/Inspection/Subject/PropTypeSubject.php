@@ -7,11 +7,6 @@ use Gskema\TypeSniff\Core\DocBlock\Tag\VarTag;
 
 class PropTypeSubject extends AbstractTypeSubject
 {
-    /**
-     * @param AbstractFqcnPropElement $prop
-     *
-     * @return static
-     */
     public static function fromElement(AbstractFqcnPropElement $prop): static
     {
         $docBlock = $prop->getDocBlock();

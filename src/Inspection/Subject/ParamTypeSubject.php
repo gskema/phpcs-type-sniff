@@ -8,14 +8,6 @@ use Gskema\TypeSniff\Core\Func\FunctionParam;
 
 class ParamTypeSubject extends AbstractTypeSubject
 {
-    /**
-     * @param FunctionParam $param
-     * @param ParamTag|null $tag
-     * @param DocBlock      $docBlock
-     * @param string        $id
-     *
-     * @return static
-     */
     public static function fromParam(FunctionParam $param, ?ParamTag $tag, DocBlock $docBlock, string $id): static
     {
         return new static(

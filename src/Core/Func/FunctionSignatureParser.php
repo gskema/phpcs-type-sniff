@@ -149,6 +149,7 @@ class FunctionSignatureParser
             $token = $tokens[$ptr];
             switch ($token['code']) {
                 case T_SELF:
+                case T_STATIC:
                 case T_CALLABLE:
                 case T_NULLABLE:
                 case T_STRING:

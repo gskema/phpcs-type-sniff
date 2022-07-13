@@ -11,6 +11,7 @@ class TypeComparatorTest extends TestCase
      */
     public function dataCompare(): array
     {
+        // doc_type, fn_type, val_type, wrong_doc, missing_doc
         return [
             // covered types
              0 => ['array',  'array',    '', '', ''],

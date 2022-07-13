@@ -137,6 +137,8 @@ class CompositeCodeElementSniffTest extends TestCase
                 '008 Replace array type with typed array type in PHPDoc for parameter $arg1, .e.g.: "string[]" or "SomeClass[]". Use mixed[] for generic arrays. Correct array depth must be specified.',
                 '037 Type hint "static" is not compatible with return value value type',
                 '037 Missing "self" type in return value type hint',
+                //'094 Type hint "$this" is not compatible with return value value type',
+                //'094 Missing "self" type in return value type hint',
                 '102 Remove @return void tag, not necessary',
                 '111 Useless PHPDoc',
                 '117 Use a more specific type in typed array hint "array[]" for parameter $arg2. Correct array depth must be specified.',
@@ -450,6 +452,30 @@ class CompositeCodeElementSniffTest extends TestCase
                 '026 Promoted constructor property is configured to be documented using __construct() PHPDoc block as param, remove inline @var tag',
                 '028 Promoted constructor property is configured to be documented using __construct() PHPDoc block as param, remove inline @var tag',
                 '029 Add typed array type hint for parameter $prop9, .e.g.: "string[]" or "SomeClass[]". Correct array depth must be specified.',
+            ],
+        ];
+
+        // #20
+        $dataSets[] = [
+            [
+                'addViolationId' => false,
+                'useReflection' => false,
+            ],
+            __DIR__ . '/fixtures/TestClass13.php',
+            [
+                '010 Add type declaration for return value, e.g.: "static".',
+                //'023 Type hint "$this" is not compatible with return value value type',
+                //'023 Missing "self" type in return value type hint',
+                '030 Type hint "$this" is not compatible with return value value type',
+                '030 Missing "static" type in return value type hint',
+                '039 Add type declaration for return value, e.g.: "self".',
+                '046 Useless PHPDoc',
+                '051 Type hint "self" is not compatible with return value value type',
+                '051 Missing "static" type in return value type hint',
+                '060 Add type declaration for return value, e.g.: "static".',
+                '065 Type hint "static" is not compatible with return value value type',
+                '065 Missing "self" type in return value type hint',
+                '074 Useless PHPDoc',
             ],
         ];
 

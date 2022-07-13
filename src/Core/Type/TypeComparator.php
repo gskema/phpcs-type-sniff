@@ -10,6 +10,7 @@ use Gskema\TypeSniff\Core\Type\Common\FloatType;
 use Gskema\TypeSniff\Core\Type\Common\FqcnType;
 use Gskema\TypeSniff\Core\Type\Common\IntType;
 use Gskema\TypeSniff\Core\Type\Common\IterableType;
+use Gskema\TypeSniff\Core\Type\Common\MixedType;
 use Gskema\TypeSniff\Core\Type\Common\NullType;
 use Gskema\TypeSniff\Core\Type\Common\ObjectType;
 use Gskema\TypeSniff\Core\Type\Common\ParentType;
@@ -98,6 +99,7 @@ class TypeComparator
             IterableType::class,
             FqcnType::class, // e.g. Collection|Image[]
         ],
+        // bool does not cover true|false - fn type is concrete and specified - copy it to PHPDoc pls
     ];
 
     /**
@@ -127,11 +129,14 @@ class TypeComparator
         if ($fnTypeDefined) {
             if ($fnType instanceof NullableType) {
                 $fnTypeMap[NullType::class] = new NullType();
-                $mainFnType = $fnType->getType();
+                $fnTypeMap[get_class($fnType->getType())] = $fnType->getType();
+            } elseif ($fnType instanceof UnionType) {
+                foreach ($fnType->getTypes() as $subType) {
+                    $fnTypeMap[get_class($subType)] = $subType;
+                }
             } else {
-                $mainFnType = $fnType;
+                $fnTypeMap[get_class($fnType)] = $fnType;
             }
-            $fnTypeMap[get_class($mainFnType)] = $mainFnType;
         }
 
         if ($valTypeDefined) {
@@ -181,6 +186,11 @@ class TypeComparator
         // E.g. function func1(int $arg1 = SomeClass::CONST1) - CONST1 may be null and we would
         // report doc type "null" as wrong. This is not relevant for props.
         if (null === $valueType && !$isProp) {
+            $wrongDocTypes = [];
+        }
+
+        // e.g. mixed|null over mixed is not wrong - it's additional info
+        if ($fnType instanceof MixedType) {
             $wrongDocTypes = [];
         }
 

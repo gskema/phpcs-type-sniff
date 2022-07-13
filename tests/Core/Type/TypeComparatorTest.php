@@ -77,6 +77,13 @@ class TypeComparatorTest extends TestCase
             53 => ['double', 'float', 'int', '', ''],
             54 => ['', 'float', '', '', ''],
             55 => ['bool', 'float', null, '', 'float'],
+
+            56 => ['mixed|null', 'mixed', '', '', ''],
+            57 => ['int|null', 'mixed', '', '', 'mixed'],
+            58 => ['int|float|null', 'int|string', '', 'float, null', 'string'],
+
+            59 => ['int|null', 'int|null|false', '', '', 'false'],
+            60 => ['int|null|bool', 'int|null|false', '', 'bool', 'false'],
         ];
     }
 
@@ -102,8 +109,8 @@ class TypeComparatorTest extends TestCase
 
         [$actualWrongDocTypes, $actualMissingDocTypes] = TypeComparator::compare($givenDocType, $givenFnType, $givenValType, false);
 
-        static::assertEquals($expectedWrongRawDocTypes, $this->implodeTypes($actualWrongDocTypes));
-        static::assertEquals($expectedMissingRawDocTypes, $this->implodeTypes($actualMissingDocTypes));
+        static::assertEquals($expectedWrongRawDocTypes, $this->implodeTypes($actualWrongDocTypes), 'Wrong doc types');
+        static::assertEquals($expectedMissingRawDocTypes, $this->implodeTypes($actualMissingDocTypes), 'Missing doc types');
     }
 
     /**

@@ -92,7 +92,7 @@ class DocTypeInspector
         // e.g. @param array $arg1 -> @param int[] $arg1
         if (TypeHelper::containsType($docType, NullableType::class)) {
             $subject->addDocTypeWarning(sprintf(
-                'Replace nullable type "%s" with compound type with null "%s" for :subject:.',
+                'Replace nullable type "%s" with union type with null "%s" for :subject:.',
                 $docType->toString(),
                 str_replace('?', '', $docType->toString()) . '|null', // @TODO Not ideal
             ));
@@ -125,9 +125,9 @@ class DocTypeInspector
         // e.g. @param null $arg1 -> @param int|null $arg1
         if ($subject->getDocType() instanceof NullType) {
             if ($subject instanceof ReturnTypeSubject) {
-                $subject->addDocTypeWarning('Use void :subject: type declaration or change type to compound, e.g. SomeClass|null');
+                $subject->addDocTypeWarning('Use void :subject: type declaration or change type to union, e.g. SomeClass|null');
             } elseif ($subject instanceof ParamTypeSubject) {
-                $subject->addDocTypeWarning('Change type hint for :subject: to compound, e.g. SomeClass|null');
+                $subject->addDocTypeWarning('Change type hint for :subject: to union, e.g. SomeClass|null');
             }
             // having @var null for const, prop is allowed
         }

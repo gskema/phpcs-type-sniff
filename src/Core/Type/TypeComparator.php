@@ -5,6 +5,7 @@ namespace Gskema\TypeSniff\Core\Type;
 use Gskema\TypeSniff\Core\Type\Common\ArrayType;
 use Gskema\TypeSniff\Core\Type\Common\BoolType;
 use Gskema\TypeSniff\Core\Type\Common\CallableType;
+use Gskema\TypeSniff\Core\Type\Common\UnionType;
 use Gskema\TypeSniff\Core\Type\Common\FloatType;
 use Gskema\TypeSniff\Core\Type\Common\FqcnType;
 use Gskema\TypeSniff\Core\Type\Common\IntType;
@@ -15,7 +16,6 @@ use Gskema\TypeSniff\Core\Type\Common\SelfType;
 use Gskema\TypeSniff\Core\Type\Common\StaticType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
-use Gskema\TypeSniff\Core\Type\DocBlock\CompoundType;
 use Gskema\TypeSniff\Core\Type\DocBlock\DoubleType;
 use Gskema\TypeSniff\Core\Type\DocBlock\FalseType;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
@@ -146,7 +146,7 @@ class TypeComparator
         $wrongDocTypes = [];
         $missingDocTypeMap = $fnTypeMap;
 
-        $flatDocTypes = $docType instanceof CompoundType ? $docType->getTypes() : [$docType];
+        $flatDocTypes = $docType instanceof UnionType ? $docType->getTypes() : [$docType];
         foreach ($flatDocTypes as $flatDocType) {
             $flatDocTypeClass = get_class($flatDocType);
             $coveredFnTypeClasses = static::$coveredFnTypeClassMap[$flatDocTypeClass] ?? [];
@@ -198,7 +198,7 @@ class TypeComparator
         // to make a particular type stand out among mixed
 
         $redundantTypes = [];
-        if ($type instanceof CompoundType) {
+        if ($type instanceof UnionType) {
             foreach ($type->getTypes() as $innerType) {
                 $expectedTypeClass = static::$redundantTypeMap[get_class($innerType)] ?? null;
                 if ($expectedTypeClass && $type->containsType($expectedTypeClass)) {

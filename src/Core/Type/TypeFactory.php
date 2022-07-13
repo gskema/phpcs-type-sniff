@@ -5,6 +5,7 @@ namespace Gskema\TypeSniff\Core\Type;
 use Gskema\TypeSniff\Core\Type\Common\ArrayType;
 use Gskema\TypeSniff\Core\Type\Common\BoolType;
 use Gskema\TypeSniff\Core\Type\Common\CallableType;
+use Gskema\TypeSniff\Core\Type\Common\UnionType;
 use Gskema\TypeSniff\Core\Type\Common\FloatType;
 use Gskema\TypeSniff\Core\Type\Common\FqcnType;
 use Gskema\TypeSniff\Core\Type\Common\IntType;
@@ -18,7 +19,6 @@ use Gskema\TypeSniff\Core\Type\Common\StringType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Common\VoidType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
-use Gskema\TypeSniff\Core\Type\DocBlock\CompoundType;
 use Gskema\TypeSniff\Core\Type\DocBlock\DoubleType;
 use Gskema\TypeSniff\Core\Type\DocBlock\FalseType;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
@@ -93,7 +93,7 @@ class TypeFactory
                 $types[] = static::fromRawTypes([$rawType]); // skip split
             }
 
-            return new CompoundType($types);
+            return new UnionType($types);
         }
         $rawType = $rawTypes[0] ?? '';
 

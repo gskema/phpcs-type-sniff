@@ -33,7 +33,7 @@ class NullableType implements TypeInterface
     {
         $rawType = $this->type->toString();
 
-        // This must match sorting in CompoundType::toString() for raw comparisons.
+        // This must match sorting in UnionType::toString() for raw comparisons.
         return $rawType > 'null' ? 'null|' . $rawType : $rawType . '|null';
     }
 }

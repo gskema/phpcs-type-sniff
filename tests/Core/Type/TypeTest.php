@@ -5,6 +5,7 @@ namespace Gskema\TypeSniff\Core\Type;
 use Gskema\TypeSniff\Core\Type\Common\ArrayType;
 use Gskema\TypeSniff\Core\Type\Common\BoolType;
 use Gskema\TypeSniff\Core\Type\Common\CallableType;
+use Gskema\TypeSniff\Core\Type\Common\UnionType;
 use Gskema\TypeSniff\Core\Type\Common\FloatType;
 use Gskema\TypeSniff\Core\Type\Common\FqcnType;
 use Gskema\TypeSniff\Core\Type\Common\IntType;
@@ -18,7 +19,6 @@ use Gskema\TypeSniff\Core\Type\Common\StringType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Common\VoidType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
-use Gskema\TypeSniff\Core\Type\DocBlock\CompoundType;
 use Gskema\TypeSniff\Core\Type\DocBlock\DoubleType;
 use Gskema\TypeSniff\Core\Type\DocBlock\FalseType;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
@@ -54,15 +54,15 @@ class TypeTest extends TestCase
         self::assertEquals('null|string', (new NullableType(new StringType()))->toDocString());
         self::assertEquals('int|null', (new NullableType(new IntType()))->toDocString());
 
-        self::assertEquals('int|string', (new CompoundType([new StringType(), new IntType()]))->toString());
-        self::assertEquals([new StringType(), new IntType()], (new CompoundType([new StringType(), new IntType()]))->getTypes());
-        self::assertEquals(2, (new CompoundType([new StringType(), new IntType()]))->getCount());
-        self::assertEquals(true, (new CompoundType([new StringType(), new IntType()]))->containsType(IntType::class));
-        self::assertEquals(false, (new CompoundType([new StringType(), new IntType()]))->containsType(SelfType::class));
-        self::assertEquals([new StringType()], (new CompoundType([new StringType(), new IntType()]))->getType(StringType::class));
+        self::assertEquals('int|string', (new UnionType([new StringType(), new IntType()]))->toString());
+        self::assertEquals([new StringType(), new IntType()], (new UnionType([new StringType(), new IntType()]))->getTypes());
+        self::assertEquals(2, (new UnionType([new StringType(), new IntType()]))->getCount());
+        self::assertEquals(true, (new UnionType([new StringType(), new IntType()]))->containsType(IntType::class));
+        self::assertEquals(false, (new UnionType([new StringType(), new IntType()]))->containsType(SelfType::class));
+        self::assertEquals([new StringType()], (new UnionType([new StringType(), new IntType()]))->getType(StringType::class));
         self::assertEquals(
             '(int|string)[]',
-            (new TypedArrayType(new CompoundType([new StringType(), new IntType()]), 1))
+            (new TypedArrayType(new UnionType([new StringType(), new IntType()]), 1))
                 ->toString(),
         );
 

@@ -30,6 +30,7 @@ use Gskema\TypeSniff\Core\Func\FunctionSignature;
 use Gskema\TypeSniff\Core\Type\Common\ArrayType;
 use Gskema\TypeSniff\Core\Type\Common\BoolType;
 use Gskema\TypeSniff\Core\Type\Common\CallableType;
+use Gskema\TypeSniff\Core\Type\Common\UnionType;
 use Gskema\TypeSniff\Core\Type\Common\FloatType;
 use Gskema\TypeSniff\Core\Type\Common\FqcnType;
 use Gskema\TypeSniff\Core\Type\Common\IntType;
@@ -43,7 +44,6 @@ use Gskema\TypeSniff\Core\Type\Common\StringType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Common\VoidType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
-use Gskema\TypeSniff\Core\Type\DocBlock\CompoundType;
 use Gskema\TypeSniff\Core\Type\DocBlock\DoubleType;
 use Gskema\TypeSniff\Core\Type\DocBlock\FalseType;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
@@ -130,7 +130,7 @@ class CodeElementDetectorTest extends TestCase
                             new ClassPropElement(
                                 28,
                                 new DocBlock([], [
-                                    new VarTag(27, new CompoundType([new StringType(), new NullType()]), null, null),
+                                    new VarTag(27, new UnionType([new StringType(), new NullType()]), null, null),
                                 ]),
                                 'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass0',
                                 [],
@@ -164,7 +164,7 @@ class CodeElementDetectorTest extends TestCase
                             new ClassMethodElement(
                                 new DocBlock([], [
                                     new ParamTag(40, new IntType(), 'param1', null),
-                                    new ReturnTag(42, new CompoundType([new ArrayType(), new NullType()]), null),
+                                    new ReturnTag(42, new UnionType([new ArrayType(), new NullType()]), null),
                                 ]),
                                 'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass0',
                                 [],
@@ -730,7 +730,7 @@ class CodeElementDetectorTest extends TestCase
                                     new ParamTag(33, new TrueType(), 'true', null),
                                     new ParamTag(34, new UndefinedType(), 'undefined', null),
                                     new ParamTag(35, new TypedArrayType(new IntType(), 1), 'typedArray', null),
-                                    new ParamTag(36, new CompoundType([new IntType(), new NullType()]), 'nullableInt', null),
+                                    new ParamTag(36, new UnionType([new IntType(), new NullType()]), 'nullableInt', null),
                                     new ReturnTag(37, new ThisType(), null),
                                 ]),
                                 'Gskema\\TypeSniff\\Core\\CodeElement\\fixtures\\TestClass3',

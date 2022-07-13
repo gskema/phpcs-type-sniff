@@ -1,10 +1,10 @@
 <?php
 
-namespace Gskema\TypeSniff\Core\Type\DocBlock;
+namespace Gskema\TypeSniff\Core\Type\Common;
 
 use Gskema\TypeSniff\Core\Type\TypeInterface;
 
-class CompoundType implements TypeInterface
+class UnionType implements TypeInterface
 {
     public function __construct(
         /** @var TypeInterface[] */

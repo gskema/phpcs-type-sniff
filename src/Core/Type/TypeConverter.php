@@ -5,6 +5,7 @@ namespace Gskema\TypeSniff\Core\Type;
 use Gskema\TypeSniff\Core\Type\Common\ArrayType;
 use Gskema\TypeSniff\Core\Type\Common\BoolType;
 use Gskema\TypeSniff\Core\Type\Common\CallableType;
+use Gskema\TypeSniff\Core\Type\Common\UnionType;
 use Gskema\TypeSniff\Core\Type\Common\FloatType;
 use Gskema\TypeSniff\Core\Type\Common\FqcnType;
 use Gskema\TypeSniff\Core\Type\Common\MixedType;
@@ -12,7 +13,6 @@ use Gskema\TypeSniff\Core\Type\Common\StaticType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Common\VoidType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
-use Gskema\TypeSniff\Core\Type\DocBlock\CompoundType;
 use Gskema\TypeSniff\Core\Type\DocBlock\DoubleType;
 use Gskema\TypeSniff\Core\Type\DocBlock\FalseType;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
@@ -39,7 +39,7 @@ class TypeConverter
         if ($fnType instanceof NullableType) {
             $accurateType = static::toExampleDocType($fnType->getType());
             return $accurateType
-                ? new CompoundType([$accurateType, new NullType()])
+                ? new UnionType([$accurateType, new NullType()])
                 : null;
         }
 
@@ -48,7 +48,7 @@ class TypeConverter
 
     public static function toExampleFnType(TypeInterface $docType, bool $isProp): ?TypeInterface
     {
-        if ($docType instanceof CompoundType) {
+        if ($docType instanceof UnionType) {
             if ($docType->containsType(MixedType::class)) {
                 return new MixedType(); // mixed|null -> mixed
             }
@@ -93,7 +93,7 @@ class TypeConverter
 
         $map = [
             UndefinedType::class => null,
-            CompoundType::class => null,
+            UnionType::class => null,
             DoubleType::class => FloatType::class,
             FalseType::class => BoolType::class,
             NullType::class => null,

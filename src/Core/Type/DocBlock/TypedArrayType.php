@@ -2,6 +2,7 @@
 
 namespace Gskema\TypeSniff\Core\Type\DocBlock;
 
+use Gskema\TypeSniff\Core\Type\Common\UnionType;
 use Gskema\TypeSniff\Core\Type\TypeInterface;
 
 class TypedArrayType implements TypeInterface
@@ -28,7 +29,7 @@ class TypedArrayType implements TypeInterface
     public function toString(): string
     {
         $innerType = $this->type->toString();
-        if ($this->type instanceof CompoundType) {
+        if ($this->type instanceof UnionType) {
             $innerType = sprintf('(%s)', $innerType);
         }
 

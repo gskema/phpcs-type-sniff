@@ -5,6 +5,7 @@ namespace Gskema\TypeSniff\Core\Type;
 use Gskema\TypeSniff\Core\Type\Common\ArrayType;
 use Gskema\TypeSniff\Core\Type\Common\BoolType;
 use Gskema\TypeSniff\Core\Type\Common\CallableType;
+use Gskema\TypeSniff\Core\Type\Common\UnionType;
 use Gskema\TypeSniff\Core\Type\Common\FloatType;
 use Gskema\TypeSniff\Core\Type\Common\FqcnType;
 use Gskema\TypeSniff\Core\Type\Common\IntType;
@@ -17,7 +18,6 @@ use Gskema\TypeSniff\Core\Type\Common\StringType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Common\VoidType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
-use Gskema\TypeSniff\Core\Type\DocBlock\CompoundType;
 use Gskema\TypeSniff\Core\Type\DocBlock\DoubleType;
 use Gskema\TypeSniff\Core\Type\DocBlock\FalseType;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
@@ -50,7 +50,7 @@ class TypeConverterTest extends TestCase
             [new VoidType(), null],
             [
                 new NullableType(new StringType()),
-                new CompoundType([new StringType(), new NullType()])
+                new UnionType([new StringType(), new NullType()])
             ],
         ];
     }
@@ -77,19 +77,19 @@ class TypeConverterTest extends TestCase
     {
         return [
             [
-                new CompoundType([new StringType(), new NullType()]),
+                new UnionType([new StringType(), new NullType()]),
                 new NullableType(new StringType()),
             ],
             [
-                new CompoundType([new ThisType(), new NullType()]),
+                new UnionType([new ThisType(), new NullType()]),
                 new NullableType(new StaticType()),
             ],
             [
-                new CompoundType([new TypedArrayType(new StringType(), 1), new NullType()]),
+                new UnionType([new TypedArrayType(new StringType(), 1), new NullType()]),
                 new NullableType(new ArrayType()),
             ],
             [
-                new CompoundType([
+                new UnionType([
                     new TypedArrayType(new StringType(), 1),
                     new FalseType(),
                     new NullType(),
@@ -97,7 +97,7 @@ class TypeConverterTest extends TestCase
                 null,
             ],
             [
-                new CompoundType([
+                new UnionType([
                     new TypedArrayType(new StringType(), 1),
                     new TypedArrayType(new IntType(), 2),
                     new ArrayType(),
@@ -105,7 +105,7 @@ class TypeConverterTest extends TestCase
                 new ArrayType(),
             ],
             [
-                new CompoundType([
+                new UnionType([
                     new TypedArrayType(new StringType(), 1),
                     new TypedArrayType(new IntType(), 2),
                     new ArrayType(),
@@ -115,11 +115,11 @@ class TypeConverterTest extends TestCase
             ],
 
             [new UndefinedType(), null],
-            [new CompoundType([new IntType(), new StringType()]), null],
+            [new UnionType([new IntType(), new StringType()]), null],
             [new DoubleType(), new FloatType()],
             [new FalseType(), new BoolType()],
             [new MixedType(), new MixedType()],
-            [new CompoundType([new MixedType(), new NullType()]), new MixedType()],
+            [new UnionType([new MixedType(), new NullType()]), new MixedType()],
             [new NullType(), new NullableType(new FqcnType('SomeClass'))],
             [new SelfType(), new SelfType()],
             [new StaticType(), new StaticType()],

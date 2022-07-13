@@ -7,10 +7,10 @@ use Gskema\TypeSniff\Core\DocBlock\Tag\ParamTag;
 use Gskema\TypeSniff\Core\DocBlock\Tag\ReturnTag;
 use Gskema\TypeSniff\Core\DocBlock\Tag\VarTag;
 use Gskema\TypeSniff\Core\Type\Common\ArrayType;
+use Gskema\TypeSniff\Core\Type\Common\UnionType;
 use Gskema\TypeSniff\Core\Type\Common\IntType;
 use Gskema\TypeSniff\Core\Type\Common\MixedType;
 use Gskema\TypeSniff\Core\Type\Common\StringType;
-use Gskema\TypeSniff\Core\Type\DocBlock\CompoundType;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
 use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
 use PHP_CodeSniffer\Config;
@@ -97,7 +97,7 @@ class DocBlockParserTest extends TestCase
                     new ParamTag(32, new IntType(), 'param1', 'ParamDesc SecondLine'),
                     new ParamTag(
                         34,
-                        new CompoundType([new TypedArrayType(new StringType(), 1), new IntType()]),
+                        new UnionType([new TypedArrayType(new StringType(), 1), new IntType()]),
                         'param2',
                         null,
                     ),
@@ -207,11 +207,11 @@ class DocBlockParserTest extends TestCase
             'expectedDocBlock'  => new DocBlock(
                 [],
                 [
-                    new ReturnTag(3, new CompoundType([
+                    new ReturnTag(3, new UnionType([
                         new TypedArrayType(new MixedType(), 1),
                         new NullType(),
                     ]), 'Description text'),
-                    new ReturnTag(4, new CompoundType([
+                    new ReturnTag(4, new UnionType([
                         new ArrayType(),
                         new NullType(),
                     ]), 'Description option dsa asd'),
@@ -232,11 +232,11 @@ class DocBlockParserTest extends TestCase
             'expectedDocBlock'  => new DocBlock(
                 [],
                 [
-                    new VarTag(3, new CompoundType([
+                    new VarTag(3, new UnionType([
                         new TypedArrayType(new MixedType(), 1),
                         new NullType(),
                     ]), null, 'Description text'),
-                    new VarTag(4, new CompoundType([
+                    new VarTag(4, new UnionType([
                         new ArrayType(),
                         new NullType(),
                     ]), null, 'Description option dsa asd'),

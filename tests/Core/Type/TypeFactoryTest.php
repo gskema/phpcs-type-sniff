@@ -5,6 +5,7 @@ namespace Gskema\TypeSniff\Core\Type;
 use Gskema\TypeSniff\Core\Type\Common\ArrayType;
 use Gskema\TypeSniff\Core\Type\Common\BoolType;
 use Gskema\TypeSniff\Core\Type\Common\CallableType;
+use Gskema\TypeSniff\Core\Type\Common\UnionType;
 use Gskema\TypeSniff\Core\Type\Common\FloatType;
 use Gskema\TypeSniff\Core\Type\Common\FqcnType;
 use Gskema\TypeSniff\Core\Type\Common\IntType;
@@ -17,7 +18,6 @@ use Gskema\TypeSniff\Core\Type\Common\StringType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Common\VoidType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
-use Gskema\TypeSniff\Core\Type\DocBlock\CompoundType;
 use Gskema\TypeSniff\Core\Type\DocBlock\DoubleType;
 use Gskema\TypeSniff\Core\Type\DocBlock\FalseType;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
@@ -69,10 +69,10 @@ class TypeFactoryTest extends TestCase
             ['?string'   , new NullableType(new StringType())],
 
             ['string[]'  , new TypedArrayType(new StringType(), 1)],
-            ['string|int', new CompoundType([new StringType(), new IntType()])],
+            ['string|int', new UnionType([new StringType(), new IntType()])],
             [
                 'string[]|int|null',
-                new CompoundType([
+                new UnionType([
                     new TypedArrayType(new StringType(), 1),
                     new IntType(),
                     new NullType(),
@@ -80,11 +80,11 @@ class TypeFactoryTest extends TestCase
             ],
             [
                 'string|NodeList|Node|(Node|Location)[]',
-                new CompoundType([
+                new UnionType([
                     new StringType(),
                     new FqcnType('NodeList'),
                     new FqcnType('Node'),
-                    new TypedArrayType(new CompoundType([
+                    new TypedArrayType(new UnionType([
                         new FqcnType('Node'),
                         new FqcnType('Location')
                     ]), 1),
@@ -92,7 +92,7 @@ class TypeFactoryTest extends TestCase
             ],
             [
                 'array<string,array<string,string>>|\Zend\ServiceManager\Config',
-                new CompoundType([
+                new UnionType([
                     new TypedArrayType(new MixedType(), 1),
                     new FqcnType('\Zend\ServiceManager\Config'),
                 ]),
@@ -103,8 +103,8 @@ class TypeFactoryTest extends TestCase
             ],
             [
                 '(int[]|string)[]|null',
-                new CompoundType([
-                    new TypedArrayType(new CompoundType([
+                new UnionType([
+                    new TypedArrayType(new UnionType([
                         new TypedArrayType(new IntType(), 1),
                         new StringType(),
                     ]), 1),
@@ -117,16 +117,16 @@ class TypeFactoryTest extends TestCase
             ],
             [
                 '((bool|int)[][]|(string|float)[])[]',
-                new TypedArrayType(new CompoundType([
-                    new TypedArrayType(new CompoundType([new BoolType(), new IntType()]), 2), // (bool|int)[][]
-                    new TypedArrayType(new CompoundType([new StringType(), new FloatType()]), 1), // (string|float)[]
+                new TypedArrayType(new UnionType([
+                    new TypedArrayType(new UnionType([new BoolType(), new IntType()]), 2), // (bool|int)[][]
+                    new TypedArrayType(new UnionType([new StringType(), new FloatType()]), 1), // (string|float)[]
                 ]), 1),
             ],
             ['[]', new TypedArrayType(new UndefinedType(), 1)],
             ['[][]', new TypedArrayType(new UndefinedType(), 2)],
             [
                 '[]|null',
-                new CompoundType([
+                new UnionType([
                     new TypedArrayType(new UndefinedType(), 1),
                     new NullType(),
                 ]),

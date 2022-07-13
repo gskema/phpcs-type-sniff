@@ -88,7 +88,7 @@ class TypeComparator
             FqcnType::class,
             IterableType::class,
             ObjectType::class,
-            SelfType::class, // '$this' doesn't provide any additional code intel over 'self', better trim PHPDoc.
+            // SelfType::class, // '$this' doesn't provide any additional code intel over 'self', better trim PHPDoc.
         ],
         TrueType::class => [
             BoolType::class,

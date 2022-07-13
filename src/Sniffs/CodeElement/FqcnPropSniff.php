@@ -23,7 +23,7 @@ class FqcnPropSniff implements CodeElementSniffInterface
 
     protected string $reportType = 'warning';
     protected bool $addViolationId = true;
-    protected bool $treatPcpAsProp = true;
+    protected bool $inspectPcpAsProp = true;
 
     /**
      * @inheritDoc
@@ -32,7 +32,7 @@ class FqcnPropSniff implements CodeElementSniffInterface
     {
         $this->reportType = (string)($config['reportType'] ?? 'warning');
         $this->addViolationId = (bool)($config['addViolationId'] ?? true);
-        $this->treatPcpAsProp = 'prop' === ($config['treatPromotedConstructorPropertyAs'] ?? 'prop');
+        $this->inspectPcpAsProp = 'prop' === ($config['inspectPromotedConstructorPropertyAs'] ?? 'prop');
     }
 
     /**
@@ -56,7 +56,7 @@ class FqcnPropSniff implements CodeElementSniffInterface
     {
         $subject = PropTypeSubject::fromElement($prop);
 
-        if (!$this->treatPcpAsProp && $prop->isPromoted()) {
+        if (!$this->inspectPcpAsProp && $prop->isPromoted()) {
             // ask to remove inline doc block = treat as function param
             $this->reportUnneededInlineDocBlock($subject);
             $subject->writeViolationsTo($file, static::CODE, $this->reportType, $this->addViolationId);

@@ -423,7 +423,7 @@ class CompositeCodeElementSniffTest extends TestCase
             [
                 'addViolationId' => false,
                 'useReflection' => false,
-                'treatPromotedConstructorPropertyAs' => 'prop'
+                'inspectPromotedConstructorPropertyAs' => 'prop'
             ],
             __DIR__ . '/fixtures/TestClass12.php',
             [
@@ -446,7 +446,7 @@ class CompositeCodeElementSniffTest extends TestCase
             [
                 'addViolationId' => false,
                 'useReflection' => false,
-                'treatPromotedConstructorPropertyAs' => 'param'
+                'inspectPromotedConstructorPropertyAs' => 'param'
             ],
             __DIR__ . '/fixtures/TestClass12.php',
             [

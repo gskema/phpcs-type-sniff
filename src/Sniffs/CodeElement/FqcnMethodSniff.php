@@ -35,7 +35,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
     protected bool $reportNullableBasicGetter = true;
     protected string $reportType = 'warning';
     protected bool $addViolationId = true;
-    protected bool $treatPcpAsParam = false;
+    protected bool $inspectPcpAsParam = false;
 
     /**
      * @inheritDoc
@@ -54,7 +54,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         $this->reportNullableBasicGetter = (bool)($config['reportNullableBasicGetter'] ?? true);
         $this->reportType = (string)($config['reportType'] ?? 'warning');
         $this->addViolationId = (bool)($config['addViolationId'] ?? true);
-        $this->treatPcpAsParam = 'param' === ($config['treatPromotedConstructorPropertyAs'] ?? 'prop');
+        $this->inspectPcpAsParam = 'param' === ($config['inspectPromotedConstructorPropertyAs'] ?? 'prop');
     }
 
     /**
@@ -112,7 +112,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
             $paramTag = $docBlock->getParamTag($fnParam->getName());
             $id = $method->getId() . $fnParam->getName();
             $subject = ParamTypeSubject::fromParam($fnParam, $paramTag, $docBlock, $id);
-            if ($this->treatPcpAsParam || !$fnParam->isPromotedProp()) {
+            if ($this->inspectPcpAsParam || !$fnParam->isPromotedProp()) {
                 $this->processParam($subject); // basic param or pcp treated as param
             } else {
                 $this->processPromotedProp($subject, $paramTag); // request to remove @param tag

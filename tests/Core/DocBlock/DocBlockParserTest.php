@@ -2,22 +2,22 @@
 
 namespace Gskema\TypeSniff\Core\DocBlock;
 
-use Gskema\TypeSniff\Core\Type\DocBlock\MixedType;
-use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
-use PHP_CodeSniffer\Config;
-use PHP_CodeSniffer\Exceptions\RuntimeException;
-use PHP_CodeSniffer\Files\LocalFile;
-use PHP_CodeSniffer\Ruleset;
-use PHPUnit\Framework\TestCase;
 use Gskema\TypeSniff\Core\DocBlock\Tag\GenericTag;
 use Gskema\TypeSniff\Core\DocBlock\Tag\ParamTag;
 use Gskema\TypeSniff\Core\DocBlock\Tag\ReturnTag;
 use Gskema\TypeSniff\Core\DocBlock\Tag\VarTag;
 use Gskema\TypeSniff\Core\Type\Common\ArrayType;
 use Gskema\TypeSniff\Core\Type\Common\IntType;
+use Gskema\TypeSniff\Core\Type\Common\MixedType;
 use Gskema\TypeSniff\Core\Type\Common\StringType;
 use Gskema\TypeSniff\Core\Type\DocBlock\CompoundType;
+use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
 use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
+use PHP_CodeSniffer\Config;
+use PHP_CodeSniffer\Exceptions\RuntimeException;
+use PHP_CodeSniffer\Files\LocalFile;
+use PHP_CodeSniffer\Ruleset;
+use PHPUnit\Framework\TestCase;
 
 class DocBlockParserTest extends TestCase
 {

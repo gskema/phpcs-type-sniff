@@ -194,6 +194,9 @@ class TypeComparator
      */
     public static function getRedundantDocTypes(?TypeInterface $type): array
     {
+        // mixed type redundancies are not reported - it's fine to document mixed|null or mixed|Acme
+        // to make a particular type stand out among mixed
+
         $redundantTypes = [];
         if ($type instanceof CompoundType) {
             foreach ($type->getTypes() as $innerType) {

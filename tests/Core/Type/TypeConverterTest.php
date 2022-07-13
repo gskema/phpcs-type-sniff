@@ -9,6 +9,7 @@ use Gskema\TypeSniff\Core\Type\Common\FloatType;
 use Gskema\TypeSniff\Core\Type\Common\FqcnType;
 use Gskema\TypeSniff\Core\Type\Common\IntType;
 use Gskema\TypeSniff\Core\Type\Common\IterableType;
+use Gskema\TypeSniff\Core\Type\Common\MixedType;
 use Gskema\TypeSniff\Core\Type\Common\ObjectType;
 use Gskema\TypeSniff\Core\Type\Common\SelfType;
 use Gskema\TypeSniff\Core\Type\Common\StaticType;
@@ -19,7 +20,6 @@ use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
 use Gskema\TypeSniff\Core\Type\DocBlock\CompoundType;
 use Gskema\TypeSniff\Core\Type\DocBlock\DoubleType;
 use Gskema\TypeSniff\Core\Type\DocBlock\FalseType;
-use Gskema\TypeSniff\Core\Type\DocBlock\MixedType;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ResourceType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ThisType;
@@ -118,7 +118,8 @@ class TypeConverterTest extends TestCase
             [new CompoundType([new IntType(), new StringType()]), null],
             [new DoubleType(), new FloatType()],
             [new FalseType(), new BoolType()],
-            [new MixedType(), null],
+            [new MixedType(), new MixedType()],
+            [new CompoundType([new MixedType(), new NullType()]), new MixedType()],
             [new NullType(), new NullableType(new FqcnType('SomeClass'))],
             [new SelfType(), new SelfType()],
             [new StaticType(), new StaticType()],

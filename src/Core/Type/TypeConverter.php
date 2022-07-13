@@ -7,6 +7,7 @@ use Gskema\TypeSniff\Core\Type\Common\BoolType;
 use Gskema\TypeSniff\Core\Type\Common\CallableType;
 use Gskema\TypeSniff\Core\Type\Common\FloatType;
 use Gskema\TypeSniff\Core\Type\Common\FqcnType;
+use Gskema\TypeSniff\Core\Type\Common\MixedType;
 use Gskema\TypeSniff\Core\Type\Common\StaticType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Common\VoidType;
@@ -14,7 +15,6 @@ use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
 use Gskema\TypeSniff\Core\Type\DocBlock\CompoundType;
 use Gskema\TypeSniff\Core\Type\DocBlock\DoubleType;
 use Gskema\TypeSniff\Core\Type\DocBlock\FalseType;
-use Gskema\TypeSniff\Core\Type\DocBlock\MixedType;
 use Gskema\TypeSniff\Core\Type\DocBlock\NullType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ResourceType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ThisType;
@@ -49,6 +49,10 @@ class TypeConverter
     public static function toExampleFnType(TypeInterface $docType, bool $isProp): ?TypeInterface
     {
         if ($docType instanceof CompoundType) {
+            if ($docType->containsType(MixedType::class)) {
+                return new MixedType(); // mixed|null -> mixed
+            }
+
             $types = $docType->getTypes();
             if (2 === $docType->getCount() && $docType->containsType(NullType::class)) {
                 $otherType = $types[0] instanceof NullType ? $types[1] : $types[0];
@@ -92,7 +96,6 @@ class TypeConverter
             CompoundType::class => null,
             DoubleType::class => FloatType::class,
             FalseType::class => BoolType::class,
-            MixedType::class => null,
             NullType::class => null,
             ThisType::class => StaticType::class,
             TrueType::class => BoolType::class,

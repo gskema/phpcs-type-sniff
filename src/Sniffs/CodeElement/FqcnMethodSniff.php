@@ -11,6 +11,7 @@ use Gskema\TypeSniff\Core\DocBlock\Tag\ParamTag;
 use Gskema\TypeSniff\Core\DocBlock\Tag\VarTag;
 use Gskema\TypeSniff\Core\DocBlock\UndefinedDocBlock;
 use Gskema\TypeSniff\Core\SniffHelper;
+use Gskema\TypeSniff\Core\Type\Common\MixedType;
 use Gskema\TypeSniff\Core\Type\Common\NullType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
@@ -266,7 +267,11 @@ class FqcnMethodSniff implements CodeElementSniffInterface
 
         // Only report in fn type is defined. Doc type and fn type is synced by other sniffs.
         $returnFnType = $subject->getFnType();
-        if (!($returnFnType instanceof UndefinedType) && !($returnFnType instanceof NullableType)) {
+        if (
+            !($returnFnType instanceof UndefinedType) &&
+            !($returnFnType instanceof NullableType) &&
+            !($returnFnType instanceof MixedType)
+        ) {
             $subject->addFnTypeWarning(sprintf(
                 'Returned property $%s is nullable, use nullable return type declaration, e.g. ?%s',
                 $propName,

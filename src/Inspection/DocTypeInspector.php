@@ -187,12 +187,21 @@ class DocTypeInspector
 
         // wrong types are not reported for dynamic assignments, e.g. class props.
         if ($wrongDocTypes) {
-            $subject->addDocTypeWarning(sprintf(
-                'Type %s "%s" %s not compatible with :subject: value type',
-                isset($wrongDocTypes[1]) ? 'hints' : 'hint',
-                TypeHelper::listRawTypes($wrongDocTypes),
-                isset($wrongDocTypes[1]) ? 'are' : 'is',
-            ));
+            $rawTypeList = TypeHelper::listRawTypes($wrongDocTypes);
+            if ('$this' === $rawTypeList) {
+                $subject->addDocTypeWarning(sprintf(
+                    'Doc type "$this" for :subject: does not provide additional code intel and can be replaced with declared type "%s".',
+                    $subject->getFnType()->toString()
+                ));
+            } else {
+                $subject->addDocTypeWarning(sprintf(
+                    'Type %s "%s" %s not compatible with :subject:%s type',
+                    isset($wrongDocTypes[1]) ? 'hints' : 'hint',
+                    $rawTypeList,
+                    isset($wrongDocTypes[1]) ? 'are' : 'is',
+                    $subject instanceof ReturnTypeSubject ? '' : ' value' // fixing messages
+                ));
+            }
         }
 
         if ($missingDocTypes) {

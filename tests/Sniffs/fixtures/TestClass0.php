@@ -56,4 +56,7 @@ class TestClass0
 
     /** @var array[][] */
     private $prop11 = [];
+
+    /** @var int|string */
+    protected int|string $prop12;
 }

@@ -32,6 +32,10 @@ class TypeConverter
             return null;
         }
 
+        if ($fnType instanceof UnionType) {
+            return new UnionType(array_map(fn(TypeInterface $type) => static::toExampleDocType($type), $fnType->getTypes()));
+        }
+
         if ($fnType instanceof ArrayType) {
             return new TypedArrayType(new FqcnType('SomeClass'), 1);
         }
@@ -50,72 +54,71 @@ class TypeConverter
     {
         if ($docType instanceof UnionType) {
             if ($docType->containsType(MixedType::class)) {
-                return new MixedType(); // mixed|null -> mixed
+                return new MixedType(); // mixed|null -> mixed, mixed type cannot be in union
             }
 
-            $types = $docType->getTypes();
-            if (2 === $docType->getCount() && $docType->containsType(NullType::class)) {
-                $otherType = $types[0] instanceof NullType ? $types[1] : $types[0];
-                $suggestedType = static::toExampleFnType($otherType, $isProp);
-                if (null !== $suggestedType) {
-                    return new NullableType($suggestedType);
+            // use map to avoid duplicates
+            $fnSubTypes = [];
+            foreach ($docType->getTypes() as $docSubType) {
+                if ($docSubType instanceof NullType || $docSubType instanceof FalseType) {
+                    $fnSubTypes[get_class($docSubType)] = $docSubType;
+                } elseif ($docSubType instanceof ArrayType || $docSubType instanceof TypedArrayType) {
+                    $fnSubTypes[ArrayType::class] = new ArrayType();
+                } else {
+                    // Sometimes ?int|string can be specified in PHPDoc. don't suggest ?int|string, but null|int|string
+                    if ($docSubType instanceof NullableType) {
+                        $fnSubTypes[NullType::class] = new NullType();
+                        $docSubType = $docSubType->getType();
+                    }
+
+                    $fnSubType = static::toExampleFnType($docSubType, $isProp);
+                    if (null === $fnSubType) {
+                        return null; // cannot be expressed in fn type, e.g. resource or callable (for prop)
+                    }
+                    $fnSubTypes[$fnSubType->toString()] = $fnSubType; // deduplicate by str expressions, e.g. FqcnType
                 }
             }
+            $fnSubTypes = array_values($fnSubTypes);
 
-            $isNullable = false;
-            $isArray = true;
-            foreach ($docType->getTypes() as $type) {
-                if ($type instanceof NullType) {
-                    $isNullable = true;
-                    continue;
+            $fnSubTypeCount = count($fnSubTypes);
+            if (2 === $fnSubTypeCount) {
+                $isNull0 = $fnSubTypes[0] instanceof NullType;
+                $isNull1 = $fnSubTypes[1] instanceof NullType;
+                if ($isNull0 || $isNull1) {
+                    $otherType = $isNull0 ? $fnSubTypes[1] : $fnSubTypes[0];
+                    return $otherType instanceof FalseType ? null : new NullableType($otherType); // null|false not possible
                 }
-                if (
-                    !($type instanceof ArrayType)
-                    && !($type instanceof TypedArrayType)
-                ) {
-                    $isArray = false;
-                    break;
-                }
+            } elseif (1 === $fnSubTypeCount) {
+                return $fnSubTypes[0];
             }
 
-            if ($isArray) {
-                return $isNullable
-                    ? new NullableType(new ArrayType())
-                    : new ArrayType();
-            }
-
-            return null;
+            return new UnionType($fnSubTypes);
         }
 
+        // e.g. suggestion when func1($arg1 = null) -> generated phpdoc is usually @param null $arg1
         if ($docType instanceof NullType) {
             return new NullableType(new FqcnType('SomeClass'));
         }
 
         $map = [
             UndefinedType::class => null,
-            UnionType::class => null,
             DoubleType::class => FloatType::class,
-            FalseType::class => BoolType::class,
-            NullType::class => null,
+            FalseType::class => BoolType::class, // false stand-alone only available in php8.1
+            NullType::class => null, // null stand-alone only available in php8.1
             ThisType::class => StaticType::class,
             TrueType::class => BoolType::class,
             TypedArrayType::class => ArrayType::class,
+            ResourceType::class => null,
         ];
 
         $docTypeClass = get_class($docType);
         if (key_exists($docTypeClass, $map)) {
             $fnTypeClass = $map[$docTypeClass];
-            return $fnTypeClass
-                ? new $fnTypeClass()
-                : null;
+            return $fnTypeClass ? new $fnTypeClass() : null;
         }
 
         if ($isProp && $docType instanceof CallableType) {
             return null; // supported for function arguments, but not props
-        }
-
-        if ($docType instanceof ResourceType) {
-            return null;
         }
 
         return $docType;

@@ -48,8 +48,5 @@ abstract class AbstractFqcnMethodElement extends AbstractFqcnElement
         }
     }
 
-    /**
-     * @return ClassMethodMetadata|TraitMethodMetadata|InterfaceMethodMetadata
-     */
-    abstract public function getMetadata();
+    abstract public function getMetadata(): ClassMethodMetadata|InterfaceMethodMetadata|TraitMethodMetadata;
 }

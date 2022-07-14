@@ -5,8 +5,10 @@ namespace Gskema\TypeSniff\Inspection;
 use Gskema\TypeSniff\Core\Type\Common\ArrayType;
 use Gskema\TypeSniff\Core\Type\Common\NullType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
+use Gskema\TypeSniff\Core\Type\Common\UnionType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
 use Gskema\TypeSniff\Core\Type\TypeConverter;
+use Gskema\TypeSniff\Core\Type\TypeInterface;
 use Gskema\TypeSniff\Inspection\Subject\AbstractTypeSubject;
 use Gskema\TypeSniff\Inspection\Subject\PropTypeSubject;
 
@@ -14,15 +16,32 @@ class FnTypeInspector
 {
     public static function reportReplaceableTypes(AbstractTypeSubject $subject): void
     {
+        $fnType = $subject->getFnType();
+
         // (string $arg1 = null) -> (?string $arg1 = null)
         if (
             $subject->getValueType() instanceof NullType
-            && !($subject->getFnType() instanceof UndefinedType)
-            && !($subject->getFnType() instanceof NullableType)
+            && !($fnType instanceof UndefinedType)
+            && !($fnType instanceof NullableType)
+            && !($fnType instanceof UnionType)
         ) {
             $subject->addFnTypeWarning(sprintf(
                 'Change :subject: type declaration to nullable, e.g. %s. Remove default null value if this argument is required.',
-                (new NullableType($subject->getFnType()))->toString(),
+                (new NullableType($fnType))->toString(),
+            ));
+        }
+
+        // (string|null $param1) -> (?string $param1)
+        if (
+            $fnType instanceof UnionType &&
+            $fnType->getCount() === 2 &&
+            $fnType->containsType(NullType::class)
+        ) {
+            $otherSubTypes = array_filter($fnType->getTypes(), fn(TypeInterface $type) => !($type instanceof NullType));
+            $otherSubType = reset($otherSubTypes);
+            $subject->addFnTypeWarning(sprintf(
+                'Change :subject: type declaration to shorthand nullable syntax, e.g. %s',
+                (new NullableType($otherSubType))->toString(),
             ));
         }
     }

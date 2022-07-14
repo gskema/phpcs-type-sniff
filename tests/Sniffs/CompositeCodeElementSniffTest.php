@@ -491,6 +491,8 @@ class CompositeCodeElementSniffTest extends TestCase
                 '065 Type hint "static" is not compatible with return value type',
                 '065 Missing "self" type in return value type hint',
                 '074 Useless PHPDoc',
+                '079 Change parameter $param1 type declaration to shorthand nullable syntax, e.g. ?Acme',
+                '081 Change return value type declaration to shorthand nullable syntax, e.g. ?int',
             ],
         ];
 

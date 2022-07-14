@@ -74,4 +74,10 @@ class TestClass13
     public function create10(): static
     {
     }
+
+    public function method1(
+        Acme|null $param1 = null,
+        Acme|string|null $param1 = null
+    ): int|null {
+    }
 }

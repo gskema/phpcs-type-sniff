@@ -10,7 +10,6 @@
     <file>tests</file>
     <file>scripts</file>
     <exclude-pattern>*/tests/*/fixtures/*\.php$</exclude-pattern>
-    <exclude-pattern>*/tests/*/FixtureClass/*\.php$</exclude-pattern>
 
     <rule ref="PSR12">
         <exclude name="Generic.Files.LineLength"/>

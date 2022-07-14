@@ -1,6 +1,6 @@
 <?php
 
-namespace Gskema\TypeSniff\Core\FixtureClass;
+namespace Gskema\TypeSniff\Core\fixtures;
 
 class TestClass13 extends TestClassBrokenParse
 {

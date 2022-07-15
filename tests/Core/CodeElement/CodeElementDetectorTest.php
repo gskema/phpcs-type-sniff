@@ -486,6 +486,17 @@ class CodeElementDetectorTest extends TestCase
                                 false,
                                 new TraitPropMetadata(true),
                             ),
+                            new TraitPropElement(
+                                10,
+                                new UndefinedDocBlock(),
+                                'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestTrait0',
+                                [],
+                                'prop2',
+                                new IntType(),
+                                new UndefinedType(),
+                                true,
+                                new TraitPropMetadata(false),
+                            ),
                         ],
                         [
                             new TraitMethodElement(
@@ -494,12 +505,27 @@ class CodeElementDetectorTest extends TestCase
                                 [],
                                 new FunctionSignature(
                                     9,
+                                    '__construct',
+                                    [
+                                        new FunctionParam(10, 'prop2', new IntType(), new UndefinedType(), [], null, true),
+                                    ],
+                                    new UndefinedType(),
+                                    11
+                                ),
+                                new TraitMethodMetadata([], null, []),
+                            ),
+                            new TraitMethodElement(
+                                new UndefinedDocBlock(),
+                                'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestTrait0',
+                                [],
+                                new FunctionSignature(
+                                    14,
                                     'func1',
                                     [
-                                        new FunctionParam(9, 'arg1', new IntType(), new UndefinedType(), []),
+                                        new FunctionParam(14, 'arg1', new IntType(), new UndefinedType(), []),
                                     ],
                                     new IntType(),
-                                    9
+                                    14
                                 ),
                                 new TraitMethodMetadata([], null, []),
                             ),

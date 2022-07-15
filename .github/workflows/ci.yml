@@ -36,6 +36,5 @@ jobs:
           composer test-coverage
           composer phpcs
 
-      - name: Upload Coverage
-        run:
-          composer upload-coverage
+    - name: Upload Scrutinizer coverage
+      uses: sudo-bot/action-scrutinizer@latest

@@ -36,5 +36,6 @@ jobs:
           composer test-coverage
           composer phpcs
 
-      - name: Upload Scrutinizer coverage
-        uses: sudo-bot/action-scrutinizer@latest
+      - name: Upload Coverage
+        if: github.repository_owner == 'gskema'
+        run: composer upload-coverage

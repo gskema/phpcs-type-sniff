@@ -9,7 +9,7 @@
 
 Custom `phpcs` [CodeSniffer][link-phpcs] rule that:
 
-- Enforces usage of PHP 7 type declarations (where possible)
+- Enforces usage of PHP8, PHP7 type declarations (where possible)
 - Enforces documenting array types with more specific types (e.g. `int[]`)
 - Checks for useless PHPDoc blocks (no repeated information)
 - Many more other checks
@@ -86,6 +86,34 @@ class Banana
 
     #[ArrayShape(['foo' => 'int'])]
     public $prop14 = ['foo' => 1];  // ArrayShape supported
+
+    public function __construct(
+        $param1,                    // missing param type decl. in method PHPDoc
+        public $param2,             // missing param type decl. (in method PHPDoc or inline PHPDoc)
+        public array $param3,       // missing typed array doc type (in method PHPDoc or inline PHPDoc)
+        public int $param4,
+        public int|null             // must use shorthand nullable syntax: ?int
+    ) {}
+
+    /**
+     * @return $this                // missing type decl. e.g. 'static'
+     */
+    public function setThing()
+    {
+        return $this;
+    }
+
+    /**
+     * @param array|string          // must used typed array + wrong type: string + missing: int 
+     * @param mixed $id 
+     * @return $this                // useless PHPDoc (does not provide additional code intel over 'static')
+     */
+    public function setSomething(
+        array|int
+        $id = null                  // missing type decl. "mixed"
+    ): self {
+        return $this;
+    }
 
     public function func1(
         $param1,                    // missing param type decl.

@@ -4,6 +4,10 @@ All notable changes to `phpcs-type-sniff` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## 74.2.0 - 2022-07-28
+### Changed
+- Change package PHP requirements to allow current PHP version + 1 next major version for forward migration.
+
 ## 74.1.2 - 2022-07-04
 ### Fixed
 - `trim(null)` deprecation warnings for PHP 8.1+

@@ -37,5 +37,5 @@ jobs:
           composer phpcs
 
       - name: Upload Coverage
-        run:
-          composer upload-coverage
+        if: github.repository_owner == 'gskema'
+        run: composer upload-coverage

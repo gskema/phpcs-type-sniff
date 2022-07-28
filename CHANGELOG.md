@@ -4,6 +4,10 @@ All notable changes to `phpcs-type-sniff` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## 80.1.0 - 2022-07-28
+### Changed
+- Change package PHP requirements to allow current PHP version + 1 next major version for forward migration.
+
 ## 80.0.0 - 2022-07-15
 ### Added
 - Support for PHP8: promoted constructor properties, static type, mixed type, false type, null type, union type.

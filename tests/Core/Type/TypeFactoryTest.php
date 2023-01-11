@@ -11,6 +11,7 @@ use Gskema\TypeSniff\Core\Type\Common\FqcnType;
 use Gskema\TypeSniff\Core\Type\Common\IntType;
 use Gskema\TypeSniff\Core\Type\Common\IterableType;
 use Gskema\TypeSniff\Core\Type\Common\MixedType;
+use Gskema\TypeSniff\Core\Type\Common\NeverType;
 use Gskema\TypeSniff\Core\Type\Common\NullType;
 use Gskema\TypeSniff\Core\Type\Common\ObjectType;
 use Gskema\TypeSniff\Core\Type\Common\SelfType;
@@ -56,6 +57,7 @@ class TypeFactoryTest extends TestCase
             ['true'     , new TrueType()],
             [''         , new UndefinedType()],
             ['void'     , new VoidType()],
+            ['never'    , new NeverType()],
 
             ['?array'    , new NullableType(new ArrayType())],
             ['?bool'     , new NullableType(new BoolType())],

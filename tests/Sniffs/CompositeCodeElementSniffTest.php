@@ -496,6 +496,20 @@ class CompositeCodeElementSniffTest extends TestCase
             ],
         ];
 
+        // #21
+        $dataSets[] = [
+            [
+                'addViolationId' => false,
+                'useReflection' => false,
+            ],
+            __DIR__ . '/fixtures/TestClass14.php',
+            [
+                '010 Add type declaration for return value, e.g.: "never".',
+                '017 Useless PHPDoc',
+                '033 Type hint "int" is not compatible with return value type',
+            ],
+        ];
+
         return $dataSets;
     }
 

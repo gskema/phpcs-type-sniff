@@ -11,6 +11,7 @@ use Gskema\TypeSniff\Core\Type\Common\FqcnType;
 use Gskema\TypeSniff\Core\Type\Common\IntType;
 use Gskema\TypeSniff\Core\Type\Common\IterableType;
 use Gskema\TypeSniff\Core\Type\Common\MixedType;
+use Gskema\TypeSniff\Core\Type\Common\NeverType;
 use Gskema\TypeSniff\Core\Type\Common\NullType;
 use Gskema\TypeSniff\Core\Type\Common\ObjectType;
 use Gskema\TypeSniff\Core\Type\Common\ParentType;
@@ -56,6 +57,7 @@ class TypeFactory
         'true'     => TrueType::class,
         ''         => UndefinedType::class,
         'void'     => VoidType::class,
+        'never'    => NeverType::class,
     ];
 
     /**

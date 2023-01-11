@@ -9,6 +9,7 @@ use Gskema\TypeSniff\Core\Type\Common\FalseType;
 use Gskema\TypeSniff\Core\Type\Common\FloatType;
 use Gskema\TypeSniff\Core\Type\Common\FqcnType;
 use Gskema\TypeSniff\Core\Type\Common\MixedType;
+use Gskema\TypeSniff\Core\Type\Common\NeverType;
 use Gskema\TypeSniff\Core\Type\Common\NullType;
 use Gskema\TypeSniff\Core\Type\Common\StaticType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
@@ -55,6 +56,9 @@ class TypeConverter
         if ($docType instanceof UnionType) {
             if ($docType->containsType(MixedType::class)) {
                 return new MixedType(); // mixed|null -> mixed, mixed type cannot be in union
+            }
+            if ($docType->containsType(NeverType::class)) {
+                return null; // never type can be in fn unions
             }
 
             // use map to avoid duplicates

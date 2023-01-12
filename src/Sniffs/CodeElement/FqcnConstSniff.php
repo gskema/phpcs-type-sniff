@@ -53,6 +53,7 @@ class FqcnConstSniff implements CodeElementSniffInterface
         DocTypeInspector::reportMandatoryTypes($subject);
         DocTypeInspector::reportReplaceableTypes($subject);
 
+        DocTypeInspector::reportInvalidTypes($subject);
         DocTypeInspector::reportRemovableTypes($subject);
         DocTypeInspector::reportMissingOrWrongTypes($subject);
 

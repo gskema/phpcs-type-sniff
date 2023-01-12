@@ -8,6 +8,7 @@ use Gskema\TypeSniff\Core\Type\Common\CallableType;
 use Gskema\TypeSniff\Core\Type\Common\FalseType;
 use Gskema\TypeSniff\Core\Type\Common\FloatType;
 use Gskema\TypeSniff\Core\Type\Common\FqcnType;
+use Gskema\TypeSniff\Core\Type\Common\IntersectionType;
 use Gskema\TypeSniff\Core\Type\Common\IntType;
 use Gskema\TypeSniff\Core\Type\Common\IterableType;
 use Gskema\TypeSniff\Core\Type\Common\MixedType;
@@ -82,8 +83,8 @@ class TypeFactory
     }
 
     /**
+     * @TODO This does not support spacing in unions and intersections, e.g. (int | string)
      * @param string[] $rawTypes
-     *
      * @return TypeInterface
      */
     protected static function fromRawTypes(array $rawTypes): TypeInterface
@@ -98,6 +99,10 @@ class TypeFactory
             return new UnionType($types);
         }
         $rawType = $rawTypes[0] ?? '';
+
+        if (str_contains($rawType, '&')) {
+            return new IntersectionType(array_map(self::fromRawType(...), explode('&', $rawType)));
+        }
 
         // Supported for parsing function parameter type declaration, but doc type not valid.
         // Usage as doc type detected by multiple warnings.

@@ -87,6 +87,7 @@ class FqcnPropSniff implements CodeElementSniffInterface
 
         FnTypeInspector::reportReplaceableTypes($subject);
 
+        DocTypeInspector::reportInvalidTypes($subject);
         DocTypeInspector::reportMandatoryTypes($subject);
         DocTypeInspector::reportReplaceableTypes($subject);
         DocTypeInspector::reportRemovableTypes($subject);

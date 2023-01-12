@@ -3,6 +3,7 @@
 namespace Gskema\TypeSniff\Inspection;
 
 use Gskema\TypeSniff\Core\Type\Common\ArrayType;
+use Gskema\TypeSniff\Core\Type\Common\IntersectionType;
 use Gskema\TypeSniff\Core\Type\Common\NullType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Common\VoidType;
@@ -89,7 +90,7 @@ class DocTypeInspector
 
         $docType = $subject->getDocType();
 
-        // e.g. @param array $arg1 -> @param int[] $arg1
+        // e.g. @param ?int $arg1 -> @param int|null $arg1
         if (TypeHelper::containsType($docType, NullableType::class)) {
             $subject->addDocTypeWarning(sprintf(
                 'Replace nullable type "%s" with union type with null "%s" for :subject:.',
@@ -122,8 +123,13 @@ class DocTypeInspector
 
         // @TODO true/void/false/$this/ cannot be param tags
 
+        $docType = $subject->getDocType();
+        if ($docType instanceof IntersectionType && !$docType->isValid()) {
+            $subject->addDocTypeWarning('Intersection types can only contain class or interfaces names');
+        }
+
         // e.g. @param null $arg1 -> @param int|null $arg1
-        if ($subject->getDocType() instanceof NullType) {
+        if ($docType instanceof NullType) {
             if ($subject instanceof ReturnTypeSubject) {
                 $subject->addDocTypeWarning('Use void :subject: type declaration or change type to union, e.g. SomeClass|null');
             } elseif ($subject instanceof ParamTypeSubject) {

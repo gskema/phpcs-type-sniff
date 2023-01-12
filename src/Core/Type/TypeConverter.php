@@ -8,6 +8,7 @@ use Gskema\TypeSniff\Core\Type\Common\CallableType;
 use Gskema\TypeSniff\Core\Type\Common\FalseType;
 use Gskema\TypeSniff\Core\Type\Common\FloatType;
 use Gskema\TypeSniff\Core\Type\Common\FqcnType;
+use Gskema\TypeSniff\Core\Type\Common\IntersectionType;
 use Gskema\TypeSniff\Core\Type\Common\MixedType;
 use Gskema\TypeSniff\Core\Type\Common\NeverType;
 use Gskema\TypeSniff\Core\Type\Common\NullType;
@@ -97,6 +98,10 @@ class TypeConverter
             }
 
             return new UnionType($fnSubTypes);
+        }
+
+        if ($docType instanceof IntersectionType && !$docType->isValid()) {
+            return null;
         }
 
         // e.g. suggestion when func1($arg1 = null) -> generated phpdoc is usually @param null $arg1

@@ -8,6 +8,7 @@ use Gskema\TypeSniff\Core\Type\Common\CallableType;
 use Gskema\TypeSniff\Core\Type\Common\FalseType;
 use Gskema\TypeSniff\Core\Type\Common\FloatType;
 use Gskema\TypeSniff\Core\Type\Common\FqcnType;
+use Gskema\TypeSniff\Core\Type\Common\IntersectionType;
 use Gskema\TypeSniff\Core\Type\Common\IntType;
 use Gskema\TypeSniff\Core\Type\Common\IterableType;
 use Gskema\TypeSniff\Core\Type\Common\MixedType;
@@ -132,6 +133,23 @@ class TypeFactoryTest extends TestCase
                     new TypedArrayType(new UndefinedType(), 1),
                     new NullType(),
                 ]),
+            ],
+            ['Iterator&Countable', new IntersectionType([new FqcnType('Iterator'), new FqcnType('Countable')])],
+            [
+                'Iterator&Countable&Aggregator',
+                new IntersectionType([new FqcnType('Iterator'), new FqcnType('Countable'), new FqcnType('Aggregator')])
+            ],
+            [
+                '\Iterator&Countable&\Aggregator',
+                new IntersectionType([new FqcnType('\Iterator'), new FqcnType('Countable'), new FqcnType('\Aggregator')])
+            ],
+            [
+                '\Iterator&Countable&string', // allow parse but illegal
+                new IntersectionType([new FqcnType('\Iterator'), new FqcnType('Countable'), new StringType()])
+            ],
+            [
+                'string&int', // allow parse but illegal
+                new IntersectionType([new StringType(), new IntType()])
             ],
         ];
     }

@@ -507,6 +507,15 @@ class CompositeCodeElementSniffTest extends TestCase
                 '010 Add type declaration for return value, e.g.: "never".',
                 '017 Useless PHPDoc',
                 '033 Type hint "int" is not compatible with return value type',
+                '040 Add type declaration for property $prop1, e.g.: "\Countable&\IteratorAggregate". Add default value or keep property in an uninitialized state.',
+                '042 Intersection types can only contain class or interfaces names',
+                '045 Type hint "\Countable&\IteratorAggregate" is not compatible with CONST1 constant value type',
+                '045 Missing "string" type in CONST1 constant type hint',
+                '047 Intersection types can only contain class or interfaces names',
+                '047 Type hint "int&string" is not compatible with CONST2 constant value type',
+                '047 Missing "string" type in CONST2 constant type hint',
+                '052 Intersection types can only contain class or interfaces names',
+                '056 Add type declaration for parameter $param1, e.g.: "Countable&IteratorAggregate".',
             ],
         ];
 

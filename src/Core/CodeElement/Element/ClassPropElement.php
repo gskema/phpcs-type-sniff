@@ -5,6 +5,7 @@ namespace Gskema\TypeSniff\Core\CodeElement\Element;
 use Gskema\TypeSniff\Core\CodeElement\Element\Metadata\ClassPropMetadata;
 use Gskema\TypeSniff\Core\DocBlock\DocBlock;
 use Gskema\TypeSniff\Core\Func\FunctionParam;
+use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\TypeInterface;
 
 class ClassPropElement extends AbstractFqcnPropElement
@@ -39,7 +40,10 @@ class ClassPropElement extends AbstractFqcnPropElement
             $param->getName(),
             $param->getType(),
             $param->getValueType(),
-            $param->isPromotedProp()
+            $param->isPromotedProp(),
+            new ClassPropMetadata(
+                $param->getValueType() && !is_a($param->getValueType(), UndefinedType::class)
+            )
         );
     }
 

@@ -122,7 +122,16 @@ class FunctionSignatureParser
                         $raw = [];
                     }
                     break;
+                case T_NEW:
+                    $raw['new'] = true;
+                    break;
+                case T_OPEN_PARENTHESIS: // can ignore, we are looking for T_CLOSE_PARENTHESIS to end
+                    break;
                 case T_CLOSE_PARENTHESIS:
+                    if ($raw['new'] ?? false) {
+                        break; // e.g. $param = new stdClass()
+                    }
+                    // otherwise: end of function signature
                     $returnLine = $token['line'];
                     if (!empty($raw)) {
                         $params[] = static::createParam($raw);
@@ -201,8 +210,12 @@ class FunctionSignatureParser
             $valueType = TypeFactory::fromRawType($raw['default'] ?? '');
         }
 
-        if ($valueType instanceof FqcnType) {
-            $valueType = null; // e.g $arg = PHP_INT_MAX // @TODO
+        if ($valueType instanceof FqcnType && !($raw['new'] ?? false)) {
+            if (defined($valueType->toString())) { // eg PHP_INT_MAX
+                $valueType = TypeFactory::fromValue(constant($valueType->toString()));
+            } else {
+                $valueType = null; // give up
+            }
         }
 
         $attrNames = [];

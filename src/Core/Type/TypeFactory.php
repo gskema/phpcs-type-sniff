@@ -82,6 +82,13 @@ class TypeFactory
         return static::fromRawTypes($rawTypes);
     }
 
+    public static function fromValue(mixed $value): TypeInterface
+    {
+        $type = gettype($value);
+        $map = ['double' => 'float', 'NULL' => 'null'];
+        return self::fromRawType($map[$type] ?? $type);
+    }
+
     /**
      * @TODO This does not support spacing in unions and intersections, e.g. (int | string)
      * @param string[] $rawTypes

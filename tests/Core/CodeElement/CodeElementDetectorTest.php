@@ -866,7 +866,7 @@ class CodeElementDetectorTest extends TestCase
                                         new FunctionParam(43, 'arg21', new StringType(), null, []),
                                         new FunctionParam(45, 'arg22', new ArrayType(), new ArrayType(), []),
                                         new FunctionParam(46, 'arg23', new BoolType(), new BoolType(), []),
-                                        new FunctionParam(47, 'arg24', new UndefinedType(), null, []),
+                                        new FunctionParam(47, 'arg24', new UndefinedType(), new IntType(), []),
                                     ],
                                     new VoidType(),
                                     48,
@@ -1211,6 +1211,107 @@ class CodeElementDetectorTest extends TestCase
                                 ),
                             ),
                         ]
+                    ),
+                ],
+            ),
+        ];
+
+        // #15
+        $dataSets[] = [
+            'givenUseReflection' => true,
+            'givenFile' => __DIR__ . '/fixtures/TestClass7.php',
+            'expected' => new FileElement(
+                1,
+                new UndefinedDocBlock(),
+                __DIR__ . '/fixtures/TestClass7.php',
+                [],
+                [],
+                [
+                    new ClassElement(
+                        5,
+                        new UndefinedDocBlock(),
+                        'Gskema\TypeSniff\Core\CodeElement\fixtures\TestClass7',
+                        [],
+                        false,
+                        [],
+                        [
+                            new ClassPropElement(
+                                7,
+                                new UndefinedDocBlock(),
+                                'Gskema\TypeSniff\Core\CodeElement\fixtures\TestClass7',
+                                [],
+                                'prop1',
+                                new StringType(),
+                                new UndefinedType(),
+                                false,
+                                new ClassPropMetadata(false)
+                            ),
+                            new ClassPropElement(
+                                12,
+                                new UndefinedDocBlock(),
+                                'Gskema\TypeSniff\Core\CodeElement\fixtures\TestClass7',
+                                [],
+                                'prop3',
+                                new FqcnType('\stdClass'),
+                                new FqcnType('\stdClass'),
+                                true,
+                                new ClassPropMetadata(true)
+                            ),
+                            new ClassPropElement(
+                                10,
+                                new UndefinedDocBlock(),
+                                'Gskema\TypeSniff\Core\CodeElement\fixtures\TestClass7',
+                                [],
+                                'title',
+                                new UnionType([new StringType(), new IntType()]),
+                                new UndefinedType(),
+                                true,
+                                new ClassPropMetadata(false)
+                            ),
+                        ],
+                        [
+                            new ClassMethodElement(
+                                new UndefinedDocBlock(),
+                                'Gskema\TypeSniff\Core\CodeElement\fixtures\TestClass7',
+                                [],
+                                new FunctionSignature(
+                                    9,
+                                    '__construct',
+                                    [
+                                        new FunctionParam(
+                                            10,
+                                            'title',
+                                            new UnionType([new StringType(), new IntType()]),
+                                            new UndefinedType(),
+                                            [],
+                                            new UndefinedDocBlock(),
+                                            true
+                                        ),
+                                        new FunctionParam(
+                                            11,
+                                            'prop2',
+                                            new CallableType(),
+                                            new UndefinedType(),
+                                            [],
+                                            new UndefinedDocBlock(),
+                                            false
+                                        ),
+                                        new FunctionParam(
+                                            12,
+                                            'prop3',
+                                            new FqcnType('\stdClass'),
+                                            new FqcnType('\stdClass'),
+                                            [],
+                                            new UndefinedDocBlock(),
+                                            true
+                                        )
+                                    ],
+                                    new UndefinedType(),
+                                    13
+                                ),
+                                new ClassMethodMetadata([], '', [], false)
+                            )
+                        ],
                     ),
                 ],
             ),

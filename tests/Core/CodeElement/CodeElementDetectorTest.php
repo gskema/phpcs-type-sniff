@@ -7,6 +7,8 @@ use Gskema\TypeSniff\Core\CodeElement\Element\ClassElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassMethodElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassPropElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\ConstElement;
+use Gskema\TypeSniff\Core\CodeElement\Element\EnumElement;
+use Gskema\TypeSniff\Core\CodeElement\Element\EnumMethodElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\FileElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\FunctionElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\InterfaceConstElement;
@@ -1095,6 +1097,120 @@ class CodeElementDetectorTest extends TestCase
                                 new ClassMethodMetadata([], null, [], false),
                             ),
                         ],
+                    ),
+                ],
+            ),
+        ];
+
+        // #13
+        $dataSets[] = [
+            'givenUseReflection' => true,
+            'givenFile'          => __DIR__ . '/fixtures/TestEnum0.php',
+            'expected' => new FileElement(
+                1,
+                new UndefinedDocBlock(),
+                __DIR__ . '/fixtures/TestEnum0.php',
+                [],
+                [],
+                [],
+                [],
+                [],
+                [
+                    new EnumElement(
+                        5,
+                        new UndefinedDocBlock(),
+                        'Gskema\\TypeSniff\\Sniffs\\fixtures\\TestEnum0',
+                        [],
+                        [],
+                        [
+                            new EnumMethodElement(
+                                new UndefinedDocBlock(),
+                                'Gskema\\TypeSniff\\Sniffs\\fixtures\\TestEnum0',
+                                [],
+                                new FunctionSignature(
+                                    10,
+                                    'testMethod',
+                                    [],
+                                    new UndefinedType(),
+                                    10
+                                ),
+                            ),
+                            new EnumMethodElement(
+                                new UndefinedDocBlock(),
+                                'Gskema\\TypeSniff\\Sniffs\\fixtures\\TestEnum0',
+                                [],
+                                new FunctionSignature(
+                                    18,
+                                    'testMethod1',
+                                    [],
+                                    new SelfType(),
+                                    18
+                                ),
+                            ),
+                        ]
+                    ),
+                ],
+            ),
+        ];
+
+        // #14
+        $dataSets[] = [
+            'givenUseReflection' => true,
+            'givenFile' => __DIR__ . '/fixtures/TestEnum1.php',
+            'expected' => new FileElement(
+                1,
+                new UndefinedDocBlock(),
+                __DIR__ . '/fixtures/TestEnum1.php',
+                [],
+                [],
+                [],
+                [],
+                [],
+                [
+                    new EnumElement(
+                        5,
+                        new UndefinedDocBlock(),
+                        'Gskema\\TypeSniff\\Sniffs\\fixtures\\TestEnum1',
+                        [],
+                        [],
+                        [
+                            new EnumMethodElement(
+                                new UndefinedDocBlock(),
+                                'Gskema\\TypeSniff\\Sniffs\\fixtures\\TestEnum1',
+                                [],
+                                new FunctionSignature(
+                                    10,
+                                    'testMethod',
+                                    [],
+                                    new UndefinedType(),
+                                    10
+                                ),
+                            ),
+                            new EnumMethodElement(
+                                new UndefinedDocBlock(),
+                                'Gskema\\TypeSniff\\Sniffs\\fixtures\\TestEnum1',
+                                [],
+                                new FunctionSignature(
+                                    18,
+                                    'testMethod1',
+                                    [],
+                                    new SelfType(),
+                                    18
+                                ),
+                            ),
+                            new EnumMethodElement(
+                                new UndefinedDocBlock(),
+                                'Gskema\\TypeSniff\\Sniffs\\fixtures\\TestEnum1',
+                                [],
+                                new FunctionSignature(
+                                    23,
+                                    'method1',
+                                    [],
+                                    new UndefinedType(),
+                                    23
+                                ),
+                            ),
+                        ]
                     ),
                 ],
             ),

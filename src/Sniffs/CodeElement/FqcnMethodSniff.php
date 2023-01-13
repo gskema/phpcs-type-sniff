@@ -6,6 +6,7 @@ use Gskema\TypeSniff\Core\CodeElement\Element\AbstractFqcnMethodElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassMethodElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\CodeElementInterface;
+use Gskema\TypeSniff\Core\CodeElement\Element\EnumMethodElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\InterfaceMethodElement;
 use Gskema\TypeSniff\Core\DocBlock\Tag\ParamTag;
 use Gskema\TypeSniff\Core\DocBlock\Tag\VarTag;
@@ -67,6 +68,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
             ClassMethodElement::class,
             // TraitMethodElement::class, // can be used to implement interface, not possible to know if it is extended
             InterfaceMethodElement::class,
+            EnumMethodElement::class,
         ];
     }
 

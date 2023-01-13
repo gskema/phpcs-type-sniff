@@ -156,5 +156,14 @@ class CompositeCodeElementSniff extends AbstractConfigurableSniff
                 yield [$method, $interface];
             }
         }
+        foreach ($file->getEnums() as $enum) {
+            yield [$enum, $file];
+            foreach ($enum->getConstants() as $constant) {
+                yield [$constant, $enum];
+            }
+            foreach ($enum->getMethods() as $method) {
+                yield [$method, $enum];
+            }
+        }
     }
 }

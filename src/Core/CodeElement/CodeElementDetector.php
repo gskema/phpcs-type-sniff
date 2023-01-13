@@ -2,6 +2,9 @@
 
 namespace Gskema\TypeSniff\Core\CodeElement;
 
+use Gskema\TypeSniff\Core\CodeElement\Element\EnumConstElement;
+use Gskema\TypeSniff\Core\CodeElement\Element\EnumElement;
+use Gskema\TypeSniff\Core\CodeElement\Element\EnumMethodElement;
 use Gskema\TypeSniff\Core\ReflectionCache;
 use Gskema\TypeSniff\Core\TokenHelper;
 use PHP_CodeSniffer\Files\File;
@@ -54,10 +57,11 @@ class CodeElementDetector
             // Bracketed namespaces are not supported.
             // This scope detection logic could be a separate class in the future.
             $inParentheses = !empty($token['nested_parenthesis']);
-            $inFile = [] === array_intersect($path, [T_CLASS, T_TRAIT, T_INTERFACE, T_ANON_CLASS]) && !$inParentheses;
+            $inFile = [] === array_intersect($path, [T_CLASS, T_TRAIT, T_INTERFACE, T_ANON_CLASS, T_ENUM]) && !$inParentheses;
             $inClass = T_CLASS === end($path) && !$inParentheses;
             $inTrait = T_TRAIT === end($path) && !$inParentheses;
             $inInterface = T_INTERFACE === end($path) && !$inParentheses;
+            $inEnum = T_ENUM === end($path) && !$inParentheses;
 
             // @TODO continue early
 
@@ -65,6 +69,7 @@ class CodeElementDetector
                 case T_CLASS:
                 case T_TRAIT:
                 case T_INTERFACE:
+                case T_ENUM:
                     $className = TokenHelper::getDeclarationName($file, $ptr);
                     break;
                 case T_NAMESPACE:
@@ -131,6 +136,14 @@ class CodeElementDetector
                         $currentElement = new InterfaceElement($line, $docBlock, $fqcn);
                         $currentElement->setAttributeNames($attrNames);
                         $fileElement->addInterface($currentElement);
+                        $parentElement = $currentElement;
+                        break;
+                    case T_ENUM:
+                        $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
+                        $attrNames = TokenHelper::getPrevAttributeNames($file, $ptr);
+                        $currentElement = new EnumElement($line, $docBlock, $fqcn);
+                        $currentElement->setAttributeNames($attrNames);
+                        $fileElement->addEnum($currentElement);
                         $parentElement = $currentElement;
                         break;
                 }
@@ -219,6 +232,25 @@ class CodeElementDetector
                         $currentElement = new InterfaceMethodElement($docBlock, $fqcn, [], $fnSig);
                         $currentElement->setAttributeNames($attrNames);
                         $currentElement->getMetadata()->setExtended($extended);
+                        $parentElement->addMethod($currentElement);
+                        break;
+                }
+            } elseif ($inEnum) {
+                $decName = TokenHelper::getDeclarationName($file, $ptr);
+                switch ($tokenCode) {
+                    case T_CONST:
+                        $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
+                        $attrNames = TokenHelper::getPrevAttributeNames($file, $ptr);
+                        [$valueType,] = TokenHelper::getAssignmentType($file, $ptr);
+                        $currentElement = new EnumConstElement($line, $docBlock, $fqcn, $attrNames, $decName, $valueType);
+                        $parentElement->addConstant($currentElement);
+                        break;
+                    case T_FUNCTION:
+                        $fnSig = FunctionSignatureParser::fromTokens($file, $ptr);
+                        $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
+                        $attrNames = TokenHelper::getPrevAttributeNames($file, $ptr);
+                        $currentElement = new EnumMethodElement($docBlock, $fqcn, [], $fnSig);
+                        $currentElement->setAttributeNames($attrNames);
                         $parentElement->addMethod($currentElement);
                         break;
                 }

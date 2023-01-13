@@ -5,6 +5,7 @@ namespace Gskema\TypeSniff\Sniffs\CodeElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\AbstractFqcnElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\ClassElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\CodeElementInterface;
+use Gskema\TypeSniff\Core\CodeElement\Element\EnumElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\InterfaceElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\TraitElement;
 use Gskema\TypeSniff\Core\SniffHelper;
@@ -56,6 +57,7 @@ class FqcnDescriptionSniff implements CodeElementSniffInterface
             ClassElement::class,
             InterfaceElement::class,
             TraitElement::class,
+            EnumElement::class,
         ];
     }
 

@@ -4,6 +4,7 @@ namespace Gskema\TypeSniff\Core\CodeElement\Element;
 
 use Generator;
 use Gskema\TypeSniff\Core\CodeElement\Element\Metadata\ClassMethodMetadata;
+use Gskema\TypeSniff\Core\CodeElement\Element\Metadata\EnumMethodMetadata;
 use Gskema\TypeSniff\Core\CodeElement\Element\Metadata\InterfaceMethodMetadata;
 use Gskema\TypeSniff\Core\CodeElement\Element\Metadata\TraitMethodMetadata;
 use Gskema\TypeSniff\Core\DocBlock\DocBlock;
@@ -35,7 +36,7 @@ abstract class AbstractFqcnMethodElement extends AbstractFqcnElement
     }
 
     /**
-     * @return Generator<FunctionParam>|FunctionParam[]
+     * @return Generator<FunctionParam>
      */
     public function getPromotedPropParams(): Generator
     {
@@ -48,5 +49,5 @@ abstract class AbstractFqcnMethodElement extends AbstractFqcnElement
         }
     }
 
-    abstract public function getMetadata(): ClassMethodMetadata|InterfaceMethodMetadata|TraitMethodMetadata;
+    abstract public function getMetadata(): ClassMethodMetadata|InterfaceMethodMetadata|TraitMethodMetadata|EnumMethodMetadata;
 }

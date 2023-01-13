@@ -519,6 +519,33 @@ class CompositeCodeElementSniffTest extends TestCase
             ],
         ];
 
+        // #22
+        $dataSets[] = [
+            [
+                'addViolationId' => false,
+                'useReflection' => false,
+            ],
+            __DIR__ . '/fixtures/TestEnum0.php',
+            [
+                '007 Create PHPDoc with typed array type hint for CONST1 constant, .e.g.: "string[]" or "SomeClass[]". Correct array depth must be specified.',
+                '012 Add type declaration for parameter $arg1 or create PHPDoc with type hint.',
+                '012 Add type declaration for return value or create PHPDoc with type hint.',
+            ],
+        ];
+
+        // #23
+        $dataSets[] = [
+            [
+                'addViolationId' => false,
+                'useReflection' => false,
+            ],
+            __DIR__ . '/fixtures/TestEnum1.php',
+            [
+                '011 Replace array type with typed array type in PHPDoc for parameter $arg, .e.g.: "string[]" or "SomeClass[]". Use mixed[] for generic arrays. Correct array depth must be specified.',
+                '012 Remove @return void tag, not necessary',
+            ],
+        ];
+
         return $dataSets;
     }
 

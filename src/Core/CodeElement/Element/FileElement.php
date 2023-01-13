@@ -20,6 +20,8 @@ class FileElement implements CodeElementInterface
         protected array $traits = [],
         /** @var InterfaceElement[] */
         protected array $interfaces = [],
+        /** @var EnumElement[] */
+        protected array $enums = [],
     ) {
     }
 
@@ -77,6 +79,14 @@ class FileElement implements CodeElementInterface
     }
 
     /**
+     * @return TraitElement[]
+     */
+    public function getEnums(): array
+    {
+        return $this->enums;
+    }
+
+    /**
      * @return InterfaceElement[]
      */
     public function getInterfaces(): array
@@ -107,6 +117,11 @@ class FileElement implements CodeElementInterface
     public function addInterface(InterfaceElement $element): void
     {
         $this->interfaces[] = $element;
+    }
+
+    public function addEnum(EnumElement $element): void
+    {
+        $this->enums[] = $element;
     }
 
     /**

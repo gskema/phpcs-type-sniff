@@ -86,7 +86,7 @@ class TypeFactory
     {
         $type = gettype($value);
         $map = ['double' => 'float', 'NULL' => 'null'];
-        return self::fromRawType($map[$type] ?? $type);
+        return static::fromRawType($map[$type] ?? $type);
     }
 
     /**
@@ -106,10 +106,6 @@ class TypeFactory
             return new UnionType($types);
         }
         $rawType = $rawTypes[0] ?? '';
-
-        if (str_contains($rawType, '&')) {
-            return new IntersectionType(array_map(self::fromRawType(...), explode('&', $rawType)));
-        }
 
         // Supported for parsing function parameter type declaration, but doc type not valid.
         // Usage as doc type detected by multiple warnings.
@@ -158,6 +154,16 @@ class TypeFactory
         if ('(' === $rawType[0] && ')' === $rawType[-1]) {
             // must not trim more than 1 char on each side!
             return static::fromRawType(substr($rawType, 1, -1)); // cannot skip split
+        }
+
+        // Have to split again because it raw type was parenthesized (A&(B|C)) or (Node|Location)[]
+        if (str_contains($rawType, '|')) {
+            [$rawTypes, ] = static::split($rawType);
+            return static::fromRawTypes($rawTypes);
+        }
+
+        if (str_contains($rawType, '&')) {
+            return new IntersectionType(array_map(static::fromRawType(...), explode('&', $rawType)));
         }
 
         return new FqcnType($rawType);

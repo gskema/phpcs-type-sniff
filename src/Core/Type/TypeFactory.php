@@ -174,61 +174,83 @@ class TypeFactory
         //      @return array{foo: string|int}|array<int|string, array<int>> Description for return tag
         //      @param int|string
 
-        $tagBody = trim($tagBody);
-
-        // Shortcut to skip loop below. No need to check strings like 'array<' because we split raw type + description
-        // by ' ' char.
-        if (
-            !str_contains($tagBody, '<') &&
-            !str_contains($tagBody, '{') &&
-            !str_contains($tagBody, '(')
-        ) {
-            $spacePos = strpos($tagBody, ' ');
-            $rawType = false !== $spacePos ? substr($tagBody, 0, $spacePos) : $tagBody;
-            $remainingString = false !== $spacePos ? substr($tagBody, $spacePos + 1) : '';
-
-            $rawTypes = array_filter(array_map('trim', explode('|', $rawType)));
-            $remainingString = trim($remainingString);
-
-            return [$rawTypes, $remainingString];
+        // shortcut to skip parse
+        if (!str_contains($tagBody, '|') && !str_contains($tagBody, ' ')) {
+            return [[$tagBody], null];
         }
 
+        $tagBody = trim($tagBody);
+
+        $scopeCount0 = 0; // <>
+        $scopeCount1 = 0; // {}
+        $scopeCount2 = 0; // ()
+
         $rawTypes = [];
-        $remainingString = null;
-        $lastSplitPos = 0;
-        $openScopes = ['<' => 0, '{' => 0, '(' => 0];
+        $description = null;
+        $splitStart = 0;
         $len = strlen($tagBody);
         for ($pos = 0; $pos <= $len - 1; $pos++) {
             $ch = $tagBody[$pos];
 
-            '<' === $ch && $openScopes['<']++;
-            '{' === $ch && $openScopes['{']++;
-            '(' === $ch && $openScopes['(']++;
-
-            // We don't want to have negative count in case there are more scope closers than openers.
-            // This may occur while editing or just invalid syntax.
-            '>' === $ch && $openScopes['<'] > 0 && $openScopes['<']--;
-            '}' === $ch && $openScopes['{'] > 0 && $openScopes['{']--;
-            ')' === $ch && $openScopes['('] > 0 && $openScopes['(']--;
-
-            $openScopeCount = array_sum($openScopes);
-            if ('|' === $ch && 0 === $openScopeCount) {
-                $rawTypes[] = substr($tagBody, $lastSplitPos, $pos - $lastSplitPos);
-                $lastSplitPos = $pos + 1; // skip current char '|'
+            if ('<' === $ch) {
+                $scopeCount0++;
+            } elseif ('{' === $ch) {
+                $scopeCount1++;
+            } elseif ('(' === $ch) {
+                $scopeCount2++;
+            } elseif ('>' === $ch && $scopeCount0 > 0) {
+                $scopeCount0--;
+            } elseif ('}' === $ch && $scopeCount1 > 0) {
+                $scopeCount1--;
+            } elseif (')' === $ch && $scopeCount2 > 0) {
+                $scopeCount2--;
             }
-            if (' ' === $ch && 0 === $openScopeCount) {
-                $rawTypes[] = substr($tagBody, $lastSplitPos, $pos - $lastSplitPos);
-                $remainingString = substr($tagBody, $pos);
-                break;
+
+            if ($scopeCount0 > 0 || $scopeCount1 > 0 || $scopeCount2 > 0) {
+                continue;
+            }
+
+            if ('|' === $ch) {
+                $rawTypes[] = substr($tagBody, $splitStart, $pos - $splitStart);
+                while (' ' === ($tagBody[$pos + 1] ?? null)) {
+                    $pos++; // skip spaces forward
+                }
+                $splitStart = $pos + 1; // skip current char '|' or ' ' for next split
+                continue;
+            }
+
+            if ('&' === $ch) {
+                while (' ' === ($tagBody[$pos + 1] ?? null)) {
+                    $pos++; // skip spaces forward
+                }
+                continue; // do nothing, cannot split
+            }
+
+            //                *
+            // e.g. int|string Desc
+            //         *
+            // e.g. int  |string Desc
+            if (' ' === $ch) {
+                $firstSpacePos = $pos;
+                while (' ' === ($tagBody[$pos + 1] ?? null)) {
+                    $pos++; // skip spaces to next type '|', '&' or description
+                }
+                $nextCh = $tagBody[$pos + 1] ?? null;
+                if ('|' !== $nextCh && '&' !== $nextCh) {
+                    // e.g. 'string  Desc'
+                    $rawTypes[] = substr($tagBody, $splitStart, $firstSpacePos - $splitStart);
+                    $description = substr($tagBody, $pos);
+                    break;
+                }
             }
         }
-        if (null === $remainingString) {
-            $rawTypes[] = substr($tagBody, $lastSplitPos);
+        if (null === $description) {
+            $rawTypes[] = substr($tagBody, $splitStart);
         }
 
         $rawTypes = array_filter(array_map('trim', $rawTypes));
-        $remainingString = null !== $remainingString ? trim($remainingString) : null;
+        $description = null !== $description ? trim($description) : null;
 
-        return [$rawTypes, $remainingString];
+        return [$rawTypes, $description];
     }
 }

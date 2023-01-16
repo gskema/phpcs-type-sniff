@@ -36,7 +36,7 @@ class TokenHelper
             return new UndefinedDocBlock(); // unfinished file
         }
 
-        return self::getPrevDocBlock($file, $scopePtr, $skip);
+        return static::getPrevDocBlock($file, $scopePtr, $skip);
     }
 
     /**

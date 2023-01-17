@@ -3,8 +3,10 @@
 namespace Gskema\TypeSniff\Inspection;
 
 use Gskema\TypeSniff\Core\Type\Common\ArrayType;
+use Gskema\TypeSniff\Core\Type\Common\FalseType;
 use Gskema\TypeSniff\Core\Type\Common\MixedType;
 use Gskema\TypeSniff\Core\Type\Common\NullType;
+use Gskema\TypeSniff\Core\Type\Common\TrueType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Common\UnionType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
@@ -41,7 +43,11 @@ class FnTypeInspector
         ) {
             $otherSubTypes = array_filter($fnType->getTypes(), fn(TypeInterface $type) => !($type instanceof NullType));
             $otherSubType = reset($otherSubTypes);
-            if (!($otherSubType instanceof MixedType)) {
+            if (
+                !($otherSubType instanceof MixedType) &&
+                !($otherSubType instanceof FalseType) &&
+                !($otherSubType instanceof TrueType)
+            ) {
                 $subject->addFnTypeWarning(sprintf(
                     'Change :subject: type declaration to shorthand nullable syntax, e.g. %s',
                     (new NullableType($otherSubType))->toString(),

@@ -121,7 +121,7 @@ class DocTypeInspector
             return;
         }
 
-        // @TODO true/void/false/$this/ cannot be param tags
+        // @TODO void/$this/ cannot be param tags
 
         $docType = $subject->getDocType();
         if ($docType instanceof IntersectionType && !$docType->isValid()) {
@@ -129,11 +129,11 @@ class DocTypeInspector
         }
 
         // e.g. @param null $arg1 -> @param int|null $arg1
-        if ($docType instanceof NullType) {
+        if ($docType instanceof NullType && !$subject->hasDefinedFnType()) {
             if ($subject instanceof ReturnTypeSubject) {
-                $subject->addDocTypeWarning('Use void :subject: type declaration or change type to union, e.g. SomeClass|null');
+                $subject->addDocTypeWarning('Use null :subject: type declaration or change type to union, e.g. SomeClass|null');
             } elseif ($subject instanceof ParamTypeSubject) {
-                $subject->addDocTypeWarning('Change type hint for :subject: to union, e.g. SomeClass|null');
+                $subject->addDocTypeWarning('Change type hint for :subject: to null or union, e.g. SomeClass|null');
             }
             // having @var null for const, prop is allowed
         }

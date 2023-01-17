@@ -16,12 +16,12 @@ use Gskema\TypeSniff\Core\Type\Common\ObjectType;
 use Gskema\TypeSniff\Core\Type\Common\ParentType;
 use Gskema\TypeSniff\Core\Type\Common\SelfType;
 use Gskema\TypeSniff\Core\Type\Common\StaticType;
+use Gskema\TypeSniff\Core\Type\Common\TrueType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Common\UnionType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
 use Gskema\TypeSniff\Core\Type\DocBlock\DoubleType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ThisType;
-use Gskema\TypeSniff\Core\Type\DocBlock\TrueType;
 use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
 
 /**

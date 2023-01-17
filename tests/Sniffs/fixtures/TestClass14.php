@@ -57,4 +57,25 @@ class TestClass14
         \Iterator&\Countable $prop2,
         $param3
     ): never { exit; }
+
+    public function method7(): null { return null; }
+    public function method8(): false { return false; }
+    public function method9(): true { return true; }
+    public function method10(): true|null { return true; }
+    public function method11(): false|null { return false; }
+
+    /**
+     * @return null
+     */
+    public function method12() { return null; }
+
+    /**
+     * @return false
+     */
+    public function method13() { return false; }
+
+    /**
+     * @return true
+     */
+    public function method14() { return true; }
 }

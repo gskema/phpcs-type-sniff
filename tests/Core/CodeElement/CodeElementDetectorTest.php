@@ -44,6 +44,7 @@ use Gskema\TypeSniff\Core\Type\Common\ParentType;
 use Gskema\TypeSniff\Core\Type\Common\SelfType;
 use Gskema\TypeSniff\Core\Type\Common\StaticType;
 use Gskema\TypeSniff\Core\Type\Common\StringType;
+use Gskema\TypeSniff\Core\Type\Common\TrueType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Common\UnionType;
 use Gskema\TypeSniff\Core\Type\Common\VoidType;
@@ -51,7 +52,6 @@ use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
 use Gskema\TypeSniff\Core\Type\DocBlock\DoubleType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ResourceType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ThisType;
-use Gskema\TypeSniff\Core\Type\DocBlock\TrueType;
 use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
 use PHP_CodeSniffer\Config;
 use PHP_CodeSniffer\Files\LocalFile;
@@ -843,7 +843,7 @@ class CodeElementDetectorTest extends TestCase
                                     'func1',
                                     [
                                         new FunctionParam(22, 'arg1', new ArrayType(), new ArrayType(), []),
-                                        new FunctionParam(23, 'arg2', new BoolType(), new BoolType(), []),
+                                        new FunctionParam(23, 'arg2', new BoolType(), new FalseType(), []),
                                         new FunctionParam(24, 'arg3', new CallableType(), new NullType(), []),
                                         new FunctionParam(25, 'arg4', new FloatType(), new FloatType(), []),
                                         new FunctionParam(26, 'arg5', new FqcnType('stdClass'), new NullType(), []),
@@ -865,7 +865,7 @@ class CodeElementDetectorTest extends TestCase
                                         new FunctionParam(42, 'arg20', new NullableType(new IntType()), null, []),
                                         new FunctionParam(43, 'arg21', new StringType(), null, []),
                                         new FunctionParam(45, 'arg22', new ArrayType(), new ArrayType(), []),
-                                        new FunctionParam(46, 'arg23', new BoolType(), new BoolType(), []),
+                                        new FunctionParam(46, 'arg23', new BoolType(), new TrueType(), []),
                                         new FunctionParam(47, 'arg24', new UndefinedType(), new IntType(), []),
                                     ],
                                     new VoidType(),

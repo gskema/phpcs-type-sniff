@@ -13,6 +13,7 @@ use Gskema\TypeSniff\Core\Type\Common\IntType;
 use Gskema\TypeSniff\Core\Type\Common\NullType;
 use Gskema\TypeSniff\Core\Type\Common\SelfType;
 use Gskema\TypeSniff\Core\Type\Common\StringType;
+use Gskema\TypeSniff\Core\Type\Common\TrueType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Common\UnionType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
@@ -75,7 +76,7 @@ class FunctionSignatureParserTest extends TestCase
                 [
                     new FunctionParam(10, 'arg1', new NullableType(new FqcnType('\Space\Class1')), new UndefinedType(), []),
                     new FunctionParam(11, 'arg2', new BoolType(), new UndefinedType(), []),
-                    new FunctionParam(12, 'arg3', new UndefinedType(), new BoolType(), []),
+                    new FunctionParam(12, 'arg3', new UndefinedType(), new FalseType(), []),
                     new FunctionParam(13, 'arg4', new IntType(), new NullType(), []),
                     new FunctionParam(14, 'arg5', new IntType(), null, []),
                 ],
@@ -127,7 +128,7 @@ class FunctionSignatureParserTest extends TestCase
                         15,
                         'arg3',
                         new UnionType([new ArrayType(), new IntType(), new FalseType()]),
-                        new BoolType(),
+                        new FalseType(),
                         [],
                         new DocBlock(
                             [],
@@ -137,11 +138,91 @@ class FunctionSignatureParserTest extends TestCase
                         ),
                         true
                     ),
-                    new FunctionParam(16, 'arg4', new NullableType(new BoolType()), new BoolType(), [], new UndefinedDocBlock(), true),
+                    new FunctionParam(16, 'arg4', new NullableType(new BoolType()), new FalseType(), [], new UndefinedDocBlock(), true),
                     new FunctionParam(17, 'arg5', new UnionType([new NullType(), new IntType(), new StringType()]), new NullType(), [], new UndefinedDocBlock(), true),
                 ],
                 new UndefinedType(),
                 18,
+            ),
+            null,
+        ];
+
+        // #6
+        $dataSets[] = [
+            __DIR__ . '/fixtures/test_func1.php',
+            133,
+            new FunctionSignature(
+                22,
+                'func2',
+                [
+                    new FunctionParam(22, 'arg1', new NullType(), new NullType(), []),
+                ],
+                new NullType(),
+                22,
+            ),
+            null,
+        ];
+
+        // #7
+        $dataSets[] = [
+            __DIR__ . '/fixtures/test_func1.php',
+            152,
+            new FunctionSignature(
+                23,
+                'func3',
+                [
+                    new FunctionParam(23, 'arg1', new FalseType(), new FalseType(), []),
+                ],
+                new FalseType(),
+                23,
+            ),
+            null,
+        ];
+
+        // #8
+        $dataSets[] = [
+            __DIR__ . '/fixtures/test_func1.php',
+            171,
+            new FunctionSignature(
+                24,
+                'func4',
+                [
+                    new FunctionParam(24, 'arg1', new TrueType(), new TrueType(), []),
+                ],
+                new TrueType(),
+                24,
+            ),
+            null,
+        ];
+
+        // #9
+        $dataSets[] = [
+            __DIR__ . '/fixtures/test_func1.php',
+            190,
+            new FunctionSignature(
+                25,
+                'func5',
+                [
+                    new FunctionParam(25, 'arg1', new UnionType([new FalseType(), new NullType()]), new NullType(), []),
+                ],
+                new UnionType([new FalseType(), new NullType()]),
+                25,
+            ),
+            null,
+        ];
+
+        // #10
+        $dataSets[] = [
+            __DIR__ . '/fixtures/test_func1.php',
+            213,
+            new FunctionSignature(
+                26,
+                'func6',
+                [
+                    new FunctionParam(26, 'arg1', new UnionType([new TrueType(), new NullType()]), new TrueType(), []),
+                ],
+                new UnionType([new TrueType(), new NullType()]),
+                26,
             ),
             null,
         ];

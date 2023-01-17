@@ -16,6 +16,7 @@ use Gskema\TypeSniff\Core\Type\Common\ObjectType;
 use Gskema\TypeSniff\Core\Type\Common\SelfType;
 use Gskema\TypeSniff\Core\Type\Common\StaticType;
 use Gskema\TypeSniff\Core\Type\Common\StringType;
+use Gskema\TypeSniff\Core\Type\Common\TrueType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Common\UnionType;
 use Gskema\TypeSniff\Core\Type\Common\VoidType;
@@ -23,7 +24,6 @@ use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
 use Gskema\TypeSniff\Core\Type\DocBlock\DoubleType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ResourceType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ThisType;
-use Gskema\TypeSniff\Core\Type\DocBlock\TrueType;
 use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
 use PHPUnit\Framework\TestCase;
 
@@ -133,14 +133,14 @@ class TypeConverterTest extends TestCase
             6 => [new UndefinedType(), null],
             7 => [new UnionType([new IntType(), new StringType()]), new UnionType([new IntType(), new StringType()])],
             8 => [new DoubleType(), new FloatType()],
-            9 => [new FalseType(), new BoolType()],
+            9 => [new FalseType(), new FalseType()],
             10 => [new MixedType(), new MixedType()],
             11 => [new UnionType([new MixedType(), new NullType()]), new MixedType()],
             12 => [new NullType(), new NullableType(new FqcnType('SomeClass'))],
             13 => [new SelfType(), new SelfType()],
             14 => [new StaticType(), new StaticType()],
             15 => [new ThisType(), new StaticType()],
-            16 => [new TrueType(), new BoolType()],
+            16 => [new TrueType(), new TrueType()],
             17 => [new TypedArrayType(new StringType(), 1), new ArrayType()],
 
             18 => [new ArrayType(), new ArrayType()],

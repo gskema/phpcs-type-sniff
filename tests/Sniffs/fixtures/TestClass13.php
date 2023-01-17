@@ -2,7 +2,7 @@
 
 namespace Gskema\TypeSniff\Sniffs\fixtures;
 
-class TestClass13
+readonly class TestClass13
 {
     /**
      * @return $this

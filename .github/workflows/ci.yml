@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - 81.x
+      - 82.x
 
 env:
   FORCE_COLOR: 1

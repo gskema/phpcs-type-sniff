@@ -5,6 +5,7 @@ namespace Gskema\TypeSniff\Core\CodeElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\EnumConstElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\EnumElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\EnumMethodElement;
+use Gskema\TypeSniff\Core\CodeElement\Element\TraitConstElement;
 use Gskema\TypeSniff\Core\ReflectionCache;
 use Gskema\TypeSniff\Core\TokenHelper;
 use PHP_CodeSniffer\Files\File;
@@ -187,6 +188,13 @@ class CodeElementDetector
             } elseif ($inTrait) {
                 $decName = TokenHelper::getDeclarationName($file, $ptr);
                 switch ($tokenCode) {
+                    case T_CONST:
+                        $docBlock = TokenHelper::getPrevDocBlock($file, $ptr, $skip);
+                        $attrNames = TokenHelper::getPrevAttributeNames($file, $ptr);
+                        [$valueType,] = TokenHelper::getAssignmentType($file, $ptr);
+                        $currentElement = new TraitConstElement($line, $docBlock, $fqcn, $attrNames, $decName, $valueType);
+                        $parentElement->addConstant($currentElement);
+                        break;
                     case T_VARIABLE:
                         $docBlock = TokenHelper::getPrevPropDocBlock($file, $ptr, $skip);
                         $attrNames = TokenHelper::getPrevPropAttributeNames($file, $ptr);

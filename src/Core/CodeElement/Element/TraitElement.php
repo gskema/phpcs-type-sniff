@@ -18,12 +18,22 @@ class TraitElement extends AbstractFqcnElement
         DocBlock $docBlock,
         string $fqcn,
         array $attributeNames = [],
+        /** @var TraitConstElement[] */
+        protected array $constants = [],
         /** @var TraitPropElement[] */
         protected array $properties = [],
         array $methods = [],
     ) {
         parent::__construct($line, $docBlock, $fqcn, $attributeNames);
         array_walk($methods, [$this, 'addMethod']);
+    }
+
+    /**
+     * @return TraitConstElement[]
+     */
+    public function getConstants(): array
+    {
+        return $this->constants;
     }
 
     /**
@@ -40,6 +50,11 @@ class TraitElement extends AbstractFqcnElement
     public function getMethods(): array
     {
         return $this->methods;
+    }
+
+    public function addConstant(TraitConstElement $const): void
+    {
+        $this->constants[] = $const;
     }
 
     public function addProperty(TraitPropElement $prop): void

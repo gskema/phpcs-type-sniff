@@ -3,6 +3,7 @@
 namespace Gskema\TypeSniff\Sniffs\CodeElement;
 
 use Gskema\TypeSniff\Core\CodeElement\Element\EnumConstElement;
+use Gskema\TypeSniff\Core\CodeElement\Element\TraitConstElement;
 use Gskema\TypeSniff\Core\DocBlock\Tag\VarTag;
 use Gskema\TypeSniff\Core\Type\Common\ArrayType;
 use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
@@ -40,6 +41,7 @@ class FqcnConstSniff implements CodeElementSniffInterface
             ClassConstElement::class,
             InterfaceConstElement::class,
             EnumConstElement::class,
+            TraitConstElement::class,
         ];
     }
 

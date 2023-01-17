@@ -4,6 +4,8 @@ namespace Gskema\TypeSniff\Core\CodeElement\fixtures;
 
 trait TestTrait0
 {
+    final public const XXX = 1;
+
     public $prop1 = 1;
 
     public function __construct(

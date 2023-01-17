@@ -18,6 +18,7 @@ use Gskema\TypeSniff\Core\CodeElement\Element\Metadata\ClassMethodMetadata;
 use Gskema\TypeSniff\Core\CodeElement\Element\Metadata\ClassPropMetadata;
 use Gskema\TypeSniff\Core\CodeElement\Element\Metadata\TraitMethodMetadata;
 use Gskema\TypeSniff\Core\CodeElement\Element\Metadata\TraitPropMetadata;
+use Gskema\TypeSniff\Core\CodeElement\Element\TraitConstElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\TraitElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\TraitMethodElement;
 use Gskema\TypeSniff\Core\CodeElement\Element\TraitPropElement;
@@ -477,8 +478,18 @@ class CodeElementDetectorTest extends TestCase
                         'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestTrait0',
                         [],
                         [
-                            new TraitPropElement(
+                            new TraitConstElement(
                                 7,
+                                new UndefinedDocBlock(),
+                                'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestTrait0',
+                                [],
+                                'XXX',
+                                new IntType(),
+                            ),
+                        ],
+                        [
+                            new TraitPropElement(
+                                9,
                                 new UndefinedDocBlock(),
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestTrait0',
                                 [],
@@ -489,7 +500,7 @@ class CodeElementDetectorTest extends TestCase
                                 new TraitPropMetadata(true),
                             ),
                             new TraitPropElement(
-                                10,
+                                12,
                                 new UndefinedDocBlock(),
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestTrait0',
                                 [],
@@ -506,13 +517,13 @@ class CodeElementDetectorTest extends TestCase
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestTrait0',
                                 [],
                                 new FunctionSignature(
-                                    9,
+                                    11,
                                     '__construct',
                                     [
-                                        new FunctionParam(10, 'prop2', new IntType(), new UndefinedType(), [], null, true),
+                                        new FunctionParam(12, 'prop2', new IntType(), new UndefinedType(), [], null, true),
                                     ],
                                     new UndefinedType(),
-                                    11
+                                    13
                                 ),
                                 new TraitMethodMetadata([], null, []),
                             ),
@@ -521,13 +532,13 @@ class CodeElementDetectorTest extends TestCase
                                 'Gskema\\TypeSniff\\Core\CodeElement\\fixtures\\TestTrait0',
                                 [],
                                 new FunctionSignature(
-                                    14,
+                                    16,
                                     'func1',
                                     [
-                                        new FunctionParam(14, 'arg1', new IntType(), new UndefinedType(), []),
+                                        new FunctionParam(16, 'arg1', new IntType(), new UndefinedType(), []),
                                     ],
                                     new IntType(),
-                                    14
+                                    16
                                 ),
                                 new TraitMethodMetadata([], null, []),
                             ),

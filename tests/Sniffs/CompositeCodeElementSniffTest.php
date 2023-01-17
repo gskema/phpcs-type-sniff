@@ -226,7 +226,8 @@ class CompositeCodeElementSniffTest extends TestCase
             ],
             __DIR__ . '/fixtures/TestTrait7.php',
             [
-                '007 Add type declaration for property $prop1 or create PHPDoc with type hint. Add default value or keep property in an uninitialized state.',
+                '007 Create PHPDoc with typed array type hint for XXX constant, .e.g.: "string[]" or "SomeClass[]". Correct array depth must be specified.',
+                '009 Add type declaration for property $prop1 or create PHPDoc with type hint. Add default value or keep property in an uninitialized state.',
             ],
         ];
 

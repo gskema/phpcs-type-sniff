@@ -140,6 +140,9 @@ class CompositeCodeElementSniff extends AbstractConfigurableSniff
         }
         foreach ($file->getTraits() as $trait) {
             yield [$trait, $file];
+            foreach ($trait->getConstants() as $constant) {
+                yield [$constant, $trait];
+            }
             foreach ($trait->getProperties() as $prop) {
                 yield [$prop, $trait];
             }

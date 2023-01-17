@@ -93,6 +93,8 @@ class Banana
         public array $param3,       // missing typed array doc type (in method PHPDoc or inline PHPDoc)
         public int $param4,
         public int|null             // must use shorthand nullable syntax: ?int
+        public readonly $obj = new stdClass(),
+        public Iterator&Countable $obj2,
     ) {}
 
     /**

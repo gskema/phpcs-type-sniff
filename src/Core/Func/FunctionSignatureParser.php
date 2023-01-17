@@ -7,6 +7,7 @@ use Gskema\TypeSniff\Core\DocBlock\UndefinedDocBlock;
 use Gskema\TypeSniff\Core\TokenHelper;
 use Gskema\TypeSniff\Core\Type\Common\FqcnType;
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Util\Tokens;
 use RuntimeException;
 use Gskema\TypeSniff\Core\Type\TypeFactory;
 
@@ -115,7 +116,13 @@ class FunctionSignatureParser
                     $raw['variable_length'] = true;
                     break;
                 case T_BITWISE_AND:
-                    $raw['pass_be_reference'] = true;
+                    // phpcs 3.7.1 bug: need to check what's next
+                    $nextTokenPtr = $file->findNext(Tokens::$emptyTokens, $ptr + 1, null, true);
+                    if (false !== $nextTokenPtr && $tokens[$nextTokenPtr]['code'] === T_VARIABLE) {
+                        $raw['pass_be_reference'] = true;
+                    } else {
+                        $raw['type'] = ($raw['type'] ?? '') . $token['content']; // T_TYPE_INTERSECTION
+                    }
                     break;
                 case T_VARIABLE:
                     $raw['name'] = substr($token['content'], 1);
@@ -129,20 +136,35 @@ class FunctionSignatureParser
                     }
                     break;
                 case T_NEW:
-                    $raw['new'] = true;
+                    $raw['new'] = 0;
                     break;
-                case T_OPEN_PARENTHESIS: // can ignore, we are looking for T_CLOSE_PARENTHESIS to end
+                case T_OPEN_PARENTHESIS:
+                    if (0 === ($raw['new'] ?? null)) {
+                        $raw['new'] = 1;
+                    } else {
+                        $raw['type'] = ($raw['type'] ?? '') . $token['content']; // intersection type
+                    }
                     break;
                 case T_CLOSE_PARENTHESIS:
-                    if ($raw['new'] ?? false) {
-                        break; // e.g. $param = new stdClass()
+                    if (1 === ($raw['new'] ?? null)) {
+                        $raw['new'] = 2;
+                        break;
                     }
-                    // otherwise: end of function signature
-                    $returnLine = $token['line'];
-                    if (!empty($raw)) {
-                        $params[] = static::createParam($raw);
+
+                    // type detected e.g '(int', variable still not detected, means this is before var name: intersection type
+                    if (isset($raw['type']) && !isset($raw['name'])) {
+                        //                                          *
+                        // e.g. function func7((\Iterator&\Countable)|null $arg1): (\Iterator&\Countable)|string|null {}
+                        $raw['type'] = ($raw['type'] ?? '') . $token['content'];
+                        break;
+                    } else {
+                        // otherwise: end of function signature or end of new stdClass()
+                        $returnLine = $token['line'];
+                        if (!empty($raw)) {
+                            $params[] = static::createParam($raw);
+                        }
+                        break 2;
                     }
-                    break 2;
                 case T_ATTRIBUTE:
                     $attrEndPtr = $file->findNext(T_ATTRIBUTE_END, $ptr + 1);
                     if (false !== $attrEndPtr) {
@@ -182,10 +204,13 @@ class FunctionSignatureParser
                 case T_TYPE_UNION:
                 case T_TYPE_INTERSECTION:
                 case T_BITWISE_OR: // phpcs 3.7.1 bug: treat as T_TYPE_UNION
+                case T_BITWISE_AND: // phpcs 3.7.1 bug: treat as T_TYPE_INTERSECTION
                 case T_FALSE:
                 case T_TRUE:
                 case T_NULL:
                 case T_NS_SEPARATOR:
+                case T_OPEN_PARENTHESIS:
+                case T_CLOSE_PARENTHESIS:
                     $returnLine = $token['line'];
                     $rawReturnType .= $token['content'];
                     break;

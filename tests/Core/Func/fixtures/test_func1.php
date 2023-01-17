@@ -24,3 +24,4 @@ function func3(false $arg1 = false): false {}
 function func4(true $arg1 = true): true {}
 function func5(false|null $arg1 = null): false|null {}
 function func6(true|null $arg1 = true): true|null {}
+function func7((\Iterator&\Countable)|null &$arg1): (\Iterator&\Countable)|string|null {}

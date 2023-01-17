@@ -9,6 +9,7 @@ use Gskema\TypeSniff\Core\Type\Common\ArrayType;
 use Gskema\TypeSniff\Core\Type\Common\BoolType;
 use Gskema\TypeSniff\Core\Type\Common\FalseType;
 use Gskema\TypeSniff\Core\Type\Common\FqcnType;
+use Gskema\TypeSniff\Core\Type\Common\IntersectionType;
 use Gskema\TypeSniff\Core\Type\Common\IntType;
 use Gskema\TypeSniff\Core\Type\Common\NullType;
 use Gskema\TypeSniff\Core\Type\Common\SelfType;
@@ -223,6 +224,32 @@ class FunctionSignatureParserTest extends TestCase
                 ],
                 new UnionType([new TrueType(), new NullType()]),
                 26,
+            ),
+            null,
+        ];
+
+        // #11
+        $dataSets[] = [
+            __DIR__ . '/fixtures/test_func1.php',
+            236,
+            new FunctionSignature(
+                27,
+                'func7',
+                [
+                    new FunctionParam(
+                        27,
+                        'arg1',
+                        new UnionType([new IntersectionType([new FqcnType('\Iterator'), new FqcnType('\Countable')]), new NullType()]),
+                        new UndefinedType(),
+                        []
+                    ),
+                ],
+                new UnionType([
+                    new IntersectionType([new FqcnType('\Iterator'), new FqcnType('\Countable')]),
+                    new StringType(),
+                    new NullType(),
+                ]),
+                27,
             ),
             null,
         ];

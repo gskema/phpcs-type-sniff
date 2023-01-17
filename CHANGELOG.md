@@ -4,6 +4,10 @@ All notable changes to `phpcs-type-sniff` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## 82.0.2 - 2023-01-17
+## Fixed
+- Catch CompileError in reflection
+
 ## 82.0.1 - 2023-01-17
 ## Fixed
 - Type comparison for bool $arg = false case

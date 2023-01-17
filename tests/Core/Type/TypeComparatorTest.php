@@ -84,6 +84,8 @@ class TypeComparatorTest extends TestCase
 
             59 => ['int|null', 'int|null|false', '', '', 'false'],
             60 => ['int|null|bool', 'int|null|false', '', 'bool', 'false'],
+            61 => ['bool', 'bool', 'false', '', ''],
+            62 => ['bool', 'bool', 'true', '', ''],
         ];
     }
 

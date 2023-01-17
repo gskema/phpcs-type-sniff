@@ -99,7 +99,6 @@ class TypeComparator
             IterableType::class,
             FqcnType::class, // e.g. Collection|Image[]
         ],
-        // bool does not cover true|false - fn type is concrete and specified - copy it to PHPDoc pls
     ];
 
     /**
@@ -140,7 +139,11 @@ class TypeComparator
         }
 
         if ($valTypeDefined) {
-            $fnTypeMap[get_class($valueType)] = $valueType;
+            if (($valueType instanceof TrueType || $valueType instanceof FalseType) && isset($fnTypeMap[BoolType::class])) {
+                // do nothing
+            } else {
+                $fnTypeMap[get_class($valueType)] = $valueType;
+            }
         }
 
         // Both fn and val types are undefined (or not detected), so we cannot check for missing or wrong types

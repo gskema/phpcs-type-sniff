@@ -2,6 +2,7 @@
 
 namespace Gskema\TypeSniff\Core;
 
+use CompileError;
 use ParseError;
 use ReflectionClass;
 use ReflectionException;
@@ -56,7 +57,7 @@ class ReflectionCache
     {
         try {
             $classRef = new ReflectionClass($fqcn);
-        } catch (ParseError) {
+        } catch (ParseError | CompileError) {
             return []; // suppress error popups when editing .php file
         }
 

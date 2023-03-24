@@ -38,6 +38,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
     protected string $reportType = 'warning';
     protected bool $addViolationId = true;
     protected bool $inspectPcpAsParam = false;
+    protected bool $requireInheritDoc = false;
 
     /**
      * @inheritDoc
@@ -57,6 +58,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         $this->reportType = (string)($config['reportType'] ?? 'warning');
         $this->addViolationId = (bool)($config['addViolationId'] ?? true);
         $this->inspectPcpAsParam = 'param' === ($config['inspectPromotedConstructorPropertyAs'] ?? 'prop');
+        $this->requireInheritDoc = (bool)($config['requireInheritDoc'] ?? false);
     }
 
     /**
@@ -103,7 +105,7 @@ class FqcnMethodSniff implements CodeElementSniffInterface
         if (!$isConstructMethod) {
             if ($hasInheritDocTag || $isMagicMethod) {
                 return;
-            } elseif ($method->getMetadata()->isExtended()) {
+            } elseif ($method->getMetadata()->isExtended() && $this->requireInheritDoc) {
                 $originId = $this->addViolationId ? $method->getId() : null;
                 SniffHelper::addViolation($file, 'Missing @inheritDoc tag. Remove duplicated parent PHPDoc content.', $method->getLine(), static::CODE, $this->reportType, $originId);
                 return;

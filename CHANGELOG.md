@@ -4,6 +4,12 @@ All notable changes to `phpcs-type-sniff` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## 81.1.0 - 2023-03-24
+## Added
+- Option `FqcnMethodSniff.requireInheritDoc`
+## Changed
+- `inheritDoc` is now not required by default (relevant when `useReflection:true`)
+
 ## 81.0.0 - 2023-01-17
 ## Added
 - Support for PHP8.1: enums, intersection types, never type

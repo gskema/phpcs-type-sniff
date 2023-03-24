@@ -114,6 +114,7 @@ class CompositeCodeElementSniffTest extends TestCase
                 'addViolationId' => false,
                 'useReflection' => true,
                 'FqcnMethodSniff.reportMissingTags' => true,
+                'FqcnMethodSniff.requireInheritDoc' => true,
             ],
             __DIR__ . '/fixtures/TestClass3.php',
             [

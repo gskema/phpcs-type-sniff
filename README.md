@@ -348,6 +348,10 @@ String `true/false` values are automatically converted to booleans.
             <!-- when method type declarations are present -->
             <property name="FqcnMethodSniff.reportMissingTags" value="true"/>
 
+            <!-- When `useReflection:true`, extended methods will be detected -->
+            <!-- and sniff will require adding `inheritDoc` tag to these methods. Default: false -->
+            <property name="FqcnMethodSniff.requireInheritDoc" value="true"/>
+
             <!-- Disables reporting missing null type in basic getter return PHPDoc -->
             <!-- and return type declaration -->
             <property name="FqcnPropSniff.reportNullableBasicGetter" value="false"/>

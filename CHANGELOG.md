@@ -4,6 +4,10 @@ All notable changes to `phpcs-type-sniff` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## 80.2.0 - 2023-04-07
+### Changed
+- Remove upper bound PHP requirement so package can be installed on higher PHP versions even if locked.
+
 ## 80.1.0 - 2022-07-28
 ### Changed
 - Change package PHP requirements to allow current PHP version + 1 next major version for forward migration.

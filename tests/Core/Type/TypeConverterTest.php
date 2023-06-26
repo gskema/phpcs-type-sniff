@@ -22,6 +22,7 @@ use Gskema\TypeSniff\Core\Type\Common\VoidType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ClassStringType;
 use Gskema\TypeSniff\Core\Type\DocBlock\DoubleType;
+use Gskema\TypeSniff\Core\Type\DocBlock\KeyValueType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ResourceType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ThisType;
 use Gskema\TypeSniff\Core\Type\DocBlock\TrueType;
@@ -183,6 +184,14 @@ class TypeConverterTest extends TestCase
             34 => [
                 new ClassStringType(),
                 new StringType(),
+            ],
+            35 => [
+                new KeyValueType(new IterableType()),
+                new IterableType(),
+            ],
+            36 => [
+                new KeyValueType(new FqcnType('Generator')),
+                new FqcnType('Generator'),
             ],
         ];
     }

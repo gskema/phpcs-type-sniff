@@ -520,6 +520,10 @@ class CompositeCodeElementSniffTest extends TestCase
                 '073 Add type declaration for parameter $prop1, e.g.: "string".',
                 '073 Add type declaration for return value, e.g.: "string".',
                 '078 Add type declaration for property $prop4, e.g.: "string". Add default value or keep property in an uninitialized state.',
+                '081 Add type declaration for property $prop5, e.g.: "iterable". Add default value or keep property in an uninitialized state.',
+                '089 Add type declaration for parameter $param1, e.g.: "array".',
+                '089 Add type declaration for parameter $param2, e.g.: "iterable".',
+                '089 Add type declaration for return value, e.g.: "\Generator".',
             ],
         ];
 

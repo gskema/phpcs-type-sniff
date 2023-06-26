@@ -76,4 +76,20 @@ class TestClass14
 
     /** @var class-string */
     public $prop4;
+
+    /** @var iterable<string, int|string> */
+    public $prop5;
+
+    /**
+     * @param array<string, string|int> $param1
+     * @param iterable<\stdClass> $param2
+     * @param Acme<string> $param3
+     * @return \Generator<class-string>
+     */
+    public function method9($param1, $param2, Acme $param3)
+    {
+    }
+
+    /** @var array<string> */
+    public const CONST3 = [];
 }

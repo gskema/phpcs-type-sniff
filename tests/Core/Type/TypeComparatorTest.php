@@ -88,6 +88,7 @@ class TypeComparatorTest extends TestCase
             61 => ['class-string',  'string', '', '', ''],
             62 => ['class-string|string',  'string', '', '', ''],
             63 => ['class-string|string|int',  'string', '', 'int', ''],
+            64 => ['Generator<class-string>|int',  'Generator|int', '', '', ''],
 
             // doc_type, fn_type, val_type, wrong_doc, missing_doc
         ];

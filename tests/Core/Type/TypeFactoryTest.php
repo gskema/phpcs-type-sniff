@@ -24,6 +24,7 @@ use Gskema\TypeSniff\Core\Type\Common\VoidType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ClassStringType;
 use Gskema\TypeSniff\Core\Type\DocBlock\DoubleType;
+use Gskema\TypeSniff\Core\Type\DocBlock\KeyValueType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ResourceType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ThisType;
 use Gskema\TypeSniff\Core\Type\DocBlock\TrueType;
@@ -269,6 +270,14 @@ class TypeFactoryTest extends TestCase
             [
                 'class-string',
                 new ClassStringType(),
+            ],
+            [
+                'Generator<class-string>',
+                new KeyValueType(new FqcnType('Generator')),
+            ],
+            [
+                'iterable<int, string|Acme>',
+                new KeyValueType(new IterableType()),
             ]
         ];
 

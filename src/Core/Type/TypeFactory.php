@@ -25,6 +25,7 @@ use Gskema\TypeSniff\Core\Type\Common\VoidType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ClassStringType;
 use Gskema\TypeSniff\Core\Type\DocBlock\DoubleType;
+use Gskema\TypeSniff\Core\Type\DocBlock\KeyValueType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ResourceType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ThisType;
 use Gskema\TypeSniff\Core\Type\DocBlock\TrueType;
@@ -151,6 +152,8 @@ class TypeFactory
             return new TypedArrayType(static::fromRawTypes([$rawInnerType]), $depth);
         }
 
+        // All cases above can be instantly detected by start/end symbols. If no matches, we must try to unwrap next.
+        //
         // e.g. (int|string)
         //      ((int|float)[]|(string|bool)[])
         if ('(' === $rawType[0] && ')' === $rawType[-1]) {
@@ -158,7 +161,14 @@ class TypeFactory
             return static::fromRawType(substr($rawType, 1, -1)); // cannot skip split
         }
 
-        // Have to split again because it raw type was parenthesized (A&(B|C)) or (Node|Location)[]
+        // Unwrapping is done, so we can safely check cases where some symbol is in the middle of raw type.
+        $ltPos = strpos($rawType, '<');
+        if (false !== $ltPos) {
+            return new KeyValueType(self::fromRawType(substr($rawType, 0, $ltPos)));
+        }
+
+        // Cases like iterable<int, int|string> was handle above, so if any pipes remain - it's DNF types.
+        // Have to split again because it raw type was parenthesized A&(B|C) or (Node|Location)[]
         if (str_contains($rawType, '|')) {
             [$rawTypes, ] = static::split($rawType);
             return static::fromRawTypes($rawTypes);

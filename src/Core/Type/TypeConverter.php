@@ -20,6 +20,7 @@ use Gskema\TypeSniff\Core\Type\Common\VoidType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ClassStringType;
 use Gskema\TypeSniff\Core\Type\DocBlock\DoubleType;
+use Gskema\TypeSniff\Core\Type\DocBlock\KeyValueType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ResourceType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ThisType;
 use Gskema\TypeSniff\Core\Type\DocBlock\TrueType;
@@ -56,7 +57,9 @@ class TypeConverter
 
     public static function toExampleFnType(TypeInterface $docType, bool $isProp): ?TypeInterface
     {
-        if ($docType instanceof UnionType) {
+        if ($docType instanceof KeyValueType) {
+            return self::toExampleFnType($docType->getType(), $isProp);
+        } elseif ($docType instanceof UnionType) {
             if ($docType->containsType(MixedType::class)) {
                 return new MixedType(); // mixed|null -> mixed, mixed type cannot be in union
             }

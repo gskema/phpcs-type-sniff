@@ -21,7 +21,9 @@ use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Common\UnionType;
 use Gskema\TypeSniff\Core\Type\Common\VoidType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
+use Gskema\TypeSniff\Core\Type\DocBlock\ClassStringType;
 use Gskema\TypeSniff\Core\Type\DocBlock\DoubleType;
+use Gskema\TypeSniff\Core\Type\DocBlock\KeyValueType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ResourceType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ThisType;
 use Gskema\TypeSniff\Core\Type\DocBlock\TrueType;
@@ -77,5 +79,8 @@ class TypeTest extends TestCase
         self::assertEquals('string[][]', (new TypedArrayType(new StringType(), 2))->toString());
         self::assertEquals(new StringType(), (new TypedArrayType(new StringType(), 2))->getType());
         self::assertEquals(2, (new TypedArrayType(new StringType(), 2))->getDepth());
+
+        self::assertEquals('class-string', (new ClassStringType())->toString());
+        self::assertEquals('iterable<?>', (new KeyValueType(new IterableType()))->toString());
     }
 }

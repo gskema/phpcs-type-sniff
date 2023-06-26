@@ -6,6 +6,7 @@ use Gskema\TypeSniff\Core\Type\Common\ArrayType;
 use Gskema\TypeSniff\Core\Type\Common\UnionType;
 use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
+use Gskema\TypeSniff\Core\Type\DocBlock\KeyValueType;
 use Gskema\TypeSniff\Core\Type\DocBlock\TypedArrayType;
 
 /**
@@ -17,7 +18,8 @@ class TypeHelper
     {
         return is_a($type, $typeClassName)
             || ($type instanceof UnionType && $type->containsType($typeClassName))
-            || ($type instanceof NullableType && $type->containsType($typeClassName));
+            || ($type instanceof NullableType && $type->containsType($typeClassName))
+            || ($type instanceof KeyValueType && $type->containsType($typeClassName));
     }
 
     public static function getFakeTypedArrayType(?TypeInterface $type): ?TypedArrayType

@@ -7,6 +7,7 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 ## 81.3.0 - 2023-06-26
 ### Added
 - Support for `class-string` doc type
+- Support for specific key-value notation for iterables, e.g. `Generator<int, string>`
 
 ## 81.2.0 - 2023-04-07
 ### Changed

@@ -90,6 +90,9 @@ class Banana
     /** @var class-string */
     public string $prop15;
 
+    /** @var iterable<int, Acme> */
+    public iterable $prop16;
+
     public function __construct(
         $param1,                    // missing param type decl. in method PHPDoc
         public $param2,             // missing param type decl. (in method PHPDoc or inline PHPDoc)
@@ -189,6 +192,11 @@ class Banana
     ): array {
         return ['foo' => 1];
     }
+    
+    /**
+     * @return Generator<int, string>   // supported
+     */
+    public function func6(): Generator;
 }
 ```
 

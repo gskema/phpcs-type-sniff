@@ -23,6 +23,7 @@ use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Common\UnionType;
 use Gskema\TypeSniff\Core\Type\Common\VoidType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
+use Gskema\TypeSniff\Core\Type\DocBlock\ClassStringType;
 use Gskema\TypeSniff\Core\Type\DocBlock\DoubleType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ResourceType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ThisType;
@@ -39,6 +40,7 @@ class TypeFactory
         'array'    => ArrayType::class,
         'bool'     => BoolType::class,
         'boolean'  => BoolType::class,
+        'class-string' => ClassStringType::class,
         'callable' => CallableType::class,
         'double'   => DoubleType::class,
         'false'    => FalseType::class,

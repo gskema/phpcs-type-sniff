@@ -84,6 +84,12 @@ class TypeComparatorTest extends TestCase
 
             59 => ['int|null', 'int|null|false', '', '', 'false'],
             60 => ['int|null|bool', 'int|null|false', '', 'bool', 'false'],
+
+            61 => ['class-string',  'string', '', '', ''],
+            62 => ['class-string|string',  'string', '', '', ''],
+            63 => ['class-string|string|int',  'string', '', 'int', ''],
+
+            // doc_type, fn_type, val_type, wrong_doc, missing_doc
         ];
     }
 

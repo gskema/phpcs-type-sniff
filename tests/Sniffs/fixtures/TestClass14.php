@@ -57,4 +57,23 @@ class TestClass14
         \Iterator&\Countable $prop2,
         $param3
     ): never { exit; }
+
+    /**
+     * @param class-string $prop1
+     * @return class-string
+     */
+    public function method7(string $prop1): string
+    {
+    }
+
+    /**
+     * @param class-string $prop1
+     * @return class-string
+     */
+    public function method8($prop1)
+    {
+    }
+
+    /** @var class-string */
+    public $prop4;
 }

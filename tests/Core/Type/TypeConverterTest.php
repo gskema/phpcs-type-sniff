@@ -20,6 +20,7 @@ use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Common\UnionType;
 use Gskema\TypeSniff\Core\Type\Common\VoidType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
+use Gskema\TypeSniff\Core\Type\DocBlock\ClassStringType;
 use Gskema\TypeSniff\Core\Type\DocBlock\DoubleType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ResourceType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ThisType;
@@ -178,6 +179,10 @@ class TypeConverterTest extends TestCase
                 new UnionType([new FalseType(), new CallableType()]),
                 new UnionType([new FalseType(), new CallableType()]),
                 false
+            ],
+            34 => [
+                new ClassStringType(),
+                new StringType(),
             ],
         ];
     }

@@ -517,6 +517,9 @@ class CompositeCodeElementSniffTest extends TestCase
                 '047 Missing "string" type in CONST2 constant type hint',
                 '052 Intersection types can only contain class or interfaces names',
                 '056 Add type declaration for parameter $param1, e.g.: "Countable&IteratorAggregate".',
+                '073 Add type declaration for parameter $prop1, e.g.: "string".',
+                '073 Add type declaration for return value, e.g.: "string".',
+                '078 Add type declaration for property $prop4, e.g.: "string". Add default value or keep property in an uninitialized state.',
             ],
         ];
 

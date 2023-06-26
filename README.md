@@ -87,6 +87,9 @@ class Banana
     #[ArrayShape(['foo' => 'int'])]
     public $prop14 = ['foo' => 1];  // ArrayShape supported
 
+    /** @var class-string */
+    public string $prop15;
+
     public function __construct(
         $param1,                    // missing param type decl. in method PHPDoc
         public $param2,             // missing param type decl. (in method PHPDoc or inline PHPDoc)

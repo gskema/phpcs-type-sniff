@@ -22,6 +22,7 @@ use Gskema\TypeSniff\Core\Type\Common\UndefinedType;
 use Gskema\TypeSniff\Core\Type\Common\UnionType;
 use Gskema\TypeSniff\Core\Type\Common\VoidType;
 use Gskema\TypeSniff\Core\Type\Declaration\NullableType;
+use Gskema\TypeSniff\Core\Type\DocBlock\ClassStringType;
 use Gskema\TypeSniff\Core\Type\DocBlock\DoubleType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ResourceType;
 use Gskema\TypeSniff\Core\Type\DocBlock\ThisType;
@@ -71,7 +72,15 @@ class TypeFactoryTest extends TestCase
             [
                 '(int|array<int, string & int>) | bool & string|int|array(int, int) | Desc Desc2',
                 [['(int|array<int, string & int>)', 'bool & string', 'int', 'array(int, int)', 'Desc'], 'Desc2'],
-            ]
+            ],
+            [
+                'class-string',
+                [['class-string'], '']
+            ],
+            [
+                'class-string|int',
+                [['class-string', 'int'], '']
+            ],
         ];
 
         return $dataSets;
@@ -257,6 +266,10 @@ class TypeFactoryTest extends TestCase
                     new IntersectionType([new FqcnType('B'), new FqcnType('D')]),
                 ]),
             ],
+            [
+                'class-string',
+                new ClassStringType(),
+            ]
         ];
 
         return $dataSets;

@@ -4,6 +4,10 @@ All notable changes to `phpcs-type-sniff` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## 81.3.2 - 2023-12-11
+### Fixed
+- Sniff options parsing
+
 ## 81.3.1 - 2023-12-11
 ### Fixed
 - Fixed parsing of `new` initializers in promoted constructor properties

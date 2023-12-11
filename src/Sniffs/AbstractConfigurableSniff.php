@@ -30,6 +30,9 @@ abstract class AbstractConfigurableSniff implements Sniff
                 }
             }
 
+            // since 3.8.0
+            $opts = array_map(fn ($value) => $value['value'] ?? $value, $opts);
+
             array_walk_recursive($opts, function (&$val) {
                 if ('true' === $val) {
                     $val = true;

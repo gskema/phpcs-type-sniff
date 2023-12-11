@@ -77,7 +77,7 @@ class TestClass13
 
     public function method1(
         Acme|null $param1 = null,
-        Acme|string|null $param1 = null
+        Acme|string|null $param2 = null
     ): int|null {
     }
 }

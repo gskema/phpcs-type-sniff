@@ -125,13 +125,25 @@ class FunctionSignatureParser
                 case T_NEW:
                     $raw['new'] = true;
                     break;
-                case T_OPEN_PARENTHESIS: // can ignore, we are looking for T_CLOSE_PARENTHESIS to end
+                case T_OPEN_PARENTHESIS:
+                    if ($raw['new'] ?? false) {
+                        // new constructor args may contain tokens arrays, object constructors, etc.
+                        // so we must skip to next param or to end of function signature
+                        $closingParenthesisPtr = TokenHelper::findClosingParenthesis($file, $ptr);
+                        // Some dumbass may write = new Obj, but it's already a standard warning. This won't crash
+                        if (null !== $closingParenthesisPtr) {
+                            if (!empty($raw)) {
+                                $params[] = static::createParam($raw);
+                                $raw = [];
+                            }
+                            $ptr = $closingParenthesisPtr;
+                            break; // skip to whatever is next
+                        }
+                    }
+                    // else: opened function signature params, can ignore
                     break;
                 case T_CLOSE_PARENTHESIS:
-                    if ($raw['new'] ?? false) {
-                        break; // e.g. $param = new stdClass()
-                    }
-                    // otherwise: end of function signature
+                    // end of function signature, close parenthesis for new (hopefully) have been skipped
                     $returnLine = $token['line'];
                     if (!empty($raw)) {
                         $params[] = static::createParam($raw);

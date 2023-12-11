@@ -136,20 +136,29 @@ class FunctionSignatureParser
                     }
                     break;
                 case T_NEW:
-                    $raw['new'] = 0;
+                    $raw['new'] = true;
                     break;
                 case T_OPEN_PARENTHESIS:
-                    if (0 === ($raw['new'] ?? null)) {
-                        $raw['new'] = 1;
+                    if ($raw['new'] ?? false) {
+                        // new constructor args may contain tokens arrays, object constructors, etc.
+                        // so we must skip to next param or to end of function signature
+                        $closingParenthesisPtr = TokenHelper::findClosingParenthesis($file, $ptr);
+                        // Some dumbass may write = new Obj, but it's already a standard warning. This won't crash
+                        if (null !== $closingParenthesisPtr) {
+                            if (!empty($raw)) {
+                                $params[] = static::createParam($raw);
+                                $raw = [];
+                            }
+                            $ptr = $closingParenthesisPtr;
+                            break; // skip to whatever is next
+                        }
                     } else {
                         $raw['type'] = ($raw['type'] ?? '') . $token['content']; // intersection type
                     }
                     break;
                 case T_CLOSE_PARENTHESIS:
-                    if (1 === ($raw['new'] ?? null)) {
-                        $raw['new'] = 2;
-                        break;
-                    }
+                    // end of function signature, close parenthesis for new (hopefully) have been skipped
+                    // also possible closing DNF type
 
                     // type detected e.g '(int', variable still not detected, means this is before var name: intersection type
                     if (isset($raw['type']) && !isset($raw['name'])) {
@@ -239,11 +248,13 @@ class FunctionSignatureParser
     {
         $rawValueType = $raw['default'] ?? '';
         if (str_contains($rawValueType, '::')) {
-            $valueType = null; // a constant is used, need reflection :(
+            $valueType = null; // a constant is used, need reflection or imported class parsing
         } else {
             $valueType = TypeFactory::fromRawType($raw['default'] ?? '');
         }
 
+        // Try when global constant (parsed as FqcnType).
+        // 'new' flag indicated new constructor - would need to parse imported classes.
         if ($valueType instanceof FqcnType && !($raw['new'] ?? false)) {
             if (defined($valueType->toString())) { // eg PHP_INT_MAX
                 $valueType = TypeFactory::fromValue(constant($valueType->toString()));

@@ -552,6 +552,17 @@ class CompositeCodeElementSniffTest extends TestCase
             ],
         ];
 
+        // #24
+        $dataSets[] = [
+            [
+                'addViolationId' => false,
+                'useReflection' => false,
+            ],
+            __DIR__ . '/fixtures/TestClass15.php',
+            [
+            ],
+        ];
+
         return $dataSets;
     }
 

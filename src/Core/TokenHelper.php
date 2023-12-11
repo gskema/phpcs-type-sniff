@@ -453,4 +453,25 @@ class TokenHelper
 
         return T_EXTENDS === $extendsCode;
     }
+
+    public static function findClosingParenthesis(File $file, int $openParenthesisPtr): ?int
+    {
+        $tokens = $file->getTokens();
+
+        $ptr = $openParenthesisPtr;
+        $openedScopeCount = 1;
+        while (isset($tokens[++$ptr])) {
+            $tokenCode = $tokens[$ptr]['code'] ?? null;
+            if (T_OPEN_PARENTHESIS === $tokenCode) {
+                $openedScopeCount++;
+            } elseif (T_CLOSE_PARENTHESIS === $tokenCode) {
+                $openedScopeCount--;
+            }
+            if (0 === $openedScopeCount) {
+                return $ptr;
+            }
+        }
+
+        return null;
+    }
 }

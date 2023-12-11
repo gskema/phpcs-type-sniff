@@ -4,6 +4,11 @@ All notable changes to `phpcs-type-sniff` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## 82.2.1 - 2023-12-11
+### Fixed
+- Fixed parsing of `new` initializers in promoted constructor properties
+- Sniff options parsing
+
 ## 82.2.0 - 2023-04-07
 ### Changed
 - Remove upper bound PHP requirement so package can be installed on higher PHP versions even if locked.

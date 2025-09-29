@@ -420,4 +420,4 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [link-scrutinizer]: https://scrutinizer-ci.com/g/gskema/phpcs-type-sniff/code-structure
 [link-code-quality]: https://scrutinizer-ci.com/g/gskema/phpcs-type-sniff
 [link-downloads]: https://packagist.org/packages/gskema/phpcs-type-sniff
-[link-phpcs]: https://github.com/squizlabs/PHP_CodeSniffer
+[link-phpcs]: https://github.com/PHPCSStandards/PHP_CodeSniffer
